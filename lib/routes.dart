@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:spark_list/pages/home_page.dart';
+import 'package:spark_list/pages/root_page.dart';
 
 ///
 /// Author: Elemen
@@ -13,7 +14,7 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
   final GlobalKey<NavigatorState> navigatorKey;
   bool show404 = false;
 
-  static List<MaterialPage> pages = [MaterialPage(child: HomePage())];
+  static List<MaterialPage> pages = [MaterialPage(child: RootPage())];
 
   AppRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>();
 

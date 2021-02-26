@@ -23,15 +23,7 @@ class _HomePageState extends State<HomePage> {
   
   @override
   Widget build(BuildContext context) {
-    return ProviderWidget<HomeViewModel>(
-      onModelReady: (viewModel){
-      
-      },
-      model: HomeViewModel(),
-      child: Scaffold(
-        body: _HomeScreen(),
-      ),
-    );
+    return _HomeScreen();
   }
 }
 
@@ -43,19 +35,21 @@ class _HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<_HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        ListView(
-          restorationId: 'home_list_view',
-          children: [
-            const SizedBox(height: 8,),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 32),
-              child: HomeHeader(),
-            )
-          ],
-        )
-      ],
+    return Scaffold(
+      body: Stack(
+        children: [
+          ListView(
+            restorationId: 'home_list_view',
+            children: [
+              const SizedBox(height: 8,),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 32),
+                child: HomeHeader(),
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 }

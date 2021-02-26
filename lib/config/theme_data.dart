@@ -33,7 +33,7 @@ class AppThemeData {
 			),
 			iconTheme: IconThemeData(color: colorScheme.onPrimary),
 			canvasColor: colorScheme.background,
-			scaffoldBackgroundColor: colorScheme.background,
+			scaffoldBackgroundColor: Color(0xFFF5F5F5),
 			highlightColor: Colors.transparent,
 			accentColor: colorScheme.primary,
 			focusColor: focusColor,

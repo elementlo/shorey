@@ -54,8 +54,6 @@ class _ProviderWidgetState<T extends ChangeNotifier>
 
 class ProviderWidget2<A extends ChangeNotifier, B extends ChangeNotifier>
     extends StatefulWidget {
-  final Widget Function(BuildContext context, A model1, B model2, Widget child)
-      builder;
   final A model1;
   final B model2;
   final Widget child;
@@ -64,7 +62,6 @@ class ProviderWidget2<A extends ChangeNotifier, B extends ChangeNotifier>
 
   ProviderWidget2(
       {Key key,
-      this.builder,
       this.model1,
       this.model2,
       this.child,
@@ -102,13 +99,10 @@ class _ProviderWidgetState2<A extends ChangeNotifier, B extends ChangeNotifier>
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<A>.value(value: model1),
-        ChangeNotifierProvider<B>.value(value: model2),
+        ChangeNotifierProvider<A>(create: (_) => model1,),
+        ChangeNotifierProvider<B>(create: (_) => model2,),
       ],
-      child: Consumer2<A, B>(
-        builder: widget.builder,
-        child: widget.child,
-      ),
+      child: widget.child,
     );
   }
 }
