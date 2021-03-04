@@ -42,7 +42,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 500),
     );
   }
-  
+
   @override
   void dispose() {
     _settingsPanelController?.dispose();
@@ -124,10 +124,10 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
               child: SettingsPage()),
           PositionedTransition(
               rect: _slideDownHomePageAnimation(context), child: HomePage()),
-          // Consumer<ConfigViewModel>(builder: (_, cfVModel, child) {
-          //   return _SettingsIcon();
-          // }),
-          _SettingsIcon(toggleSettings: _toggleSettings,animationController: _iconController,)
+          _SettingsIcon(
+            toggleSettings: _toggleSettings,
+            animationController: _iconController,
+          )
         ],
       ),
     );
