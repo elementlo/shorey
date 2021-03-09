@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:spark_list/config/theme_data.dart';
+import 'package:spark_list/widget/panel_text_field.dart';
 
 ///
 /// Author: Elemen
@@ -29,7 +31,7 @@ class DailyFocusPanel extends StatelessWidget {
                 0.0, 30 * (1.0 - animation.value), 0.0),
             child: Padding(
               padding: const EdgeInsets.only(
-                  left: 12, right: 12, top: 16, bottom: 18),
+                  left: 16, right: 16, top: 16, bottom: 18),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -61,7 +63,7 @@ class DailyFocusPanel extends StatelessWidget {
                                         width: 2,
                                         decoration: BoxDecoration(
                                           color:
-                                              Color(0x87A0E5).withOpacity(0.5),
+                                          Theme.of(context).colorScheme.primaryVariant.withOpacity(0.5),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(4.0)),
                                         ),
@@ -78,7 +80,7 @@ class DailyFocusPanel extends StatelessWidget {
                                               padding: const EdgeInsets.only(
                                                   left: 4, bottom: 2),
                                               child: Text(
-                                                'Eaten',
+                                                'Mantra',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w500,
@@ -90,12 +92,14 @@ class DailyFocusPanel extends StatelessWidget {
                                               ),
                                             ),
                                             Container(
-                                              width: MediaQuery.of(context).size.width - 200,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                  210,
                                               child: Text(
-                                                '的叫法乐山大佛结案率束带结发',
+                                                '我们称之为路的, 只不过是彷徨.',
                                                 style: TextStyle(
-                                                  fontWeight:
-                                                      FontWeight.w600,
+                                                  fontWeight: FontWeight.w600,
                                                   fontSize: 16,
                                                 ),
                                               ),
@@ -112,293 +116,89 @@ class DailyFocusPanel extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 16),
-                            child: Center(
-                              child: Stack(
-                                overflow: Overflow.visible,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      width: 100,
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(100.0),
-                                        ),
-                                        border: new Border.all(
-                                            width: 4,
-                                            color: Color(0xFF2633C5)
-                                                .withOpacity(0.2)),
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          Text(
-                                            '${(1503 * animation.value).toInt()}',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 24,
-                                              letterSpacing: 0.0,
-                                              color: Color(0xFF2633C5),
-                                            ),
-                                          ),
-                                          Text(
-                                            'Kcal left',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                              letterSpacing: 0.0,
-                                              color:
-                                                  Colors.grey.withOpacity(0.5),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: CustomPaint(
-                                      painter: CurvePainter(
-                                          colors: [
-                                            Color(0xFF2633C5),
-                                            Color(0x8A98E8),
-                                            Color(0x8A98E8)
-                                          ],
-                                          angle: 140 +
-                                              (360 - 140) *
-                                                  (1.0 - animation.value)),
-                                      child: SizedBox(
-                                        width: 108,
-                                        height: 108,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 24, right: 24, top: 8, bottom: 8),
-                      child: Container(
-                        height: 2,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFF2F3F8),
-                          borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 24, right: 24, top: 8, bottom: 16),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          Center(
+                            child: Stack(
+                              overflow: Overflow.visible,
                               children: <Widget>[
-                                Text(
-                                  'Carbs',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16,
-                                    letterSpacing: -0.2,
-                                  ),
-                                ),
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 4),
+                                  padding: const EdgeInsets.all(8.0),
                                   child: Container(
-                                    height: 4,
-                                    width: 70,
+                                    width: 100,
+                                    height: 100,
                                     decoration: BoxDecoration(
-                                      color: Color(0x87A0E5).withOpacity(0.2),
+                                      color: Colors.white,
                                       borderRadius: BorderRadius.all(
-                                          Radius.circular(4.0)),
+                                        Radius.circular(100.0),
+                                      ),
+                                      border: new Border.all(
+                                          width: 4,
+                                          color: Color(0xFFe26d5c)
+                                              .withOpacity(0.2)),
                                     ),
-                                    child: Row(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: <Widget>[
-                                        Container(
-                                          width: ((70 / 1.2) * animation.value),
-                                          height: 4,
-                                          decoration: BoxDecoration(
-                                            gradient: LinearGradient(colors: [
-                                              Color(0x87A0E5),
-                                              Color(0x87A0E5).withOpacity(0.5),
-                                            ]),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(4.0)),
+                                        Text(
+                                          '${(80 * animation.value).toInt()}%',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 24,
+                                            letterSpacing: 0.0,
+                                            color: AppThemeData.lightColorScheme.primaryVariant,
                                           ),
-                                        )
+                                        ),
+                                        Text(
+                                          'Today',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                            letterSpacing: 0.0,
+                                            color: Colors.grey.withOpacity(0.5),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 6),
-                                  child: Text(
-                                    '12g left',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 12,
-                                      color: Colors.grey.withOpacity(0.5),
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: CustomPaint(
+                                    painter: CurvePainter(
+                                        colors: [
+                                          Color(0xFFe26d5c),
+                                          // Color(0x8A98E8),
+                                          // Color(0x8A98E8)
+                                          Colors.white
+                                        ],
+                                        angle: 140 +
+                                            (360 - 140) *
+                                                (1.0 - animation.value)),
+                                    child: SizedBox(
+                                      width: 108,
+                                      height: 108,
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      'Protein',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 16,
-                                        letterSpacing: -0.2,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 4),
-                                      child: Container(
-                                        height: 4,
-                                        width: 70,
-                                        decoration: BoxDecoration(
-                                          color:
-                                              Color(0xF56E98).withOpacity(0.2),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(4.0)),
-                                        ),
-                                        child: Row(
-                                          children: <Widget>[
-                                            Container(
-                                              width: ((70 / 2) *
-                                                  animationController.value),
-                                              height: 4,
-                                              decoration: BoxDecoration(
-                                                gradient:
-                                                    LinearGradient(colors: [
-                                                  Color(0xF56E98)
-                                                      .withOpacity(0.1),
-                                                  Color(0xF56E98),
-                                                ]),
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(4.0)),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 6),
-                                      child: Text(
-                                        '30g left',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 12,
-                                          color: Colors.grey.withOpacity(0.5),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      'Fat',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 16,
-                                        letterSpacing: -0.2,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          right: 0, top: 4),
-                                      child: Container(
-                                        height: 4,
-                                        width: 70,
-                                        decoration: BoxDecoration(
-                                          color:
-                                              Color(0xF1B440).withOpacity(0.2),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(4.0)),
-                                        ),
-                                        child: Row(
-                                          children: <Widget>[
-                                            Container(
-                                              width: ((70 / 2.5) *
-                                                  animationController.value),
-                                              height: 4,
-                                              decoration: BoxDecoration(
-                                                gradient:
-                                                    LinearGradient(colors: [
-                                                  Color(0xF1B440)
-                                                      .withOpacity(0.1),
-                                                  Color(0xF1B440),
-                                                ]),
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(4.0)),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 6),
-                                      child: Text(
-                                        '10g left',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 12,
-                                          color: Colors.grey.withOpacity(0.5),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                )
                               ],
                             ),
                           )
                         ],
                       ),
-                    )
+                    ),
+                    Divider(
+                      indent: 16,
+                      endIndent: 16,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(
+                               left: 16, right: 16, bottom: 16),
+                      child: PanelTextField(),
+                    ),
                   ],
                 ),
               ),
