@@ -49,7 +49,7 @@ class AppThemeData {
 	}
 	
 	static const ColorScheme lightColorScheme = ColorScheme(
-		primary: Color(0xbf8627),
+		primary: Color(0xe26d5c),
 		primaryVariant: Color(0xFF117378),
 		secondary: Color(0xFFEFF3F3),
 		secondaryVariant: Color(0xFFFAFBFB),

@@ -29,6 +29,7 @@ class RootPage extends StatefulWidget {
 class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
   AnimationController _settingsPanelController;
   AnimationController _iconController;
+  AnimationController homePageFadeController;
 
   @override
   void initState() {
@@ -41,12 +42,15 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
+    homePageFadeController = AnimationController(
+        duration: const Duration(milliseconds: 600), vsync: this);
   }
 
   @override
   void dispose() {
     _settingsPanelController?.dispose();
     _iconController?.dispose();
+    homePageFadeController?.dispose();
     super.dispose();
   }
 
@@ -56,6 +60,8 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
     if (cfVModel.isSettingsOpenNotifier) {
       _settingsPanelController.reverse();
       _iconController.reverse();
+      homePageFadeController.reset();
+      homePageFadeController.forward();
     } else {
       _settingsPanelController.forward();
       _iconController.forward();
@@ -123,7 +129,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
               rect: _slideDownSettingsPageAnimation(context),
               child: SettingsPage()),
           PositionedTransition(
-              rect: _slideDownHomePageAnimation(context), child: HomePage()),
+              rect: _slideDownHomePageAnimation(context), child: HomePage(animationController: homePageFadeController,)),
           _SettingsIcon(
             toggleSettings: _toggleSettings,
             animationController: _iconController,

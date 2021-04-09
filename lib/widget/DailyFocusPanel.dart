@@ -97,7 +97,7 @@ class DailyFocusPanel extends StatelessWidget {
                                                       .width -
                                                   210,
                                               child: Text(
-                                                '我们称之为路的, 只不过是彷徨.',
+                                                '我们称之为路的, 不过是彷徨.',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 16,
@@ -131,9 +131,9 @@ class DailyFocusPanel extends StatelessWidget {
                                         Radius.circular(100.0),
                                       ),
                                       border: new Border.all(
-                                          width: 4,
+                                          width: 3,
                                           color: Color(0xFFe26d5c)
-                                              .withOpacity(0.2)),
+                                              .withOpacity(0.4)),
                                     ),
                                     child: Column(
                                       mainAxisAlignment:
@@ -171,9 +171,10 @@ class DailyFocusPanel extends StatelessWidget {
                                     painter: CurvePainter(
                                         colors: [
                                           Color(0xFFe26d5c),
+                                          Color(0xFFe26d5c),
                                           // Color(0x8A98E8),
                                           // Color(0x8A98E8)
-                                          Colors.white
+                                          //Colors.white
                                         ],
                                         angle: 140 +
                                             (360 - 140) *
@@ -225,47 +226,47 @@ class CurvePainter extends CustomPainter {
       colorsList.addAll([Colors.white, Colors.white]);
     }
 
-    final shdowPaint = new Paint()
-      ..color = Colors.black.withOpacity(0.4)
-      ..strokeCap = StrokeCap.round
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 14;
-    final shdowPaintCenter = new Offset(size.width / 2, size.height / 2);
-    final shdowPaintRadius =
-        math.min(size.width / 2, size.height / 2) - (14 / 2);
-    canvas.drawArc(
-        new Rect.fromCircle(center: shdowPaintCenter, radius: shdowPaintRadius),
-        degreeToRadians(278),
-        degreeToRadians(360 - (365 - angle)),
-        false,
-        shdowPaint);
-
-    shdowPaint.color = Colors.grey.withOpacity(0.3);
-    shdowPaint.strokeWidth = 16;
-    canvas.drawArc(
-        new Rect.fromCircle(center: shdowPaintCenter, radius: shdowPaintRadius),
-        degreeToRadians(278),
-        degreeToRadians(360 - (365 - angle)),
-        false,
-        shdowPaint);
-
-    shdowPaint.color = Colors.grey.withOpacity(0.2);
-    shdowPaint.strokeWidth = 20;
-    canvas.drawArc(
-        new Rect.fromCircle(center: shdowPaintCenter, radius: shdowPaintRadius),
-        degreeToRadians(278),
-        degreeToRadians(360 - (365 - angle)),
-        false,
-        shdowPaint);
-
-    shdowPaint.color = Colors.grey.withOpacity(0.1);
-    shdowPaint.strokeWidth = 22;
-    canvas.drawArc(
-        new Rect.fromCircle(center: shdowPaintCenter, radius: shdowPaintRadius),
-        degreeToRadians(278),
-        degreeToRadians(360 - (365 - angle)),
-        false,
-        shdowPaint);
+    // final shdowPaint = new Paint()
+    //   ..color = Colors.black.withOpacity(0.4)
+    //   ..strokeCap = StrokeCap.round
+    //   ..style = PaintingStyle.stroke
+    //   ..strokeWidth = 14;
+    // final shdowPaintCenter = new Offset(size.width / 2, size.height / 2);
+    // final shdowPaintRadius =
+    //     math.min(size.width / 2, size.height / 2) - (14 / 2);
+    // canvas.drawArc(
+    //     new Rect.fromCircle(center: shdowPaintCenter, radius: shdowPaintRadius),
+    //     degreeToRadians(278),
+    //     degreeToRadians(360 - (365 - angle)),
+    //     false,
+    //     shdowPaint);
+    //
+    // shdowPaint.color = Colors.grey.withOpacity(0.3);
+    // shdowPaint.strokeWidth = 16;
+    // canvas.drawArc(
+    //     new Rect.fromCircle(center: shdowPaintCenter, radius: shdowPaintRadius),
+    //     degreeToRadians(278),
+    //     degreeToRadians(360 - (365 - angle)),
+    //     false,
+    //     shdowPaint);
+    //
+    // shdowPaint.color = Colors.grey.withOpacity(0.2);
+    // shdowPaint.strokeWidth = 20;
+    // canvas.drawArc(
+    //     new Rect.fromCircle(center: shdowPaintCenter, radius: shdowPaintRadius),
+    //     degreeToRadians(278),
+    //     degreeToRadians(360 - (365 - angle)),
+    //     false,
+    //     shdowPaint);
+    //
+    // shdowPaint.color = Colors.grey.withOpacity(0.1);
+    // shdowPaint.strokeWidth = 22;
+    // canvas.drawArc(
+    //     new Rect.fromCircle(center: shdowPaintCenter, radius: shdowPaintRadius),
+    //     degreeToRadians(278),
+    //     degreeToRadians(360 - (365 - angle)),
+    //     false,
+    //     shdowPaint);
 
     final rect = new Rect.fromLTWH(0.0, 0.0, size.width, size.width);
     final gradient = new SweepGradient(
@@ -278,9 +279,9 @@ class CurvePainter extends CustomPainter {
       ..shader = gradient.createShader(rect)
       ..strokeCap = StrokeCap.round // StrokeCap.round is not recommended.
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 14;
+      ..strokeWidth = 10;
     final center = new Offset(size.width / 2, size.height / 2);
-    final radius = math.min(size.width / 2, size.height / 2) - (14 / 2);
+    final radius = math.min(size.width / 2, size.height / 2) - (10 / 2);
 
     canvas.drawArc(
         new Rect.fromCircle(center: center, radius: radius),
@@ -297,7 +298,7 @@ class CurvePainter extends CustomPainter {
     var cPaint = new Paint();
     cPaint..shader = gradient1.createShader(rect);
     cPaint..color = Colors.white;
-    cPaint..strokeWidth = 14 / 2;
+    cPaint..strokeWidth = 10 / 2;
     canvas.save();
 
     final centerToCircle = size.width / 2;
@@ -307,8 +308,8 @@ class CurvePainter extends CustomPainter {
     canvas.rotate(degreeToRadians(angle + 2));
 
     canvas.save();
-    canvas.translate(0.0, -centerToCircle + 14 / 2);
-    canvas.drawCircle(new Offset(0, 0), 14 / 5, cPaint);
+    canvas.translate(0.0, -centerToCircle + 10 / 2);
+    canvas.drawCircle(new Offset(0, 0), 10 / 5, cPaint);
 
     canvas.restore();
     canvas.restore();
