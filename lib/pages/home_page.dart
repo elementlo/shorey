@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:spark_list/widget/DailyFocusPanel.dart';
+import 'package:spark_list/widget/daily_focus_panel.dart';
 import 'package:spark_list/widget/category_list_item.dart';
 import 'package:spark_list/widget/home_header.dart';
 
@@ -79,7 +79,7 @@ class _HomeScreenState extends State<_HomeScreen>
                 height: 8,
               ),
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 32),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
                 child: HomeHeader(),
               ),
               DailyFocusPanel(
@@ -91,7 +91,7 @@ class _HomeScreenState extends State<_HomeScreen>
                 animationController: widget.animationController,
               ),
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 32),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
                 child: _CategoriesHeader(),
               ),
               _AnimatedCategoryItem(
@@ -99,15 +99,63 @@ class _HomeScreenState extends State<_HomeScreen>
                 controller: _animationController,
                 child: CategoryListItem(
                     key: const PageStorageKey<String>(
-                      'material',
+                      'ToDo',
                     ),
                     restorationId: 'home_material_category_list',
-                    category: 'material',
+                    category: 'ToDo',
                     imageString: 'assets/icons/material/material.png',
                     demos: ['1111', '2222'],
                     initiallyExpanded: false,
                     onTap: (shouldOpenList) {
                     
+                    }),
+              ),
+              _AnimatedCategoryItem(
+                startDelayFraction: 0.00,
+                controller: _animationController,
+                child: CategoryListItem(
+                    key: const PageStorageKey<String>(
+                      'ToDo',
+                    ),
+                    restorationId: 'home_material_category_list',
+                    category: 'ToDo',
+                    imageString: 'assets/icons/material/material.png',
+                    demos: ['1111', '2222'],
+                    initiallyExpanded: false,
+                    onTap: (shouldOpenList) {
+          
+                    }),
+              ),
+              _AnimatedCategoryItem(
+                startDelayFraction: 0.00,
+                controller: _animationController,
+                child: CategoryListItem(
+                    key: const PageStorageKey<String>(
+                      'ToDo',
+                    ),
+                    restorationId: 'home_material_category_list',
+                    category: 'ToDo',
+                    imageString: 'assets/icons/material/material.png',
+                    demos: ['1111', '2222'],
+                    initiallyExpanded: false,
+                    onTap: (shouldOpenList) {
+          
+                    }),
+              ),
+              _AnimatedCategoryItem(
+                startDelayFraction: 0.00,
+                controller: _animationController,
+                child: CategoryListItem(
+                    key: const PageStorageKey<String>(
+                      'ToDo',
+                    ),
+                    restorationId: 'home_material_category_list',
+                    category: 'ToDo',
+                    imageString: 'assets/icons/material/material.png',
+                    demos: ['1111', '2222'],
+                    initiallyExpanded: false,
+                    onTap: (shouldOpenList) {
+          
                     }),
               ),
             ],

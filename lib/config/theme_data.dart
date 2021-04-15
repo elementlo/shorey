@@ -59,7 +59,7 @@ class AppThemeData {
 		error: _lightFillColor,
 		onError: _lightFillColor,
 		onPrimary: _lightFillColor,
-		onSecondary: Color(0xFF322942),
+		onSecondary: Color(0xFFe26d5c),
 		onSurface: Color(0xFF241E30),
 		brightness: Brightness.light,
 	);

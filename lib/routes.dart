@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:spark_list/pages/home_page.dart';
+import 'package:spark_list/pages/editor_page.dart';
 import 'package:spark_list/pages/root_page.dart';
 
 ///
@@ -13,8 +13,11 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppRoutePath> {
   final GlobalKey<NavigatorState> navigatorKey;
   bool show404 = false;
+  String currentPage = '';
 
-  static List<MaterialPage> pages = [MaterialPage(child: RootPage())];
+  static List<MaterialPage> pages = [
+    MaterialPage(key: ValueKey('RootPage'), child: RootPage()),
+  ];
 
   AppRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>();
 
@@ -22,45 +25,76 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
     print("currentConfiguration");
     if (show404) {
       return AppRoutePath.unknown();
-    }else{
-      return AppRoutePath.home();
+    } else {
+      switch(currentPage){
+        case AppRoutePath.textEditorPage:
+          return AppRoutePath.editorPage('title');
+        default:
+          return AppRoutePath.home();
+      }
     }
   }
+  
+  static AppRouterDelegate of(BuildContext context) {
+    final delegate = Router.of(context).routerDelegate;
+    assert(delegate is AppRouterDelegate, 'Delegate type must match');
+    return delegate as AppRouterDelegate;
+  }
+
+  void push(MaterialPage newPage) {
+    pages.add(newPage);
+    notifyListeners();
+  }
+  
+  // bool _onPopPage(Route<dynamic> route, dynamic result) {
+  //   if (pages.isNotEmpty) {
+  //     if (pages.last.name == route.settings.name) {
+  //       pages.remove(route.settings);
+  //       notifyListeners();
+  //     }
+  //   }
+  //   return route.didPop(result);
+  // }
   
   @override
   Widget build(BuildContext context) {
     return Navigator(
-      key: navigatorKey,
+      //key: navigatorKey,
       pages: pages,
-      onPopPage: (route, result) {},
+      onPopPage: (route, result){},
     );
   }
 
   ///监听新页面的到来
   @override
-  Future<void> setNewRoutePath(configuration) async{
+  Future<void> setNewRoutePath(configuration) async {
     print("setNewRoutePath");
-    if(configuration.unknownPage){
+    if (configuration.unknownPage) {
       show404 = true;
       return;
     }
-    
-    if(configuration.isHomePage){
-      show404 = false;
-      return;
+
+    if(configuration.currentPage == AppRoutePath.textEditorPage){
+      currentPage = AppRoutePath.textEditorPage;
+      pages.add(MaterialPage(key: ValueKey('TextEditorPage'), child: TextEditorPage()));
     }
+    
   }
 }
 
 class AppRoutePath {
-  final int id;
+  static const String textEditorPage = 'text-editor';
+  int id;
   final bool unknownPage;
-
+  String title;
+  String currentPage = '';
   AppRoutePath.home()
       : id = null,
-        unknownPage = false;
+        unknownPage = false, currentPage = '';
 
   AppRoutePath.details(this.id) : unknownPage = false;
+
+  AppRoutePath.editorPage(this.title) : unknownPage = false, currentPage = textEditorPage;
 
   AppRoutePath.unknown()
       : id = null,
@@ -79,6 +113,11 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
     final uri = Uri.parse(routeInformation.location);
     if (uri.pathSegments.length == 0) {
       return AppRoutePath.home();
+    }
+
+    if (uri.pathSegments.length == 2) {
+      if (uri.pathSegments[0] == AppRoutePath.textEditorPage)
+        return AppRoutePath.editorPage(uri.pathSegments[1] ?? '');
     }
 
     // if (uri.pathSegments.length == 2) {
@@ -100,6 +139,9 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
     }
     if (configuration.isHomePage) {
       return RouteInformation(location: '/');
+    }
+    if(configuration.currentPage == AppRoutePath.textEditorPage){
+      return RouteInformation(location:  '/${AppRoutePath.textEditorPage}/${configuration.title}');
     }
     // if (configuration.isDetailsPage) {
     //   return RouteInformation(location: '/veggie/${path.id}');
