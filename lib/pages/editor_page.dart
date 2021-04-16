@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:spark_list/config/config.dart';
+import 'package:spark_list/widget/app_bar.dart';
 
 ///
 /// Author: Elemen
@@ -17,13 +19,16 @@ class _TextEditorPageState extends State<TextEditorPage> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        title: Text('Todo'),
-        iconTheme:
-            IconThemeData(color: colorScheme.onSecondary),
+      appBar: SparkAppBar(
+        context: context,
+        title: 'ToDo',
         actions: [
-          IconButton(icon: Icon(Icons.check, color: colorScheme.onSecondary,), onPressed: (){})
+          IconButton(
+              icon: Icon(
+                Icons.check,
+                color: colorScheme.onSecondary,
+              ),
+              onPressed: () {})
         ],
       ),
       body: Container(
@@ -93,8 +98,8 @@ class _EditorTableRow extends StatelessWidget {
       color: Colors.white,
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
-        onTap: (){
-          Navigator.of(context).pushNamed('/list_category_page');
+        onTap: () {
+          Navigator.of(context).pushNamed(Routes.listCategoryPage);
         },
         child: Container(
           height: 55,
@@ -105,15 +110,24 @@ class _EditorTableRow extends StatelessWidget {
               Container(
                 height: 10,
                 width: 10,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.red
-                ),
+                decoration:
+                    BoxDecoration(shape: BoxShape.circle, color: Colors.red),
               ),
-              SizedBox(width: 8,),
-              Text('To Do', style: TextStyle(color: Colors.grey),),
-              SizedBox(width: 8,),
-              Icon(Icons.arrow_forward_ios, size: 14, color: Colors.grey,)
+              SizedBox(
+                width: 8,
+              ),
+              Text(
+                'To Do',
+                style: TextStyle(color: Colors.grey),
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                size: 14,
+                color: Theme.of(context).colorScheme.onSecondary,
+              )
             ],
           ),
         ),

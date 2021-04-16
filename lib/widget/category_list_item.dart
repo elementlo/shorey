@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:spark_list/pages/editor_page.dart';
-import 'package:spark_list/routes.dart';
+import 'package:spark_list/config/config.dart';
 
 ///
 /// Author: Elemen
@@ -269,7 +268,7 @@ class _CategoryHeader extends StatelessWidget {
                           child: Row(
                             children: [
                               IconButton(
-	                              onPressed: (){},
+                                onPressed: () {},
                                 icon: Icon(
                                   Icons.more_horiz,
                                   color: colorScheme.primaryVariant,
@@ -308,7 +307,7 @@ class CategoryDemoItem extends StatelessWidget {
       color: Theme.of(context).colorScheme.surface,
       child: InkWell(
         onTap: () {
-          Navigator.of(context).pushNamed('/text_editor_page');
+          Navigator.of(context).pushNamed(Routes.textEditorPage);
         },
         child: Padding(
           padding: EdgeInsetsDirectional.only(

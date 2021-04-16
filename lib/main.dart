@@ -1,8 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:spark_list/config/config.dart';
 import 'package:spark_list/pages/editor_page.dart';
 import 'package:spark_list/pages/list_category_page.dart';
+import 'package:spark_list/pages/mantra_edit_page.dart';
 import 'package:spark_list/pages/root_page.dart';
+import 'package:spark_list/pages/settings_category_page.dart';
 import 'package:spark_list/routes.dart';
 
 import 'config/theme_data.dart';
@@ -41,9 +44,11 @@ class MyApp extends StatelessWidget {
       //   platform: defaultTargetPlatform,
       // ),
       routes: {
-        '/': (context) => RootPage(),
-        '/text_editor_page': (context) => TextEditorPage(),
-        '/list_category_page': (context) => ListCategoryPage()
+        Routes.homePage: (context) => RootPage(),
+        Routes.textEditorPage: (context) => TextEditorPage(),
+        Routes.listCategoryPage: (context) => ListCategoryPage(),
+        Routes.settingsCategoryPage: (context) => SettingsCategoryPage(),
+        Routes.mantraEditPage: (context) => MantraEditPage(),
       },
     );
   }

@@ -11,24 +11,28 @@ import 'package:spark_list/widget/panel_text_field.dart';
 /// Description:
 ///
 
-///996B1F
-class DailyFocusPanel extends StatelessWidget {
+class DailyFocusPanel extends StatefulWidget {
   final AnimationController animationController;
   final Animation animation;
-
+  
   const DailyFocusPanel({Key key, this.animationController, this.animation})
       : super(key: key);
+  
+  @override
+  _DailyFocusPanelState createState() => _DailyFocusPanelState();
+}
 
+class _DailyFocusPanelState extends State<DailyFocusPanel> {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animationController,
+      animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
         return FadeTransition(
-          opacity: animation,
+          opacity: widget.animation,
           child: new Transform(
             transform: new Matrix4.translationValues(
-                0.0, 30 * (1.0 - animation.value), 0.0),
+                0.0, 30 * (1.0 - widget.animation.value), 0.0),
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 16, right: 16, top: 16, bottom: 18),
@@ -47,7 +51,7 @@ class DailyFocusPanel extends StatelessWidget {
                   children: <Widget>[
                     Padding(
                       padding:
-                          const EdgeInsets.only(top: 16, left: 12, right: 12),
+                      const EdgeInsets.only(top: 16, left: 12, right: 12),
                       child: Row(
                         children: <Widget>[
                           Expanded(
@@ -72,9 +76,9 @@ class DailyFocusPanel extends StatelessWidget {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Column(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          MainAxisAlignment.center,
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Padding(
                                               padding: const EdgeInsets.only(
@@ -93,8 +97,8 @@ class DailyFocusPanel extends StatelessWidget {
                                             ),
                                             Container(
                                               width: MediaQuery.of(context)
-                                                      .size
-                                                      .width -
+                                                  .size
+                                                  .width -
                                                   210,
                                               child: Text(
                                                 '我们称之为路的, 不过是彷徨.',
@@ -137,12 +141,12 @@ class DailyFocusPanel extends StatelessWidget {
                                     ),
                                     child: Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      MainAxisAlignment.center,
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                      CrossAxisAlignment.center,
                                       children: <Widget>[
                                         Text(
-                                          '${(80 * animation.value).toInt()}%',
+                                          '${(80 * widget.animation.value).toInt()}%',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontWeight: FontWeight.normal,
@@ -178,7 +182,7 @@ class DailyFocusPanel extends StatelessWidget {
                                         ],
                                         angle: 140 +
                                             (360 - 140) *
-                                                (1.0 - animation.value)),
+                                                (1.0 - widget.animation.value)),
                                     child: SizedBox(
                                       width: 108,
                                       height: 108,
@@ -197,7 +201,7 @@ class DailyFocusPanel extends StatelessWidget {
                     ),
                     Container(
                       padding: const EdgeInsets.only(
-                               left: 16, right: 16, bottom: 16),
+                          left: 16, right: 16, bottom: 16),
                       child: PanelTextField(),
                     ),
                   ],

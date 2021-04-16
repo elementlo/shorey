@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/config/config.dart';
-import 'package:spark_list/pages/settings_page.dart';
+import 'package:spark_list/pages/curtain_page.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/settings_icon/icon.dart' as settings_icon;
@@ -127,7 +127,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
         children: [
           PositionedTransition(
               rect: _slideDownSettingsPageAnimation(context),
-              child: SettingsPage()),
+              child: CurtainPage()),
           PositionedTransition(
               rect: _slideDownHomePageAnimation(context), child: HomePage(animationController: homePageFadeController,)),
           _SettingsIcon(
