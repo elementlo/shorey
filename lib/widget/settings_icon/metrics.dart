@@ -7,10 +7,10 @@ import 'package:flutter/animation.dart' show Curves;
 import 'package:flutter/material.dart';
 
 // Color gradients.
-const pinkLeft = Color(0xFFFF5983);
+const pinkLeft = Color(0xFFe26d5c);
 const pinkRight = Color(0xFFFF8383);
 
-const tealLeft = Color(0xFF1CDDC8);
+const tealLeft = Color(0xFF117378);
 const tealRight = Color(0xFF00A5B3);
 
 // Dimensions.

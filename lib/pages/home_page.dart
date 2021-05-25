@@ -21,24 +21,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return _HomeScreen(widget.animationController);
-  }
-}
-
-class _HomeScreen extends StatefulWidget {
-  AnimationController animationController;
-
-  _HomeScreen(this.animationController);
-  
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<_HomeScreen>
-    with TickerProviderStateMixin {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   AnimationController _animationController;
   
   @override
@@ -66,7 +49,7 @@ class _HomeScreenState extends State<_HomeScreen>
     //   );
     // }
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,7 +90,7 @@ class _HomeScreenState extends State<_HomeScreen>
                     demos: ['1111', '2222'],
                     initiallyExpanded: false,
                     onTap: (shouldOpenList) {
-                    
+                  
                     }),
               ),
               _AnimatedCategoryItem(
@@ -123,7 +106,7 @@ class _HomeScreenState extends State<_HomeScreen>
                     demos: ['1111', '2222'],
                     initiallyExpanded: false,
                     onTap: (shouldOpenList) {
-          
+                  
                     }),
               ),
               _AnimatedCategoryItem(
@@ -139,7 +122,7 @@ class _HomeScreenState extends State<_HomeScreen>
                     demos: ['1111', '2222'],
                     initiallyExpanded: false,
                     onTap: (shouldOpenList) {
-          
+                  
                     }),
               ),
               _AnimatedCategoryItem(
@@ -155,14 +138,14 @@ class _HomeScreenState extends State<_HomeScreen>
                     demos: ['1111', '2222'],
                     initiallyExpanded: false,
                     onTap: (shouldOpenList) {
-          
+                  
                     }),
               ),
             ],
           )
         ],
       ),
-    );
+    );;
   }
 }
 

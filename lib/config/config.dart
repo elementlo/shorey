@@ -1,3 +1,7 @@
+import 'dart:core';
+
+import 'package:sqflite/sqflite.dart';
+
 ///
 /// Author: Elemen
 /// Github: https://github.com/elementlo
@@ -25,4 +29,22 @@ class Mantra {
 	static const String mantra4 = 'El psy kongroo.';
 	
 	static const List<String> mantraList = [mantra1, mantra2, mantra3, mantra4];
+}
+
+///Database
+class DatabaseRef{
+	static const String DbName = 'spark_list_db.db';
+	static const String tableMainFocus = 'main_focus_table';
+	static const String tableHeatMap = 'heat_map_table';
+	static const int kVersion = 1;
+	static const String columnId = '_id';
+	
+	///table - main_focus_table
+	static const String mainFocusContent = 'content';
+	static const String mainFocusCreatedTime = 'created_time';
+	
+	///table - heat_map_table
+	static const String heatPointlevel = 'level';
+	static const String heatPointId = '_id';
+	static const String heatPointcreatedTime = 'created_time';
 }

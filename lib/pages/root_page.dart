@@ -44,6 +44,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
     );
     homePageFadeController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
+    
   }
 
   @override

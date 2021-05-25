@@ -1,8 +1,12 @@
 import 'dart:math' as math;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spark_list/config/config.dart';
 import 'package:spark_list/config/theme_data.dart';
 import 'package:spark_list/widget/panel_text_field.dart';
+import 'package:sqflite/sqflite.dart';
 
 ///
 /// Author: Elemen
@@ -14,20 +18,45 @@ import 'package:spark_list/widget/panel_text_field.dart';
 class DailyFocusPanel extends StatefulWidget {
   final AnimationController animationController;
   final Animation animation;
-  
+
   const DailyFocusPanel({Key key, this.animationController, this.animation})
       : super(key: key);
-  
+
   @override
   _DailyFocusPanelState createState() => _DailyFocusPanelState();
 }
 
 class _DailyFocusPanelState extends State<DailyFocusPanel> {
+  String mantra = '';
+  Database db;
+
+  void initMantra() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      mantra =
+          prefs.getString('mantra') ?? Mantra.mantraList[Random().nextInt(3)];
+      print(mantra);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initMantra();
+  }
+
+  @override
+  void didUpdateWidget(covariant DailyFocusPanel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    initMantra();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
+        final percent = DateTime.now().hour / 24 * 100;
         return FadeTransition(
           opacity: widget.animation,
           child: new Transform(
@@ -51,13 +80,13 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                   children: <Widget>[
                     Padding(
                       padding:
-                      const EdgeInsets.only(top: 16, left: 12, right: 12),
+                          const EdgeInsets.only(top: 16, left: 12, right: 12),
                       child: Row(
                         children: <Widget>[
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.only(
-                                  left: 8, right: 8, top: 4),
+                                  left: 8, top: 4),
                               child: Column(
                                 children: <Widget>[
                                   Row(
@@ -66,19 +95,21 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                                         height: 48,
                                         width: 2,
                                         decoration: BoxDecoration(
-                                          color:
-                                          Theme.of(context).colorScheme.primaryVariant.withOpacity(0.5),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primaryVariant
+                                              .withOpacity(0.5),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(4.0)),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.only(left: 8.0),
                                         child: Column(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                              MainAxisAlignment.center,
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Padding(
                                               padding: const EdgeInsets.only(
@@ -89,7 +120,6 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 16,
-                                                  letterSpacing: -0.1,
                                                   color: Colors.grey
                                                       .withOpacity(0.5),
                                                 ),
@@ -97,11 +127,11 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                                             ),
                                             Container(
                                               width: MediaQuery.of(context)
-                                                  .size
-                                                  .width -
-                                                  210,
+                                                      .size
+                                                      .width -
+                                                  200,
                                               child: Text(
-                                                '我们称之为路的, 不过是彷徨.',
+                                                '${mantra}',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 16,
@@ -141,18 +171,19 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                                     ),
                                     child: Column(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                          MainAxisAlignment.center,
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.center,
+                                          CrossAxisAlignment.center,
                                       children: <Widget>[
                                         Text(
-                                          '${(80 * widget.animation.value).toInt()}%',
+                                          '${(percent * widget.animation.value).toInt()}%',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontWeight: FontWeight.normal,
                                             fontSize: 24,
                                             letterSpacing: 0.0,
-                                            color: AppThemeData.lightColorScheme.primaryVariant,
+                                            color: AppThemeData.lightColorScheme
+                                                .primaryVariant,
                                           ),
                                         ),
                                         Text(

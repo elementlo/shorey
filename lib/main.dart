@@ -6,11 +6,18 @@ import 'package:spark_list/pages/list_category_page.dart';
 import 'package:spark_list/pages/mantra_edit_page.dart';
 import 'package:spark_list/pages/root_page.dart';
 import 'package:spark_list/pages/settings_category_page.dart';
+import 'package:spark_list/resource/db_provider.dart';
 import 'package:spark_list/routes.dart';
 
 import 'config/theme_data.dart';
 
-void main() {
+DbSparkProvider sparkProvider;
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+
+  sparkProvider = DbSparkProvider();
+  await sparkProvider.ready;
   runApp(MyApp());
 }
 
