@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:spark_list/main.dart';
+import 'package:spark_list/model/model.dart';
+import 'package:spark_list/view_model/home_view_model.dart';
 
 ///
 /// Author: Elemen
 /// Github: https://github.com/elementlo
 /// Date: 3/9/21
-/// Description: 
+/// Description:
 ///
 
 class PanelTextField extends StatefulWidget {
@@ -16,25 +20,106 @@ class PanelTextField extends StatefulWidget {
 }
 
 class _PanelTextFieldState extends State<PanelTextField> {
-	
-	
+  var finished = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initMainFocus();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<HomeViewModel>(context);
     return Container(
-	    child: TextField(
-		    onSubmitted: (String finalInput){
-			    print('onsubmit: ${finalInput}');
-			
-		    },
-		    decoration: InputDecoration(
-				    labelText: 'Main Focus Today...',
-				    border: UnderlineInputBorder(
-						    borderSide: BorderSide(
-								    color: Colors.grey
-						    )
-				    )
-		    ),
-	    ),
+      child: viewModel.hasMainFocus
+          ? _buildMainFocusRow(context)
+          : TextField(
+              onSubmitted: (String finalInput) async {
+                print('onsubmit: ${finalInput}');
+                if (finalInput.isNotEmpty) {
+                  await viewModel.saveMainFocus(finalInput);
+                }
+              },
+              decoration: InputDecoration(
+                  labelText: 'Main Focus Today...',
+                  border: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey))),
+            ),
+    );
+  }
+
+  void _initMainFocus() async {
+    // final viewModel = Provider.of<HomeViewModel>(context, listen: false);
+    // viewModel.initMainFocus();
+  }
+
+  Widget _buildMainFocusRow(BuildContext context) {
+    final viewModel = Provider.of<HomeViewModel>(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          finished = !finished;
+        });
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Main Focus Today:',
+            style: TextStyle(fontSize: 12),
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      finished
+                          ? Icons.check_circle_outline
+                          : Icons.brightness_1_outlined,
+                      color: colorScheme.onSecondary,
+                      size: 18,
+                    ),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      '${viewModel.mainFocus}',
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          height: 1,
+                          decoration:
+                              finished ? TextDecoration.lineThrough : null),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                width: 18,
+                height: 18,
+                child: IconButton(
+                    padding: EdgeInsets.all(0),
+                    icon: Icon(Icons.edit),
+                    iconSize: 16,
+                    onPressed: () {
+                      setState(() {
+                        viewModel.hasMainFocus = false;
+                      });
+                    }),
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 }

@@ -34,16 +34,17 @@ class Mantra {
 ///Database
 class DatabaseRef{
 	static const String DbName = 'spark_list_db.db';
-	static const String tableMainFocus = 'main_focus_table';
-	static const String tableHeatMap = 'heat_map_table';
 	static const int kVersion = 1;
 	static const String columnId = '_id';
 	
-	///table - main_focus_table
-	static const String mainFocusContent = 'content';
-	static const String mainFocusCreatedTime = 'created_time';
+	///table - to_do_table
+	static const String tableToDo = 'to_do';
+	static const String toDoContent = 'content';
+	static const String toDoCreatedTime = 'created_time';
+	static const String status = 'status';
 	
 	///table - heat_map_table
+	static const String tableHeatMap = 'heat_map';
 	static const String heatPointlevel = 'level';
 	static const String heatPointId = '_id';
 	static const String heatPointcreatedTime = 'created_time';

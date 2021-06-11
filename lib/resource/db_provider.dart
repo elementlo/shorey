@@ -42,10 +42,11 @@ class DbSparkProvider {
 
   Future _createDb(Database db) async {
     await db.execute('''
-  	CREATE TABLE ${DatabaseRef.tableMainFocus} (
+  	CREATE TABLE ${DatabaseRef.tableToDo} (
   	${DatabaseRef.columnId} INTEGER PRIMARY KEY AUTOINCREMENT,
-  	${DatabaseRef.mainFocusContent} TEXT,
-  	${DatabaseRef.mainFocusCreatedTime} INT NOT NULL)
+  	${DatabaseRef.toDoContent} TEXT,
+  	${DatabaseRef.toDoCreatedTime} INT NOT NULL,
+  	${DatabaseRef.status} INT)
   	''');
     await db.execute('''
   	CREATE TABLE ${DatabaseRef.tableHeatMap} (
@@ -55,10 +56,12 @@ class DbSparkProvider {
   	''');
   }
 
-  Future saveMainFocus(MainFocusModel model) async {
-    await db.insert(DatabaseRef.tableMainFocus, {
-      '${DatabaseRef.mainFocusContent}': model.content,
-      '${DatabaseRef.mainFocusCreatedTime}': model.createdTime
+  ///status: 0: 已完成 1: 未完成
+  Future insertToDo(ToDoModel model) async {
+    await db.insert(DatabaseRef.tableToDo, {
+      '${DatabaseRef.toDoContent}': model.content,
+      '${DatabaseRef.toDoCreatedTime}': model.createdTime,
+      '${DatabaseRef.status}': model.status,
     });
   }
 
@@ -75,6 +78,22 @@ class DbSparkProvider {
     }
     return null;
   }
+
+  Future<ToDoModel> getTopToDo() async {
+    List<Map> list = await db.rawQuery('''
+    SELECT * FROM ${DatabaseRef.tableToDo}
+    WHERE ${DatabaseRef.columnId} = (SELECT MAX(${DatabaseRef.columnId})
+    FROM ${DatabaseRef.tableToDo})
+    ''');
+    if (list.isNotEmpty) {
+      return ToDoModel(
+          createdTime: list.first['${DatabaseRef.toDoCreatedTime}'],
+          content: list.first['${DatabaseRef.toDoContent}']);
+    }
+    return null;
+  }
+  
+  
 
   Future insertHeatPoint(int heatLevel, int createdTime) async {
     await db.insert(DatabaseRef.tableHeatMap, {

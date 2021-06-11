@@ -77,6 +77,7 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                   // ],
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Padding(
                       padding:

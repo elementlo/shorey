@@ -12,6 +12,7 @@ import 'package:spark_list/routes.dart';
 import 'config/theme_data.dart';
 
 DbSparkProvider sparkProvider;
+bool oneDayPassBy = true;
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();

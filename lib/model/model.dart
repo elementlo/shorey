@@ -6,17 +6,18 @@ import 'package:flutter/cupertino.dart';
 /// Date: 4/19/21
 /// Description: 
 ///
-class MainFocusModel{
-	final int createdTime;
-	final String content;
+class ToDoModel{
+	int createdTime;
+	String content;
+	int status;
 	
-	MainFocusModel({this.content, @required this.createdTime});
+	ToDoModel({this.content, @required this.createdTime, this.status});
 }
 
 
 class HeatMapModel{
-	final int createdTime;
-	final int level;
+	int createdTime;
+	int level;
 	
 	HeatMapModel({this.level, @required this.createdTime});
 }

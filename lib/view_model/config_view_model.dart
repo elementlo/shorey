@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:spark_list/base/view_state_model.dart';
+import 'package:spark_list/main.dart';
+import 'package:spark_list/resource/db_provider.dart';
 
 ///
 /// Author: Elemen
