@@ -56,9 +56,9 @@ class DbSparkProvider {
   	''');
   }
 
-  ///status: 0: 已完成 1: 未完成
-  Future insertToDo(ToDoModel model) async {
-    await db.insert(DatabaseRef.tableToDo, {
+  ///status: 0: 已完成 1: 未完成 2: 已删除
+  Future<int> insertToDo(ToDoModel model) async {
+    return await db.insert(DatabaseRef.tableToDo, {
       '${DatabaseRef.toDoContent}': model.content,
       '${DatabaseRef.toDoCreatedTime}': model.createdTime,
       '${DatabaseRef.status}': model.status,
@@ -87,18 +87,38 @@ class DbSparkProvider {
     ''');
     if (list.isNotEmpty) {
       return ToDoModel(
+          id: list.first['${DatabaseRef.columnId}'],
           createdTime: list.first['${DatabaseRef.toDoCreatedTime}'],
           content: list.first['${DatabaseRef.toDoContent}']);
     }
     return null;
   }
-  
-  
 
-  Future insertHeatPoint(int heatLevel, int createdTime) async {
-    await db.insert(DatabaseRef.tableHeatMap, {
+  Future<int> insertHeatPoint(int heatLevel, int createdTime) async {
+    return await db.insert(DatabaseRef.tableHeatMap, {
       '${DatabaseRef.heatPointlevel}': heatLevel,
       '${DatabaseRef.heatPointcreatedTime}': createdTime
     });
+  }
+
+  Future updateToDoStatus(ToDoModel model) async {
+    return await db.update(
+        DatabaseRef.tableToDo,
+        {
+          DatabaseRef.toDoContent: model.content,
+          DatabaseRef.status: model.status,
+        },
+        where: '${DatabaseRef.columnId} = ?',
+        whereArgs: [model.id]);
+  }
+  
+  Future updateHeatPoint(int difference) async{
+    return await db.execute('''
+    UPDATE ${DatabaseRef.tableHeatMap}
+    SET ${DatabaseRef.heatPointlevel} = ${DatabaseRef.heatPointlevel} + ${difference}
+    WHERE ${DatabaseRef.columnId} IN (SELECT ${DatabaseRef.columnId} FROM ${DatabaseRef.tableHeatMap}
+    ORDER BY ${DatabaseRef.columnId} DESC
+    LIMIT 1)
+    ''');
   }
 }

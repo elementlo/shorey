@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spark_list/main.dart';
-import 'package:spark_list/model/model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 
 ///
@@ -61,6 +59,7 @@ class _PanelTextFieldState extends State<PanelTextField> {
       onTap: () {
         setState(() {
           finished = !finished;
+          viewModel.updateMainFocusStatus(finished ? 0 : 1);
         });
       },
       child: Column(

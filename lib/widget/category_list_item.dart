@@ -20,6 +20,7 @@ class CategoryListItem extends StatefulWidget {
     this.demos = const [''],
     this.initiallyExpanded = false,
     this.onTap,
+    this.icon,
   })  : assert(initiallyExpanded != null),
         super(key: key);
 
@@ -32,6 +33,7 @@ class CategoryListItem extends StatefulWidget {
   final List<String> demos;
   final bool initiallyExpanded;
   final CategoryHeaderTapCallback onTap;
+  final Icon icon;
 
   @override
   _CategoryListItemState createState() => _CategoryListItemState();
@@ -133,6 +135,7 @@ class _CategoryListItemState extends State<CategoryListItem>
           chevronOpacity: _headerChevronOpacity.value,
           imageString: widget.imageString,
           category: widget.category,
+          icon: widget.icon,
           onTap: _handleTap,
         ),
         Padding(
@@ -204,6 +207,7 @@ class _CategoryHeader extends StatelessWidget {
     this.imageString,
     this.category,
     this.onTap,
+    this.icon,
   }) : super(key: key);
 
   final EdgeInsetsGeometry margin;
@@ -214,6 +218,7 @@ class _CategoryHeader extends StatelessWidget {
   final String category;
   final double chevronOpacity;
   final GestureTapCallback onTap;
+  final Icon icon;
 
   @override
   Widget build(BuildContext context) {
@@ -239,11 +244,7 @@ class _CategoryHeader extends StatelessWidget {
                     children: [
                       Padding(
                         padding: imagePadding,
-                        child: Icon(
-                          Icons.assignment_outlined,
-                          size: 30,
-                          color: Colors.blue,
-                        ),
+                        child: icon,
                       ),
                       Padding(
                         padding: const EdgeInsetsDirectional.only(start: 8),

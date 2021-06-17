@@ -82,13 +82,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 controller: _animationController,
                 child: CategoryListItem(
                     key: const PageStorageKey<String>(
-                      'ToDo',
+                      'To Do',
                     ),
                     restorationId: 'home_material_category_list',
-                    category: 'ToDo',
+                    category: 'To Do',
                     imageString: 'assets/icons/material/material.png',
                     demos: ['1111', '2222'],
                     initiallyExpanded: false,
+                    icon: Icon(
+                      Icons.article_outlined,
+                      color: Colors.blue,
+                    ),
                     onTap: (shouldOpenList) {
                   
                     }),
@@ -98,13 +102,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 controller: _animationController,
                 child: CategoryListItem(
                     key: const PageStorageKey<String>(
-                      'ToDo',
+                      'To Watch',
                     ),
                     restorationId: 'home_material_category_list',
-                    category: 'ToDo',
+                    category: 'To Watch',
                     imageString: 'assets/icons/material/material.png',
                     demos: ['1111', '2222'],
                     initiallyExpanded: false,
+                    icon: Icon(
+                      Icons.movie_outlined,
+                      color: Colors.yellow,
+                    ),
                     onTap: (shouldOpenList) {
                   
                     }),
@@ -114,13 +122,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 controller: _animationController,
                 child: CategoryListItem(
                     key: const PageStorageKey<String>(
-                      'ToDo',
+                      'To Read',
                     ),
                     restorationId: 'home_material_category_list',
-                    category: 'ToDo',
+                    category: 'To Read',
                     imageString: 'assets/icons/material/material.png',
                     demos: ['1111', '2222'],
                     initiallyExpanded: false,
+                    icon: Icon(
+                      Icons.menu_book_outlined,
+                      color: Colors.red,
+                    ),
                     onTap: (shouldOpenList) {
                   
                     }),
@@ -130,15 +142,59 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 controller: _animationController,
                 child: CategoryListItem(
                     key: const PageStorageKey<String>(
-                      'ToDo',
+                      'Alert',
                     ),
                     restorationId: 'home_material_category_list',
-                    category: 'ToDo',
+                    category: 'Alert',
                     imageString: 'assets/icons/material/material.png',
                     demos: ['1111', '2222'],
                     initiallyExpanded: false,
+                    icon: Icon(
+                      Icons.add_alert,
+                      color: Colors.orangeAccent,
+                    ),
                     onTap: (shouldOpenList) {
                   
+                    }),
+              ),
+              _AnimatedCategoryItem(
+                startDelayFraction: 0.00,
+                controller: _animationController,
+                child: CategoryListItem(
+                    key: const PageStorageKey<String>(
+                      'Work',
+                    ),
+                    restorationId: 'home_material_category_list',
+                    category: 'Work',
+                    imageString: 'assets/icons/material/material.png',
+                    demos: ['1111', '2222'],
+                    initiallyExpanded: false,
+                    icon: Icon(
+                      Icons.work_outline,
+                      color: Colors.greenAccent,
+                    ),
+                    onTap: (shouldOpenList) {
+          
+                    }),
+              ),
+              _AnimatedCategoryItem(
+                startDelayFraction: 0.00,
+                controller: _animationController,
+                child: CategoryListItem(
+                    key: const PageStorageKey<String>(
+                      'To Learn',
+                    ),
+                    restorationId: 'home_material_category_list',
+                    category: 'To Learn',
+                    imageString: 'assets/icons/material/material.png',
+                    demos: ['1111', '2222'],
+                    initiallyExpanded: false,
+                    icon: Icon(
+                      Icons.school_outlined,
+                      color: Colors.black,
+                    ),
+                    onTap: (shouldOpenList) {
+          
                     }),
               ),
             ],

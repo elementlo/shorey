@@ -21,6 +21,9 @@ class HomeViewModel extends ViewStateModel {
 
   bool get hasMainFocus => _hasMainFocus;
 
+  ToDoModel _mainFocusModel;
+  HeatMapModel _heatMapModel;
+
   set hasMainFocus(bool hasMainFocus) {
     this._hasMainFocus = hasMainFocus;
     notifyListeners();
@@ -32,8 +35,8 @@ class HomeViewModel extends ViewStateModel {
     final currentTime = DateTime.now();
     if (point?.createdTime != null) {
       final lastTime = DateTime.fromMillisecondsSinceEpoch(point.createdTime);
-      if (lastTime.year != currentTime.year &&
-          lastTime.month != currentTime.month &&
+      if (lastTime.year != currentTime.year ||
+          lastTime.month != currentTime.month ||
           lastTime.day != currentTime.day) {
         print('not the same day ...insert initial heat point...');
         oneDayPassBy = true;
@@ -49,39 +52,50 @@ class HomeViewModel extends ViewStateModel {
       await sparkProvider.insertHeatPoint(
           0, currentTime.millisecondsSinceEpoch);
     }
-    
-    initMainFocus();
+    _initMainFocus();
   }
 
-  Future initMainFocus() async{
+  Future _initMainFocus() async {
     if (oneDayPassBy) {
       _hasMainFocus = false;
     } else {
-      final model = await queryMainFocus();
-      if (model != null) {
-        _mainFocus = model.content;
+      _mainFocusModel = await queryMainFocus();
+      if (_mainFocusModel != null) {
+        _mainFocus = _mainFocusModel.content;
         _hasMainFocus = true;
-      }else{
+      } else {
         _hasMainFocus = false;
       }
     }
     notifyListeners();
   }
-  
+
   Future saveMainFocus(String content, {int status = 1}) async {
     await sparkProvider.insertToDo(
         ToDoModel(createdTime: DateTime.now().millisecondsSinceEpoch)
           ..content = content
           ..status = 1);
-    await initMainFocus();
+    await _initMainFocus();
     notifyListeners();
   }
 
   Future<ToDoModel> queryMainFocus() async {
     return await sparkProvider.getTopToDo();
   }
-  
-  Future updateMainFocusStatus(int status){
-    
+
+  Future updateMainFocusStatus(int status) async {
+    if (_mainFocusModel != null) {
+      _mainFocusModel.status = status;
+      await sparkProvider.updateToDoStatus(_mainFocusModel);
+      int difference = 0;
+      if(status == 0){
+        difference = 1;
+      }else if(status == 1){
+        difference = -1;
+      }
+      await sparkProvider.updateHeatPoint(difference);
+    }
   }
+
+  Future updateHeatMap() async {}
 }
