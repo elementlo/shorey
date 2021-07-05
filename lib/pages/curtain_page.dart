@@ -30,13 +30,15 @@ class _CurtainPageState extends State<CurtainPage> {
               text: 'Spark Moment',
             ),
           ),
-          SizedBox(height: 16,),
+          SizedBox(
+            height: 16,
+          ),
           _MomentGrid(),
           Divider(
             indent: 16,
             endIndent: 16,
           ),
-        _SettingsRow(title: '设置'),
+          _SettingsRow(title: '设置'),
         ],
       ),
     );
@@ -66,11 +68,12 @@ class _MomentGrid extends StatelessWidget {
             for (int i = 0; i <= 6; i++)
               Row(
                 children: [
-                  for (int i = 0; i <= 12; i++)
-                    _buildCell(i, context)
+                  for (int j = 0; j <= 12; j++) _buildCell(j, i, context)
                 ],
               ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -83,42 +86,52 @@ class _MomentGrid extends StatelessWidget {
     );
   }
 
-  Color _randomColor(int i, BuildContext context) {
-    if (i % 3 == 0) {
+  Color _randomColor(int row, int col, BuildContext context) {
+    if (row % 3 == 0) {
       return Theme.of(context).colorScheme.primaryVariant.withOpacity(0.6);
-    } else if (i % 6 == 5) {
+    } else if (row % 6 == 5) {
       return Color(0xFF1ab4bc).withOpacity(0.5);
-    } else if (i % 4 == 3) {
+    } else if (row % 4 == 3) {
       return Color(0xFF2ad8e2).withOpacity(0.2);
-    }
-    else {
+    } else {
       return Colors.black12.withOpacity(0.1);
     }
   }
 
-  Widget _buildCell(int i, BuildContext context) {
+  Widget _buildCell(int row, int col, BuildContext context) {
     return Container(
       margin: EdgeInsets.only(right: 8, top: 8),
       height: 17,
       width: 17,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(2),
-          color: _randomColor(i, context)),
+          border: row == DateTime.now().weekday - 1 && col == 6
+              ? Border.all(color: Color(0xFF1ab4bc).withOpacity(0.5))
+              : null,
+          color: _randomColor(row, col, context)),
     );
   }
-  
-  Widget _buildCutline(BuildContext context){
+
+  Widget _buildCutline(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Padding(padding: EdgeInsets.only(top:8, right: 8),
-            child: Text('Completed Less', style: TextStyle(fontSize: 12, color: Colors.grey),)),
-        _buildCell(1, context),
-        _buildCell(7, context),
-        _buildCell(11, context),
-        _buildCell(3, context),
-        Padding(padding: EdgeInsets.only(top:8),
-            child: Text('More', style: TextStyle(fontSize: 12, color: Colors.grey),)),
+        Padding(
+            padding: EdgeInsets.only(top: 8, right: 8),
+            child: Text(
+              'Completed Less',
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            )),
+        _buildCell(1, 1, context),
+        _buildCell(7, 1, context),
+        _buildCell(11, 1, context),
+        _buildCell(3, 1, context),
+        Padding(
+            padding: EdgeInsets.only(top: 8),
+            child: Text(
+              'More',
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            )),
       ],
     );
   }
@@ -126,9 +139,9 @@ class _MomentGrid extends StatelessWidget {
 
 class _SettingsRow extends StatelessWidget {
   final String title;
-  
+
   _SettingsRow({this.title});
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -137,7 +150,7 @@ class _SettingsRow extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
         child: InkWell(
-          onTap: (){
+          onTap: () {
             Navigator.of(context).pushNamed(Routes.settingsCategoryPage);
           },
           child: Container(
@@ -146,13 +159,20 @@ class _SettingsRow extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(child: Text('${title}')),
-                SizedBox(width: 8,),
-                Icon(Icons.arrow_forward_ios, size: 14, color: Theme.of(context).colorScheme.onSecondary,)
+                SizedBox(
+                  width: 8,
+                ),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 14,
+                  color: Theme.of(context).colorScheme.onSecondary,
+                )
               ],
             ),
           ),
         ),
       ),
-    );;
+    );
+    ;
   }
 }

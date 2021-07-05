@@ -45,6 +45,8 @@ class DbSparkProvider {
   	CREATE TABLE ${DatabaseRef.tableToDo} (
   	${DatabaseRef.columnId} INTEGER PRIMARY KEY AUTOINCREMENT,
   	${DatabaseRef.toDoContent} TEXT,
+  	${DatabaseRef.toDoBrief} TEXT,
+  	${DatabaseRef.category} TEXT,
   	${DatabaseRef.toDoCreatedTime} INT NOT NULL,
   	${DatabaseRef.status} INT)
   	''');
@@ -56,12 +58,17 @@ class DbSparkProvider {
   	''');
   }
 
+  Future close() async {
+    await db.close();
+  }
+
   ///status: 0: 已完成 1: 未完成 2: 已删除
   Future<int> insertToDo(ToDoModel model) async {
     return await db.insert(DatabaseRef.tableToDo, {
       '${DatabaseRef.toDoContent}': model.content,
       '${DatabaseRef.toDoCreatedTime}': model.createdTime,
       '${DatabaseRef.status}': model.status,
+      '${DatabaseRef.category}': model.category,
     });
   }
 
@@ -101,18 +108,18 @@ class DbSparkProvider {
     });
   }
 
-  Future updateToDoStatus(ToDoModel model) async {
+  Future updateToDoStatus(ToDoModel model, {bool updateContent = true}) async {
     return await db.update(
         DatabaseRef.tableToDo,
         {
-          DatabaseRef.toDoContent: model.content,
+          if (updateContent) DatabaseRef.toDoContent: model.content,
           DatabaseRef.status: model.status,
         },
         where: '${DatabaseRef.columnId} = ?',
         whereArgs: [model.id]);
   }
-  
-  Future updateHeatPoint(int difference) async{
+
+  Future updateHeatPoint(int difference) async {
     return await db.execute('''
     UPDATE ${DatabaseRef.tableHeatMap}
     SET ${DatabaseRef.heatPointlevel} = ${DatabaseRef.heatPointlevel} + ${difference}
@@ -120,5 +127,15 @@ class DbSparkProvider {
     ORDER BY ${DatabaseRef.columnId} DESC
     LIMIT 1)
     ''');
+  }
+
+  Future<ToDoListModel> queryToDoList(String category, {int status = 1}) async {
+    var list = await db.query(DatabaseRef.tableToDo,
+        where: '${DatabaseRef.category} = ? AND ${DatabaseRef.status} = ?',
+        whereArgs: [category, status]);
+    if (list.isNotEmpty) {
+      return ToDoListModel(list);
+    }
+    return null;
   }
 }

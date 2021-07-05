@@ -23,7 +23,6 @@ class _PanelTextFieldState extends State<PanelTextField> {
   @override
   void initState() {
     super.initState();
-    _initMainFocus();
   }
 
   @override
@@ -45,11 +44,6 @@ class _PanelTextFieldState extends State<PanelTextField> {
                       borderSide: BorderSide(color: Colors.grey))),
             ),
     );
-  }
-
-  void _initMainFocus() async {
-    // final viewModel = Provider.of<HomeViewModel>(context, listen: false);
-    // viewModel.initMainFocus();
   }
 
   Widget _buildMainFocusRow(BuildContext context) {

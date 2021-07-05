@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:spark_list/config/config.dart';
+import 'package:spark_list/model/model.dart';
+import 'package:spark_list/view_model/home_view_model.dart';
 
 ///
 /// Author: Elemen
@@ -12,16 +15,17 @@ import 'package:spark_list/config/config.dart';
 typedef CategoryHeaderTapCallback = Function(bool shouldOpenList);
 
 class CategoryListItem extends StatefulWidget {
-  const CategoryListItem({
-    Key key,
-    this.restorationId,
-    this.category,
-    this.imageString,
-    this.demos = const [''],
-    this.initiallyExpanded = false,
-    this.onTap,
-    this.icon,
-  })  : assert(initiallyExpanded != null),
+  const CategoryListItem(
+      {Key key,
+      this.restorationId,
+      this.category,
+      this.imageString,
+      this.demos = const [''],
+      this.initiallyExpanded = false,
+      this.onTap,
+      this.icon,
+      this.demoList})
+      : assert(initiallyExpanded != null),
         super(key: key);
 
   //final GalleryDemoCategory category;
@@ -31,6 +35,7 @@ class CategoryListItem extends StatefulWidget {
 
   //final List<GalleryDemo> demos;
   final List<String> demos;
+  final ToDoListModel demoList;
   final bool initiallyExpanded;
   final CategoryHeaderTapCallback onTap;
   final Icon icon;
@@ -161,16 +166,17 @@ class _CategoryListItemState extends State<CategoryListItem>
           : _ExpandedCategoryDemos(
               category: widget.category,
               demos: widget.demos,
-            ),
+              demoList: widget.demoList),
     );
   }
 }
 
 class _ExpandedCategoryDemos extends StatelessWidget {
-  const _ExpandedCategoryDemos({
+  _ExpandedCategoryDemos({
     Key key,
     this.category,
     this.demos,
+    this.demoList,
   }) : super(key: key);
 
   //
@@ -180,18 +186,55 @@ class _ExpandedCategoryDemos extends StatelessWidget {
   // final List<GalleryDemo> demos;
   final List<String> demos;
 
+  final ToDoListModel demoList;
+  final TextEditingController _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Column(
       // Makes integration tests possible.
       key: ValueKey('${category}DemoList'),
       children: [
-        for (final demo in demos)
-          CategoryDemoItem(
-            demo: demo,
-          ),
+        if (demoList != null && demoList.length > 0)
+          for (int i = 0; i < demoList.length; i++)
+            CategoryDemoItem(
+              model: demoList[i],
+            ),
+        _buildNewTaskField(context),
         const SizedBox(height: 12), // Extra space below.
       ],
+    );
+  }
+
+  Widget _buildNewTaskField(BuildContext context) {
+    final viewModel = Provider.of<HomeViewModel>(context, listen: false);
+    return Container(
+      color: Theme.of(context).colorScheme.surface,
+      padding: EdgeInsets.only(bottom: 5, left: 32, right: 8),
+      child: TextField(
+        controller: _controller,
+        decoration: InputDecoration(
+          hintText: 'Add a task',
+          hintStyle: TextStyle(
+            color: Theme.of(context).colorScheme.background,
+            fontSize: 14,
+          ),
+          enabledBorder: UnderlineInputBorder(
+            //未选中时候的颜色
+            borderSide:
+                BorderSide(color: Theme.of(context).colorScheme.background),
+          ),
+          border: UnderlineInputBorder(
+              borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.background)),
+        ),
+        onSubmitted: (input) async {
+          print(input);
+          await viewModel.saveToDo(input, category);
+          _controller.text = '';
+          await viewModel.queryToDoList(category);
+        },
+      ),
     );
   }
 }
@@ -294,9 +337,9 @@ class _CategoryHeader extends StatelessWidget {
 }
 
 class CategoryDemoItem extends StatelessWidget {
-  const CategoryDemoItem({Key key, this.demo}) : super(key: key);
+  const CategoryDemoItem({Key key, this.model}) : super(key: key);
 
-  final String demo;
+  final ToDoModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -304,7 +347,7 @@ class CategoryDemoItem extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return Material(
       // Makes integration tests possible.
-      key: ValueKey(demo),
+      key: ValueKey(model?.id ?? 0),
       color: Theme.of(context).colorScheme.surface,
       child: InkWell(
         onTap: () {
@@ -312,32 +355,47 @@ class CategoryDemoItem extends StatelessWidget {
         },
         child: Padding(
           padding: EdgeInsetsDirectional.only(
-            start: 32,
-            top: 20,
+            start: 16,
+            top: 10,
             end: 8,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(
-                Icons.brightness_1_outlined,
-                color: colorScheme.onSecondary,
+              GestureDetector(
+                onTap: () async {
+                  await context.read<HomeViewModel>().updateTodoItem(model);
+                },
+                child: Icon(
+                  model.status == 0
+                      ? Icons.check_circle_outline
+                      : Icons.brightness_1_outlined,
+                  color: colorScheme.onSecondary,
+                ),
               ),
-              const SizedBox(width: 40),
+              const SizedBox(width: 16),
               Flexible(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      demo,
+                      model?.content ?? '',
+                      style: TextStyle(
+                          decoration: model.status == 0
+                              ? TextDecoration.lineThrough
+                              : null,
+                          color: model.status == 0
+                              ? Colors.grey
+                              : Colors.black),
                     ),
-                    Text(
-                      demo,
-                      style: textTheme.overline.apply(
-                        color: colorScheme.onSurface.withOpacity(0.5),
+                    if (model?.brief != null && model?.brief.isNotEmpty)
+                      Text(
+                        model?.brief ?? '',
+                        style: textTheme.overline.apply(
+                          color: colorScheme.onSurface.withOpacity(0.5),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     Divider(
                       thickness: 1,
                       height: 1,

@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:spark_list/widget/daily_focus_panel.dart';
+import 'package:provider/provider.dart';
+import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/category_list_item.dart';
+import 'package:spark_list/widget/daily_focus_panel.dart';
 import 'package:spark_list/widget/home_header.dart';
 
 ///
@@ -12,8 +14,9 @@ import 'package:spark_list/widget/home_header.dart';
 ///
 class HomePage extends StatefulWidget {
   AnimationController animationController;
-  
-  HomePage({Key key, this.title, @required this.animationController}) : super(key: key);
+
+  HomePage({Key key, this.title, @required this.animationController})
+      : super(key: key);
 
   final String title;
 
@@ -23,7 +26,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   AnimationController _animationController;
-  
+
   @override
   void initState() {
     widget.animationController?.forward();
@@ -49,9 +52,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     //   );
     // }
   }
-  
+
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<HomeViewModel>(context);
     return Scaffold(
       body: Stack(
         children: [
@@ -87,14 +91,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     restorationId: 'home_material_category_list',
                     category: 'To Do',
                     imageString: 'assets/icons/material/material.png',
-                    demos: ['1111', '2222'],
+                    demoList: viewModel.indexedList['To Do'],
                     initiallyExpanded: false,
                     icon: Icon(
                       Icons.article_outlined,
                       color: Colors.blue,
                     ),
                     onTap: (shouldOpenList) {
-                  
+                      if (shouldOpenList) {
+                        viewModel.queryToDoList('To Do');
+                      }
                     }),
               ),
               _AnimatedCategoryItem(
@@ -107,14 +113,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     restorationId: 'home_material_category_list',
                     category: 'To Watch',
                     imageString: 'assets/icons/material/material.png',
-                    demos: ['1111', '2222'],
+                    demoList: viewModel.indexedList['To Watch'],
                     initiallyExpanded: false,
                     icon: Icon(
                       Icons.movie_outlined,
                       color: Colors.yellow,
                     ),
                     onTap: (shouldOpenList) {
-                  
+                      if (shouldOpenList) {
+                        viewModel.queryToDoList('To Watch');
+                      }
                     }),
               ),
               _AnimatedCategoryItem(
@@ -127,14 +135,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     restorationId: 'home_material_category_list',
                     category: 'To Read',
                     imageString: 'assets/icons/material/material.png',
-                    demos: ['1111', '2222'],
+                    demoList: viewModel.indexedList['To Read'],
                     initiallyExpanded: false,
                     icon: Icon(
                       Icons.menu_book_outlined,
                       color: Colors.red,
                     ),
                     onTap: (shouldOpenList) {
-                  
+                      if (shouldOpenList) {
+                        viewModel.queryToDoList('To Read');
+                      }
                     }),
               ),
               _AnimatedCategoryItem(
@@ -147,14 +157,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     restorationId: 'home_material_category_list',
                     category: 'Alert',
                     imageString: 'assets/icons/material/material.png',
-                    demos: ['1111', '2222'],
+                    demoList: viewModel.indexedList['Alert'],
                     initiallyExpanded: false,
                     icon: Icon(
                       Icons.add_alert,
                       color: Colors.orangeAccent,
                     ),
                     onTap: (shouldOpenList) {
-                  
+                      if (shouldOpenList) {
+                        viewModel.queryToDoList('Alert');
+                      }
                     }),
               ),
               _AnimatedCategoryItem(
@@ -167,14 +179,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     restorationId: 'home_material_category_list',
                     category: 'Work',
                     imageString: 'assets/icons/material/material.png',
-                    demos: ['1111', '2222'],
+                    demoList: viewModel.indexedList['Work'],
                     initiallyExpanded: false,
                     icon: Icon(
                       Icons.work_outline,
                       color: Colors.greenAccent,
                     ),
                     onTap: (shouldOpenList) {
-          
+                      if (shouldOpenList) {
+                        viewModel.queryToDoList('Work');
+                      }
                     }),
               ),
               _AnimatedCategoryItem(
@@ -187,21 +201,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     restorationId: 'home_material_category_list',
                     category: 'To Learn',
                     imageString: 'assets/icons/material/material.png',
-                    demos: ['1111', '2222'],
+                    demoList: viewModel.indexedList['To Learn'],
                     initiallyExpanded: false,
                     icon: Icon(
                       Icons.school_outlined,
                       color: Colors.black,
                     ),
                     onTap: (shouldOpenList) {
-          
+                      if (shouldOpenList) {
+                        viewModel.queryToDoList('To Learn');
+                      }
                     }),
               ),
             ],
           )
         ],
       ),
-    );;
+    );
+    ;
   }
 }
 
@@ -217,10 +234,10 @@ class _CategoriesHeader extends StatelessWidget {
 
 class Header extends StatelessWidget {
   const Header({this.color, this.text});
-  
+
   final Color color;
   final String text;
-  
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -231,8 +248,8 @@ class Header extends StatelessWidget {
       child: Text(
         text,
         style: Theme.of(context).textTheme.headline4.apply(
-          color: color,
-        ),
+              color: color,
+            ),
       ),
     );
   }
@@ -245,24 +262,24 @@ class _AnimatedCategoryItem extends StatelessWidget {
     @required this.controller,
     @required this.child,
   })  : topPaddingAnimation = Tween(
-    begin: 60.0,
-    end: 0.0,
-  ).animate(
-    CurvedAnimation(
-      parent: controller,
-      curve: Interval(
-        0.000 + startDelayFraction,
-        0.400 + startDelayFraction,
-        curve: Curves.ease,
-      ),
-    ),
-  ),
+          begin: 60.0,
+          end: 0.0,
+        ).animate(
+          CurvedAnimation(
+            parent: controller,
+            curve: Interval(
+              0.000 + startDelayFraction,
+              0.400 + startDelayFraction,
+              curve: Curves.ease,
+            ),
+          ),
+        ),
         super(key: key);
-  
+
   final Widget child;
   final AnimationController controller;
   final Animation<double> topPaddingAnimation;
-  
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(

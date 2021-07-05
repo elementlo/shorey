@@ -40,8 +40,10 @@ class DatabaseRef{
 	///table - to_do_table
 	static const String tableToDo = 'to_do';
 	static const String toDoContent = 'content';
+	static const String toDoBrief = 'brief';
 	static const String toDoCreatedTime = 'created_time';
 	static const String status = 'status';
+	static const String category = 'category';
 	
 	///table - heat_map_table
 	static const String tableHeatMap = 'heat_map';
