@@ -39,7 +39,7 @@ class _ProviderWidgetState<T extends ChangeNotifier>
 
   @override
   void dispose() {
-    if (widget.autoDispose == true) model.dispose();
+    //if (widget.autoDispose == true) model.dispose();
     super.dispose();
   }
 

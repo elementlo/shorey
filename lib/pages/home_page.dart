@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/category_list_item.dart';
 import 'package:spark_list/widget/daily_focus_panel.dart';
@@ -89,14 +90,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       'To Do',
                     ),
                     restorationId: 'home_material_category_list',
-                    category: 'To Do',
+                    category:
+                        '${context.watch<ConfigViewModel>().categoryDemosList[0].name}',
                     imageString: 'assets/icons/material/material.png',
                     demoList: viewModel.indexedList['To Do'],
                     initiallyExpanded: false,
-                    icon: Icon(
-                      Icons.article_outlined,
-                      color: Colors.blue,
-                    ),
+                    icon: context
+                        .watch<ConfigViewModel>()
+                        .categoryDemosList[0]
+                        .icon,
                     onTap: (shouldOpenList) {
                       if (shouldOpenList) {
                         viewModel.queryToDoList('To Do');
@@ -111,14 +113,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       'To Watch',
                     ),
                     restorationId: 'home_material_category_list',
-                    category: 'To Watch',
+                    category:
+                        '${context.watch<ConfigViewModel>().categoryDemosList[1].name}',
                     imageString: 'assets/icons/material/material.png',
                     demoList: viewModel.indexedList['To Watch'],
                     initiallyExpanded: false,
-                    icon: Icon(
-                      Icons.movie_outlined,
-                      color: Colors.yellow,
-                    ),
+                    icon: context
+                        .watch<ConfigViewModel>()
+                        .categoryDemosList[1]
+                        .icon,
                     onTap: (shouldOpenList) {
                       if (shouldOpenList) {
                         viewModel.queryToDoList('To Watch');
@@ -133,14 +136,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       'To Read',
                     ),
                     restorationId: 'home_material_category_list',
-                    category: 'To Read',
+                    category:
+                        '${context.watch<ConfigViewModel>().categoryDemosList[2].name}',
                     imageString: 'assets/icons/material/material.png',
                     demoList: viewModel.indexedList['To Read'],
                     initiallyExpanded: false,
-                    icon: Icon(
-                      Icons.menu_book_outlined,
-                      color: Colors.red,
-                    ),
+                    icon: context
+                        .watch<ConfigViewModel>()
+                        .categoryDemosList[2]
+                        .icon,
                     onTap: (shouldOpenList) {
                       if (shouldOpenList) {
                         viewModel.queryToDoList('To Read');
@@ -155,14 +159,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       'Alert',
                     ),
                     restorationId: 'home_material_category_list',
-                    category: 'Alert',
+                    category:
+                        '${context.watch<ConfigViewModel>().categoryDemosList[3].name}',
                     imageString: 'assets/icons/material/material.png',
                     demoList: viewModel.indexedList['Alert'],
                     initiallyExpanded: false,
-                    icon: Icon(
-                      Icons.add_alert,
-                      color: Colors.orangeAccent,
-                    ),
+                    icon: context
+                        .watch<ConfigViewModel>()
+                        .categoryDemosList[3]
+                        .icon,
                     onTap: (shouldOpenList) {
                       if (shouldOpenList) {
                         viewModel.queryToDoList('Alert');
@@ -177,14 +182,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       'Work',
                     ),
                     restorationId: 'home_material_category_list',
-                    category: 'Work',
+                    category:
+                        '${context.watch<ConfigViewModel>().categoryDemosList[4].name}',
                     imageString: 'assets/icons/material/material.png',
                     demoList: viewModel.indexedList['Work'],
                     initiallyExpanded: false,
-                    icon: Icon(
-                      Icons.work_outline,
-                      color: Colors.greenAccent,
-                    ),
+                    icon: context
+                        .watch<ConfigViewModel>()
+                        .categoryDemosList[4]
+                        .icon,
                     onTap: (shouldOpenList) {
                       if (shouldOpenList) {
                         viewModel.queryToDoList('Work');
@@ -199,14 +205,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       'To Learn',
                     ),
                     restorationId: 'home_material_category_list',
-                    category: 'To Learn',
+                    category:
+                        '${context.watch<ConfigViewModel>().categoryDemosList[5].name}',
                     imageString: 'assets/icons/material/material.png',
                     demoList: viewModel.indexedList['To Learn'],
                     initiallyExpanded: false,
-                    icon: Icon(
-                      Icons.school_outlined,
-                      color: Colors.black,
-                    ),
+                    icon: context
+                        .watch<ConfigViewModel>()
+                        .categoryDemosList[5]
+                        .icon,
                     onTap: (shouldOpenList) {
                       if (shouldOpenList) {
                         viewModel.queryToDoList('To Learn');

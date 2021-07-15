@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/pages/editor_page.dart';
 import 'package:spark_list/pages/list_category_page.dart';
@@ -8,6 +9,7 @@ import 'package:spark_list/pages/root_page.dart';
 import 'package:spark_list/pages/settings_category_page.dart';
 import 'package:spark_list/resource/db_provider.dart';
 import 'package:spark_list/routes.dart';
+import 'package:spark_list/view_model/config_view_model.dart';
 
 import 'config/theme_data.dart';
 
@@ -43,21 +45,26 @@ class MyApp extends StatelessWidget {
     //   ),
     // );
 
-    return MaterialApp(
-      themeMode: ThemeMode.system,
-      theme: AppThemeData.lightThemeData.copyWith(
-        platform: defaultTargetPlatform,
-      ),
-      // darkTheme: AppThemeData.darkThemeData.copyWith(
-      //   platform: defaultTargetPlatform,
-      // ),
-      routes: {
-        Routes.homePage: (context) => RootPage(),
-        Routes.textEditorPage: (context) => TextEditorPage(),
-        Routes.listCategoryPage: (context) => ListCategoryPage(),
-        Routes.settingsCategoryPage: (context) => SettingsCategoryPage(),
-        Routes.mantraEditPage: (context) => MantraEditPage(),
+    return ProviderWidget<ConfigViewModel>(
+      model: ConfigViewModel(),
+      onModelReady: (viewModel){
+        viewModel.initCategoryDemosList();
       },
+      child: MaterialApp(
+        themeMode: ThemeMode.system,
+        theme: AppThemeData.lightThemeData.copyWith(
+          platform: defaultTargetPlatform,
+        ),
+        // darkTheme: AppThemeData.darkThemeData.copyWith(
+        //   platform: defaultTargetPlatform,
+        // ),
+        routes: {
+          Routes.homePage: (context) => RootPage(),
+          Routes.listCategoryPage: (context) => ListCategoryPage(),
+          Routes.settingsCategoryPage: (context) => SettingsCategoryPage(),
+          Routes.mantraEditPage: (context) => MantraEditPage(),
+        },
+      ),
     );
   }
 }

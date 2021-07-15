@@ -83,4 +83,26 @@ class HeatMapModel {
   int level;
 
   HeatMapModel({this.id, this.level, this.createdTime});
+
+  HeatMapModel.fromJson(Map<String, dynamic> json) {
+    id = json['_id'];
+    createdTime = json['created_time'];
+    level = json['level'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['created_time'] = this.createdTime;
+    data['level'] = this.level;
+    return data;
+  }
+}
+
+class CategoryItem{
+  String name;
+  Icon icon;
+  Color color;
+
+  CategoryItem({this.name, this.icon, this.color});
 }

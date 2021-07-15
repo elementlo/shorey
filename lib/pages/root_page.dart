@@ -64,6 +64,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
       homePageFadeController.reset();
       homePageFadeController.forward();
     } else {
+      context.read<HomeViewModel>().queryAllHeatPoints();
       _settingsPanelController.forward();
       _iconController.forward();
     }
@@ -111,10 +112,8 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderWidget2<ConfigViewModel, HomeViewModel>(
-      onModelReady: (cfVModel, hVModel) {},
-      model1: ConfigViewModel(),
-      model2: HomeViewModel(),
+    return ProviderWidget<HomeViewModel>(
+      model: HomeViewModel(),
       child: Scaffold(
         body: _buildStack(context),
       ),

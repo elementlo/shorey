@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/model/model.dart';
+import 'package:spark_list/pages/editor_page.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 
 ///
@@ -351,7 +352,8 @@ class CategoryDemoItem extends StatelessWidget {
       color: Theme.of(context).colorScheme.surface,
       child: InkWell(
         onTap: () {
-          Navigator.of(context).pushNamed(Routes.textEditorPage);
+          //Navigator.of(context).pushNamed(Routes.textEditorPage);
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => TextEditorPage(model)));
         },
         child: Padding(
           padding: EdgeInsetsDirectional.only(

@@ -76,7 +76,7 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
 
     if(configuration.currentPage == AppRoutePath.textEditorPage){
       currentPage = AppRoutePath.textEditorPage;
-      pages.add(MaterialPage(key: ValueKey('TextEditorPage'), child: TextEditorPage()));
+      //pages.add(MaterialPage(key: ValueKey('TextEditorPage'), child: TextEditorPage()));
     }
     
   }

@@ -14,6 +14,10 @@ class HomeViewModel extends ViewStateModel {
     _heatMapTask();
   }
 
+  ToDoModel selectedModel;
+  Map<String, ToDoListModel> indexedList = Map();
+  Map<String, int> heatPointsMap = Map();
+
   String _mainFocus = '';
   bool _hasMainFocus = true;
 
@@ -23,7 +27,6 @@ class HomeViewModel extends ViewStateModel {
 
   ToDoModel _mainFocusModel;
   HeatMapModel _heatMapModel;
-  Map<String, ToDoListModel> indexedList = Map();
 
   set hasMainFocus(bool hasMainFocus) {
     this._hasMainFocus = hasMainFocus;
@@ -56,6 +59,11 @@ class HomeViewModel extends ViewStateModel {
     _initMainFocus();
   }
 
+  Future queryAllHeatPoints() async {
+    heatPointsMap = await sparkProvider.queryAllHeatPoints();
+    notifyListeners();
+  }
+
   Future _initMainFocus() async {
     if (oneDayPassBy) {
       _hasMainFocus = false;
@@ -71,20 +79,6 @@ class HomeViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-  Future saveMainFocus(String content, {int status = 1}) async {
-    await saveToDo(content, 'mainfocus', status: status);
-    await _initMainFocus();
-    notifyListeners();
-  }
-  
-  Future saveToDo(String content, String category, {int status = 1}) async{
-    await sparkProvider.insertToDo(
-        ToDoModel(createdTime: DateTime.now().millisecondsSinceEpoch)
-          ..content = content
-          ..category = category
-          ..status = status);
-  }
-
   Future<ToDoModel> queryMainFocus() async {
     return await sparkProvider.getTopToDo();
   }
@@ -94,26 +88,39 @@ class HomeViewModel extends ViewStateModel {
       _mainFocusModel.status = status;
       await sparkProvider.updateToDoStatus(_mainFocusModel);
       int difference = 0;
-      if(status == 0){
+      if (status == 0) {
         difference = 1;
-      }else if(status == 1){
+      } else if (status == 1) {
         difference = -1;
       }
       await sparkProvider.updateHeatPoint(difference);
     }
   }
 
-  Future<ToDoListModel> queryToDoList(String category) async{
+  Future saveMainFocus(String content, {int status = 1}) async {
+    await saveToDo(content, 'mainfocus', status: status);
+    await _initMainFocus();
+    notifyListeners();
+  }
+
+  Future saveToDo(String content, String category, {int status = 1}) async {
+    await sparkProvider.insertToDo(
+        ToDoModel(createdTime: DateTime.now().millisecondsSinceEpoch)
+          ..content = content
+          ..category = category
+          ..status = status);
+  }
+
+  Future<ToDoListModel> queryToDoList(String category) async {
     ToDoListModel toDoListModel = await sparkProvider.queryToDoList(category);
     indexedList[category] = toDoListModel;
     notifyListeners();
     return toDoListModel;
   }
 
-
-  Future updateTodoItem(ToDoModel model) async{
+  Future updateTodoItem(ToDoModel model) async {
     int difference = 0;
-    switch(model.status){
+    switch (model.status) {
       case 0:
         difference = -1;
         model.status = 1;
@@ -128,4 +135,7 @@ class HomeViewModel extends ViewStateModel {
     notifyListeners();
   }
 
+  Future queryToDoItem(int id) async {
+    selectedModel = await sparkProvider.queryToDoItem(id);
+  }
 }

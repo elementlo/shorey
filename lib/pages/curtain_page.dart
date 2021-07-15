@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:spark_list/config/config.dart';
+import 'package:spark_list/view_model/home_view_model.dart';
 
 import 'home_page.dart';
 
@@ -17,7 +19,6 @@ class CurtainPage extends StatefulWidget {
 class _CurtainPageState extends State<CurtainPage> {
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return Material(
       color: Colors.white12,
       // color: colorScheme.secondaryVariant,
@@ -65,12 +66,17 @@ class _MomentGrid extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(cellWidth, 8, cellWidth, 16),
         child: Column(
           children: [
-            for (int i = 0; i <= 6; i++)
-              Row(
-                children: [
-                  for (int j = 0; j <= 12; j++) _buildCell(j, i, context)
-                ],
-              ),
+            Row(
+              children: [
+                for (int i = 0; i <= 12; i++)
+                  Column(
+                    children: [
+                      for (int j = 0; j <= 6; j++)
+                        _buildCell(i, j, context, useRandomColor: false)
+                    ],
+                  ),
+              ],
+            ),
             SizedBox(
               height: 10,
             ),
@@ -98,18 +104,43 @@ class _MomentGrid extends StatelessWidget {
     }
   }
 
-  Widget _buildCell(int row, int col, BuildContext context) {
+  Color _tintColor(BuildContext context, DateTime dateTime) {
+    final map = context.watch<HomeViewModel>().heatPointsMap;
+    String key = '${dateTime.year}${dateTime.month}${dateTime.day}';
+    if (map.containsKey(key)) {
+      int value = map[key];
+      if (value > 0 && value <= 2) {
+        return Color(0xFF2ad8e2).withOpacity(0.2);
+      } else if (value > 2 && value <= 4) {
+        return Color(0xFF1ab4bc).withOpacity(0.5);
+      } else if (value > 4) {
+        return Theme.of(context).colorScheme.primaryVariant.withOpacity(0.6);
+      } else {
+        return Colors.black12.withOpacity(0.1);
+      }
+    } else {
+      return Colors.black12.withOpacity(0.1);
+    }
+  }
+
+  Widget _buildCell(int row, int col, BuildContext context,
+      {bool useRandomColor = true}) {
+    final dateTime = DateTime.now().add(
+        Duration(days: -(DateTime.now().weekday - 1 - col + (12 - row) * 7)));
     return Container(
-      margin: EdgeInsets.only(right: 8, top: 8),
-      height: 17,
-      width: 17,
-      decoration: BoxDecoration(
+        margin: EdgeInsets.only(right: 8, top: 8),
+        height: 17,
+        width: 17,
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(2),
-          border: row == DateTime.now().weekday - 1 && col == 6
+          border: col == DateTime.now().weekday - 1 && row == 12
               ? Border.all(color: Color(0xFF1ab4bc).withOpacity(0.5))
               : null,
-          color: _randomColor(row, col, context)),
-    );
+          color: useRandomColor
+              ? _randomColor(row, col, context)
+              : _tintColor(context, dateTime),
+        ),
+       );
   }
 
   Widget _buildCutline(BuildContext context) {
