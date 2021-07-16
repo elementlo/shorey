@@ -22,14 +22,14 @@ class SettingsIcon extends StatelessWidget {
 }
 
 class _SettingsIconPainter extends CustomPainter {
-  _SettingsIconPainter({@required this.time, @required this.context});
+  _SettingsIconPainter({required this.time, required this.context});
 
   final double time;
   final BuildContext context;
 
-  Offset _center;
-  double _scaling;
-  Canvas _canvas;
+  late Offset _center;
+  late double _scaling;
+  late Canvas _canvas;
 
   /// Computes [_center] and [_scaling], parameters used to convert offsets
   /// and lengths in relative units into logical pixels.
@@ -94,11 +94,11 @@ class _SettingsIconPainter extends CustomPainter {
 
   /// Paints a stadium-shaped stick.
   void _paintStick({
-    @required Offset center,
-    @required double length,
-    @required double width,
+    required Offset center,
+    required double length,
+    required double width,
     double angle = 0,
-    @required Paint paint,
+    required Paint paint,
   }) {
     // Convert to pixels.
     center = _transform(center);
@@ -190,5 +190,5 @@ class _SettingsIconPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) =>
       oldDelegate is! _SettingsIconPainter ||
-      (oldDelegate as _SettingsIconPainter).time != time;
+      oldDelegate.time != time;
 }

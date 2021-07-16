@@ -15,7 +15,7 @@ abstract class ViewStateListModel<T> extends ViewStateModel {
   }
 
   ///下拉刷新
-  Future<List<T>> refresh({bool init = false}) async {
+  Future<List<T>?> refresh({bool init = false}) async {
     try {
       List<T> data = await loadData();
       if (data.isEmpty) {
@@ -36,7 +36,7 @@ abstract class ViewStateListModel<T> extends ViewStateModel {
   }
 
   ///加载数据
-  Future<List<T>> loadData({int pageNum});
+  Future<List<T>> loadData({int? pageNum});
 
   onCompleted(List<T> data) {}
 }

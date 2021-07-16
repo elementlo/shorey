@@ -12,9 +12,9 @@ class ViewStateModel with ChangeNotifier {
   bool _disposed = false;
 
   ViewState _viewState;
-  ViewStateError _viewStateError;
+  ViewStateError? _viewStateError;
 
-  ViewStateModel({ViewState viewState})
+  ViewStateModel({ViewState? viewState})
       : _viewState = viewState ?? ViewState.idle;
 
   ViewState get viewState => _viewState;
@@ -25,7 +25,7 @@ class ViewStateModel with ChangeNotifier {
     notifyListeners();
   }
 
-  ViewStateError get viewStateError => _viewStateError;
+  ViewStateError? get viewStateError => _viewStateError;
 
   bool get isLoading => viewState == ViewState.loading;
 
@@ -50,7 +50,7 @@ class ViewStateModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void setError({e, stackTrace, String message}) {
+  void setError({e, stackTrace, String? message}) {
     ViewStateErrorType errorType = ViewStateErrorType.defaultError;
     viewState = ViewState.error;
     _viewStateError = ViewStateError(

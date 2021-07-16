@@ -52,9 +52,9 @@ class _ListCategoryPageState extends State<ListCategoryPage> {
 }
 
 class _CategoryItem extends StatelessWidget {
-  final String title;
-  final int index;
-  final Icon icon;
+  final String? title;
+  final int? index;
+  final Icon? icon;
 
   _CategoryItem({this.title, this.index, this.icon});
 

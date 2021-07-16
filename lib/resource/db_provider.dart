@@ -13,9 +13,9 @@ import 'package:synchronized/synchronized.dart';
 
 class DbSparkProvider {
   final lock = Lock(reentrant: true);
-  Database db;
+  Database? db;
 
-  Future<Database> get ready async => db ??= await lock.synchronized(() async {
+  Future<Database?> get ready async => db ??= await lock.synchronized(() async {
         if (db == null) {
           await openPath();
         }
@@ -59,11 +59,11 @@ class DbSparkProvider {
   }
 
   Future close() async {
-    await db.close();
+    await db!.close();
   }
 
-  Future<HeatMapModel> getTopHeatPoint() async {
-    List<Map> list = await db.rawQuery('''
+  Future<HeatMapModel?> getTopHeatPoint() async {
+    List<Map> list = await db!.rawQuery('''
     SELECT * FROM ${DatabaseRef.tableHeatMap}
     WHERE ${DatabaseRef.heatPointId} = (SELECT MAX(${DatabaseRef.heatPointId})
     FROM ${DatabaseRef.tableHeatMap})
@@ -77,14 +77,14 @@ class DbSparkProvider {
   }
 
   Future<int> insertHeatPoint(int heatLevel, int createdTime) async {
-    return await db.insert(DatabaseRef.tableHeatMap, {
+    return await db!.insert(DatabaseRef.tableHeatMap, {
       '${DatabaseRef.heatPointlevel}': heatLevel,
       '${DatabaseRef.heatPointcreatedTime}': createdTime
     });
   }
 
   Future updateHeatPoint(int difference) async {
-    return await db.execute('''
+    return await db!.execute('''
     UPDATE ${DatabaseRef.tableHeatMap}
     SET ${DatabaseRef.heatPointlevel} = ${DatabaseRef.heatPointlevel} + ${difference}
     WHERE ${DatabaseRef.columnId} IN (SELECT ${DatabaseRef.columnId} FROM ${DatabaseRef.tableHeatMap}
@@ -93,10 +93,10 @@ class DbSparkProvider {
     ''');
   }
 
-  Future<Map<String, int>> queryAllHeatPoints() async {
+  Future<Map<String, int?>> queryAllHeatPoints() async {
     List<Map<String, dynamic>> points =
-        await db.query(DatabaseRef.tableHeatMap);
-    Map<String, int> timeMap = Map();
+        await db!.query(DatabaseRef.tableHeatMap);
+    Map<String, int?> timeMap = Map();
     DateTime dateTime;
     points.forEach((element) {
       dateTime = DateTime.fromMillisecondsSinceEpoch(element['created_time']);
@@ -106,8 +106,8 @@ class DbSparkProvider {
     return timeMap;
   }
 
-  Future<ToDoModel> getTopToDo() async {
-    List<Map> list = await db.rawQuery('''
+  Future<ToDoModel?> getTopToDo() async {
+    List<Map> list = await db!.rawQuery('''
     SELECT * FROM ${DatabaseRef.tableToDo}
     WHERE ${DatabaseRef.columnId} = (SELECT MAX(${DatabaseRef.columnId})
     FROM ${DatabaseRef.tableToDo})
@@ -123,7 +123,7 @@ class DbSparkProvider {
 
   ///status: 0: 已完成 1: 未完成 2: 已删除
   Future<int> insertToDo(ToDoModel model) async {
-    return await db.insert(DatabaseRef.tableToDo, {
+    return await db!.insert(DatabaseRef.tableToDo, {
       '${DatabaseRef.toDoContent}': model.content,
       '${DatabaseRef.toDoBrief}': model.brief,
       '${DatabaseRef.toDoCreatedTime}': model.createdTime,
@@ -133,7 +133,7 @@ class DbSparkProvider {
   }
 
   Future updateToDoItem(ToDoModel model, {bool updateContent = true}) async {
-    return await db.update(
+    return await db!.update(
         DatabaseRef.tableToDo,
         {
           if (updateContent) DatabaseRef.toDoContent: model.content,
@@ -145,8 +145,8 @@ class DbSparkProvider {
         whereArgs: [model.id]);
   }
 
-  Future<ToDoListModel> queryToDoList(String category, {int status = 1}) async {
-    var list = await db.query(DatabaseRef.tableToDo,
+  Future<ToDoListModel?> queryToDoList(String? category, {int status = 1}) async {
+    var list = await db!.query(DatabaseRef.tableToDo,
         where: '${DatabaseRef.category} = ? AND ${DatabaseRef.status} = ?',
         whereArgs: [category, status]);
     if (list.isNotEmpty) {
@@ -155,8 +155,8 @@ class DbSparkProvider {
     return null;
   }
 
-  Future<ToDoModel> queryToDoItem(int id) async {
-    final list = await db
+  Future<ToDoModel?> queryToDoItem(int id) async {
+    final list = await db!
         .query(DatabaseRef.tableToDo, where: '_id = ?', whereArgs: [id]);
     if (list.isNotEmpty) {
       return ToDoModel.fromJson(list[0]);

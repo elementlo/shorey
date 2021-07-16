@@ -23,11 +23,10 @@ enum ViewStateErrorType {
 
 class ViewStateError {
   ViewStateErrorType _errorType;
-  String message;
-  String errorMessage;
+  String? message;
+  String? errorMessage;
 
   ViewStateError(this._errorType, {this.message, this.errorMessage}) {
-    _errorType ??= ViewStateErrorType.defaultError;
     message ??= errorMessage;
   }
   ViewStateErrorType get errorType => _errorType;

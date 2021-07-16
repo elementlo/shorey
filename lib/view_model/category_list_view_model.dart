@@ -8,11 +8,11 @@ import 'package:spark_list/base/view_state_model.dart';
 ///
 
 class CategoryListViewModel extends ViewStateModel{
-  int _selectedCategoryIndex = 0;
+  int? _selectedCategoryIndex = 0;
 
-  int get selectedCategoryIndex => _selectedCategoryIndex;
+  int? get selectedCategoryIndex => _selectedCategoryIndex;
 
-  set selectedCategoryIndex(int index){
+  set selectedCategoryIndex(int? index){
     this._selectedCategoryIndex = index;
     notifyListeners();
   }

@@ -11,18 +11,18 @@ import 'package:flutter/foundation.dart';
 ///
 
 class ToDoModel {
-  int id;
-  int createdTime;
-  String content;
-  String brief;
+  int? id;
+  int? createdTime;
+  String? content;
+  String? brief;
   ///0: finished, 1: going
-  int status;
-  String category;
+  int? status;
+  String? category;
 
   ToDoModel(
       {this.id,
       this.content,
-      @required this.createdTime,
+      required this.createdTime,
       this.status,
       this.category,
       this.brief});
@@ -49,7 +49,7 @@ class ToDoModel {
 }
 
 class ToDoListModel {
-  List<ToDoModel> _cacheTodoList;
+  late List<ToDoModel?> _cacheTodoList;
 
   final List<Map<String, dynamic>> list;
 
@@ -78,9 +78,9 @@ class ToDoListModel {
 }
 
 class HeatMapModel {
-  int id;
-  int createdTime;
-  int level;
+  int? id;
+  int? createdTime;
+  int? level;
 
   HeatMapModel({this.id, this.level, this.createdTime});
 
@@ -100,9 +100,9 @@ class HeatMapModel {
 }
 
 class CategoryItem{
-  String name;
-  Icon icon;
-  Color color;
+  String? name;
+  Icon? icon;
+  Color? color;
 
   CategoryItem({this.name, this.icon, this.color});
 }

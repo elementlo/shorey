@@ -20,8 +20,8 @@ class HomeHeader extends StatelessWidget {
 class Header extends StatelessWidget {
   const Header({this.color, this.text});
 
-  final Color color;
-  final String text;
+  final Color? color;
+  final String? text;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +31,8 @@ class Header extends StatelessWidget {
         bottom: 11,
       ),
       child: Text(
-        text,
-        style: Theme.of(context).textTheme.headline4.apply(
+        text!,
+        style: Theme.of(context).textTheme.headline4!.apply(
               color: color,
               fontSizeDelta: 0,
             ),

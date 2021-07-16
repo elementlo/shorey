@@ -22,22 +22,22 @@ class ViewStateLoadingWidget extends StatelessWidget {
 /// ErrorWidget
 class ViewStateErrorWidget extends StatelessWidget {
   final ViewStateError error;
-  final String title;
-  final String message;
-  final Widget image;
-  final Widget buttonText;
-  final String buttonTextData;
+  final String? title;
+  final String? message;
+  final Widget? image;
+  final Widget? buttonText;
+  final String? buttonTextData;
   final VoidCallback onPressed;
 
   const ViewStateErrorWidget({
-    Key key,
-    @required this.error,
+    Key? key,
+    required this.error,
     this.image,
     this.title,
     this.message,
     this.buttonText,
     this.buttonTextData,
-    @required this.onPressed,
+    required this.onPressed,
   }) : super(key: key);
 
   @override
@@ -82,17 +82,17 @@ class ViewStateErrorWidget extends StatelessWidget {
 
 /// 页面无数据
 class ViewStateEmptyWidget extends StatelessWidget {
-  final String message;
-  final Widget image;
-  final Widget buttonText;
+  final String? message;
+  final Widget? image;
+  final Widget? buttonText;
   final VoidCallback onPressed;
 
   const ViewStateEmptyWidget(
-      {Key key,
+      {Key? key,
       this.image,
       this.message,
       this.buttonText,
-      @required this.onPressed})
+      required this.onPressed})
       : super(key: key);
 
   @override
@@ -109,17 +109,17 @@ class ViewStateEmptyWidget extends StatelessWidget {
 
 /// 页面未授权
 class ViewStateUnAuthWidget extends StatelessWidget {
-  final String message;
-  final Widget image;
-  final Widget buttonText;
+  final String? message;
+  final Widget? image;
+  final Widget? buttonText;
   final VoidCallback onPressed;
 
   const ViewStateUnAuthWidget(
-      {Key key,
+      {Key? key,
       this.image,
       this.message,
       this.buttonText,
-      @required this.onPressed})
+      required this.onPressed})
       : super(key: key);
 
   @override
@@ -155,10 +155,10 @@ class ViewStateUnAuthImage extends StatelessWidget {
 /// 公用Button
 class ViewStateButton extends StatelessWidget {
   final VoidCallback onPressed;
-  final Widget child;
-  final String textData;
+  final Widget? child;
+  final String? textData;
 
-  const ViewStateButton({@required this.onPressed, this.child, this.textData})
+  const ViewStateButton({required this.onPressed, this.child, this.textData})
       : assert(child == null || textData == null);
 
   @override
@@ -179,29 +179,29 @@ class ViewStateButton extends StatelessWidget {
 
 ///基础widget
 class ViewStateWidget extends StatelessWidget {
-  final String title;
-  final String message;
-  final Widget image;
-  final Widget buttonText;
-  final String buttonTextData;
+  final String? title;
+  final String? message;
+  final Widget? image;
+  final Widget? buttonText;
+  final String? buttonTextData;
   final VoidCallback onPressed;
 
   ViewStateWidget(
-      {Key key,
+      {Key? key,
       this.image,
       this.title,
       this.message,
       this.buttonText,
-      @required this.onPressed,
+      required this.onPressed,
       this.buttonTextData})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var titleStyle =
-        Theme.of(context).textTheme.subhead.copyWith(color: Colors.grey);
+        Theme.of(context).textTheme.subhead!.copyWith(color: Colors.grey);
     var messageStyle = titleStyle.copyWith(
-        color: titleStyle.color.withOpacity(0.7), fontSize: 14);
+        color: titleStyle.color!.withOpacity(0.7), fontSize: 14);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,

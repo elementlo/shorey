@@ -27,7 +27,7 @@ class _MantraEditPageState extends State<MantraEditPage> {
     });
   }
 
-  void _saveMantra(String text) async {
+  Future _saveMantra(String text) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('mantra', text);
   }

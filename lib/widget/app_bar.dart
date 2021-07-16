@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 
 class SparkAppBar extends AppBar {
   SparkAppBar(
-      {@required BuildContext context, String title, List<Widget> actions})
+      {required BuildContext context, String? title, List<Widget>? actions})
       : assert(context != null),
         super(
             title: Text('${title}'),

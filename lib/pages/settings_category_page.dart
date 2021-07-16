@@ -32,7 +32,7 @@ class _SettingsCategoryPageState extends State<SettingsCategoryPage> {
 }
 
 class _SettingItem extends StatelessWidget {
-  final String title;
+  final String? title;
 
   _SettingItem({this.title});
   

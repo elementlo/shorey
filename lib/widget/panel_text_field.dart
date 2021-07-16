@@ -11,7 +11,7 @@ import 'package:spark_list/view_model/home_view_model.dart';
 ///
 
 class PanelTextField extends StatefulWidget {
-  const PanelTextField({Key key}) : super(key: key);
+  const PanelTextField({Key? key}) : super(key: key);
 
   @override
   _PanelTextFieldState createState() => _PanelTextFieldState();

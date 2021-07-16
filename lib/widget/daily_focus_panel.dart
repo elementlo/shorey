@@ -16,10 +16,10 @@ import 'package:sqflite/sqflite.dart';
 ///
 
 class DailyFocusPanel extends StatefulWidget {
-  final AnimationController animationController;
-  final Animation animation;
+  final AnimationController? animationController;
+  final Animation? animation;
 
-  const DailyFocusPanel({Key key, this.animationController, this.animation})
+  const DailyFocusPanel({Key? key, this.animationController, this.animation})
       : super(key: key);
 
   @override
@@ -28,7 +28,7 @@ class DailyFocusPanel extends StatefulWidget {
 
 class _DailyFocusPanelState extends State<DailyFocusPanel> {
   String mantra = '';
-  Database db;
+  Database? db;
 
   void initMantra() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -54,14 +54,14 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: widget.animationController,
-      builder: (BuildContext context, Widget child) {
+      animation: widget.animationController!,
+      builder: (BuildContext context, Widget? child) {
         final percent = DateTime.now().hour / 24 * 100;
         return FadeTransition(
-          opacity: widget.animation,
+          opacity: widget.animation as Animation<double>,
           child: new Transform(
             transform: new Matrix4.translationValues(
-                0.0, 30 * (1.0 - widget.animation.value), 0.0),
+                0.0, 30 * (1.0 - widget.animation!.value), 0.0),
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 16, right: 16, top: 16, bottom: 18),
@@ -177,7 +177,7 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                                           CrossAxisAlignment.center,
                                       children: <Widget>[
                                         Text(
-                                          '${(percent * widget.animation.value).toInt()}%',
+                                          '${(percent * widget.animation!.value).toInt()}%',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontWeight: FontWeight.normal,
@@ -214,7 +214,7 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                                         ],
                                         angle: 140 +
                                             (360 - 140) *
-                                                (1.0 - widget.animation.value)),
+                                                (1.0 - widget.animation!.value)),
                                     child: SizedBox(
                                       width: 108,
                                       height: 108,
@@ -249,13 +249,13 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
 
 class CurvePainter extends CustomPainter {
   final double angle;
-  final List<Color> colors;
+  final List<Color>? colors;
 
   CurvePainter({this.colors, this.angle = 140});
 
   @override
   void paint(Canvas canvas, Size size) {
-    List<Color> colorsList = List<Color>();
+    List<Color>? colorsList = <Color>[];
     if (colors != null) {
       colorsList = colors;
     } else {
@@ -309,7 +309,7 @@ class CurvePainter extends CustomPainter {
       startAngle: degreeToRadians(268),
       endAngle: degreeToRadians(270.0 + 360),
       tileMode: TileMode.repeated,
-      colors: colorsList,
+      colors: colorsList!,
     );
     final paint = new Paint()
       ..shader = gradient.createShader(rect)

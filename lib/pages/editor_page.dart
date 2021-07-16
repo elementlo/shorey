@@ -15,7 +15,7 @@ import 'list_category_page.dart';
 ///
 
 class TextEditorPage extends StatefulWidget {
-  final ToDoModel todoModel;
+  final ToDoModel? todoModel;
 
   TextEditorPage(this.todoModel);
 
@@ -30,8 +30,8 @@ class _TextEditorPageState extends State<TextEditorPage> {
   @override
   void initState() {
     super.initState();
-    _titleController.text = widget.todoModel.content ??= '';
-    _briefController.text = widget.todoModel.brief ??= '';
+    _titleController.text = widget.todoModel!.content ??= '';
+    _briefController.text = widget.todoModel!.brief ??= '';
     setState(() {});
   }
 
@@ -41,7 +41,7 @@ class _TextEditorPageState extends State<TextEditorPage> {
     return Scaffold(
       appBar: SparkAppBar(
         context: context,
-        title: '${widget.todoModel.category}',
+        title: '${widget.todoModel!.category}',
         actions: [
           IconButton(
               icon: Icon(
@@ -49,9 +49,9 @@ class _TextEditorPageState extends State<TextEditorPage> {
                 color: colorScheme.onSecondary,
               ),
               onPressed: () {
-                widget.todoModel.brief = _briefController.text;
-                widget.todoModel.content = _titleController.text;
-                context.read<HomeViewModel>().updateTodoItem(widget.todoModel);
+                widget.todoModel!.brief = _briefController.text;
+                widget.todoModel!.content = _titleController.text;
+                context.read<HomeViewModel>().updateTodoItem(widget.todoModel!);
                 Navigator.pop(context);
               })
         ],
@@ -96,9 +96,9 @@ class _TextEditorPageState extends State<TextEditorPage> {
 }
 
 class InputField extends StatelessWidget {
-  final String hintText;
+  final String? hintText;
   final int maxLines;
-  final TextEditingController textEditingController;
+  final TextEditingController? textEditingController;
 
   InputField({this.hintText, this.maxLines = 1, this.textEditingController});
 
@@ -123,16 +123,16 @@ class InputField extends StatelessWidget {
 }
 
 class _EditorTableRow extends StatefulWidget {
-  const _EditorTableRow({Key key, this.todoModel}) : super(key: key);
+  const _EditorTableRow({Key? key, this.todoModel}) : super(key: key);
 
-  final ToDoModel todoModel;
+  final ToDoModel? todoModel;
 
   @override
   _EditorTableRowState createState() => _EditorTableRowState();
 }
 
 class _EditorTableRowState extends State<_EditorTableRow> {
-  Color _color = Colors.white;
+  Color? _color = Colors.white;
 
   @override
   void initState() {
@@ -151,7 +151,7 @@ class _EditorTableRowState extends State<_EditorTableRow> {
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => ListCategoryPage()))
               .then((result) {
-                widget.todoModel.category = result;
+                widget.todoModel!.category = result;
                 _color = _mapCategoryColor();
                 setState(() {});
           });
@@ -172,7 +172,7 @@ class _EditorTableRowState extends State<_EditorTableRow> {
                 width: 8,
               ),
               Text(
-                '${widget.todoModel.category}',
+                '${widget.todoModel!.category}',
                 style: TextStyle(color: Colors.grey),
               ),
               SizedBox(
@@ -190,10 +190,10 @@ class _EditorTableRowState extends State<_EditorTableRow> {
     );
   }
 
-  Color _mapCategoryColor() {
+  Color? _mapCategoryColor() {
     for (CategoryItem item
         in context.read<ConfigViewModel>().categoryDemosList) {
-      if (widget.todoModel.category == item.name) {
+      if (widget.todoModel!.category == item.name) {
         return item.color;
       }
     }

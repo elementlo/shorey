@@ -21,10 +21,10 @@ abstract class ViewStateRefreshListModel<T> extends ViewStateListModel<T> {
   int _currentPageNum = pageNumFirst;
 
   @override
-  Future<List<T>> refresh({bool init = false}) async {
+  Future<List<T>?> refresh({bool init = false}) async {
     try {
       _currentPageNum = pageNumFirst;
-      var data = await loadData(pageNum: pageNumFirst);
+      List<T> data = await loadData(pageNum: pageNumFirst);
       if (data.isEmpty) {
         refreshController.refreshCompleted(resetFooterState: true);
         list.clear();
@@ -54,9 +54,9 @@ abstract class ViewStateRefreshListModel<T> extends ViewStateListModel<T> {
     }
   }
 
-  Future<List<T>> loadMore() async {
+  Future<List<T>?> loadMore() async {
     try {
-      var data = await loadData(pageNum: ++_currentPageNum);
+      List<T> data = await loadData(pageNum: ++_currentPageNum);
       if (data.isEmpty) {
         _currentPageNum--;
         refreshController.loadNoData();

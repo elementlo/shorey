@@ -14,19 +14,19 @@ import 'package:spark_list/widget/home_header.dart';
 /// Description:
 ///
 class HomePage extends StatefulWidget {
-  AnimationController animationController;
+  AnimationController? animationController;
 
-  HomePage({Key key, this.title, @required this.animationController})
+  HomePage({Key? key, this.title, required this.animationController})
       : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  AnimationController _animationController;
+  late AnimationController _animationController;
 
   @override
   void initState() {
@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               DailyFocusPanel(
                 animation: Tween<double>(begin: 0.0, end: 1.0).animate(
                     CurvedAnimation(
-                        parent: widget.animationController,
+                        parent: widget.animationController!,
                         curve: Interval((1 / 9) * 1, 1.0,
                             curve: Curves.fastOutSlowIn))),
                 animationController: widget.animationController,
@@ -128,8 +128,8 @@ class _CategoriesHeader extends StatelessWidget {
 class Header extends StatelessWidget {
   const Header({this.color, this.text});
 
-  final Color color;
-  final String text;
+  final Color? color;
+  final String? text;
 
   @override
   Widget build(BuildContext context) {
@@ -139,8 +139,8 @@ class Header extends StatelessWidget {
         bottom: 11,
       ),
       child: Text(
-        text,
-        style: Theme.of(context).textTheme.headline4.apply(
+        text!,
+        style: Theme.of(context).textTheme.headline4!.apply(
               color: color,
             ),
       ),
@@ -150,10 +150,10 @@ class Header extends StatelessWidget {
 
 class _AnimatedCategoryItem extends StatelessWidget {
   _AnimatedCategoryItem({
-    Key key,
-    double startDelayFraction,
-    @required this.controller,
-    @required this.child,
+    Key? key,
+    required double startDelayFraction,
+    required this.controller,
+    required this.child,
   })  : topPaddingAnimation = Tween(
           begin: 60.0,
           end: 0.0,

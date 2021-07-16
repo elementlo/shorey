@@ -108,7 +108,7 @@ class _MomentGrid extends StatelessWidget {
     final map = context.watch<HomeViewModel>().heatPointsMap;
     String key = '${dateTime.year}${dateTime.month}${dateTime.day}';
     if (map.containsKey(key)) {
-      int value = map[key];
+      int value = map[key]!;
       if (value > 0 && value <= 2) {
         return Color(0xFF2ad8e2).withOpacity(0.2);
       } else if (value > 2 && value <= 4) {
@@ -169,7 +169,7 @@ class _MomentGrid extends StatelessWidget {
 }
 
 class _SettingsRow extends StatelessWidget {
-  final String title;
+  final String? title;
 
   _SettingsRow({this.title});
 

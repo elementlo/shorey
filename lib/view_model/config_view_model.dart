@@ -15,7 +15,7 @@ class ConfigViewModel extends ViewStateModel {
 
   bool isSettingsOpenNotifier = false;
 
-  List<CategoryItem> categoryDemosList = List();
+  List<CategoryItem> categoryDemosList = [];
 
   void set settingsOpenNotifier(bool open) {
     isSettingsOpenNotifier = open;
@@ -79,7 +79,7 @@ class ConfigViewModel extends ViewStateModel {
         brightness = Brightness.dark;
         break;
       default:
-        brightness = WidgetsBinding.instance.window.platformBrightness;
+        brightness = WidgetsBinding.instance!.window.platformBrightness;
     }
 
     final overlayStyle = brightness == Brightness.dark

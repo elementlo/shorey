@@ -27,9 +27,9 @@ class RootPage extends StatefulWidget {
 }
 
 class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
-  AnimationController _settingsPanelController;
-  AnimationController _iconController;
-  AnimationController homePageFadeController;
+  AnimationController? _settingsPanelController;
+  AnimationController? _iconController;
+  AnimationController? homePageFadeController;
 
   @override
   void initState() {
@@ -59,14 +59,14 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
     // Animate the settings panel to open or close.
     final cfVModel = Provider.of<ConfigViewModel>(context, listen: false);
     if (cfVModel.isSettingsOpenNotifier) {
-      _settingsPanelController.reverse();
-      _iconController.reverse();
-      homePageFadeController.reset();
-      homePageFadeController.forward();
+      _settingsPanelController!.reverse();
+      _iconController!.reverse();
+      homePageFadeController!.reset();
+      homePageFadeController!.forward();
     } else {
       context.read<HomeViewModel>().queryAllHeatPoints();
-      _settingsPanelController.forward();
-      _iconController.forward();
+      _settingsPanelController!.forward();
+      _iconController!.forward();
     }
     cfVModel.settingsOpenNotifier = !cfVModel.isSettingsOpenNotifier;
   }
@@ -79,7 +79,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
       end: const RelativeRect.fromLTRB(0, 0, 0, 0),
     ).animate(
       CurvedAnimation(
-        parent: _settingsPanelController,
+        parent: _settingsPanelController!,
         curve: const Interval(
           0.0,
           0.4,
@@ -100,7 +100,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
       ),
     ).animate(
       CurvedAnimation(
-        parent: _settingsPanelController,
+        parent: _settingsPanelController!,
         curve: const Interval(
           0.0,
           0.4,
@@ -129,7 +129,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
               rect: _slideDownHomePageAnimation(context), child: HomePage(animationController: homePageFadeController,)),
           _SettingsIcon(
             toggleSettings: _toggleSettings,
-            animationController: _iconController,
+            animationController: _iconController!,
           )
         ],
       ),
@@ -138,11 +138,11 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
 }
 
 class _SettingsIcon extends AnimatedWidget {
-  _SettingsIcon({this.animationController, this.toggleSettings})
+  _SettingsIcon({required this.animationController, this.toggleSettings})
       : super(listenable: animationController);
 
   final AnimationController animationController;
-  final Function toggleSettings;
+  final Function? toggleSettings;
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +163,7 @@ class _SettingsIcon extends AnimatedWidget {
           clipBehavior: Clip.antiAlias,
           child: InkWell(
             onTap: () {
-              toggleSettings(context);
+              toggleSettings!(context);
             },
             child: Padding(
               padding: const EdgeInsetsDirectional.only(start: 3, end: 18),

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:spark_list/pages/editor_page.dart';
 import 'package:spark_list/pages/root_page.dart';
 
 ///
@@ -9,8 +8,8 @@ import 'package:spark_list/pages/root_page.dart';
 /// Date: 2/23/21
 /// Description:
 ///
-class AppRouterDelegate extends RouterDelegate<AppRoutePath>
-    with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppRoutePath> {
+class AppRouterDelegate extends RouterDelegate<AppRoutePath?>
+    with ChangeNotifier {
   final GlobalKey<NavigatorState> navigatorKey;
   bool show404 = false;
   String currentPage = '';
@@ -26,7 +25,7 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
     if (show404) {
       return AppRoutePath.unknown();
     } else {
-      switch(currentPage){
+      switch (currentPage) {
         case AppRoutePath.textEditorPage:
           return AppRoutePath.editorPage('title');
         default:
@@ -34,7 +33,7 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
       }
     }
   }
-  
+
   static AppRouterDelegate of(BuildContext context) {
     final delegate = Router.of(context).routerDelegate;
     assert(delegate is AppRouterDelegate, 'Delegate type must match');
@@ -45,7 +44,7 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
     pages.add(newPage);
     notifyListeners();
   }
-  
+
   // bool _onPopPage(Route<dynamic> route, dynamic result) {
   //   if (pages.isNotEmpty) {
   //     if (pages.last.name == route.settings.name) {
@@ -55,13 +54,13 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
   //   }
   //   return route.didPop(result);
   // }
-  
+
   @override
   Widget build(BuildContext context) {
     return Navigator(
       //key: navigatorKey,
       pages: pages,
-      onPopPage: (route, result){},
+      onPopPage: (route, result) {} as bool Function(Route<dynamic>, dynamic)?,
     );
   }
 
@@ -69,32 +68,40 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
   @override
   Future<void> setNewRoutePath(configuration) async {
     print("setNewRoutePath");
-    if (configuration.unknownPage) {
+    if (configuration?.unknownPage ?? false) {
       show404 = true;
       return;
     }
 
-    if(configuration.currentPage == AppRoutePath.textEditorPage){
+    if (configuration?.currentPage == AppRoutePath.textEditorPage) {
       currentPage = AppRoutePath.textEditorPage;
       //pages.add(MaterialPage(key: ValueKey('TextEditorPage'), child: TextEditorPage()));
     }
-    
+  }
+
+  @override
+  Future<bool> popRoute() {
+    return Future.value(true);
   }
 }
 
 class AppRoutePath {
   static const String textEditorPage = 'text-editor';
-  int id;
-  final bool unknownPage;
-  String title;
+  int? id;
+  bool unknownPage = false;
+  String? title;
   String currentPage = '';
+
   AppRoutePath.home()
       : id = null,
-        unknownPage = false, currentPage = '';
+        unknownPage = false,
+        currentPage = '';
 
   AppRoutePath.details(this.id) : unknownPage = false;
 
-  AppRoutePath.editorPage(this.title) : unknownPage = false, currentPage = textEditorPage;
+  AppRoutePath.editorPage(this.title)
+      : unknownPage = false,
+        currentPage = textEditorPage;
 
   AppRoutePath.unknown()
       : id = null,
@@ -110,14 +117,14 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
   Future<AppRoutePath> parseRouteInformation(
       RouteInformation routeInformation) async {
     print("parseRouteInformation");
-    final uri = Uri.parse(routeInformation.location);
+    final uri = Uri.parse(routeInformation.location!);
     if (uri.pathSegments.length == 0) {
       return AppRoutePath.home();
     }
 
     if (uri.pathSegments.length == 2) {
       if (uri.pathSegments[0] == AppRoutePath.textEditorPage)
-        return AppRoutePath.editorPage(uri.pathSegments[1] ?? '');
+        return AppRoutePath.editorPage(uri.pathSegments[1]);
     }
 
     // if (uri.pathSegments.length == 2) {
@@ -132,7 +139,7 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
   }
 
   @override
-  RouteInformation restoreRouteInformation(AppRoutePath configuration) {
+  RouteInformation? restoreRouteInformation(AppRoutePath configuration) {
     print("restoreRouteInformation");
     if (configuration.unknownPage) {
       return RouteInformation(location: '/404');
@@ -140,8 +147,9 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
     if (configuration.isHomePage) {
       return RouteInformation(location: '/');
     }
-    if(configuration.currentPage == AppRoutePath.textEditorPage){
-      return RouteInformation(location:  '/${AppRoutePath.textEditorPage}/${configuration.title}');
+    if (configuration.currentPage == AppRoutePath.textEditorPage) {
+      return RouteInformation(
+          location: '/${AppRoutePath.textEditorPage}/${configuration.title}');
     }
     // if (configuration.isDetailsPage) {
     //   return RouteInformation(location: '/veggie/${path.id}');

@@ -16,7 +16,7 @@ typedef CategoryHeaderTapCallback = Function(bool shouldOpenList);
 
 class CategoryListItem extends StatefulWidget {
   const CategoryListItem(
-      {Key key,
+      {Key? key,
       this.restorationId,
       this.category,
       this.imageString,
@@ -29,16 +29,16 @@ class CategoryListItem extends StatefulWidget {
         super(key: key);
 
   //final GalleryDemoCategory category;
-  final String category;
-  final String restorationId;
-  final String imageString;
+  final String? category;
+  final String? restorationId;
+  final String? imageString;
 
   //final List<GalleryDemo> demos;
   final List<String> demos;
-  final ToDoListModel demoList;
+  final ToDoListModel? demoList;
   final bool initiallyExpanded;
-  final CategoryHeaderTapCallback onTap;
-  final Icon icon;
+  final CategoryHeaderTapCallback? onTap;
+  final Icon? icon;
 
   @override
   _CategoryListItemState createState() => _CategoryListItemState();
@@ -49,14 +49,14 @@ class _CategoryListItemState extends State<CategoryListItem>
   static final Animatable<double> _easeInTween =
       CurveTween(curve: Curves.easeIn);
   static const _expandDuration = Duration(milliseconds: 200);
-  AnimationController _controller;
-  Animation<double> _childrenHeightFactor;
-  Animation<double> _headerChevronOpacity;
-  Animation<double> _headerHeight;
-  Animation<EdgeInsetsGeometry> _headerMargin;
-  Animation<EdgeInsetsGeometry> _headerImagePadding;
-  Animation<EdgeInsetsGeometry> _childrenPadding;
-  Animation<BorderRadius> _headerBorderRadius;
+  late AnimationController _controller;
+  late Animation<double> _childrenHeightFactor;
+  late Animation<double> _headerChevronOpacity;
+  late Animation<double> _headerHeight;
+  late Animation<EdgeInsetsGeometry> _headerMargin;
+  late Animation<EdgeInsetsGeometry> _headerImagePadding;
+  late Animation<EdgeInsetsGeometry> _childrenPadding;
+  late Animation<BorderRadius> _headerBorderRadius;
 
   @override
   void initState() {
@@ -101,7 +101,7 @@ class _CategoryListItemState extends State<CategoryListItem>
     super.dispose();
   }
 
-  bool _shouldOpenList() {
+  bool? _shouldOpenList() {
     switch (_controller.status) {
       case AnimationStatus.completed:
       case AnimationStatus.forward:
@@ -115,20 +115,20 @@ class _CategoryListItemState extends State<CategoryListItem>
   }
 
   void _handleTap() {
-    if (_shouldOpenList()) {
+    if (_shouldOpenList()!) {
       _controller.forward();
       if (widget.onTap != null) {
-        widget.onTap(true);
+        widget.onTap!(true);
       }
     } else {
       _controller.reverse();
       if (widget.onTap != null) {
-        widget.onTap(false);
+        widget.onTap!(false);
       }
     }
   }
 
-  Widget _buildHeaderWithChildren(BuildContext context, Widget child) {
+  Widget _buildHeaderWithChildren(BuildContext context, Widget? child) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -161,7 +161,7 @@ class _CategoryListItemState extends State<CategoryListItem>
     return AnimatedBuilder(
       animation: _controller.view,
       builder: _buildHeaderWithChildren,
-      child: _shouldOpenList()
+      child: _shouldOpenList()!
           ? null
           : _ExpandedCategoryDemos(
               category: widget.category,
@@ -173,7 +173,7 @@ class _CategoryListItemState extends State<CategoryListItem>
 
 class _ExpandedCategoryDemos extends StatelessWidget {
   _ExpandedCategoryDemos({
-    Key key,
+    Key? key,
     this.category,
     this.demos,
     this.demoList,
@@ -181,12 +181,12 @@ class _ExpandedCategoryDemos extends StatelessWidget {
 
   //
   // final GalleryDemoCategory category;
-  final String category;
+  final String? category;
 
   // final List<GalleryDemo> demos;
-  final List<String> demos;
+  final List<String>? demos;
 
-  final ToDoListModel demoList;
+  final ToDoListModel? demoList;
   final TextEditingController _controller = TextEditingController();
 
   @override
@@ -195,10 +195,10 @@ class _ExpandedCategoryDemos extends StatelessWidget {
       // Makes integration tests possible.
       key: ValueKey('${category}DemoList'),
       children: [
-        if (demoList != null && demoList.length > 0)
-          for (int i = 0; i < demoList.length; i++)
+        if (demoList != null && demoList!.length > 0)
+          for (int i = 0; i < demoList!.length; i++)
             CategoryDemoItem(
-              model: demoList[i],
+              model: demoList![i],
             ),
         _buildNewTaskField(context),
         const SizedBox(height: 12), // Extra space below.
@@ -241,7 +241,7 @@ class _ExpandedCategoryDemos extends StatelessWidget {
 
 class _CategoryHeader extends StatelessWidget {
   const _CategoryHeader({
-    Key key,
+    Key? key,
     this.margin,
     this.imagePadding,
     this.borderRadius,
@@ -253,15 +253,15 @@ class _CategoryHeader extends StatelessWidget {
     this.icon,
   }) : super(key: key);
 
-  final EdgeInsetsGeometry margin;
-  final EdgeInsetsGeometry imagePadding;
-  final double height;
-  final BorderRadiusGeometry borderRadius;
-  final String imageString;
-  final String category;
-  final double chevronOpacity;
-  final GestureTapCallback onTap;
-  final Icon icon;
+  final EdgeInsetsGeometry? margin;
+  final EdgeInsetsGeometry? imagePadding;
+  final double? height;
+  final BorderRadiusGeometry? borderRadius;
+  final String? imageString;
+  final String? category;
+  final double? chevronOpacity;
+  final GestureTapCallback? onTap;
+  final Icon? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -270,7 +270,7 @@ class _CategoryHeader extends StatelessWidget {
       height: height,
       margin: margin,
       child: Material(
-        shape: RoundedRectangleBorder(borderRadius: borderRadius),
+        shape: RoundedRectangleBorder(borderRadius: borderRadius!),
         color: colorScheme.onBackground,
         clipBehavior: Clip.antiAlias,
         child: Container(
@@ -286,13 +286,13 @@ class _CategoryHeader extends StatelessWidget {
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Padding(
-                        padding: imagePadding,
+                        padding: imagePadding!,
                         child: icon,
                       ),
                       Padding(
                         padding: const EdgeInsetsDirectional.only(start: 8),
                         child: Text(
-                          category,
+                          category!,
                           // style: Theme.of(context).textTheme.headline5.apply(
                           // 	color: colorScheme.onSurface,
                           // ),
@@ -302,7 +302,7 @@ class _CategoryHeader extends StatelessWidget {
                   ),
                 ),
                 Opacity(
-                  opacity: chevronOpacity,
+                  opacity: chevronOpacity!,
                   child: chevronOpacity != 0
                       ? Padding(
                           padding: const EdgeInsetsDirectional.only(
@@ -337,10 +337,10 @@ class _CategoryHeader extends StatelessWidget {
 }
 
 class CategoryDemoItem extends StatelessWidget {
-  CategoryDemoItem({Key key, this.model}) : super(key: key);
+  CategoryDemoItem({Key? key, this.model}) : super(key: key);
 
-  final ToDoModel model;
-  String _cachedCategory;
+  final ToDoModel? model;
+  String? _cachedCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -352,7 +352,7 @@ class CategoryDemoItem extends StatelessWidget {
       color: Theme.of(context).colorScheme.surface,
       child: InkWell(
         onTap: () {
-          _cachedCategory = model.category;
+          _cachedCategory = model!.category;
           Navigator.of(context)
               .push(MaterialPageRoute(
                   builder: (context) => TextEditorPage(model)))
@@ -371,10 +371,10 @@ class CategoryDemoItem extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () async {
-                  await context.read<HomeViewModel>().updateTodoItem(model);
+                  await context.read<HomeViewModel>().updateTodoStatus(model!);
                 },
                 child: Icon(
-                  model.status == 0
+                  model!.status == 0
                       ? Icons.check_circle_outline
                       : Icons.brightness_1_outlined,
                   color: colorScheme.onSecondary,
@@ -388,16 +388,16 @@ class CategoryDemoItem extends StatelessWidget {
                     Text(
                       model?.content ?? '',
                       style: TextStyle(
-                          decoration: model.status == 0
+                          decoration: model!.status == 0
                               ? TextDecoration.lineThrough
                               : null,
                           color:
-                              model.status == 0 ? Colors.grey : Colors.black),
+                              model!.status == 0 ? Colors.grey : Colors.black),
                     ),
-                    if (model?.brief != null && model?.brief.isNotEmpty)
+                    if (model?.brief != null)
                       Text(
                         model?.brief ?? '',
-                        style: textTheme.overline.apply(
+                        style: textTheme.overline!.apply(
                           color: colorScheme.onSurface.withOpacity(0.5),
                         ),
                       ),
