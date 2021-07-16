@@ -82,144 +82,30 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 child: _CategoriesHeader(),
               ),
-              _AnimatedCategoryItem(
-                startDelayFraction: 0.00,
-                controller: _animationController,
-                child: CategoryListItem(
-                    key: const PageStorageKey<String>(
-                      'To Do',
-                    ),
-                    restorationId: 'home_material_category_list',
-                    category:
-                        '${context.watch<ConfigViewModel>().categoryDemosList[0].name}',
-                    imageString: 'assets/icons/material/material.png',
-                    demoList: viewModel.indexedList['To Do'],
-                    initiallyExpanded: false,
-                    icon: context
-                        .watch<ConfigViewModel>()
-                        .categoryDemosList[0]
-                        .icon,
-                    onTap: (shouldOpenList) {
-                      if (shouldOpenList) {
-                        viewModel.queryToDoList('To Do');
-                      }
-                    }),
-              ),
-              _AnimatedCategoryItem(
-                startDelayFraction: 0.00,
-                controller: _animationController,
-                child: CategoryListItem(
-                    key: const PageStorageKey<String>(
-                      'To Watch',
-                    ),
-                    restorationId: 'home_material_category_list',
-                    category:
-                        '${context.watch<ConfigViewModel>().categoryDemosList[1].name}',
-                    imageString: 'assets/icons/material/material.png',
-                    demoList: viewModel.indexedList['To Watch'],
-                    initiallyExpanded: false,
-                    icon: context
-                        .watch<ConfigViewModel>()
-                        .categoryDemosList[1]
-                        .icon,
-                    onTap: (shouldOpenList) {
-                      if (shouldOpenList) {
-                        viewModel.queryToDoList('To Watch');
-                      }
-                    }),
-              ),
-              _AnimatedCategoryItem(
-                startDelayFraction: 0.00,
-                controller: _animationController,
-                child: CategoryListItem(
-                    key: const PageStorageKey<String>(
-                      'To Read',
-                    ),
-                    restorationId: 'home_material_category_list',
-                    category:
-                        '${context.watch<ConfigViewModel>().categoryDemosList[2].name}',
-                    imageString: 'assets/icons/material/material.png',
-                    demoList: viewModel.indexedList['To Read'],
-                    initiallyExpanded: false,
-                    icon: context
-                        .watch<ConfigViewModel>()
-                        .categoryDemosList[2]
-                        .icon,
-                    onTap: (shouldOpenList) {
-                      if (shouldOpenList) {
-                        viewModel.queryToDoList('To Read');
-                      }
-                    }),
-              ),
-              _AnimatedCategoryItem(
-                startDelayFraction: 0.00,
-                controller: _animationController,
-                child: CategoryListItem(
-                    key: const PageStorageKey<String>(
-                      'Alert',
-                    ),
-                    restorationId: 'home_material_category_list',
-                    category:
-                        '${context.watch<ConfigViewModel>().categoryDemosList[3].name}',
-                    imageString: 'assets/icons/material/material.png',
-                    demoList: viewModel.indexedList['Alert'],
-                    initiallyExpanded: false,
-                    icon: context
-                        .watch<ConfigViewModel>()
-                        .categoryDemosList[3]
-                        .icon,
-                    onTap: (shouldOpenList) {
-                      if (shouldOpenList) {
-                        viewModel.queryToDoList('Alert');
-                      }
-                    }),
-              ),
-              _AnimatedCategoryItem(
-                startDelayFraction: 0.00,
-                controller: _animationController,
-                child: CategoryListItem(
-                    key: const PageStorageKey<String>(
-                      'Work',
-                    ),
-                    restorationId: 'home_material_category_list',
-                    category:
-                        '${context.watch<ConfigViewModel>().categoryDemosList[4].name}',
-                    imageString: 'assets/icons/material/material.png',
-                    demoList: viewModel.indexedList['Work'],
-                    initiallyExpanded: false,
-                    icon: context
-                        .watch<ConfigViewModel>()
-                        .categoryDemosList[4]
-                        .icon,
-                    onTap: (shouldOpenList) {
-                      if (shouldOpenList) {
-                        viewModel.queryToDoList('Work');
-                      }
-                    }),
-              ),
-              _AnimatedCategoryItem(
-                startDelayFraction: 0.00,
-                controller: _animationController,
-                child: CategoryListItem(
-                    key: const PageStorageKey<String>(
-                      'To Learn',
-                    ),
-                    restorationId: 'home_material_category_list',
-                    category:
-                        '${context.watch<ConfigViewModel>().categoryDemosList[5].name}',
-                    imageString: 'assets/icons/material/material.png',
-                    demoList: viewModel.indexedList['To Learn'],
-                    initiallyExpanded: false,
-                    icon: context
-                        .watch<ConfigViewModel>()
-                        .categoryDemosList[5]
-                        .icon,
-                    onTap: (shouldOpenList) {
-                      if (shouldOpenList) {
-                        viewModel.queryToDoList('To Learn');
-                      }
-                    }),
-              ),
+              for (int i = 0; i <= 5; i++)
+                _AnimatedCategoryItem(
+                  startDelayFraction: 0.00,
+                  controller: _animationController,
+                  child: CategoryListItem(
+                      key: PageStorageKey<String>(
+                        'CategoryListItem${i}',
+                      ),
+                      restorationId: 'home_material_category_list',
+                      category:
+                          '${context.watch<ConfigViewModel>().categoryDemosList[i].name}',
+                      imageString: 'assets/icons/material/material.png',
+                      demoList: viewModel.indexedList['${context.watch<ConfigViewModel>().categoryDemosList[i].name}'],
+                      initiallyExpanded: false,
+                      icon: context
+                          .watch<ConfigViewModel>()
+                          .categoryDemosList[i]
+                          .icon,
+                      onTap: (shouldOpenList) {
+                        if (shouldOpenList) {
+                          viewModel.queryToDoList('${context.read<ConfigViewModel>().categoryDemosList[i].name}');
+                        }
+                      }),
+                ),
             ],
           )
         ],

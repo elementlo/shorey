@@ -35,11 +35,11 @@ class _ListCategoryPageState extends State<ListCategoryPage> {
               for (int i = 0; i <= 5; i++)
                 _CategoryItem(
                     title: context
-                        .watch<ConfigViewModel>()
+                        .read<ConfigViewModel>()
                         .categoryDemosList[i]
                         .name,
                     icon: context
-                        .watch<ConfigViewModel>()
+                        .read<ConfigViewModel>()
                         .categoryDemosList[i]
                         .icon,
                     index: i),
@@ -63,6 +63,9 @@ class _CategoryItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         context.read<CategoryListViewModel>().selectedCategoryIndex = index;
+        Future.delayed(Duration(milliseconds: 200),(){
+          Navigator.pop(context, title);
+        });
       },
       child: Column(
         children: [

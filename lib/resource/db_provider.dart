@@ -125,17 +125,20 @@ class DbSparkProvider {
   Future<int> insertToDo(ToDoModel model) async {
     return await db.insert(DatabaseRef.tableToDo, {
       '${DatabaseRef.toDoContent}': model.content,
+      '${DatabaseRef.toDoBrief}': model.brief,
       '${DatabaseRef.toDoCreatedTime}': model.createdTime,
       '${DatabaseRef.status}': model.status,
       '${DatabaseRef.category}': model.category,
     });
   }
 
-  Future updateToDoStatus(ToDoModel model, {bool updateContent = true}) async {
+  Future updateToDoItem(ToDoModel model, {bool updateContent = true}) async {
     return await db.update(
         DatabaseRef.tableToDo,
         {
           if (updateContent) DatabaseRef.toDoContent: model.content,
+          if (updateContent) DatabaseRef.toDoBrief: model.brief,
+          if (updateContent) DatabaseRef.category: model.category,
           DatabaseRef.status: model.status,
         },
         where: '${DatabaseRef.columnId} = ?',

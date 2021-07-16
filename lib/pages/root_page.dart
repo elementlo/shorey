@@ -112,12 +112,9 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderWidget<HomeViewModel>(
-      model: HomeViewModel(),
-      child: Scaffold(
+    return Scaffold(
         body: _buildStack(context),
-      ),
-    );
+      );
   }
 
   Widget _buildStack(BuildContext context) {

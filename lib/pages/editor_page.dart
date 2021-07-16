@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spark_list/config/config.dart';
 import 'package:spark_list/model/model.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
+import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
+
+import 'list_category_page.dart';
 
 ///
 /// Author: Elemen
@@ -35,9 +37,7 @@ class _TextEditorPageState extends State<TextEditorPage> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme
-        .of(context)
-        .colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: SparkAppBar(
         context: context,
@@ -48,7 +48,12 @@ class _TextEditorPageState extends State<TextEditorPage> {
                 Icons.check,
                 color: colorScheme.onSecondary,
               ),
-              onPressed: () {})
+              onPressed: () {
+                widget.todoModel.brief = _briefController.text;
+                widget.todoModel.content = _titleController.text;
+                context.read<HomeViewModel>().updateTodoItem(widget.todoModel);
+                Navigator.pop(context);
+              })
         ],
       ),
       body: Container(
@@ -80,7 +85,9 @@ class _TextEditorPageState extends State<TextEditorPage> {
             SizedBox(
               height: 16,
             ),
-            _EditorTableRow(todoModel: widget.todoModel,)
+            _EditorTableRow(
+              todoModel: widget.todoModel,
+            )
           ],
         ),
       ),
@@ -141,7 +148,13 @@ class _EditorTableRowState extends State<_EditorTableRow> {
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
         onTap: () {
-          Navigator.of(context).pushNamed(Routes.listCategoryPage);
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => ListCategoryPage()))
+              .then((result) {
+                widget.todoModel.category = result;
+                _color = _mapCategoryColor();
+                setState(() {});
+          });
         },
         child: Container(
           height: 55,
@@ -153,7 +166,7 @@ class _EditorTableRowState extends State<_EditorTableRow> {
                 height: 10,
                 width: 10,
                 decoration:
-                BoxDecoration(shape: BoxShape.circle, color: _color),
+                    BoxDecoration(shape: BoxShape.circle, color: _color),
               ),
               SizedBox(
                 width: 8,
@@ -168,10 +181,7 @@ class _EditorTableRowState extends State<_EditorTableRow> {
               Icon(
                 Icons.arrow_forward_ios,
                 size: 14,
-                color: Theme
-                    .of(context)
-                    .colorScheme
-                    .onSecondary,
+                color: Theme.of(context).colorScheme.onSecondary,
               )
             ],
           ),
@@ -181,10 +191,9 @@ class _EditorTableRowState extends State<_EditorTableRow> {
   }
 
   Color _mapCategoryColor() {
-    for (CategoryItem item in context
-        .read<ConfigViewModel>()
-        .categoryDemosList) {
-      if (widget.todoModel.category == item.name){
+    for (CategoryItem item
+        in context.read<ConfigViewModel>().categoryDemosList) {
+      if (widget.todoModel.category == item.name) {
         return item.color;
       }
     }

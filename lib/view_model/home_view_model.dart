@@ -86,7 +86,7 @@ class HomeViewModel extends ViewStateModel {
   Future updateMainFocusStatus(int status) async {
     if (_mainFocusModel != null) {
       _mainFocusModel.status = status;
-      await sparkProvider.updateToDoStatus(_mainFocusModel);
+      await sparkProvider.updateToDoItem(_mainFocusModel);
       int difference = 0;
       if (status == 0) {
         difference = 1;
@@ -103,12 +103,14 @@ class HomeViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-  Future saveToDo(String content, String category, {int status = 1}) async {
+  Future saveToDo(String content, String category,
+      {String brief, int status = 1}) async {
     await sparkProvider.insertToDo(
         ToDoModel(createdTime: DateTime.now().millisecondsSinceEpoch)
           ..content = content
           ..category = category
-          ..status = status);
+          ..status = status
+          ..brief = brief);
   }
 
   Future<ToDoListModel> queryToDoList(String category) async {
@@ -118,7 +120,7 @@ class HomeViewModel extends ViewStateModel {
     return toDoListModel;
   }
 
-  Future updateTodoItem(ToDoModel model) async {
+  Future updateTodoStatus(ToDoModel model) async {
     int difference = 0;
     switch (model.status) {
       case 0:
@@ -130,9 +132,13 @@ class HomeViewModel extends ViewStateModel {
         model.status = 0;
         break;
     }
-    await sparkProvider.updateToDoStatus(model, updateContent: false);
+    await sparkProvider.updateToDoItem(model, updateContent: false);
     await sparkProvider.updateHeatPoint(difference);
     notifyListeners();
+  }
+
+  Future updateTodoItem(ToDoModel model) async{
+    await sparkProvider.updateToDoItem(model, updateContent: true);
   }
 
   Future queryToDoItem(int id) async {

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spark_list/config/config.dart';
 import 'package:spark_list/model/model.dart';
 import 'package:spark_list/pages/editor_page.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
@@ -338,9 +337,10 @@ class _CategoryHeader extends StatelessWidget {
 }
 
 class CategoryDemoItem extends StatelessWidget {
-  const CategoryDemoItem({Key key, this.model}) : super(key: key);
+  CategoryDemoItem({Key key, this.model}) : super(key: key);
 
   final ToDoModel model;
+  String _cachedCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -352,8 +352,13 @@ class CategoryDemoItem extends StatelessWidget {
       color: Theme.of(context).colorScheme.surface,
       child: InkWell(
         onTap: () {
-          //Navigator.of(context).pushNamed(Routes.textEditorPage);
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => TextEditorPage(model)));
+          _cachedCategory = model.category;
+          Navigator.of(context)
+              .push(MaterialPageRoute(
+                  builder: (context) => TextEditorPage(model)))
+              .then((result) {
+                context.read<HomeViewModel>().queryToDoList(_cachedCategory);
+          });
         },
         child: Padding(
           padding: EdgeInsetsDirectional.only(
@@ -386,9 +391,8 @@ class CategoryDemoItem extends StatelessWidget {
                           decoration: model.status == 0
                               ? TextDecoration.lineThrough
                               : null,
-                          color: model.status == 0
-                              ? Colors.grey
-                              : Colors.black),
+                          color:
+                              model.status == 0 ? Colors.grey : Colors.black),
                     ),
                     if (model?.brief != null && model?.brief.isNotEmpty)
                       Text(

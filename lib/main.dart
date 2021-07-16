@@ -10,6 +10,7 @@ import 'package:spark_list/pages/settings_category_page.dart';
 import 'package:spark_list/resource/db_provider.dart';
 import 'package:spark_list/routes.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
+import 'package:spark_list/view_model/home_view_model.dart';
 
 import 'config/theme_data.dart';
 
@@ -45,10 +46,11 @@ class MyApp extends StatelessWidget {
     //   ),
     // );
 
-    return ProviderWidget<ConfigViewModel>(
-      model: ConfigViewModel(),
-      onModelReady: (viewModel){
-        viewModel.initCategoryDemosList();
+    return ProviderWidget2<ConfigViewModel, HomeViewModel>(
+      model1: ConfigViewModel(),
+      model2: HomeViewModel(),
+      onModelReady: (cViewModel, hViewModel){
+        cViewModel.initCategoryDemosList();
       },
       child: MaterialApp(
         themeMode: ThemeMode.system,
