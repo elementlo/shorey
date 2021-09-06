@@ -18,6 +18,7 @@ class ToDoModel {
   ///0: finished, 1: going
   int? status;
   String? category;
+  String? alertTime;
 
   ToDoModel(
       {this.id,
@@ -25,7 +26,8 @@ class ToDoModel {
       required this.createdTime,
       this.status,
       this.category,
-      this.brief});
+      this.brief,
+      this.alertTime,});
 
   ToDoModel.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
@@ -34,6 +36,7 @@ class ToDoModel {
     status = json['status'];
     category = json['category'];
     brief = json['brief'];
+    alertTime = json['alertTime'];
   }
 
   Map<String, dynamic> toJson() {
@@ -44,6 +47,7 @@ class ToDoModel {
     data['status'] = this.status;
     data['category'] = this.category;
     data['brief'] = this.brief;
+    data['alertTime'] = this.alertTime;
     return data;
   }
 }

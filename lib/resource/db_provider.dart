@@ -48,6 +48,7 @@ class DbSparkProvider {
   	${DatabaseRef.toDoBrief} TEXT,
   	${DatabaseRef.category} TEXT,
   	${DatabaseRef.toDoCreatedTime} INT NOT NULL,
+  	${DatabaseRef.alertTime} TEXT,
   	${DatabaseRef.status} INT)
   	''');
     await db.execute('''

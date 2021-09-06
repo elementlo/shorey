@@ -1,9 +1,15 @@
+import 'dart:collection';
+
+import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/model/model.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
+import 'package:spark_list/widget/customized_date_picker.dart';
+import 'package:spark_list/widget/settings_list_item.dart';
 
 import 'list_category_page.dart';
 
@@ -14,6 +20,15 @@ import 'list_category_page.dart';
 /// Description:
 ///
 
+enum _ExpandableSetting {
+  date,
+  time,
+  textDirection,
+  locale,
+  platform,
+  theme,
+}
+
 class TextEditorPage extends StatefulWidget {
   final ToDoModel? todoModel;
 
@@ -23,26 +38,99 @@ class TextEditorPage extends StatefulWidget {
   _TextEditorPageState createState() => _TextEditorPageState();
 }
 
-class _TextEditorPageState extends State<TextEditorPage> {
+class _TextEditorPageState extends State<TextEditorPage>
+    with TickerProviderStateMixin {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _briefController = TextEditingController();
+  _ExpandableSetting? _expandedSettingId;
+  late Animation<double> _staggerSettingsItemsAnimation;
+  late AnimationController _settingsPanelController;
+  final ScrollController _controller = ScrollController();
+  TimeOfDay _time = TimeOfDay.now();
+  String _selectedDate = '';
 
   @override
   void initState() {
     super.initState();
     _titleController.text = widget.todoModel!.content ??= '';
     _briefController.text = widget.todoModel!.brief ??= '';
+    _settingsPanelController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _settingsPanelController.addStatusListener(_closeSettingId);
+    _staggerSettingsItemsAnimation = CurvedAnimation(
+      parent: _settingsPanelController,
+      curve: const Interval(
+        0.5,
+        1.0,
+        curve: Curves.easeIn,
+      ),
+    );
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final settingsListItems = [
+      SettingsListItem<double>(
+          title: '日期',
+          selectedOption: 1.0,
+          optionsMap: LinkedHashMap.of(
+              {1.0: DisplayOption(_selectedDate == '' ? '无' : _selectedDate)}),
+          onOptionChanged: (newTextScale) {},
+          onTapSetting: () => onTapSetting(_ExpandableSetting.date),
+          isExpanded: _expandedSettingId == _ExpandableSetting.date,
+          child: CustomizedDatePicker([], (selection) {
+            _selectedDate =
+                '${selection.year}-${selection.month}-${selection.day}';
+            setState(() {});
+          })),
+      if (_selectedDate != '')
+        SettingsListItem<double>(
+          title: '时间',
+          selectedOption: 1.0,
+          optionsMap: LinkedHashMap.of({
+            1.0: DisplayOption(_time == null ? '无' : _time.format(context))
+          }),
+          onOptionChanged: (newTextScale) {},
+          onTapSetting: () => onTapSetting(_ExpandableSetting.time),
+          isExpanded: _expandedSettingId == _ExpandableSetting.time,
+          child: createInlinePicker(
+              accentColor: colorScheme.onSecondary,
+              dialogInsetPadding: EdgeInsets.all(0),
+              context: context,
+              disableHour: false,
+              disableMinute: false,
+              value: _time,
+              minMinute: 0,
+              elevation: 0,
+              maxMinute: 59,
+              isOnChangeValueMode: true,
+              onChange: (time) {
+                print(time);
+                setState(() {
+                  _time = time;
+                });
+              }),
+        ),
+    ];
     return Scaffold(
       appBar: SparkAppBar(
         context: context,
         title: '${widget.todoModel!.category}',
         actions: [
+          IconButton(
+              icon: Icon(
+                Icons.alarm_off,
+                color: colorScheme.onSecondary,
+              ),
+              onPressed: () {
+                _selectedDate = '';
+                setState(() {});
+                Fluttertoast.showToast(msg: '清除提醒时间');
+              }),
           IconButton(
               icon: Icon(
                 Icons.check,
@@ -53,15 +141,17 @@ class _TextEditorPageState extends State<TextEditorPage> {
                 widget.todoModel!.content = _titleController.text;
                 context.read<HomeViewModel>().updateTodoItem(widget.todoModel!);
                 Navigator.pop(context);
-              })
+              }),
         ],
       ),
       body: Container(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.symmetric(vertical: 16),
         child: ListView(
+          controller: _controller,
           children: [
             Container(
               padding: EdgeInsets.symmetric(horizontal: 16),
+              margin: EdgeInsets.symmetric(horizontal: 16),
               height: 300,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8), color: Colors.white),
@@ -85,13 +175,53 @@ class _TextEditorPageState extends State<TextEditorPage> {
             SizedBox(
               height: 16,
             ),
-            _EditorTableRow(
-              todoModel: widget.todoModel,
-            )
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: _EditorTableRow(
+                todoModel: widget.todoModel,
+              ),
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            ...[
+              _AnimateSettingsListItems(
+                animation: _staggerSettingsItemsAnimation,
+                children: settingsListItems,
+              ),
+              const SizedBox(height: 16),
+
+              //Divider(thickness: 2, height: 0, color: colorScheme.background),
+            ],
           ],
         ),
       ),
     );
+  }
+
+  void onTapSetting(_ExpandableSetting settingId) {
+    Future.delayed(Duration(milliseconds: 300), () {
+      final extent = _controller.position.maxScrollExtent;
+      print(extent);
+      if (extent > 0)
+        _controller.animateTo(_controller.position.maxScrollExtent,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
+    });
+    setState(() {
+      if (_expandedSettingId == settingId) {
+        _expandedSettingId = null;
+      } else {
+        _expandedSettingId = settingId;
+      }
+    });
+  }
+
+  void _closeSettingId(AnimationStatus status) {
+    if (status == AnimationStatus.dismissed) {
+      setState(() {
+        _expandedSettingId = null;
+      });
+    }
   }
 }
 
@@ -151,9 +281,9 @@ class _EditorTableRowState extends State<_EditorTableRow> {
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => ListCategoryPage()))
               .then((result) {
-                widget.todoModel!.category = result;
-                _color = _mapCategoryColor();
-                setState(() {});
+            widget.todoModel!.category = result;
+            _color = _mapCategoryColor();
+            setState(() {});
           });
         },
         child: Container(
@@ -198,5 +328,50 @@ class _EditorTableRowState extends State<_EditorTableRow> {
       }
     }
     return Colors.white;
+  }
+}
+
+class _AnimateSettingsListItems extends StatelessWidget {
+  const _AnimateSettingsListItems({
+    Key? key,
+    required this.animation,
+    required this.children,
+  }) : super(key: key);
+
+  final Animation<double> animation;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final dividingPadding = 4.0;
+    final topPaddingTween = Tween<double>(
+      begin: 0,
+      end: children.length * dividingPadding,
+    );
+    final dividerTween = Tween<double>(
+      begin: 0,
+      end: dividingPadding,
+    );
+
+    return Padding(
+      padding: EdgeInsets.only(top: topPaddingTween.animate(animation).value),
+      child: Column(
+        children: [
+          for (Widget child in children)
+            AnimatedBuilder(
+              animation: animation,
+              builder: (context, child) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    top: dividerTween.animate(animation).value,
+                  ),
+                  child: child,
+                );
+              },
+              child: child,
+            ),
+        ],
+      ),
+    );
   }
 }

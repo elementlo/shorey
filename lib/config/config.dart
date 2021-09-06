@@ -44,7 +44,8 @@ class DatabaseRef{
 	static const String toDoCreatedTime = 'created_time';
 	static const String status = 'status';
 	static const String category = 'category';
-	
+	static const String alertTime = 'alert_time';
+
 	///table - heat_map_table
 	static const String tableHeatMap = 'heat_map';
 	static const String heatPointlevel = 'level';
