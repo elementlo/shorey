@@ -337,9 +337,9 @@ class _CategoryHeader extends StatelessWidget {
 }
 
 class CategoryDemoItem extends StatelessWidget {
-  CategoryDemoItem({Key? key, this.model}) : super(key: key);
+  CategoryDemoItem({Key? key, required this.model}) : super(key: key);
 
-  final ToDoModel? model;
+  final ToDoModel model;
   String? _cachedCategory;
 
   @override
@@ -348,11 +348,11 @@ class CategoryDemoItem extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return Material(
       // Makes integration tests possible.
-      key: ValueKey(model?.id ?? 0),
+      key: ValueKey(model.id ?? 0),
       color: Theme.of(context).colorScheme.surface,
       child: InkWell(
         onTap: () {
-          _cachedCategory = model!.category;
+          _cachedCategory = model.category;
           Navigator.of(context)
               .push(MaterialPageRoute(
                   builder: (context) => TextEditorPage(model)))
@@ -371,10 +371,10 @@ class CategoryDemoItem extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () async {
-                  await context.read<HomeViewModel>().updateTodoStatus(model!);
+                  await context.read<HomeViewModel>().updateTodoStatus(model);
                 },
                 child: Icon(
-                  model!.status == 0
+                  model.status == 0
                       ? Icons.check_circle_outline
                       : Icons.brightness_1_outlined,
                   color: colorScheme.onSecondary,
@@ -386,17 +386,17 @@ class CategoryDemoItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      model?.content ?? '',
+                      model.content ?? '',
                       style: TextStyle(
-                          decoration: model!.status == 0
+                          decoration: model.status == 0
                               ? TextDecoration.lineThrough
                               : null,
                           color:
-                              model!.status == 0 ? Colors.grey : Colors.black),
+                              model.status == 0 ? Colors.grey : Colors.black),
                     ),
-                    if (model?.brief != null)
+                    if (model.brief != null)
                       Text(
-                        model?.brief ?? '',
+                        model.brief ?? '',
                         style: textTheme.overline!.apply(
                           color: colorScheme.onSurface.withOpacity(0.5),
                         ),

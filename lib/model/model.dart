@@ -36,7 +36,7 @@ class ToDoModel {
     status = json['status'];
     category = json['category'];
     brief = json['brief'];
-    alertTime = json['alertTime'];
+    alertTime = json['alert_time'];
   }
 
   Map<String, dynamic> toJson() {
@@ -47,7 +47,7 @@ class ToDoModel {
     data['status'] = this.status;
     data['category'] = this.category;
     data['brief'] = this.brief;
-    data['alertTime'] = this.alertTime;
+    data['alert_time'] = this.alertTime;
     return data;
   }
 }

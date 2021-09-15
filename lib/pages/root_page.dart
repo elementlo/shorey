@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/config/config.dart';
+import 'package:spark_list/main.dart';
 import 'package:spark_list/pages/curtain_page.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
@@ -34,6 +36,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    _requestPermissions();
     _settingsPanelController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
@@ -53,6 +56,17 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
     _iconController?.dispose();
     homePageFadeController?.dispose();
     super.dispose();
+  }
+
+  void _requestPermissions() {
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
   }
 
   void _toggleSettings(BuildContext context) {

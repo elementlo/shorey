@@ -31,10 +31,11 @@ dependencies:
   sqflite: ^2.0.0+3
   synchronized: ^3.0.0
   animated_text_kit: ^4.2.1
-  flutter_local_notifications: ^6.0.0
+  flutter_local_notifications: ^8.1.1+2
   cupertino_icons: ^1.0.3
   syncfusion_flutter_datepicker: ^19.2.49
   day_night_time_picker: ^1.0.3+1
+  flutter_native_timezone: ^1.0.10
 
 dev_dependencies:
   flutter_test:

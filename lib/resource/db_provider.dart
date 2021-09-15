@@ -140,6 +140,7 @@ class DbSparkProvider {
           if (updateContent) DatabaseRef.toDoContent: model.content,
           if (updateContent) DatabaseRef.toDoBrief: model.brief,
           if (updateContent) DatabaseRef.category: model.category,
+          if (updateContent) DatabaseRef.alertTime: model.alertTime,
           DatabaseRef.status: model.status,
         },
         where: '${DatabaseRef.columnId} = ?',

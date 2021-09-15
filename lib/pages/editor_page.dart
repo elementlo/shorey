@@ -30,7 +30,7 @@ enum _ExpandableSetting {
 }
 
 class TextEditorPage extends StatefulWidget {
-  final ToDoModel? todoModel;
+  final ToDoModel todoModel;
 
   TextEditorPage(this.todoModel);
 
@@ -46,14 +46,23 @@ class _TextEditorPageState extends State<TextEditorPage>
   late Animation<double> _staggerSettingsItemsAnimation;
   late AnimationController _settingsPanelController;
   final ScrollController _controller = ScrollController();
-  TimeOfDay _time = TimeOfDay.now();
+  TimeOfDay _time = TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 1);
   String _selectedDate = '';
+  DateTime? _alertDateTime = null;
 
   @override
   void initState() {
     super.initState();
-    _titleController.text = widget.todoModel!.content ??= '';
-    _briefController.text = widget.todoModel!.brief ??= '';
+    if (widget.todoModel.alertTime != null &&
+        widget.todoModel.alertTime!.isNotEmpty) {
+      _alertDateTime = DateTime.parse(widget.todoModel.alertTime!);
+      _selectedDate =
+          '${_alertDateTime!.year}-${_alertDateTime!.month.toString().padLeft(2, '0')}'
+              '-${_alertDateTime!.day.toString().padLeft(2, '0')}';
+      _time = TimeOfDay.fromDateTime(_alertDateTime!);
+    }
+    _titleController.text = widget.todoModel.content ??= '';
+    _briefController.text = widget.todoModel.brief ??= '';
     _settingsPanelController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
@@ -84,7 +93,8 @@ class _TextEditorPageState extends State<TextEditorPage>
           isExpanded: _expandedSettingId == _ExpandableSetting.date,
           child: CustomizedDatePicker([], (selection) {
             _selectedDate =
-                '${selection.year}-${selection.month}-${selection.day}';
+                '${selection.year}-${selection.month.toString().padLeft(2, '0')}'
+                    '-${selection.day.toString().padLeft(2, '0')}';
             setState(() {});
           })),
       if (_selectedDate != '')
@@ -119,7 +129,7 @@ class _TextEditorPageState extends State<TextEditorPage>
     return Scaffold(
       appBar: SparkAppBar(
         context: context,
-        title: '${widget.todoModel!.category}',
+        title: '${widget.todoModel.category}',
         actions: [
           IconButton(
               icon: Icon(
@@ -137,9 +147,15 @@ class _TextEditorPageState extends State<TextEditorPage>
                 color: colorScheme.onSecondary,
               ),
               onPressed: () {
-                widget.todoModel!.brief = _briefController.text;
-                widget.todoModel!.content = _titleController.text;
-                context.read<HomeViewModel>().updateTodoItem(widget.todoModel!);
+                widget.todoModel.brief = _briefController.text;
+                widget.todoModel.content = _titleController.text;
+                String? alertTime = null;
+                if(_selectedDate.isNotEmpty){
+                  alertTime = '$_selectedDate ${_time.format(context)}';
+                }
+                print(alertTime);
+                widget.todoModel.alertTime = alertTime;
+                context.read<HomeViewModel>().updateTodoItem(widget.todoModel);
                 Navigator.pop(context);
               }),
         ],
