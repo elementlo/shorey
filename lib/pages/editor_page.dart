@@ -2,14 +2,18 @@ import 'dart:collection';
 
 import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:spark_list/config/config.dart';
+import 'package:spark_list/main.dart';
 import 'package:spark_list/model/model.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 import 'package:spark_list/widget/customized_date_picker.dart';
 import 'package:spark_list/widget/settings_list_item.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 import 'list_category_page.dart';
 
@@ -58,7 +62,7 @@ class _TextEditorPageState extends State<TextEditorPage>
       _alertDateTime = DateTime.parse(widget.todoModel.alertTime!);
       _selectedDate =
           '${_alertDateTime!.year}-${_alertDateTime!.month.toString().padLeft(2, '0')}'
-              '-${_alertDateTime!.day.toString().padLeft(2, '0')}';
+          '-${_alertDateTime!.day.toString().padLeft(2, '0')}';
       _time = TimeOfDay.fromDateTime(_alertDateTime!);
     }
     _titleController.text = widget.todoModel.content ??= '';
@@ -94,7 +98,7 @@ class _TextEditorPageState extends State<TextEditorPage>
           child: CustomizedDatePicker([], (selection) {
             _selectedDate =
                 '${selection.year}-${selection.month.toString().padLeft(2, '0')}'
-                    '-${selection.day.toString().padLeft(2, '0')}';
+                '-${selection.day.toString().padLeft(2, '0')}';
             setState(() {});
           })),
       if (_selectedDate != '')
@@ -146,16 +150,8 @@ class _TextEditorPageState extends State<TextEditorPage>
                 Icons.check,
                 color: colorScheme.onSecondary,
               ),
-              onPressed: () {
-                widget.todoModel.brief = _briefController.text;
-                widget.todoModel.content = _titleController.text;
-                String? alertTime = null;
-                if(_selectedDate.isNotEmpty){
-                  alertTime = '$_selectedDate ${_time.format(context)}';
-                }
-                print(alertTime);
-                widget.todoModel.alertTime = alertTime;
-                context.read<HomeViewModel>().updateTodoItem(widget.todoModel);
+              onPressed: () async {
+                await _updateTodoItem();
                 Navigator.pop(context);
               }),
         ],
@@ -215,10 +211,53 @@ class _TextEditorPageState extends State<TextEditorPage>
     );
   }
 
+  Future<void> _setNotification(DateTime alertTime, int notificationId) async {
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+        notificationId,
+        '${_titleController.text}',
+        '${_briefController.text}',
+        tz.TZDateTime.from(alertTime, tz.local),
+        const NotificationDetails(
+            android: AndroidNotificationDetails(NotificationId.mainChannelId,
+                'Todo Alert', 'Reminder\'s notification channel',
+                importance: Importance.max,
+                priority: Priority.high,
+                playSound: true,
+                ticker: 'ticker')),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime);
+  }
+
+  Future<void> _cancelNotification(int notificationId) async {
+    await flutterLocalNotificationsPlugin.cancel(notificationId);
+  }
+
+  Future<void> _updateTodoItem() async {
+    widget.todoModel.brief = _briefController.text;
+    widget.todoModel.content = _titleController.text;
+    String? alertTime = null;
+    if (_selectedDate.isNotEmpty) {
+      final notificationId =
+          DateTime.now().millisecond * 1000 + DateTime.now().microsecond;
+      widget.todoModel.notificationId ??= notificationId;
+      alertTime = '$_selectedDate ${_time.format(context)}';
+      await _setNotification(DateTime.parse(alertTime), notificationId);
+    } else {
+      if (widget.todoModel.notificationId != null) {
+        await _cancelNotification(widget.todoModel.notificationId!);
+      }
+      widget.todoModel.notificationId = null;
+    }
+    print(
+        'alerttime: $alertTime notificationId: ${widget.todoModel.notificationId}');
+    widget.todoModel.alertTime = alertTime;
+    context.read<HomeViewModel>().updateTodoItem(widget.todoModel);
+  }
+
   void onTapSetting(_ExpandableSetting settingId) {
     Future.delayed(Duration(milliseconds: 300), () {
       final extent = _controller.position.maxScrollExtent;
-      print(extent);
       if (extent > 0)
         _controller.animateTo(_controller.position.maxScrollExtent,
             duration: Duration(milliseconds: 200), curve: Curves.ease);

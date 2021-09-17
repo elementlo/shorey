@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:flutter/material.dart';
 import 'package:spark_list/widget/app_bar.dart';
 import 'package:spark_list/widget/settings_list_item.dart';
@@ -15,23 +16,45 @@ import 'home_page.dart';
 
 enum _ExpandableSetting {
   textScale,
-  textDirection,
-  locale,
-  platform,
-  theme,
+  time
 }
 
-class PushFrequencyPage extends StatefulWidget {
+enum AlertPeriod {
+  daily,
+  mon,
+  tue,
+  wed,
+  thu,
+  fri,
+  sat,
+  sun,
+  none
+}
+
+class AlertPeriodPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return PushFrequencyPageState();
+    return AlertPeriodPageState();
   }
 }
 
-class PushFrequencyPageState extends State with TickerProviderStateMixin {
+class AlertPeriodPageState extends State with TickerProviderStateMixin {
   late Animation<double> _staggerSettingsItemsAnimation;
   late AnimationController _settingsPanelController;
   _ExpandableSetting? _expandedSettingId;
+  AlertPeriod selectPeriod = AlertPeriod.daily;
+  TimeOfDay _time = TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 1);
+  final optionMap = LinkedHashMap.of({
+    AlertPeriod.daily: '每天',
+    AlertPeriod.mon: '每周一',
+    AlertPeriod.tue: '每周二',
+    AlertPeriod.wed: '每周三',
+    AlertPeriod.thu: '每周四',
+    AlertPeriod.fri: '每周五',
+    AlertPeriod.sat: '每周六',
+    AlertPeriod.sun: '每周日',
+    AlertPeriod.none: '不提醒',
+  });
 
   void onTapSetting(_ExpandableSetting settingId) {
     setState(() {
@@ -71,40 +94,56 @@ class PushFrequencyPageState extends State with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     final settingsListItems = [
       SettingsListItem<double>(
-        title: 'title11',
-        selectedOption: MediaQuery.of(context).textScaleFactor,
-        optionsMap: LinkedHashMap.of({
-          -1: DisplayOption(
-            '1',
-          ),
-          0.8: DisplayOption(
-            '1',
-          ),
-          1.0: DisplayOption(
-            '1',
-          ),
-          2.0: DisplayOption(
-            '1',
-          ),
-          3.0: DisplayOption(
-            '1',
-          ),
-        }),
-        onOptionChanged: (newTextScale){
+        title: '频率',
+        optionsMap: LinkedHashMap.of(
+            {1.0: DisplayOption(optionMap[selectPeriod]??'')}),
+        selectedOption: MediaQuery
+            .of(context)
+            .textScaleFactor,
+        onOptionChanged: (newTextScale) {
 
         },
         onTapSetting: () => onTapSetting(_ExpandableSetting.textScale),
         isExpanded: _expandedSettingId == _ExpandableSetting.textScale,
-        child: Container(),
+        child: _optionChildList(colorScheme),
+      ),
+      SettingsListItem<double>(
+        title: '时间',
+        selectedOption: 1.0,
+        optionsMap: LinkedHashMap.of({
+          1.0: DisplayOption(_time == null ? '无' : _time.format(context))
+        }),
+        onOptionChanged: (newTextScale) {},
+        onTapSetting: () => onTapSetting(_ExpandableSetting.time),
+        isExpanded: _expandedSettingId == _ExpandableSetting.time,
+        child: createInlinePicker(
+            accentColor: colorScheme.onSecondary,
+            dialogInsetPadding: EdgeInsets.all(0),
+            context: context,
+            disableHour: false,
+            disableMinute: false,
+            value: _time,
+            minMinute: 0,
+            elevation: 0,
+            maxMinute: 59,
+            isOnChangeValueMode: true,
+            onChange: (time) {
+              print(time);
+              setState(() {
+                _time = time;
+              });
+            }),
       ),
     ];
     return Scaffold(
       appBar: SparkAppBar(
         context: context,
-        title: '默认推送频率',
+        title: '回顾',
         actions: [
           IconButton(
               icon: Icon(
@@ -115,7 +154,9 @@ class PushFrequencyPageState extends State with TickerProviderStateMixin {
         ],
       ),
       body: Material(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: Theme
+            .of(context)
+            .scaffoldBackgroundColor,
         child: Padding(
           padding: const EdgeInsets.only(
             bottom: 64,
@@ -136,6 +177,36 @@ class PushFrequencyPageState extends State with TickerProviderStateMixin {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _optionChildList(ColorScheme colorScheme) {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: _expandedSettingId == _ExpandableSetting.textScale ? 9 : 0,
+      itemBuilder: (context, index) {
+        final displayOption = optionMap.values.elementAt(index);
+        return RadioListTile<AlertPeriod>(
+          value: optionMap.keys.elementAt(index),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                displayOption,
+                style: TextStyle(color: Colors.black, fontSize: 14)
+              ),
+            ],
+          ),
+          groupValue: selectPeriod,
+          onChanged: (option){
+            selectPeriod = option!;
+            setState(() {
+            });
+          },
+          activeColor: colorScheme.onSecondary,
+          dense: true,
+        );
+      },
     );
   }
 }
@@ -163,7 +234,9 @@ class _AnimateSettingsListItems extends StatelessWidget {
     );
 
     return Padding(
-      padding: EdgeInsets.only(top: topPaddingTween.animate(animation).value),
+      padding: EdgeInsets.only(top: topPaddingTween
+          .animate(animation)
+          .value),
       child: Column(
         children: [
           for (Widget child in children)
@@ -172,7 +245,9 @@ class _AnimateSettingsListItems extends StatelessWidget {
               builder: (context, child) {
                 return Padding(
                   padding: EdgeInsets.only(
-                    top: dividerTween.animate(animation).value,
+                    top: dividerTween
+                        .animate(animation)
+                        .value,
                   ),
                   child: child,
                 );

@@ -45,10 +45,15 @@ class DatabaseRef{
 	static const String status = 'status';
 	static const String category = 'category';
 	static const String alertTime = 'alert_time';
+	static const String notificationId = 'notification_id';
 
 	///table - heat_map_table
 	static const String tableHeatMap = 'heat_map';
 	static const String heatPointlevel = 'level';
 	static const String heatPointId = '_id';
 	static const String heatPointcreatedTime = 'created_time';
+}
+
+class NotificationId{
+	static const String mainChannelId = 'todo-alert';
 }

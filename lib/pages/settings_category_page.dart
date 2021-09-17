@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spark_list/config/config.dart';
-import 'package:spark_list/pages/push_frequency_page.dart';
+import 'package:spark_list/pages/alert_period_page.dart';
 import 'package:spark_list/widget/app_bar.dart';
 
 ///
@@ -32,10 +32,10 @@ class _SettingsCategoryPageState extends State<SettingsCategoryPage> {
             },
           ),
           _SettingItem(
-            title: '默认推送频率',
+            title: '回顾',
             onPressed: () {
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => PushFrequencyPage()));
+                  MaterialPageRoute(builder: (context) => AlertPeriodPage()));
             },
           ),
         ],

@@ -49,7 +49,8 @@ class DbSparkProvider {
   	${DatabaseRef.category} TEXT,
   	${DatabaseRef.toDoCreatedTime} INT NOT NULL,
   	${DatabaseRef.alertTime} TEXT,
-  	${DatabaseRef.status} INT)
+  	${DatabaseRef.status} INT,
+  	${DatabaseRef.notificationId} INT)
   	''');
     await db.execute('''
   	CREATE TABLE ${DatabaseRef.tableHeatMap} (
@@ -141,6 +142,7 @@ class DbSparkProvider {
           if (updateContent) DatabaseRef.toDoBrief: model.brief,
           if (updateContent) DatabaseRef.category: model.category,
           if (updateContent) DatabaseRef.alertTime: model.alertTime,
+          if (updateContent) DatabaseRef.notificationId: model.notificationId,
           DatabaseRef.status: model.status,
         },
         where: '${DatabaseRef.columnId} = ?',
