@@ -36,6 +36,7 @@ dependencies:
   syncfusion_flutter_datepicker: ^19.2.49
   day_night_time_picker: ^1.0.3+1
   flutter_native_timezone: ^1.0.10
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

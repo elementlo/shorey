@@ -242,15 +242,18 @@ class _TextEditorPageState extends State<TextEditorPage>
           DateTime.now().millisecond * 1000 + DateTime.now().microsecond;
       widget.todoModel.notificationId ??= notificationId;
       alertTime = '$_selectedDate ${_time.format(context)}';
-      await _setNotification(DateTime.parse(alertTime), notificationId);
+      print(
+          'alerttime: $alertTime notificationId: ${widget.todoModel.notificationId}');
+      if(DateTime.parse(alertTime).isBefore(DateTime.now())){
+        await _setNotification(DateTime.parse(alertTime), notificationId);
+      }
     } else {
       if (widget.todoModel.notificationId != null) {
         await _cancelNotification(widget.todoModel.notificationId!);
       }
       widget.todoModel.notificationId = null;
     }
-    print(
-        'alerttime: $alertTime notificationId: ${widget.todoModel.notificationId}');
+
     widget.todoModel.alertTime = alertTime;
     context.read<HomeViewModel>().updateTodoItem(widget.todoModel);
   }

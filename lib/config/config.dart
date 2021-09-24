@@ -56,4 +56,6 @@ class DatabaseRef{
 
 class NotificationId{
 	static const String mainChannelId = 'todo-alert';
+	static const String retrospectChannelId = 'retrospect-alert';
+	static const int retrospectId = 20210601;
 }

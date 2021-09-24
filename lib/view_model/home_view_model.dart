@@ -1,6 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:spark_list/base/view_state_model.dart';
+import 'package:spark_list/config/config.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/model/model.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 ///
 /// Author: Elemen
@@ -137,11 +142,79 @@ class HomeViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-  Future updateTodoItem(ToDoModel model) async{
+  Future updateTodoItem(ToDoModel model) async {
     await sparkProvider.updateToDoItem(model, updateContent: true);
   }
 
   Future queryToDoItem(int id) async {
     selectedModel = await sparkProvider.queryToDoItem(id);
+  }
+
+  Future<void> assembleRetrospectNotification(
+    TimeOfDay alertTime,
+    int weekday,
+  ) async {
+    final todoList = await queryToDoList(null);
+    var brief = '';
+    if (todoList != null && todoList.length > 0) {
+      for (var i = 0; i < todoList.length; i++) {
+        brief += '${todoList[i].content}、';
+      }
+      debugPrint('assembleRetrospectNotification: $brief');
+    }
+    if(brief.isNotEmpty){
+      _setNotification(alertTime: alertTime, weekday: weekday, title: '回顾', body: brief);
+    }
+  }
+
+  Future<void> _setNotification(
+      {required TimeOfDay alertTime,
+      required int weekday,
+      String? title,
+      String? body}) async {
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+        NotificationId.retrospectId,
+        '$title',
+        '$body',
+        weekday == 0
+            ? _nextInstance(alertTime)
+            : _nextInstanceOfWeekday(alertTime, weekday),
+        const NotificationDetails(
+            android: AndroidNotificationDetails(
+                NotificationId.retrospectChannelId,
+                'Retrospect Alert',
+                'Retrospect\'s notification channel',
+                importance: Importance.max,
+                priority: Priority.high,
+                playSound: true,
+                ticker: 'ticker')),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: weekday == 0
+            ? DateTimeComponents.time
+            : DateTimeComponents.dayOfWeekAndTime);
+  }
+
+  Future<void> cancelNotification(int notificationId) async {
+    await flutterLocalNotificationsPlugin.cancel(notificationId);
+  }
+
+  tz.TZDateTime _nextInstanceOfWeekday(TimeOfDay time, int weekday) {
+    tz.TZDateTime scheduledDate = _nextInstance(time);
+    while (scheduledDate.weekday != weekday) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
+  }
+
+  tz.TZDateTime _nextInstance(TimeOfDay time) {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate = tz.TZDateTime(
+        tz.local, now.year, now.month, now.day, time.hour, time.minute);
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
   }
 }

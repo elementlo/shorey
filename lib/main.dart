@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/pages/editor_page.dart';
@@ -57,6 +58,8 @@ class MyApp extends StatelessWidget {
       HomeViewModel(),
       onModelReady: (cViewModel, hViewModel){
         cViewModel?.initCategoryDemosList();
+        _initAlertPeriod(hViewModel);
+        //hViewModel?.assembleRetrospectNotification();
       },
       child: MaterialApp(
         themeMode: ThemeMode.system,
@@ -74,6 +77,14 @@ class MyApp extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+void _initAlertPeriod(HomeViewModel? viewModel) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (prefs.get('alert_period') == null) {
+    prefs.setInt('alert_period', 0);
+    viewModel?.assembleRetrospectNotification(TimeOfDay(hour: 18, minute: 0), 0);
   }
 }
 

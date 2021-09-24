@@ -35,7 +35,7 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
     setState(() {
       mantra =
           prefs.getString('mantra') ?? Mantra.mantraList[Random().nextInt(3)];
-      print(mantra);
+      print('mantra: $mantra');
     });
   }
 

@@ -149,10 +149,14 @@ class DbSparkProvider {
         whereArgs: [model.id]);
   }
 
-  Future<ToDoListModel?> queryToDoList(String? category, {int status = 1}) async {
+  Future<ToDoListModel?> queryToDoList(String? category,
+      {int status = 1}) async {
+    var whereArgs = category == null
+        ? '${DatabaseRef.status} = ?'
+        : '${DatabaseRef.category} = ? AND ${DatabaseRef.status} = ?';
     var list = await db!.query(DatabaseRef.tableToDo,
-        where: '${DatabaseRef.category} = ? AND ${DatabaseRef.status} = ?',
-        whereArgs: [category, status]);
+        where: whereArgs,
+        whereArgs: category == null ? [status] : [category, status]);
     if (list.isNotEmpty) {
       return ToDoListModel(list);
     }

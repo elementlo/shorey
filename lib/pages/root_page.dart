@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
-import 'package:spark_list/base/provider_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/pages/curtain_page.dart';
@@ -47,7 +47,6 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
     );
     homePageFadeController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    
   }
 
   @override
@@ -61,12 +60,12 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
   void _requestPermissions() {
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-        IOSFlutterLocalNotificationsPlugin>()
+            IOSFlutterLocalNotificationsPlugin>()
         ?.requestPermissions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+          alert: true,
+          badge: true,
+          sound: true,
+        );
   }
 
   void _toggleSettings(BuildContext context) {
@@ -127,8 +126,8 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: _buildStack(context),
-      );
+      body: _buildStack(context),
+    );
   }
 
   Widget _buildStack(BuildContext context) {
@@ -140,7 +139,10 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
               rect: _slideDownSettingsPageAnimation(context),
               child: CurtainPage()),
           PositionedTransition(
-              rect: _slideDownHomePageAnimation(context), child: HomePage(animationController: homePageFadeController,)),
+              rect: _slideDownHomePageAnimation(context),
+              child: HomePage(
+                animationController: homePageFadeController,
+              )),
           _SettingsIcon(
             toggleSettings: _toggleSettings,
             animationController: _iconController!,
