@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/config/config.dart';
+import 'package:spark_list/pages/filed_events_page.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 
+import 'about_page.dart';
 import 'home_page.dart';
 
 ///
@@ -28,19 +30,57 @@ class _CurtainPageState extends State<CurtainPage> {
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Header(
               color: Colors.black,
-              text: 'Spark Moment',
+              text: 'Shorey moment',
             ),
           ),
           SizedBox(
             height: 16,
           ),
           _MomentGrid(),
-          Divider(
-            indent: 16,
-            endIndent: 16,
+          SizedBox(height: 8),
+          _SettingsRow(
+            title: '设置',
+            onTap: () {
+              Navigator.of(context).pushNamed(Routes.settingsCategoryPage);
+            },
           ),
-          _SettingsRow(title: '设置'),
+          SizedBox(height: 8),
+          _SettingsRow(title: '历史'),
+          SizedBox(height: 8),
+          _SettingsRow(title: '已归档', onTap: () {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => FiledEventsPage()));
+          },),
+          SizedBox(height: 20),
+          Divider(),
+          _aboutView(),
+          Divider(),
         ],
+      ),
+    );
+  }
+
+  Widget _aboutView() {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => AboutPage()));
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(Icons.announcement_outlined, color: Colors.grey),
+            SizedBox(
+              width: 20,
+            ),
+            Text(
+              '关于Shorey',
+              style: TextStyle(color: Colors.grey, height: 1.2, fontSize: 14),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -53,15 +93,18 @@ class _CurtainPageState extends State<CurtainPage> {
 class _MomentGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final width = MediaQuery
+        .of(context)
+        .size
+        .width;
     final cellWidth = (width - 32 - 25 * 13) / 2;
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16),
       alignment: Alignment.center,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8), color: Colors.white
-          // color: Theme.of(context).scaffoldBackgroundColor
-          ),
+        // color: Theme.of(context).scaffoldBackgroundColor
+      ),
       child: Container(
         padding: EdgeInsets.fromLTRB(cellWidth, 8, cellWidth, 16),
         child: Column(
@@ -94,7 +137,11 @@ class _MomentGrid extends StatelessWidget {
 
   Color _randomColor(int row, int col, BuildContext context) {
     if (row % 3 == 0) {
-      return Theme.of(context).colorScheme.primaryVariant.withOpacity(0.6);
+      return Theme
+          .of(context)
+          .colorScheme
+          .primaryVariant
+          .withOpacity(0.6);
     } else if (row % 6 == 5) {
       return Color(0xFF1ab4bc).withOpacity(0.5);
     } else if (row % 4 == 3) {
@@ -105,7 +152,9 @@ class _MomentGrid extends StatelessWidget {
   }
 
   Color _tintColor(BuildContext context, DateTime dateTime) {
-    final map = context.watch<HomeViewModel>().heatPointsMap;
+    final map = context
+        .watch<HomeViewModel>()
+        .heatPointsMap;
     String key = '${dateTime.year}${dateTime.month}${dateTime.day}';
     if (map.containsKey(key)) {
       int value = map[key]!;
@@ -114,7 +163,11 @@ class _MomentGrid extends StatelessWidget {
       } else if (value > 2 && value <= 4) {
         return Color(0xFF1ab4bc).withOpacity(0.5);
       } else if (value > 4) {
-        return Theme.of(context).colorScheme.primaryVariant.withOpacity(0.6);
+        return Theme
+            .of(context)
+            .colorScheme
+            .primaryVariant
+            .withOpacity(0.6);
       } else {
         return Colors.black12.withOpacity(0.1);
       }
@@ -126,21 +179,25 @@ class _MomentGrid extends StatelessWidget {
   Widget _buildCell(int row, int col, BuildContext context,
       {bool useRandomColor = true}) {
     final dateTime = DateTime.now().add(
-        Duration(days: -(DateTime.now().weekday - 1 - col + (12 - row) * 7)));
+        Duration(days: -(DateTime
+            .now()
+            .weekday - 1 - col + (12 - row) * 7)));
     return Container(
-        margin: EdgeInsets.only(right: 8, top: 8),
-        height: 17,
-        width: 17,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(2),
-          border: col == DateTime.now().weekday - 1 && row == 12
-              ? Border.all(color: Color(0xFF1ab4bc).withOpacity(0.5))
-              : null,
-          color: useRandomColor
-              ? _randomColor(row, col, context)
-              : _tintColor(context, dateTime),
-        ),
-       );
+      margin: EdgeInsets.only(right: 8, top: 8),
+      height: 17,
+      width: 17,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(2),
+        border: col == DateTime
+            .now()
+            .weekday - 1 && row == 12
+            ? Border.all(color: Color(0xFF1ab4bc).withOpacity(0.5))
+            : null,
+        color: useRandomColor
+            ? _randomColor(row, col, context)
+            : _tintColor(context, dateTime),
+      ),
+    );
   }
 
   Widget _buildCutline(BuildContext context) {
@@ -150,7 +207,7 @@ class _MomentGrid extends StatelessWidget {
         Padding(
             padding: EdgeInsets.only(top: 8, right: 8),
             child: Text(
-              'Completed Less',
+              'Filed Less',
               style: TextStyle(fontSize: 12, color: Colors.grey),
             )),
         _buildCell(1, 1, context),
@@ -170,8 +227,9 @@ class _MomentGrid extends StatelessWidget {
 
 class _SettingsRow extends StatelessWidget {
   final String? title;
+  final VoidCallback? onTap;
 
-  _SettingsRow({this.title});
+  _SettingsRow({this.title, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -182,7 +240,7 @@ class _SettingsRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         child: InkWell(
           onTap: () {
-            Navigator.of(context).pushNamed(Routes.settingsCategoryPage);
+            onTap?.call();
           },
           child: Container(
             height: 55,
@@ -196,7 +254,10 @@ class _SettingsRow extends StatelessWidget {
                 Icon(
                   Icons.arrow_forward_ios,
                   size: 14,
-                  color: Theme.of(context).colorScheme.onSecondary,
+                  color: Theme
+                      .of(context)
+                      .colorScheme
+                      .onSecondary,
                 )
               ],
             ),

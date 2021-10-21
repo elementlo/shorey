@@ -2,16 +2,13 @@ import 'dart:collection';
 
 import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spark_list/config/config.dart';
-import 'package:spark_list/main.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 import 'package:spark_list/widget/settings_list_item.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 ///
 /// Author: Elemen
@@ -95,53 +92,6 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
     }
     prefs.setInt('alert_period', index);
     prefs.setString('retrospect_time', _time.format(context));
-  }
-
-  Future<void> _cancelNotification(int notificationId) async {
-    await flutterLocalNotificationsPlugin.cancel(notificationId);
-  }
-
-  Future<void> _setNotification(TimeOfDay alertTime, int weekday) async {
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-        NotificationId.retrospectId,
-        'title',
-        'text',
-        weekday == 0
-            ? _nextInstance(alertTime)
-            : _nextInstanceOfWeekday(alertTime, weekday),
-        const NotificationDetails(
-            android: AndroidNotificationDetails(
-                NotificationId.retrospectChannelId,
-                'Retrospect Alert',
-                'Retrospect\'s notification channel',
-                importance: Importance.max,
-                priority: Priority.high,
-                playSound: true,
-                ticker: 'ticker')),
-        androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        matchDateTimeComponents: weekday == 0
-            ? DateTimeComponents.time
-            : DateTimeComponents.dayOfWeekAndTime);
-  }
-
-  tz.TZDateTime _nextInstanceOfWeekday(TimeOfDay time, int weekday) {
-    tz.TZDateTime scheduledDate = _nextInstance(time);
-    while (scheduledDate.weekday != weekday) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
-    }
-    return scheduledDate;
-  }
-
-  tz.TZDateTime _nextInstance(TimeOfDay time) {
-    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime scheduledDate = tz.TZDateTime(
-        tz.local, now.year, now.month, now.day, time.hour, time.minute);
-    if (scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
-    }
-    return scheduledDate;
   }
 
   @override
@@ -273,9 +223,7 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
     );
   }
 
-  void _checkUncompetedTasks() {
-
-  }
+  void _checkUncompetedTasks() {}
 }
 
 class _AnimateSettingsListItems extends StatelessWidget {

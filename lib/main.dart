@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,6 +32,11 @@ void main() async{
   sparkProvider = DbSparkProvider();
   await sparkProvider.ready;
   runApp(MyApp());
+  _configLoading();
+}
+
+void _configLoading() {
+  EasyLoading.instance..indicatorType = EasyLoadingIndicatorType.threeBounce;
 }
 
 class MyApp extends StatelessWidget {
@@ -66,6 +72,7 @@ class MyApp extends StatelessWidget {
         theme: AppThemeData.lightThemeData.copyWith(
           platform: defaultTargetPlatform,
         ),
+        builder: EasyLoading.init(),
         // darkTheme: AppThemeData.darkThemeData.copyWith(
         //   platform: defaultTargetPlatform,
         // ),

@@ -42,6 +42,7 @@ class DatabaseRef{
 	static const String toDoContent = 'content';
 	static const String toDoBrief = 'brief';
 	static const String toDoCreatedTime = 'created_time';
+	static const String toDoFiledTime = 'filed_time';
 	static const String status = 'status';
 	static const String category = 'category';
 	static const String alertTime = 'alert_time';

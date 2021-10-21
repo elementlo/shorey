@@ -12,7 +12,7 @@ class HomeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Header(
       color: Theme.of(context).colorScheme.primaryVariant,
-      text: 'Spark',
+      text: 'Shorey',
     );
   }
 }

@@ -48,6 +48,7 @@ class DbSparkProvider {
   	${DatabaseRef.toDoBrief} TEXT,
   	${DatabaseRef.category} TEXT,
   	${DatabaseRef.toDoCreatedTime} INT NOT NULL,
+  	${DatabaseRef.toDoFiledTime} INT,
   	${DatabaseRef.alertTime} TEXT,
   	${DatabaseRef.status} INT,
   	${DatabaseRef.notificationId} INT)
@@ -147,6 +148,21 @@ class DbSparkProvider {
         },
         where: '${DatabaseRef.columnId} = ?',
         whereArgs: [model.id]);
+  }
+
+  Future updateToDoListStatus(int currentStatus, int updatedStatus) async {
+    return await db!.execute('''
+    UPDATE ${DatabaseRef.tableToDo}
+    SET ${DatabaseRef.status} = ${updatedStatus}
+    WHERE ${DatabaseRef.status} = ${currentStatus}
+    ''');
+    // return await db!.execute('''
+    // UPDATE ${DatabaseRef.tableHeatMap}
+    // SET ${DatabaseRef.heatPointlevel} = ${DatabaseRef.heatPointlevel} + ${difference}
+    // WHERE ${DatabaseRef.columnId} IN (SELECT ${DatabaseRef.columnId} FROM ${DatabaseRef.tableHeatMap}
+    // ORDER BY ${DatabaseRef.columnId} DESC
+    // LIMIT 1)
+    // ''');
   }
 
   Future<ToDoListModel?> queryToDoList(String? category,

@@ -37,6 +37,9 @@ dependencies:
   day_night_time_picker: ^1.0.3+1
   flutter_native_timezone: ^1.0.10
   intl: ^0.17.0
+  package_info_plus: ^1.0.6
+  lottie: ^1.2.1
+  flutter_easyloading: ^3.0.3
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +63,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/material/
+    - assets/anim/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

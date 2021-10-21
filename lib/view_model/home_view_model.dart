@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -32,6 +34,8 @@ class HomeViewModel extends ViewStateModel {
 
   ToDoModel? _mainFocusModel;
   HeatMapModel? _heatMapModel;
+  ToDoListModel? filedListModel;
+
 
   set hasMainFocus(bool hasMainFocus) {
     this._hasMainFocus = hasMainFocus;
@@ -125,6 +129,12 @@ class HomeViewModel extends ViewStateModel {
     return toDoListModel;
   }
 
+  Future<ToDoListModel?> queryFiledList() async {
+    filedListModel = await sparkProvider.queryToDoList(null, status: 0);
+    notifyListeners();
+    return filedListModel;
+  }
+
   Future updateTodoStatus(ToDoModel model) async {
     int difference = 0;
     switch (model.status) {
@@ -139,6 +149,12 @@ class HomeViewModel extends ViewStateModel {
     }
     await sparkProvider.updateToDoItem(model, updateContent: false);
     await sparkProvider.updateHeatPoint(difference);
+    notifyListeners();
+  }
+
+  Future clearFiledItems() async{
+    await sparkProvider.updateToDoListStatus(0, 2);
+    filedListModel = null;
     notifyListeners();
   }
 

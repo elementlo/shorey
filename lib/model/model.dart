@@ -1,7 +1,4 @@
-import 'dart:collection';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 
 ///
 /// Author: Elemen
@@ -13,9 +10,11 @@ import 'package:flutter/foundation.dart';
 class ToDoModel {
   int? id;
   int? createdTime;
+  int? filedTime;
   String? content;
   String? brief;
-  ///0: finished, 1: going
+
+  ///0: finished 1: going 2: deleted
   int? status;
   String? category;
   String? alertTime;
@@ -25,6 +24,7 @@ class ToDoModel {
       {this.id,
       this.content,
       required this.createdTime,
+      this.filedTime,
       this.status,
       this.category,
       this.brief,
@@ -40,6 +40,7 @@ class ToDoModel {
     brief = json['brief'];
     alertTime = json['alert_time'];
     notificationId = json['notification_id'];
+    filedTime = json['filed_time'];
   }
 
   Map<String, dynamic> toJson() {
@@ -52,6 +53,7 @@ class ToDoModel {
     data['brief'] = this.brief;
     data['alert_time'] = this.alertTime;
     data['notification_id'] = this.notificationId;
+    data['filed_time'] = this.filedTime;
     return data;
   }
 }
@@ -60,7 +62,6 @@ class ToDoListModel {
   late List<ToDoModel?> _cacheTodoList;
 
   final List<Map<String, dynamic>> list;
-
 
   ToDoListModel(this.list) {
     ///lazy load
@@ -108,7 +109,7 @@ class HeatMapModel {
   }
 }
 
-class CategoryItem{
+class CategoryItem {
   String? name;
   Icon? icon;
   Color? color;
