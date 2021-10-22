@@ -110,23 +110,6 @@ class _SettingsListItemState<T> extends State<SettingsListItem<T>>
     }
   }
 
-  // List<DateTime> _getSpecialDates() {
-  //   final List<DateTime> dates = <DateTime>[];
-  //   final DateTime startDate =
-  //   DateTime.now().subtract(const Duration(days: 200));
-  //   final DateTime endDate = DateTime.now().add(const Duration(days: 500));
-  //   final Random random = Random();
-  //   for (DateTime date = startDate;
-  //   date.isBefore(endDate);
-  //   date = date.add(const Duration(days: 25))) {
-  //     for (int i = 0; i < 3; i++) {
-  //       dates.add(date.add(Duration(days: random.nextInt(i + 4))));
-  //     }
-  //   }
-  //
-  //   return <DateTime>[];
-  // }
-
   Widget _buildHeaderWithChildren(BuildContext context, Widget? child) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -157,7 +140,6 @@ class _SettingsListItemState<T> extends State<SettingsListItem<T>>
   @override
   Widget build(BuildContext context) {
     _handleExpansion();
-    final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return AnimatedBuilder(
       animation: _controller.view,

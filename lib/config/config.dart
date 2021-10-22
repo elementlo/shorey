@@ -42,11 +42,11 @@ class DatabaseRef{
 	static const String toDoContent = 'content';
 	static const String toDoBrief = 'brief';
 	static const String toDoCreatedTime = 'created_time';
-	static const String toDoFiledTime = 'filed_time';
 	static const String status = 'status';
 	static const String category = 'category';
 	static const String alertTime = 'alert_time';
 	static const String notificationId = 'notification_id';
+	static const String filedTime = 'filed_time';
 
 	///table - heat_map_table
 	static const String tableHeatMap = 'heat_map';

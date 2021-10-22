@@ -110,8 +110,6 @@ class _CategoryListItemState extends State<CategoryListItem>
       case AnimationStatus.reverse:
         return true;
     }
-    assert(false);
-    return null;
   }
 
   void _handleTap() {

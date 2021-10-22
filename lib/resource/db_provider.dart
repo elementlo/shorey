@@ -48,9 +48,9 @@ class DbSparkProvider {
   	${DatabaseRef.toDoBrief} TEXT,
   	${DatabaseRef.category} TEXT,
   	${DatabaseRef.toDoCreatedTime} INT NOT NULL,
-  	${DatabaseRef.toDoFiledTime} INT,
   	${DatabaseRef.alertTime} TEXT,
   	${DatabaseRef.status} INT,
+  	${DatabaseRef.filedTime} INT,
   	${DatabaseRef.notificationId} INT)
   	''');
     await db.execute('''
@@ -152,6 +152,7 @@ class DbSparkProvider {
           if (updateContent) DatabaseRef.category: model.category,
           if (updateContent) DatabaseRef.alertTime: model.alertTime,
           if (updateContent) DatabaseRef.notificationId: model.notificationId,
+          if (model.status == 0) DatabaseRef.filedTime: DateTime.now().millisecondsSinceEpoch,
           DatabaseRef.status: model.status,
         },
         where: '${DatabaseRef.columnId} = ?',

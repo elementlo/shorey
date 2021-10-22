@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
 ///
 /// Author: Elemen
@@ -13,6 +14,11 @@ class ToDoModel {
   int? filedTime;
   String? content;
   String? brief;
+
+  String get formatFiledTime {
+    var formatter = new DateFormat('yyyy-MM-dd');
+    return formatter.format(DateTime.fromMillisecondsSinceEpoch(filedTime ?? 0));
+  }
 
   ///0: finished 1: going 2: deleted
   int? status;

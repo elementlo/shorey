@@ -98,9 +98,9 @@ class FiledItem extends StatelessWidget {
           onTap: () {},
           child: Padding(
             padding: EdgeInsetsDirectional.only(
-              start: 28,
+              start: 20,
               top: 20,
-              end: 8,
+              end: 20,
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,23 +112,24 @@ class FiledItem extends StatelessWidget {
                       color: colorScheme.primaryVariant,
                       size: 26,
                     ),
-                    Text('${model?.category ?? ''}',
+                    SizedBox(height: 8,),
+                    Text('${model?.formatFiledTime ?? ''}',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontSize: 12, color: Colors.grey.withOpacity(0.8))),
                   ],
                 ),
-                const SizedBox(width: 28),
+                const SizedBox(width: 16),
                 Flexible(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
-                          Flexible(
+                          Expanded(
                             child: Text(
-                              '${model?.content ?? ''} - ',
+                              '${model?.content ?? ''}',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -138,8 +139,8 @@ class FiledItem extends StatelessWidget {
                           Text(
                             '${model?.category ?? ''}',
                             style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.black.withOpacity(0.5)),
+                                fontSize: 12,
+                                color: Colors.grey.withOpacity(0.5)),
                           ),
                         ],
                       ),
