@@ -59,6 +59,14 @@ class DbSparkProvider {
   	${DatabaseRef.heatPointlevel} INT,
   	${DatabaseRef.heatPointcreatedTime} INT NOT NULL)
   	''');
+    await db.execute('''
+  	CREATE TABLE ${DatabaseRef.tableActionHistory} (
+  	${DatabaseRef.actionId} INTEGER PRIMARY KEY AUTOINCREMENT,
+  	${DatabaseRef.action} INT,
+  	${DatabaseRef.earlyContent} TEXT,
+  	${DatabaseRef.updatedContent} TEXT,
+  	${DatabaseRef.updatedTime} INT)
+  	''');
   }
 
   Future close() async {
@@ -186,5 +194,14 @@ class DbSparkProvider {
       return ToDoModel.fromJson(list[0]);
     }
     return null;
+  }
+
+  Future<int> insertAction(UserAction model) async {
+    return await db!.insert(DatabaseRef.tableActionHistory,{
+      '${DatabaseRef.action}': model.action,
+      '${DatabaseRef.earlyContent}': model.earlyContent,
+      '${DatabaseRef.updatedContent}': model.updatedContent,
+      '${DatabaseRef.updatedTime}': model.updatedTime,
+    });
   }
 }

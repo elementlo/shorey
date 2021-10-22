@@ -53,6 +53,14 @@ class DatabaseRef{
 	static const String heatPointlevel = 'level';
 	static const String heatPointId = '_id';
 	static const String heatPointcreatedTime = 'created_time';
+
+	///table - action_history_table
+	static const String tableActionHistory = 'action_history';
+	static const String actionId = '_id';
+	static const String action = 'action';
+	static const String earlyContent = 'early_content';
+	static const String updatedContent = 'updated_content';
+	static const String updatedTime = 'updated_time';
 }
 
 class NotificationId{

@@ -219,7 +219,7 @@ class _TextEditorPageState extends State<TextEditorPage>
         tz.TZDateTime.from(alertTime, tz.local),
         const NotificationDetails(
             android: AndroidNotificationDetails(NotificationId.mainChannelId,
-                'Todo Alert', 'Reminder\'s notification channel',
+                'Todo Alert',
                 importance: Importance.max,
                 priority: Priority.high,
                 playSound: true,

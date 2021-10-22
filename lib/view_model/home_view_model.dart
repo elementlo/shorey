@@ -36,7 +36,6 @@ class HomeViewModel extends ViewStateModel {
   HeatMapModel? _heatMapModel;
   ToDoListModel? filedListModel;
 
-
   set hasMainFocus(bool hasMainFocus) {
     this._hasMainFocus = hasMainFocus;
     notifyListeners();
@@ -114,12 +113,17 @@ class HomeViewModel extends ViewStateModel {
 
   Future saveToDo(String content, String? category,
       {String? brief, int status = 1}) async {
-    await sparkProvider.insertToDo(
-        ToDoModel(createdTime: DateTime.now().millisecondsSinceEpoch)
-          ..content = content
-          ..category = category
-          ..status = status
-          ..brief = brief);
+    final updatedTime = DateTime.now().millisecondsSinceEpoch;
+    await sparkProvider.insertToDo(ToDoModel(createdTime: updatedTime)
+      ..content = content
+      ..category = category
+      ..status = status
+      ..brief = brief);
+
+    await sparkProvider.insertAction(UserAction()
+      ..updatedTime = updatedTime
+      ..updatedContent = content
+      ..action = status);
   }
 
   Future<ToDoListModel?> queryToDoList(String? category) async {
@@ -152,7 +156,7 @@ class HomeViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-  Future clearFiledItems() async{
+  Future clearFiledItems() async {
     await sparkProvider.updateToDoListStatus(0, 2);
     filedListModel = null;
     notifyListeners();
@@ -178,8 +182,9 @@ class HomeViewModel extends ViewStateModel {
       }
       debugPrint('assembleRetrospectNotification: $brief');
     }
-    if(brief.isNotEmpty){
-      _setNotification(alertTime: alertTime, weekday: weekday, title: '回顾', body: brief);
+    if (brief.isNotEmpty) {
+      _setNotification(
+          alertTime: alertTime, weekday: weekday, title: '回顾', body: brief);
     }
   }
 
@@ -197,9 +202,7 @@ class HomeViewModel extends ViewStateModel {
             : _nextInstanceOfWeekday(alertTime, weekday),
         const NotificationDetails(
             android: AndroidNotificationDetails(
-                NotificationId.retrospectChannelId,
-                'Retrospect Alert',
-                'Retrospect\'s notification channel',
+                NotificationId.retrospectChannelId, 'Retrospect Alert',
                 importance: Importance.max,
                 priority: Priority.high,
                 playSound: true,

@@ -116,3 +116,11 @@ class CategoryItem {
 
   CategoryItem({this.name, this.icon, this.color});
 }
+
+class UserAction {
+  int? id;
+  String? earlyContent;
+  String? updatedContent;
+  int? updatedTime;
+  int? action;
+}

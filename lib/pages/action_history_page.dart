@@ -21,7 +21,7 @@ class _ActionHistoryPageState extends State<ActionHistoryPage> {
       appBar: SparkAppBar(context: context, title: "行为历史"),
       body: Container(
         child: ListView(
-          
+
         ),
       ),
     );

@@ -3,11 +3,8 @@
 // found in the LICENSE file.
 
 import 'dart:collection';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:spark_list/widget/customized_date_picker.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 final settingItemBorderRadius = BorderRadius.circular(10);
 const settingItemHeaderMargin = EdgeInsetsDirectional.fromSTEB(16, 0, 16, 8);
@@ -23,11 +20,11 @@ class SettingsListItem<T> extends StatefulWidget {
   SettingsListItem({
     Key? key,
     required this.optionsMap,
-     required this.title,
-     required this.selectedOption,
-     required this.onOptionChanged,
-     required this.onTapSetting,
-     required this.isExpanded,
+    required this.title,
+    required this.selectedOption,
+    required this.onOptionChanged,
+    required this.onTapSetting,
+    required this.isExpanded,
     required this.child,
   }) : super(key: key);
 
@@ -55,7 +52,7 @@ class _SettingsListItemState<T> extends State<SettingsListItem<T>>
   late Animation<EdgeInsetsGeometry> _headerMargin;
   late Animation<EdgeInsetsGeometry> _headerPadding;
   late Animation<EdgeInsetsGeometry> _childrenPadding;
-  late Animation<BorderRadius> _headerBorderRadius;
+  late Animation<BorderRadius?> _headerBorderRadius;
 
   // For ease of use. Correspond to the keys and values of `widget.optionsMap`.
   late Iterable<T> _options;
@@ -137,7 +134,7 @@ class _SettingsListItemState<T> extends State<SettingsListItem<T>>
         _CategoryHeader(
           margin: _headerMargin.value,
           padding: _headerPadding.value,
-          borderRadius: _headerBorderRadius.value,
+          borderRadius: _headerBorderRadius.value ?? BorderRadius.circular(8),
           subtitleHeight: _headerSubtitleHeight,
           chevronRotation: _headerChevronRotation,
           title: widget.title,
@@ -166,14 +163,14 @@ class _SettingsListItemState<T> extends State<SettingsListItem<T>>
       animation: _controller.view,
       builder: _buildHeaderWithChildren,
       child: Container(
-        constraints: const BoxConstraints(maxHeight: 460),
-        color: colorScheme.secondaryVariant,
-        margin: const EdgeInsetsDirectional.only(bottom: 40),
-        padding: const EdgeInsetsDirectional.only(start: 24, end: 24, bottom: 20),
-        child:
-        widget.child
-        //CustomizedDatePicker([])
-      ),
+          constraints: const BoxConstraints(maxHeight: 460),
+          color: colorScheme.secondaryVariant,
+          margin: const EdgeInsetsDirectional.only(bottom: 40),
+          padding:
+              const EdgeInsetsDirectional.only(start: 24, end: 24, bottom: 20),
+          child: widget.child
+          //CustomizedDatePicker([])
+          ),
     );
   }
 }
@@ -224,14 +221,12 @@ class _CategoryHeader extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: TextStyle(
-                          color: colorScheme.onSurface
-                        ),
+                        style: TextStyle(color: colorScheme.onSurface),
                       ),
                       SizeTransition(
                         sizeFactor: subtitleHeight,
                         child: Text(
-                          subtitle??'',
+                          subtitle ?? '',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: textTheme.overline?.apply(

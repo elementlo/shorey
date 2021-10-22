@@ -56,7 +56,7 @@ class _CategoryListItemState extends State<CategoryListItem>
   late Animation<EdgeInsetsGeometry> _headerMargin;
   late Animation<EdgeInsetsGeometry> _headerImagePadding;
   late Animation<EdgeInsetsGeometry> _childrenPadding;
-  late Animation<BorderRadius> _headerBorderRadius;
+  late Animation<BorderRadius?> _headerBorderRadius;
 
   @override
   void initState() {
