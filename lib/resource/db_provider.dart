@@ -152,7 +152,8 @@ class DbSparkProvider {
           if (updateContent) DatabaseRef.category: model.category,
           if (updateContent) DatabaseRef.alertTime: model.alertTime,
           if (updateContent) DatabaseRef.notificationId: model.notificationId,
-          if (model.status == 0) DatabaseRef.filedTime: DateTime.now().millisecondsSinceEpoch,
+          if (model.status == 0)
+            DatabaseRef.filedTime: DateTime.now().millisecondsSinceEpoch,
           DatabaseRef.status: model.status,
         },
         where: '${DatabaseRef.columnId} = ?',
@@ -198,11 +199,20 @@ class DbSparkProvider {
   }
 
   Future<int> insertAction(UserAction model) async {
-    return await db!.insert(DatabaseRef.tableActionHistory,{
+    return await db!.insert(DatabaseRef.tableActionHistory, {
       '${DatabaseRef.action}': model.action,
       '${DatabaseRef.earlyContent}': model.earlyContent,
       '${DatabaseRef.updatedContent}': model.updatedContent,
       '${DatabaseRef.updatedTime}': model.updatedTime,
     });
+  }
+
+  Future<List<UserAction>?> queryActions() async {
+    final list = await db!
+        .query(DatabaseRef.tableActionHistory);
+    if(list.isNotEmpty){
+
+    }
+    return null;
   }
 }

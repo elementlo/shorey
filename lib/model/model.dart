@@ -17,7 +17,8 @@ class ToDoModel {
 
   String get formatFiledTime {
     var formatter = new DateFormat('yyyy-MM-dd');
-    return formatter.format(DateTime.fromMillisecondsSinceEpoch(filedTime ?? 0));
+    return formatter
+        .format(DateTime.fromMillisecondsSinceEpoch(filedTime ?? 0));
   }
 
   ///0: finished 1: going 2: deleted
@@ -129,4 +130,19 @@ class UserAction {
   String? updatedContent;
   int? updatedTime;
   int? action;
+
+  UserAction(
+      {this.id,
+      this.earlyContent,
+      this.updatedContent,
+      this.updatedTime,
+      this.action});
+
+  UserAction.fromJson(Map<String, dynamic> json) {
+    id = json['_id'];
+    earlyContent = json['early_content'];
+    updatedContent = json['updated_content'];
+    updatedTime = json['updated_time'];
+    action = json['action'];
+  }
 }

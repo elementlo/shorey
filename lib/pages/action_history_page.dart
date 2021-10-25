@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spark_list/widget/app_bar.dart';
+import 'package:provider/provider.dart';
 
 ///
 /// Author: Elemen
@@ -15,6 +16,13 @@ class ActionHistoryPage extends StatefulWidget {
 }
 
 class _ActionHistoryPageState extends State<ActionHistoryPage> {
+
+  @override
+  void initState() {
+    super.initState();
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

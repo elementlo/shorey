@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/config/config.dart';
+import 'package:spark_list/pages/action_history_page.dart';
 import 'package:spark_list/pages/filed_events_page.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 
@@ -45,7 +46,10 @@ class _CurtainPageState extends State<CurtainPage> {
             },
           ),
           SizedBox(height: 8),
-          _SettingsRow(title: '历史'),
+          _SettingsRow(title: '历史', onTap: (){
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => ActionHistoryPage()));
+          },),
           SizedBox(height: 8),
           _SettingsRow(title: '已归档', onTap: () {
             Navigator.of(context).push(
