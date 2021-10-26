@@ -207,11 +207,10 @@ class DbSparkProvider {
     });
   }
 
-  Future<List<UserAction>?> queryActions() async {
-    final list = await db!
-        .query(DatabaseRef.tableActionHistory);
-    if(list.isNotEmpty){
-
+  Future<UserActionList?> queryActions() async {
+    final list = await db!.query(DatabaseRef.tableActionHistory);
+    if (list.isNotEmpty) {
+      return UserActionList(list);
     }
     return null;
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +21,7 @@ class _ActionHistoryPageState extends State<ActionHistoryPage> {
   @override
   void initState() {
     super.initState();
-
+    context.read<HomeViewModel>().queryActions();
   }
 
   @override
@@ -34,6 +35,7 @@ class _ActionHistoryPageState extends State<ActionHistoryPage> {
               return Container(
                 child: ListTile(
                   leading: Icon(Icons.wb_incandescent_rounded),
+                  title: context.watch<HomeViewModel>().userActionList,
                 ),
               );
             }),

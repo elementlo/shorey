@@ -65,18 +65,16 @@ class ToDoModel {
   }
 }
 
-class ToDoListModel {
-  late List<ToDoModel?> _cacheTodoList;
-
+abstract class ListModel<T> {
+  late List<T?> _cacheTodoList;
   final List<Map<String, dynamic>> list;
 
-  ToDoListModel(this.list) {
-    ///lazy load
+  ListModel(this.list) {
     _cacheTodoList = List.generate(list.length, (index) => null);
   }
 
   @override
-  ToDoModel operator [](int index) {
+  T operator [](int index) {
     return _cacheTodoList[index] ??= snapshotToToDo(list[index]);
   }
 
@@ -84,11 +82,20 @@ class ToDoListModel {
   int get length => list.length;
 
   @override
-  void operator []=(int index, ToDoModel value) => throw 'read-only';
+  void operator []=(int index, T value) => throw 'read-only';
 
   @override
   set length(int newLength) => throw 'read-only';
 
+  T snapshotToToDo(Map<String, dynamic> snapshot);
+}
+
+class ToDoListModel extends ListModel<ToDoModel> {
+  final List<Map<String, dynamic>> list;
+
+  ToDoListModel(this.list) : super(list);
+
+  @override
   ToDoModel snapshotToToDo(Map<String, dynamic> snapshot) {
     return ToDoModel.fromJson(snapshot);
   }
@@ -122,6 +129,18 @@ class CategoryItem {
   Color? color;
 
   CategoryItem({this.name, this.icon, this.color});
+}
+
+class UserActionList extends ListModel<UserAction>{
+  final List<Map<String, dynamic>> list;
+
+  UserActionList(this.list) : super(list);
+
+  @override
+  UserAction snapshotToToDo(Map<String, dynamic> snapshot) {
+    return UserAction.fromJson(snapshot);
+  }
+
 }
 
 class UserAction {

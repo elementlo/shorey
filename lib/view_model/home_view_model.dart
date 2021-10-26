@@ -35,6 +35,7 @@ class HomeViewModel extends ViewStateModel {
   ToDoModel? _mainFocusModel;
   HeatMapModel? _heatMapModel;
   ToDoListModel? filedListModel;
+  UserActionList? userActionList;
 
   set hasMainFocus(bool hasMainFocus) {
     this._hasMainFocus = hasMainFocus;
@@ -131,6 +132,11 @@ class HomeViewModel extends ViewStateModel {
     indexedList[category] = toDoListModel;
     notifyListeners();
     return toDoListModel;
+  }
+
+  Future queryActions() async {
+    userActionList = await sparkProvider.queryActions();
+    notifyListeners();
   }
 
   Future<ToDoListModel?> queryFiledList() async {
