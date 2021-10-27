@@ -150,6 +150,12 @@ class UserAction {
   int? updatedTime;
   int? action;
 
+  String get formatFiledTime {
+    var formatter = new DateFormat('yyyy-MM-dd');
+    return formatter
+        .format(DateTime.fromMillisecondsSinceEpoch(updatedTime ?? 0));
+  }
+
   UserAction(
       {this.id,
       this.earlyContent,

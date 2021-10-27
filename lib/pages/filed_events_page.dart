@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -112,10 +111,12 @@ class FiledItem extends StatelessWidget {
                     Icon(
                       Icons.where_to_vote_rounded,
                       color: colorScheme.primaryVariant,
-                      size: 26,
+                      size: 22,
                     ),
-                    SizedBox(height: 8,),
-                    Text('${model?.formatFiledTime ?? ''}',
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text('${model?.category ?? ''}',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -140,7 +141,7 @@ class FiledItem extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '${model?.category ?? ''}',
+                            '${model?.formatFiledTime ?? ''}',
                             style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey.withOpacity(0.5)),
@@ -153,7 +154,9 @@ class FiledItem extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey.withOpacity(0.8))),
-                      const SizedBox(height: 20),
+                      const SizedBox(
+                        height: 8,
+                      ),
                       Divider(
                         thickness: 1,
                         height: 1,
