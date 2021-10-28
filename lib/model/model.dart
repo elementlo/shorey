@@ -63,6 +63,12 @@ class ToDoModel {
     data['filed_time'] = this.filedTime;
     return data;
   }
+
+  ToDoModel copy(){
+    final model = ToDoModel(createdTime: this.createdTime);
+    model.content = this.content;
+    return model;
+  }
 }
 
 abstract class ListModel<T> {

@@ -198,6 +198,7 @@ class DbSparkProvider {
     return null;
   }
 
+  ///0:新增 1:归档 2:更新
   Future<int> insertAction(UserAction model) async {
     return await db!.insert(DatabaseRef.tableActionHistory, {
       '${DatabaseRef.action}': model.action,

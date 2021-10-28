@@ -103,6 +103,13 @@ class HomeViewModel extends ViewStateModel {
         difference = -1;
       }
       await sparkProvider.updateHeatPoint(difference);
+      if(_mainFocusModel!.status == 0){
+        final action = UserAction();
+        action.updatedContent = _mainFocusModel!.content;
+        action.updatedTime = DateTime.now().millisecondsSinceEpoch;
+        action.action = 1;
+        await sparkProvider.insertAction(action);
+      }
     }
   }
 
@@ -124,7 +131,7 @@ class HomeViewModel extends ViewStateModel {
     await sparkProvider.insertAction(UserAction()
       ..updatedTime = updatedTime
       ..updatedContent = content
-      ..action = status);
+      ..action = 0);
   }
 
   Future<ToDoListModel?> queryToDoList(String? category) async {
@@ -159,6 +166,13 @@ class HomeViewModel extends ViewStateModel {
     }
     await sparkProvider.updateToDoItem(model, updateContent: false);
     await sparkProvider.updateHeatPoint(difference);
+    if(model.status == 0){
+      final action = UserAction();
+      action.updatedContent = model.content;
+      action.updatedTime = DateTime.now().millisecondsSinceEpoch;
+      action.action = 1;
+      await sparkProvider.insertAction(action);
+    }
     notifyListeners();
   }
 
@@ -168,8 +182,14 @@ class HomeViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-  Future updateTodoItem(ToDoModel model) async {
-    await sparkProvider.updateToDoItem(model, updateContent: true);
+  Future updateTodoItem(ToDoModel oldModel, ToDoModel updatedModel) async {
+    await sparkProvider.updateToDoItem(updatedModel, updateContent: true);
+    final action = UserAction();
+    action.earlyContent = oldModel.content;
+    action.updatedContent = updatedModel.content;
+    action.updatedTime = DateTime.now().millisecondsSinceEpoch;
+    action.action = 2;
+    await sparkProvider.insertAction(action);
   }
 
   Future queryToDoItem(int id) async {

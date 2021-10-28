@@ -51,62 +51,100 @@ class _ActionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Padding(
-      padding: EdgeInsetsDirectional.only(
-        start: 20,
-        top: 20,
-        end: 20,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            children: [
-              Icon(
-                Icons.wb_incandescent_rounded,
-                color: colorScheme.primaryVariant,
-                size: 22,
-              ),
-              SizedBox(
-                height: 8,
-              ),
-            ],
-          ),
-          const SizedBox(width: 16),
-          Flexible(
-            child: Column(
+    return userAction != null
+        ? Padding(
+            padding: EdgeInsetsDirectional.only(
+              start: 20,
+              top: 20,
+              end: 20,
+            ),
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                RichText(
-                    text: TextSpan(
+                Column(
+                  children: [
+                    Icon(
+                      Icons.wb_incandescent_rounded,
+                      color: colorScheme.primaryVariant,
+                      size: 22,
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 16),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildRichText(userAction!),
+                      Text(
+                        '${userAction?.formatFiledTime}',
                         style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w500),
-                        children: [
-                      TextSpan(
-                          text: '新增  ',
-                          style: TextStyle(color: Color(0xffc9cba3))),
-                      TextSpan(
-                          text: '${userAction?.updatedContent ?? ''}',
-                          style: TextStyle(
-                            color: Colors.black,
-                          )),
-                    ])),
-                Text(
-                  '${userAction?.formatFiledTime}',
-                  style: TextStyle(
-                      fontSize: 12, color: Colors.grey.withOpacity(0.5)),
-                ),
-                const SizedBox(height: 8),
-                Divider(
-                  thickness: 1,
-                  height: 1,
-                  color: Theme.of(context).colorScheme.background,
-                ),
+                            fontSize: 12, color: Colors.grey.withOpacity(0.5)),
+                      ),
+                      const SizedBox(height: 8),
+                      Divider(
+                        thickness: 1,
+                        height: 1,
+                        color: Theme.of(context).colorScheme.background,
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           )
-        ],
-      ),
-    );
+        : Container();
+  }
+
+  Widget _buildRichText(UserAction action) {
+    final spanList = <TextSpan>[];
+    switch (action.action) {
+      case 0:
+        final span1 =
+            TextSpan(text: '新增  ', style: TextStyle(color: Color(0xffc9cba3)));
+        final span2 = TextSpan(
+            text: '${userAction?.updatedContent ?? ''}',
+            style: TextStyle(
+              color: Colors.black.withOpacity(0.6),
+            ));
+        spanList.add(span1);
+        spanList.add(span2);
+        break;
+      case 1:
+        final span1 =
+            TextSpan(text: '归档  ', style: TextStyle(color: Color(0xffffe1a8)));
+        final span2 = TextSpan(
+            text: '${userAction?.updatedContent ?? ''}',
+            style: TextStyle(
+              color: Colors.black.withOpacity(0.6),
+            ));
+        spanList.add(span1);
+        spanList.add(span2);
+        break;
+      case 2:
+        final span1 = TextSpan(
+            text: '${userAction?.earlyContent ?? ''}  ',
+            style: TextStyle(
+              color: Colors.black.withOpacity(0.6),
+            ));
+        final span2 =
+            TextSpan(text: '更新为  ', style: TextStyle(color: Color(0xffe26d5c)));
+        final span3 = TextSpan(
+            text: '${userAction?.updatedContent ?? ''}',
+            style: TextStyle(
+              color: Colors.black.withOpacity(0.6),
+            ));
+        spanList.add(span1);
+        spanList.add(span2);
+        spanList.add(span3);
+        break;
+    }
+    return RichText(
+        text: TextSpan(
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            children: [...spanList]));
   }
 }

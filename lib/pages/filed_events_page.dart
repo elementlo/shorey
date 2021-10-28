@@ -100,7 +100,7 @@ class FiledItem extends StatelessWidget {
           child: Padding(
             padding: EdgeInsetsDirectional.only(
               start: 20,
-              top: 20,
+              top: 8,
               end: 20,
             ),
             child: Row(
@@ -114,13 +114,8 @@ class FiledItem extends StatelessWidget {
                       size: 22,
                     ),
                     SizedBox(
-                      height: 8,
+                      height: 6,
                     ),
-                    Text('${model?.category ?? ''}',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 12, color: Colors.grey.withOpacity(0.8))),
                   ],
                 ),
                 const SizedBox(width: 16),
@@ -155,7 +150,15 @@ class FiledItem extends StatelessWidget {
                               fontSize: 12,
                               color: Colors.grey.withOpacity(0.8))),
                       const SizedBox(
-                        height: 8,
+                        height: 6,
+                      ),
+                      Text('${model?.category ?? ''}',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 12, color: Colors.grey.withOpacity(0.8))),
+                      const SizedBox(
+                        height: 5,
                       ),
                       Divider(
                         thickness: 1,

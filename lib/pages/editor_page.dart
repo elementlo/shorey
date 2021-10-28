@@ -234,6 +234,7 @@ class _TextEditorPageState extends State<TextEditorPage>
   }
 
   Future<void> _updateTodoItem() async {
+    final oldModel = widget.todoModel.copy();
     widget.todoModel.brief = _briefController.text;
     widget.todoModel.content = _titleController.text;
     String? alertTime = null;
@@ -255,7 +256,7 @@ class _TextEditorPageState extends State<TextEditorPage>
     }
 
     widget.todoModel.alertTime = alertTime;
-    context.read<HomeViewModel>().updateTodoItem(widget.todoModel);
+    await context.read<HomeViewModel>().updateTodoItem(oldModel, widget.todoModel);
   }
 
   void onTapSetting(_ExpandableSetting settingId) {
