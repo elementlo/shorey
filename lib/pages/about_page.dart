@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:spark_list/widget/app_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 ///
 /// Author: Elemen
@@ -36,7 +37,6 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return Stack(
       children: [
         Scaffold(
@@ -73,7 +73,8 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
                   height: 25,
                 ),
                 _textView('Shorey moment'),
-                _textView('一个热力图，颜色越深代表当日处理信息越多。行代表周数，列代表星期几。热力图会记录过去13周的热度。努力填满空格吧！'),
+                _textView(
+                    '一个热力图，颜色越深代表当日处理信息越多。行代表周数，列代表星期几。热力图会记录过去13周的热度。努力填满空格吧！'),
                 SizedBox(
                   height: 25,
                 ),
@@ -83,6 +84,12 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
                   height: 45,
                 ),
                 _textView('Version: $_version'),
+                _textView('反馈: https://github.com/elementlo/spark_list/issues', onTap: (){
+                  launch('https://github.com/elementlo/spark_list/issues');
+                }),
+                _textView('捐赠: https://github.com/elementlo/spark_list', onTap: (){
+                  launch('https://github.com/elementlo/spark_list');
+                }),
               ],
             ),
           ),
@@ -95,8 +102,10 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _textView(String text) {
-    return Text('$text', style: TextStyle(color: Colors.grey));
+  Widget _textView(String text,{VoidCallback? onTap}) {
+    return InkWell(
+        onTap: onTap,
+        child: Text('$text', style: TextStyle(color: Colors.grey)));
   }
 
   Widget _secretMask() {
@@ -131,7 +140,8 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
                             isRepeatingAnimation: false,
                             animatedTexts: [
                               RotateAnimatedText('Be',
-                                  duration: Duration(milliseconds: 3000), rotateOut: false),
+                                  duration: Duration(milliseconds: 3000),
+                                  rotateOut: false),
                             ],
                           ),
                         ),
@@ -157,7 +167,8 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
                       ],
                     ),
                   ),
-                  Lottie.asset('assets/anim/68349-cat-tail-wag.json', width: 250),
+                  Lottie.asset('assets/anim/68349-cat-tail-wag.json',
+                      width: 250),
                 ],
               ),
             ),

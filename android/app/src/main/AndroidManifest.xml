@@ -5,9 +5,22 @@
          In most cases you can leave this as-is, but you if you want to provide
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="http" />
+        </intent>
+    </queries>
+
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="spark_list"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
