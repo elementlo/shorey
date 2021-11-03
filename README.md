@@ -10,7 +10,6 @@
 * 更多功能开发中…
 
 ## 马上开始
-- - - -
 **应用运行要求:**
 1. Android 5.0 +
 2. iOS 10+
@@ -20,11 +19,11 @@
 2. Flutter SDK 2.5.3
 
 ## 应用展示
-- - - -
+
 
 
 ## 技术架构
-- - - -
+
 * 关于Flutter
   由于想要体验完全的跨平台能力, 所以APP主体是纯Dart开发的, 保证安卓和iOS的UI是一套代码完成的.
 * 关于MVVM
@@ -33,7 +32,6 @@
 * [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
 
 ## 感谢
-- - - -
 Flutter 插件:
 * Provider
 * pull_to_refresh
@@ -55,10 +53,12 @@ Flutter 插件:
 * url_launcher
 
 ## 关于我
-- - - -
 作者是一名前端开发, 对大前端技术都很有兴趣. 欢迎对Flutter/前端有同样兴趣或者技术问题的邮件联系.
 邮箱: lawliet.zhan@outlook.com
 
 ## 捐赠
-- - - -
 欢迎对项目感兴趣的朋友捐赠一杯咖啡☕️
+
+<img width="319" alt="wechat" src="https://user-images.githubusercontent.com/10020581/140040097-b616a896-b064-4429-a164-e044770e89e4.png"><img width="288" alt="alipay" src="https://user-images.githubusercontent.com/10020581/140040108-f7d619d7-a9bc-43ce-8e52-37357620c02e.png">
+
+
