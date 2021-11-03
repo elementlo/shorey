@@ -73,11 +73,11 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
                   height: 25,
                 ),
                 _textView('Shorey moment'),
-                _textView('一个热力图，颜色越深代表当日处理信息越多。努力填满空格吧！'),
+                _textView('一个热力图，颜色越深代表当日处理信息越多。行代表周数，列代表星期几。热力图会记录过去13周的热度。努力填满空格吧！'),
                 SizedBox(
                   height: 25,
                 ),
-                _textView('Shorey'),
+                _textView('Why Shorey'),
                 _textView('Memory + Shore = Shorey'),
                 Divider(
                   height: 45,

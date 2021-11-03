@@ -101,7 +101,7 @@ class _PanelTextFieldState extends State<PanelTextField> {
                 height: 18,
                 child: IconButton(
                     padding: EdgeInsets.all(0),
-                    icon: Icon(Icons.edit),
+                    icon: Icon(Icons.edit, color: Colors.grey),
                     iconSize: 16,
                     onPressed: () {
                       setState(() {

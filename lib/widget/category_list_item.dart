@@ -228,9 +228,11 @@ class _ExpandedCategoryDemos extends StatelessWidget {
         ),
         onSubmitted: (input) async {
           print(input);
-          await viewModel.saveToDo(input, category);
-          _controller.text = '';
-          await viewModel.queryToDoList(category);
+          if (input != '' && input != null) {
+            await viewModel.saveToDo(input, category);
+            _controller.text = '';
+            await viewModel.queryToDoList(category);
+          }
         },
       ),
     );
@@ -355,7 +357,7 @@ class CategoryDemoItem extends StatelessWidget {
               .push(MaterialPageRoute(
                   builder: (context) => TextEditorPage(model)))
               .then((result) {
-                context.read<HomeViewModel>().queryToDoList(_cachedCategory);
+            context.read<HomeViewModel>().queryToDoList(_cachedCategory);
           });
         },
         child: Padding(
