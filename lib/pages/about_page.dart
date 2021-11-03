@@ -63,7 +63,7 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
 1. 记住它们！
 2. 知识归档-你的笔记软件'''),
                 _textView(
-                    '所以默认Shorey会每天回顾一次还未归档的信息，以防遗忘。后期Shorey会考虑接Notion API'),
+                    '所以默认Shorey会每天回顾一次还未归档的信息，以防遗忘。后期Shorey会考虑接Notion API。'),
                 SizedBox(
                   height: 25,
                 ),

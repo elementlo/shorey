@@ -72,7 +72,7 @@ class _CurtainPageState extends State<CurtainPage> {
             isAntiAlias: true,
             filterQuality: FilterQuality.medium,
           ),
-          SizedBox(height: 4,),
+          SizedBox(height: 8,),
           Align(
               child: Text('@Elemen', style: TextStyle(color: Colors.grey, fontSize: 12),),
           )
