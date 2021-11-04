@@ -22,7 +22,7 @@
 ## 应用展示
 UI部分大量参考了Flutter官方的Gallery应用. 另外还在关于页埋了个小彩蛋, 希望喜欢.
 
-![1635993576753196](https://user-images.githubusercontent.com/10020581/140248837-eedb8d40-c163-4971-b935-336ca6dcf7db.gif) ![1635993576753197](https://user-images.githubusercontent.com/10020581/140249070-e82979ab-8a6b-45e7-969a-1c7cdec95013.gif) ![1635993576753198](https://user-images.githubusercontent.com/10020581/140249271-78f3c6f3-235a-4c1a-8aec-48f1f2ec63e1.gif) ![1635993576753199](https://user-images.githubusercontent.com/10020581/140249546-98a5ce01-d005-4e2e-bbca-d95a5778bc36.gif)
+![1636005007174126](https://user-images.githubusercontent.com/10020581/140265074-430bc04c-0157-4c8c-931c-abcc6e92e922.gif) ![1636005007174127](https://user-images.githubusercontent.com/10020581/140265167-a41c6e05-cde1-4fe1-bb01-68688e036b8a.gif) ![1636005007174128](https://user-images.githubusercontent.com/10020581/140265292-11729260-45a8-4b98-b62f-a93f8f1f29b8.gif) ![1636005007174129](https://user-images.githubusercontent.com/10020581/140265890-d16730ee-8230-4215-b0db-b63cb074bce4.gif)
 
 
 ## 体验
