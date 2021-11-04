@@ -25,7 +25,10 @@ UI部分大量参考了Flutter官方的Gallery应用. 另外还在关于页埋�
 ![1635993576753196](https://user-images.githubusercontent.com/10020581/140248837-eedb8d40-c163-4971-b935-336ca6dcf7db.gif) ![1635993576753197](https://user-images.githubusercontent.com/10020581/140249070-e82979ab-8a6b-45e7-969a-1c7cdec95013.gif) ![1635993576753198](https://user-images.githubusercontent.com/10020581/140249271-78f3c6f3-235a-4c1a-8aec-48f1f2ec63e1.gif) ![1635993576753199](https://user-images.githubusercontent.com/10020581/140249546-98a5ce01-d005-4e2e-bbca-d95a5778bc36.gif)
 
 
+## 体验
+Android: 可直接在Release板块下载apk体验.
 
+iOS: 可下载源码使用 flutter run --release 编译体验, 后期考虑上testflight.
 
 
 ## 技术架构
