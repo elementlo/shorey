@@ -27,10 +27,6 @@ import 'list_category_page.dart';
 enum _ExpandableSetting {
   date,
   time,
-  textDirection,
-  locale,
-  platform,
-  theme,
 }
 
 class TextEditorPage extends StatefulWidget {
@@ -218,8 +214,8 @@ class _TextEditorPageState extends State<TextEditorPage>
         '${_briefController.text}',
         tz.TZDateTime.from(alertTime, tz.local),
         const NotificationDetails(
-            android: AndroidNotificationDetails(NotificationId.mainChannelId,
-                'Todo Alert',
+            android: AndroidNotificationDetails(
+                NotificationId.mainChannelId, 'Todo Alert',
                 importance: Importance.max,
                 priority: Priority.high,
                 playSound: true,
@@ -245,9 +241,10 @@ class _TextEditorPageState extends State<TextEditorPage>
       alertTime = '$_selectedDate ${_time.format(context)}';
       print(
           'alerttime: $alertTime notificationId: ${widget.todoModel.notificationId}');
-      if(DateTime.parse(alertTime).isBefore(DateTime.now())){
-        await _setNotification(DateTime.parse(alertTime), notificationId);
-      }
+      await _setNotification(DateTime.parse(alertTime), notificationId)
+          .catchError((onError) {
+        debugPrint('${onError}');
+      });
     } else {
       if (widget.todoModel.notificationId != null) {
         await _cancelNotification(widget.todoModel.notificationId!);
@@ -256,7 +253,9 @@ class _TextEditorPageState extends State<TextEditorPage>
     }
 
     widget.todoModel.alertTime = alertTime;
-    await context.read<HomeViewModel>().updateTodoItem(oldModel, widget.todoModel);
+    await context
+        .read<HomeViewModel>()
+        .updateTodoItem(oldModel, widget.todoModel);
   }
 
   void onTapSetting(_ExpandableSetting settingId) {
@@ -340,9 +339,11 @@ class _EditorTableRowState extends State<_EditorTableRow> {
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => ListCategoryPage()))
               .then((result) {
-            widget.todoModel!.category = result;
-            _color = _mapCategoryColor();
-            setState(() {});
+            if (result != null) {
+              widget.todoModel!.category = result;
+              _color = _mapCategoryColor();
+              setState(() {});
+            }
           });
         },
         child: Container(
