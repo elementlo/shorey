@@ -1,4 +1,10 @@
-# Shorey
+<h1 align="center">
+  <img src="https://user-images.githubusercontent.com/10020581/142364992-fd8ff10f-cae3-4a51-ba21-e7d03cf265f0.png" alt="Shorey" width="200">
+  <div></>
+  <br>
+  Shorey
+  <br>
+</h1>
 这是一款开源笔记应用, 支持Android/iOS双平台, 使用Flutter 2开发, 体验Flutter的同时也希望做一个能成为个人知识中转站的应用,  任重道远 :)
 
 Shorey is a simple note app which is built with Flutter 2 and supports both Android/iOS platforms. It provides me full experience of interacting with Flutter and in the meantime I hope it can be your knowledge/memory transition tool, and yes, there still much work to do.
