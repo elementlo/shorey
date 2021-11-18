@@ -105,7 +105,7 @@ Future<void> _initNotificationsSettings() async{
   final NotificationAppLaunchDetails? notificationAppLaunchDetails =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
   const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings('ic_launcher');
+  AndroidInitializationSettings('ic_notification');
 
   final IOSInitializationSettings initializationSettingsIOS =
   IOSInitializationSettings(

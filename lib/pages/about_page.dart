@@ -55,7 +55,7 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
                       controller?.reset();
                       controller?.forward();
                     },
-                    child: Icon(Icons.ac_unit, size: 90)),
+                    child: Image.asset('assets/images/ic_logo.png', width: 90, height: 90),),
                 _textView('理念'),
                 _textView('Shorey希望能成为一个个人的知识/记忆中转站，信息载体在这里短暂停留，'
                     '之后就流向它该被归档的地方，可以是你的备忘录或者Notion等笔记软件。你需要尽可能地让信息尽快离开Shorey，这可以有两种途径：'),
@@ -126,10 +126,13 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
             child: Center(
               child: Column(
                 children: [
+                  SizedBox(height: 100,),
+                  Image.asset('assets/images/ic_logo.png', width: 90, height: 90),
                   Expanded(
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
+
                         const SizedBox(width: 30.0, height: 100.0),
                         DefaultTextStyle(
                           style: const TextStyle(

@@ -1,9 +1,10 @@
 name: spark_list
-description: A new Flutter application.
+description: Shorey is a simple note app which is built with Flutter 2 and supports
+  both Android/iOS platforms. It provides me full experience of interacting with Flutter
+  and in the meantime I hope it can be your knowledge/memory transition tool,
+  and yes, there still much work to do.
 
-# The following line prevents the package from being accidentally published to
-# pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
