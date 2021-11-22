@@ -1,12 +1,10 @@
 import 'dart:math' as math;
-import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:spark_list/config/config.dart';
 import 'package:spark_list/config/theme_data.dart';
+import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/panel_text_field.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:provider/provider.dart';
 
 ///
 /// Author: Elemen
@@ -27,30 +25,6 @@ class DailyFocusPanel extends StatefulWidget {
 }
 
 class _DailyFocusPanelState extends State<DailyFocusPanel> {
-  String mantra = '';
-  Database? db;
-
-  void initMantra() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      mantra =
-          prefs.getString('mantra') ?? Mantra.mantraList[Random().nextInt(3)];
-      print('mantra: $mantra');
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    initMantra();
-  }
-
-  @override
-  void didUpdateWidget(covariant DailyFocusPanel oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    initMantra();
-  }
-
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -86,8 +60,7 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                         children: <Widget>[
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 8, top: 4),
+                              padding: const EdgeInsets.only(left: 8, top: 4),
                               child: Column(
                                 children: <Widget>[
                                   Row(
@@ -105,7 +78,8 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 8.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -132,7 +106,7 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                                                       .width -
                                                   200,
                                               child: Text(
-                                                '${mantra}',
+                                                '${context.watch<HomeViewModel>().mantra}',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 16,
@@ -214,7 +188,8 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                                         ],
                                         angle: 140 +
                                             (360 - 140) *
-                                                (1.0 - widget.animation!.value)),
+                                                (1.0 -
+                                                    widget.animation!.value)),
                                     child: SizedBox(
                                       width: 108,
                                       height: 108,

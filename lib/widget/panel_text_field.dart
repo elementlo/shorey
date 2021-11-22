@@ -40,6 +40,9 @@ class _PanelTextFieldState extends State<PanelTextField> {
               },
               decoration: InputDecoration(
                   labelText: 'Main Focus Today...',
+                  labelStyle: TextStyle(color: Colors.grey),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey)),
                   border: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey))),
             ),
@@ -49,6 +52,7 @@ class _PanelTextFieldState extends State<PanelTextField> {
   Widget _buildMainFocusRow(BuildContext context) {
     final viewModel = Provider.of<HomeViewModel>(context);
     final colorScheme = Theme.of(context).colorScheme;
+    finished = viewModel.mainFocusModel?.status == 0;
     return GestureDetector(
       onTap: () {
         setState(() {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 
 ///
@@ -28,8 +29,7 @@ class _MantraEditPageState extends State<MantraEditPage> {
   }
 
   Future _saveMantra(String text) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('mantra', text);
+    await context.read<HomeViewModel>().saveMantra(text);
   }
 
   @override
@@ -57,15 +57,10 @@ class _MantraEditPageState extends State<MantraEditPage> {
                 Icons.check,
                 color: colorScheme.onSecondary,
               ),
-              onPressed: () async{
-              	mantra = _controller.text;
-                if (mantra.isEmpty) {
-                  Fluttertoast.showToast(msg: '请输入Mantra内容');
-                  return;
-                } else {
-	                await _saveMantra(_controller.text);
-	                Navigator.of(context).pop();
-                }
+              onPressed: () async {
+                mantra = _controller.text;
+                await _saveMantra(_controller.text);
+                Navigator.of(context).pop();
               })
         ],
       ),

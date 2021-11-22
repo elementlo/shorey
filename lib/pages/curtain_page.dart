@@ -38,12 +38,6 @@ class _CurtainPageState extends State<CurtainPage> {
           ),
           _MomentGrid(),
           SizedBox(height: 8),
-          _SettingsRow(
-            title: '设置',
-            onTap: () {
-              Navigator.of(context).pushNamed(Routes.settingsCategoryPage);
-            },
-          ),
           SizedBox(height: 8),
           _SettingsRow(
             title: '历史',
@@ -58,6 +52,13 @@ class _CurtainPageState extends State<CurtainPage> {
             onTap: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => FiledEventsPage()));
+            },
+          ),
+          SizedBox(height: 8),
+          _SettingsRow(
+            title: '设置',
+            onTap: () {
+              Navigator.of(context).pushNamed(Routes.settingsCategoryPage);
             },
           ),
           SizedBox(height: 20),
@@ -124,7 +125,6 @@ class _MomentGrid extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8), color: Colors.white
-        // color: Theme.of(context).scaffoldBackgroundColor
       ),
       child: Container(
         padding: EdgeInsets.fromLTRB(cellWidth, 8, cellWidth, 16),

@@ -120,14 +120,15 @@ class DbSparkProvider {
   Future<ToDoModel?> getTopToDo() async {
     List<Map> list = await db!.rawQuery('''
     SELECT * FROM ${DatabaseRef.tableToDo}
-    WHERE ${DatabaseRef.columnId} = (SELECT MAX(${DatabaseRef.columnId})
-    FROM ${DatabaseRef.tableToDo})
-    ''');
+    WHERE ${DatabaseRef.category} = ?
+    ''', ['mainfocus']);
     if (list.isNotEmpty) {
       return ToDoModel(
-          id: list.first['${DatabaseRef.columnId}'],
-          createdTime: list.first['${DatabaseRef.toDoCreatedTime}'],
-          content: list.first['${DatabaseRef.toDoContent}']);
+          id: list.last['${DatabaseRef.columnId}'],
+          createdTime: list.last['${DatabaseRef.toDoCreatedTime}'],
+          content: list.last['${DatabaseRef.toDoContent}'],
+          category: 'mainfocus',
+          status: list.last['${DatabaseRef.status}']);
     }
     return null;
   }

@@ -132,7 +132,6 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
-
                         const SizedBox(width: 30.0, height: 100.0),
                         DefaultTextStyle(
                           style: const TextStyle(

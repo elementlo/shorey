@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spark_list/base/view_state_model.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/main.dart';
@@ -18,7 +20,8 @@ import 'package:timezone/timezone.dart' as tz;
 
 class HomeViewModel extends ViewStateModel {
   HomeViewModel() {
-    _heatMapTask();
+    _initMainFocus();
+    _initMantra();
   }
 
   ToDoModel? selectedModel;
@@ -27,13 +30,13 @@ class HomeViewModel extends ViewStateModel {
 
   String? _mainFocus = '';
   bool _hasMainFocus = true;
+  String mantra = '';
 
   String? get mainFocus => _mainFocus;
 
   bool get hasMainFocus => _hasMainFocus;
 
-  ToDoModel? _mainFocusModel;
-  HeatMapModel? _heatMapModel;
+  ToDoModel? mainFocusModel;
   ToDoListModel? filedListModel;
   UserActionList? userActionList;
 
@@ -42,30 +45,54 @@ class HomeViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-  void _heatMapTask() async {
-    final point = await sparkProvider.getTopHeatPoint();
-    print('heat map task: ${point}');
+  Future _initMantra() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('mantra') == null || prefs.getString('mantra') == '') {
+      mantra = Mantra.mantraList[Random().nextInt(3)];
+    } else {
+      mantra = prefs.getString('mantra')!;
+    }
+    print('mantra: $mantra');
+    notifyListeners();
+  }
+
+  Future saveMantra(String text) async {
+    mantra = text.isEmpty ? Mantra.mantraList[Random().nextInt(3)] : text;
+    notifyListeners();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('mantra', text);
+  }
+
+  void _initMainFocus() async {
+    mainFocusModel = await sparkProvider.getTopToDo();
     final currentTime = DateTime.now();
-    if (point?.createdTime != null) {
-      final lastTime = DateTime.fromMillisecondsSinceEpoch(point!.createdTime!);
+    if (mainFocusModel?.createdTime != null) {
+      final lastTime =
+          DateTime.fromMillisecondsSinceEpoch(mainFocusModel!.createdTime!);
       if (lastTime.year != currentTime.year ||
           lastTime.month != currentTime.month ||
           lastTime.day != currentTime.day) {
-        print('not the same day ...insert initial heat point...');
-        oneDayPassBy = true;
-        await sparkProvider.insertHeatPoint(
-            0, currentTime.millisecondsSinceEpoch);
+        print('One day passed by ...insert initial heat point...');
+        _hasMainFocus = false;
+        //oneDayPassBy = true;
+        // await sparkProvider.insertHeatPoint(
+        //     0, currentTime.millisecondsSinceEpoch);
       } else {
-        oneDayPassBy = false;
+        if (mainFocusModel != null) {
+          _mainFocus = mainFocusModel!.content;
+          _hasMainFocus = true;
+        } else {
+          _hasMainFocus = false;
+        }
         print('the same day ...ignore...');
       }
     } else {
-      oneDayPassBy = true;
-      print('insert initial heat point...');
-      await sparkProvider.insertHeatPoint(
-          0, currentTime.millisecondsSinceEpoch);
+      _hasMainFocus = false;
+      print('non-mainfocus');
+      // await sparkProvider.insertHeatPoint(
+      //     0, currentTime.millisecondsSinceEpoch);
     }
-    _initMainFocus();
+    notifyListeners();
   }
 
   Future queryAllHeatPoints() async {
@@ -73,17 +100,11 @@ class HomeViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-  Future _initMainFocus() async {
-    if (oneDayPassBy) {
-      _hasMainFocus = false;
-    } else {
-      _mainFocusModel = await queryMainFocus();
-      if (_mainFocusModel != null) {
-        _mainFocus = _mainFocusModel!.content;
-        _hasMainFocus = true;
-      } else {
-        _hasMainFocus = false;
-      }
+  Future _updateMainFocus() async {
+    mainFocusModel = await sparkProvider.getTopToDo();
+    if (mainFocusModel != null) {
+      _mainFocus = mainFocusModel!.content;
+      hasMainFocus = true;
     }
     notifyListeners();
   }
@@ -93,9 +114,9 @@ class HomeViewModel extends ViewStateModel {
   }
 
   Future updateMainFocusStatus(int status) async {
-    if (_mainFocusModel != null) {
-      _mainFocusModel!.status = status;
-      await sparkProvider.updateToDoItem(_mainFocusModel!);
+    if (mainFocusModel != null) {
+      mainFocusModel!.status = status;
+      await sparkProvider.updateToDoItem(mainFocusModel!);
       int difference = 0;
       if (status == 0) {
         difference = 1;
@@ -103,9 +124,9 @@ class HomeViewModel extends ViewStateModel {
         difference = -1;
       }
       await sparkProvider.updateHeatPoint(difference);
-      if(_mainFocusModel!.status == 0){
+      if (mainFocusModel!.status == 0) {
         final action = UserAction();
-        action.updatedContent = _mainFocusModel!.content;
+        action.updatedContent = mainFocusModel!.content;
         action.updatedTime = DateTime.now().millisecondsSinceEpoch;
         action.action = 1;
         await sparkProvider.insertAction(action);
@@ -115,7 +136,7 @@ class HomeViewModel extends ViewStateModel {
 
   Future saveMainFocus(String content, {int status = 1}) async {
     await saveToDo(content, 'mainfocus', status: status);
-    await _initMainFocus();
+    await _updateMainFocus();
     notifyListeners();
   }
 
@@ -166,7 +187,7 @@ class HomeViewModel extends ViewStateModel {
     }
     await sparkProvider.updateToDoItem(model, updateContent: false);
     await sparkProvider.updateHeatPoint(difference);
-    if(model.status == 0){
+    if (model.status == 0) {
       final action = UserAction();
       action.updatedContent = model.content;
       action.updatedTime = DateTime.now().millisecondsSinceEpoch;
