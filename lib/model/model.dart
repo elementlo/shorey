@@ -64,7 +64,7 @@ class ToDoModel {
     return data;
   }
 
-  ToDoModel copy(){
+  ToDoModel copy() {
     final model = ToDoModel(createdTime: this.createdTime);
     model.content = this.content;
     return model;
@@ -73,14 +73,18 @@ class ToDoModel {
 
 abstract class ListModel<T> {
   late List<T?> _cacheTodoList;
-  final List<Map<String, dynamic>> list;
+  List<Map<String, dynamic>> list;
+  final bool reversed;
 
-  ListModel(this.list) {
+  ListModel(this.list, {this.reversed = false}) {
     _cacheTodoList = List.generate(list.length, (index) => null);
   }
 
   @override
   T operator [](int index) {
+    if (reversed) {
+      list = list.reversed.toList();
+    }
     return _cacheTodoList[index] ??= snapshotToToDo(list[index]);
   }
 
@@ -98,8 +102,10 @@ abstract class ListModel<T> {
 
 class ToDoListModel extends ListModel<ToDoModel> {
   final List<Map<String, dynamic>> list;
+  final bool reversed;
 
-  ToDoListModel(this.list) : super(list);
+  ToDoListModel(this.list, {this.reversed = false})
+      : super(list, reversed: reversed);
 
   @override
   ToDoModel snapshotToToDo(Map<String, dynamic> snapshot) {
@@ -137,16 +143,17 @@ class CategoryItem {
   CategoryItem({this.name, this.icon, this.color});
 }
 
-class UserActionList extends ListModel<UserAction>{
+class UserActionList extends ListModel<UserAction> {
   final List<Map<String, dynamic>> list;
+  final bool reversed;
 
-  UserActionList(this.list) : super(list);
+  UserActionList(this.list, {this.reversed = false})
+      : super(list, reversed: reversed);
 
   @override
   UserAction snapshotToToDo(Map<String, dynamic> snapshot) {
     return UserAction.fromJson(snapshot);
   }
-
 }
 
 class UserAction {

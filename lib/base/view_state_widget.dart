@@ -100,7 +100,7 @@ class ViewStateEmptyWidget extends StatelessWidget {
     return ViewStateWidget(
       onPressed: this.onPressed,
       image: image ?? const Icon(Icons.error, size: 100, color: Colors.grey),
-      title: message ?? '无数据',
+      title: message ?? 'Empty',
       buttonText: buttonText,
       buttonTextData: 'Refresh',
     );

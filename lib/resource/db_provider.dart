@@ -212,7 +212,7 @@ class DbSparkProvider {
   Future<UserActionList?> queryActions() async {
     final list = await db!.query(DatabaseRef.tableActionHistory);
     if (list.isNotEmpty) {
-      return UserActionList(list);
+      return UserActionList(list, reversed: true);
     }
     return null;
   }

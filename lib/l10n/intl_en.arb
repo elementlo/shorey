@@ -1,0 +1,63 @@
+{
+  "mantra": "Mantra",
+  "today": "Today",
+  "@today": {
+    "description": "Today"
+  },
+  "mainFocusToday": "Main Focus Today",
+  "@mainFocusToday": {
+    "description": "Main Focus Today"
+  },
+  "mainCategory": "Category",
+  "@mainCategory": {
+    "description": "Main Category"
+  },
+  "shoreyMomment": "Shorey moment",
+  "@shoreyMomment": {
+    "description": "Shorey moment"
+  },
+  "archivedLess": "Archived less",
+  "@archivedLess": {
+    "description": "Archived less"
+  },
+  "archivedMore": "More",
+  "@archivedMore": {
+    "description": "More"
+  },
+  "actionHistory": "History",
+  "@actionHistory": {
+    "description": "Action history"
+  },
+  "archivedList": "Archived",
+  "@archivedList": {
+    "description": "Archived list"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings"
+  },
+  "aboutShorey": "About Shorey",
+  "@aboutShorey": {
+    "description": "About Shorey"
+  },
+  "actionHistoryTitle": "Actions History",
+  "actionAdd": "Added",
+  "actionArchived": "Archived",
+  "actionUpdate": "Updated to",
+  "editMantra": "Edit Mantra",
+  "retrospect": "Retrospect",
+  "frequency": "Frequency",
+  "time": "Time",
+  "date": "Date",
+  "categoryList": "Category",
+  "everyday": "Every day",
+  "everyMonday": "Every Monday",
+  "everyTuesday": "Every Tuesday",
+  "everyWednesday": "Every Wednesday",
+  "everyThursday": "Every Thursday",
+  "everyFriday": "Every Friday",
+  "everySaturday": "Every Saturday",
+  "everySunday": "Every Sunday",
+  "noAlert": "No alert",
+  "languages": "Languages"
+}

@@ -4,6 +4,8 @@ import 'package:spark_list/config/config.dart';
 import 'package:spark_list/pages/action_history_page.dart';
 import 'package:spark_list/pages/filed_events_page.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 import 'about_page.dart';
 import 'home_page.dart';
@@ -30,7 +32,7 @@ class _CurtainPageState extends State<CurtainPage> {
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Header(
               color: Colors.black,
-              text: 'Shorey moment',
+              text: AppLocalizations.of(context)!.shoreyMomment,
             ),
           ),
           SizedBox(
@@ -40,7 +42,7 @@ class _CurtainPageState extends State<CurtainPage> {
           SizedBox(height: 8),
           SizedBox(height: 8),
           _SettingsRow(
-            title: '历史',
+            title: AppLocalizations.of(context)!.actionHistory,
             onTap: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => ActionHistoryPage()));
@@ -48,7 +50,7 @@ class _CurtainPageState extends State<CurtainPage> {
           ),
           SizedBox(height: 8),
           _SettingsRow(
-            title: '已归档',
+            title: AppLocalizations.of(context)!.actionArchived,
             onTap: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => FiledEventsPage()));
@@ -56,7 +58,7 @@ class _CurtainPageState extends State<CurtainPage> {
           ),
           SizedBox(height: 8),
           _SettingsRow(
-            title: '设置',
+            title: AppLocalizations.of(context)!.settings,
             onTap: () {
               Navigator.of(context).pushNamed(Routes.settingsCategoryPage);
             },
@@ -98,7 +100,7 @@ class _CurtainPageState extends State<CurtainPage> {
               width: 20,
             ),
             Text(
-              '关于Shorey',
+              AppLocalizations.of(context)!.aboutShorey,
               style: TextStyle(color: Colors.grey, height: 1.2, fontSize: 14),
             ),
           ],
@@ -228,7 +230,7 @@ class _MomentGrid extends StatelessWidget {
         Padding(
             padding: EdgeInsets.only(top: 8, right: 8),
             child: Text(
-              'Filed Less',
+              AppLocalizations.of(context)!.archivedLess,
               style: TextStyle(fontSize: 12, color: Colors.grey),
             )),
         _buildCell(1, 1, context),
@@ -238,7 +240,7 @@ class _MomentGrid extends StatelessWidget {
         Padding(
             padding: EdgeInsets.only(top: 8),
             child: Text(
-              'More',
+              AppLocalizations.of(context)!.archivedMore,
               style: TextStyle(fontSize: 12, color: Colors.grey),
             )),
       ],

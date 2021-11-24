@@ -6,9 +6,11 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spark_list/config/config.dart';
+import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 import 'package:spark_list/widget/settings_list_item.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 ///
 /// Author: Elemen
@@ -35,17 +37,7 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
   AlertPeriod selectPeriod = AlertPeriod.daily;
   TimeOfDay _time = TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 1);
   int? selectedOption;
-  final optionMap = LinkedHashMap.of({
-    AlertPeriod.daily: '每天',
-    AlertPeriod.mon: '每周一',
-    AlertPeriod.tue: '每周二',
-    AlertPeriod.wed: '每周三',
-    AlertPeriod.thu: '每周四',
-    AlertPeriod.fri: '每周五',
-    AlertPeriod.sat: '每周六',
-    AlertPeriod.sun: '每周日',
-    AlertPeriod.none: '不提醒',
-  });
+  late Map optionMap;
 
   void onTapSetting(_ExpandableSetting settingId) {
     setState(() {
@@ -116,10 +108,21 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    optionMap = LinkedHashMap.of({
+      AlertPeriod.daily: S.of(context).everyday,
+      AlertPeriod.mon: S.of(context).everyMonday,
+      AlertPeriod.tue: S.of(context).everyTuesday,
+      AlertPeriod.wed: S.of(context).everyWednesday,
+      AlertPeriod.thu: S.of(context).everyThursday,
+      AlertPeriod.fri: S.of(context).everyFriday,
+      AlertPeriod.sat: S.of(context).everySaturday,
+      AlertPeriod.sun: S.of(context).everySunday,
+      AlertPeriod.none: S.of(context).noAlert,
+    });
     final colorScheme = Theme.of(context).colorScheme;
     final settingsListItems = [
       SettingsListItem<double>(
-        title: '频率',
+        title: S.of(context).frequency,
         optionsMap: LinkedHashMap.of(
             {1.0: DisplayOption(optionMap[selectPeriod] ?? '')}),
         selectedOption: MediaQuery.of(context).textScaleFactor,
@@ -131,10 +134,10 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
         child: _optionChildList(colorScheme),
       ),
       SettingsListItem<double>(
-        title: '时间',
+        title: S.of(context).time,
         selectedOption: 1.0,
         optionsMap: LinkedHashMap.of(
-            {1.0: DisplayOption(_time == null ? '无' : _time.format(context))}),
+            {1.0: DisplayOption(_time == null ? '' : _time.format(context))}),
         onOptionChanged: (newTextScale) {},
         onTapSetting: () => onTapSetting(_ExpandableSetting.time),
         isExpanded: _expandedSettingId == _ExpandableSetting.time,
@@ -158,7 +161,7 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
     return Scaffold(
       appBar: SparkAppBar(
         context: context,
-        title: '回顾',
+        title: S.of(context).retrospect,
         actions: [
           IconButton(
               icon: Icon(

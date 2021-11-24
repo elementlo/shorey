@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spark_list/base/provider_widget.dart';
@@ -19,6 +20,8 @@ import 'package:spark_list/view_model/home_view_model.dart';
 import 'config/theme_data.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'generated/l10n.dart';
 
 late DbSparkProvider sparkProvider;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -67,11 +70,23 @@ class MyApp extends StatelessWidget {
         //hViewModel?.assembleRetrospectNotification();
       },
       child: MaterialApp(
+        localeResolutionCallback: (locale, supportedLocales){
+          return locale;
+        },
+        //locale: const Locale('en',''),
         themeMode: ThemeMode.system,
         theme: AppThemeData.lightThemeData.copyWith(
           platform: defaultTargetPlatform,
         ),
         builder: EasyLoading.init(),
+        localizationsDelegates: [
+          S.delegate,
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
         // darkTheme: AppThemeData.darkThemeData.copyWith(
         //   platform: defaultTargetPlatform,
         // ),

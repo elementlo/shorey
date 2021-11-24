@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spark_list/config/config.dart';
+import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/pages/alert_period_page.dart';
 import 'package:spark_list/widget/app_bar.dart';
 
@@ -16,27 +17,53 @@ class SettingsCategoryPage extends StatefulWidget {
 }
 
 class _SettingsCategoryPageState extends State<SettingsCategoryPage> {
+  var switchOn = false;
+
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: SparkAppBar(
         context: context,
-        title: '设置',
+        title: S.of(context).settings,
       ),
       body: ListView(
         children: [
           _SettingItem(
-            title: '编辑Mantra',
+            title: S.of(context).editMantra,
             onPressed: () {
               Navigator.of(context).pushNamed(Routes.mantraEditPage);
             },
           ),
           _SettingItem(
-            title: '回顾',
+            title: S.of(context).retrospect,
             onPressed: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => AlertPeriodPage()));
             },
+          ),
+          Container(
+            child: Column(
+              children: [
+                ListTile(
+                  title: Text(S.of(context).languages),
+                  trailing: Switch(
+                    value: switchOn,
+                    activeColor: colorScheme.primary,
+                    onChanged: (isOn) {
+                      setState(() {
+                        switchOn = isOn;
+                        S.load(Locale(isOn?'en':'zh',''));
+                      });
+                    },
+                  ),
+                ),
+                Divider(
+                  indent: 16,
+                  endIndent: 16,
+                )
+              ],
+            ),
           ),
         ],
       ),

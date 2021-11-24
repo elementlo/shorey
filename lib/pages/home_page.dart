@@ -6,6 +6,7 @@ import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/category_list_item.dart';
 import 'package:spark_list/widget/daily_focus_panel.dart';
 import 'package:spark_list/widget/home_header.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 ///
 /// Author: Elemen
@@ -122,7 +123,7 @@ class _CategoriesHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Header(
       color: Theme.of(context).colorScheme.primaryVariant,
-      text: '类别',
+      text: AppLocalizations.of(context)!.mainCategory,
     );
   }
 }

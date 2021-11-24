@@ -1,0 +1,63 @@
+{
+  "mantra": "格言",
+  "today": "今天",
+  "@today": {
+    "description": "Today"
+  },
+  "mainFocusToday": "今日聚焦",
+  "@mainFocusToday": {
+    "description": "Main Focus Today"
+  },
+  "mainCategory": "类别",
+  "@mainCategory": {
+    "description": "Main Category"
+  },
+  "shoreyMomment": "Shorey时刻",
+  "@shoreyMomment": {
+    "description": "Shorey moment"
+  },
+  "archivedLess": "归档较少",
+  "@archivedLess": {
+    "description": "Archived less"
+  },
+  "archivedMore": "较多",
+  "@archivedMore": {
+    "description": "More"
+  },
+  "actionHistory": "历史",
+  "@actionHistory": {
+    "description": "Action history"
+  },
+  "archivedList": "已归档",
+  "@archivedList": {
+    "description": "Archived list"
+  },
+  "settings": "设置",
+  "@settings": {
+    "description": "Settings"
+  },
+  "aboutShorey": "关于Shorey",
+  "@aboutShorey": {
+    "description": "About Shorey"
+  },
+  "actionHistoryTitle": "行为历史",
+  "actionAdd": "添加",
+  "actionArchived": "归档",
+  "actionUpdate": "更新为",
+  "editMantra": "编辑格言",
+  "retrospect": "回顾",
+  "frequency": "频率",
+  "time": "时间",
+  "date": "日期",
+  "categoryList": "类别",
+  "everyday": "每天",
+  "everyMonday": "每周一",
+  "everyTuesday": "每周二",
+  "everyWednesday": "每周三",
+  "everyThursday": "每周四",
+  "everyFriday": "每周五",
+  "everySaturday": "每周六",
+  "everySunday": "每周日",
+  "noAlert": "不提醒",
+  "languages": "语言"
+}

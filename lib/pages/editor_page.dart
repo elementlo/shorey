@@ -87,7 +87,7 @@ class _TextEditorPageState extends State<TextEditorPage>
           title: '日期',
           selectedOption: 1.0,
           optionsMap: LinkedHashMap.of(
-              {1.0: DisplayOption(_selectedDate == '' ? '无' : _selectedDate)}),
+              {1.0: DisplayOption(_selectedDate)}),
           onOptionChanged: (newTextScale) {},
           onTapSetting: () => onTapSetting(_ExpandableSetting.date),
           isExpanded: _expandedSettingId == _ExpandableSetting.date,
@@ -102,7 +102,7 @@ class _TextEditorPageState extends State<TextEditorPage>
           title: '时间',
           selectedOption: 1.0,
           optionsMap: LinkedHashMap.of({
-            1.0: DisplayOption(_time == null ? '无' : _time.format(context))
+            1.0: DisplayOption(_time == null ? '' : _time.format(context))
           }),
           onOptionChanged: (newTextScale) {},
           onTapSetting: () => onTapSetting(_ExpandableSetting.time),

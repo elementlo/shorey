@@ -3,6 +3,7 @@
 # Files and directories created by pub
 .dart_tool/
 .packages
+.gradle/
 build/
 .idea/
 # If you're building an application, you may want to check-in your pubspec.lock
