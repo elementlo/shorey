@@ -59,5 +59,8 @@
   "everySaturday": "Every Saturday",
   "everySunday": "Every Sunday",
   "noAlert": "No alert",
-  "languages": "Languages"
+  "languages": "Languages",
+  "cancelAlertTime": "Cleared alert time",
+  "itemAlert": "Title",
+  "itemRemark": "Remark"
 }

@@ -44,6 +44,7 @@ dependencies:
   lottie: ^1.2.1
   flutter_easyloading: ^3.0.3
   url_launcher: ^6.0.12
+  get: ^4.3.8
 
 dev_dependencies:
   flutter_test:

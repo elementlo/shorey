@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/config/config.dart';
+import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/pages/action_history_page.dart';
 import 'package:spark_list/pages/filed_events_page.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 import 'about_page.dart';
@@ -32,7 +32,7 @@ class _CurtainPageState extends State<CurtainPage> {
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Header(
               color: Colors.black,
-              text: AppLocalizations.of(context)!.shoreyMomment,
+              text: S.of(context).shoreyMomment,
             ),
           ),
           SizedBox(
@@ -42,7 +42,7 @@ class _CurtainPageState extends State<CurtainPage> {
           SizedBox(height: 8),
           SizedBox(height: 8),
           _SettingsRow(
-            title: AppLocalizations.of(context)!.actionHistory,
+            title: S.of(context).actionHistory,
             onTap: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => ActionHistoryPage()));
@@ -50,7 +50,7 @@ class _CurtainPageState extends State<CurtainPage> {
           ),
           SizedBox(height: 8),
           _SettingsRow(
-            title: AppLocalizations.of(context)!.actionArchived,
+            title: S.of(context).actionArchived,
             onTap: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => FiledEventsPage()));
@@ -58,7 +58,7 @@ class _CurtainPageState extends State<CurtainPage> {
           ),
           SizedBox(height: 8),
           _SettingsRow(
-            title: AppLocalizations.of(context)!.settings,
+            title: S.of(context).settings,
             onTap: () {
               Navigator.of(context).pushNamed(Routes.settingsCategoryPage);
             },
@@ -100,7 +100,7 @@ class _CurtainPageState extends State<CurtainPage> {
               width: 20,
             ),
             Text(
-              AppLocalizations.of(context)!.aboutShorey,
+              S.of(context).aboutShorey,
               style: TextStyle(color: Colors.grey, height: 1.2, fontSize: 14),
             ),
           ],
@@ -230,7 +230,7 @@ class _MomentGrid extends StatelessWidget {
         Padding(
             padding: EdgeInsets.only(top: 8, right: 8),
             child: Text(
-              AppLocalizations.of(context)!.archivedLess,
+              S.of(context).archivedLess,
               style: TextStyle(fontSize: 12, color: Colors.grey),
             )),
         _buildCell(1, 1, context),
@@ -240,7 +240,7 @@ class _MomentGrid extends StatelessWidget {
         Padding(
             padding: EdgeInsets.only(top: 8),
             child: Text(
-              AppLocalizations.of(context)!.archivedMore,
+              S.of(context).archivedMore,
               style: TextStyle(fontSize: 12, color: Colors.grey),
             )),
       ],

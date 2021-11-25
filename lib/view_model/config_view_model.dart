@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:spark_list/base/view_state_model.dart';
 import 'package:spark_list/model/model.dart';
 
@@ -17,8 +18,22 @@ class ConfigViewModel extends ViewStateModel {
 
   List<CategoryItem> categoryDemosList = [];
 
+  Locale? defaultLocale;
+
   void set settingsOpenNotifier(bool open) {
     isSettingsOpenNotifier = open;
+    notifyListeners();
+  }
+//I/flutter (24107): default: en_US
+// I/flutter (24107): zh_CN
+  void initLocale(){
+    defaultLocale = Locale(Intl.getCurrentLocale(), '');
+    print('default: ${defaultLocale}');
+    notifyListeners();
+  }
+
+  void updateLocale(Locale locale){
+    defaultLocale = locale;
     notifyListeners();
   }
 

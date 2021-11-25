@@ -4,8 +4,10 @@ import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/config/config.dart';
+import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/model/model.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
@@ -84,22 +86,25 @@ class _TextEditorPageState extends State<TextEditorPage>
     final colorScheme = Theme.of(context).colorScheme;
     final settingsListItems = [
       SettingsListItem<double>(
-          title: '日期',
+          title: S.of(context).date,
           selectedOption: 1.0,
           optionsMap: LinkedHashMap.of(
               {1.0: DisplayOption(_selectedDate)}),
           onOptionChanged: (newTextScale) {},
           onTapSetting: () => onTapSetting(_ExpandableSetting.date),
           isExpanded: _expandedSettingId == _ExpandableSetting.date,
-          child: CustomizedDatePicker([], (selection) {
-            _selectedDate =
-                '${selection.year}-${selection.month.toString().padLeft(2, '0')}'
-                '-${selection.day.toString().padLeft(2, '0')}';
-            setState(() {});
-          })),
+          child: Localizations.override(context: context,
+            locale: Locale(Intl.getCurrentLocale()),
+            child: CustomizedDatePicker([], (selection) {
+              _selectedDate =
+                  '${selection.year}-${selection.month.toString().padLeft(2, '0')}'
+                  '-${selection.day.toString().padLeft(2, '0')}';
+              setState(() {});
+            }),
+          )),
       if (_selectedDate != '')
         SettingsListItem<double>(
-          title: '时间',
+          title: S.of(context).time,
           selectedOption: 1.0,
           optionsMap: LinkedHashMap.of({
             1.0: DisplayOption(_time == null ? '' : _time.format(context))
@@ -139,7 +144,7 @@ class _TextEditorPageState extends State<TextEditorPage>
               onPressed: () {
                 _selectedDate = '';
                 setState(() {});
-                Fluttertoast.showToast(msg: '清除提醒时间');
+                Fluttertoast.showToast(msg: S.of(context).cancelAlertTime);
               }),
           IconButton(
               icon: Icon(
@@ -166,14 +171,14 @@ class _TextEditorPageState extends State<TextEditorPage>
               child: Column(
                 children: [
                   InputField(
-                    hintText: '标题',
+                    hintText: S.of(context).itemAlert,
                     textEditingController: _titleController,
                   ),
                   Divider(
                     color: colorScheme.background,
                   ),
                   InputField(
-                    hintText: '备注',
+                    hintText: S.of(context).itemRemark,
                     maxLines: 8,
                     textEditingController: _briefController,
                   ),
@@ -351,7 +356,7 @@ class _EditorTableRowState extends State<_EditorTableRow> {
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
-              Expanded(child: Text('列表')),
+              Expanded(child: Text(S.of(context).categoryList)),
               Container(
                 height: 10,
                 width: 10,

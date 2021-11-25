@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 ///
 /// Author: Elemen
@@ -35,7 +35,7 @@ class _PanelTextFieldState extends State<PanelTextField> {
                 }
               },
               decoration: InputDecoration(
-                  labelText: '${AppLocalizations.of(context)!.mainFocusToday}...',
+                  labelText: '${S.of(context).mainFocusToday}...',
                   labelStyle: TextStyle(color: Colors.grey),
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey)),

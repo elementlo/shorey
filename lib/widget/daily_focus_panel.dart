@@ -2,10 +2,10 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:spark_list/config/theme_data.dart';
+import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/panel_text_field.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 ///
 /// Author: Elemen
@@ -91,7 +91,7 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                                               padding: const EdgeInsets.only(
                                                   left: 4, bottom: 2),
                                               child: Text(
-                                                AppLocalizations.of(context)!.mantra,
+                                                S.of(context).mantra,
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w500,
@@ -163,7 +163,7 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                                           ),
                                         ),
                                         Text(
-                                          AppLocalizations.of(context)!.today,
+                                          S.of(context).today,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,

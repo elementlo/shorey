@@ -59,5 +59,8 @@
   "everySaturday": "每周六",
   "everySunday": "每周日",
   "noAlert": "不提醒",
-  "languages": "语言"
+  "languages": "语言",
+  "cancelAlertTime": "已取消提醒时间",
+  "itemAlert": "标题",
+  "itemRemark": "备注"
 }

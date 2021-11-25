@@ -32,6 +32,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "archivedLess": MessageLookupByLibrary.simpleMessage("Archived less"),
         "archivedList": MessageLookupByLibrary.simpleMessage("Archived"),
         "archivedMore": MessageLookupByLibrary.simpleMessage("More"),
+        "cancelAlertTime":
+            MessageLookupByLibrary.simpleMessage("Cleared alert time"),
         "categoryList": MessageLookupByLibrary.simpleMessage("Category"),
         "date": MessageLookupByLibrary.simpleMessage("Date"),
         "editMantra": MessageLookupByLibrary.simpleMessage("Edit Mantra"),
@@ -45,6 +47,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Every Wednesday"),
         "everyday": MessageLookupByLibrary.simpleMessage("Every day"),
         "frequency": MessageLookupByLibrary.simpleMessage("Frequency"),
+        "itemAlert": MessageLookupByLibrary.simpleMessage("Title"),
+        "itemRemark": MessageLookupByLibrary.simpleMessage("Remark"),
         "languages": MessageLookupByLibrary.simpleMessage("Languages"),
         "mainCategory": MessageLookupByLibrary.simpleMessage("Category"),
         "mainFocusToday":

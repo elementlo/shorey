@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/config/config.dart';
-import 'package:spark_list/pages/editor_page.dart';
 import 'package:spark_list/pages/list_category_page.dart';
 import 'package:spark_list/pages/mantra_edit_page.dart';
 import 'package:spark_list/pages/root_page.dart';
@@ -16,24 +16,32 @@ import 'package:spark_list/resource/db_provider.dart';
 import 'package:spark_list/routes.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+import 'package:provider/provider.dart';
 
 import 'config/theme_data.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'generated/l10n.dart';
 
 late DbSparkProvider sparkProvider;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   _configureLocalTimeZone();
   await _initNotificationsSettings();
   sparkProvider = DbSparkProvider();
   await sparkProvider.ready;
-  runApp(MyApp());
+  runApp(ProviderWidget2<ConfigViewModel, HomeViewModel>(
+      ConfigViewModel(), HomeViewModel(),
+      onModelReady: (cViewModel, hViewModel) {
+        cViewModel?.initCategoryDemosList();
+        cViewModel?.initLocale();
+        _initAlertPeriod(hViewModel);
+        //hViewModel?.assembleRetrospectNotification();
+      },
+      child: MyApp()));
   _configLoading();
 }
 
@@ -62,41 +70,39 @@ class MyApp extends StatelessWidget {
     //   ),
     // );
 
-    return ProviderWidget2<ConfigViewModel, HomeViewModel>(ConfigViewModel(),
-      HomeViewModel(),
-      onModelReady: (cViewModel, hViewModel){
-        cViewModel?.initCategoryDemosList();
-        _initAlertPeriod(hViewModel);
-        //hViewModel?.assembleRetrospectNotification();
-      },
-      child: MaterialApp(
-        localeResolutionCallback: (locale, supportedLocales){
-          return locale;
-        },
-        //locale: const Locale('en',''),
-        themeMode: ThemeMode.system,
-        theme: AppThemeData.lightThemeData.copyWith(
-          platform: defaultTargetPlatform,
-        ),
-        builder: EasyLoading.init(),
-        localizationsDelegates: [
-          S.delegate,
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: S.delegate.supportedLocales,
-        // darkTheme: AppThemeData.darkThemeData.copyWith(
-        //   platform: defaultTargetPlatform,
-        // ),
-        routes: {
-          Routes.homePage: (context) => RootPage(),
-          Routes.listCategoryPage: (context) => ListCategoryPage(),
-          Routes.settingsCategoryPage: (context) => SettingsCategoryPage(),
-          Routes.mantraEditPage: (context) => MantraEditPage(),
-        },
+    return MaterialApp(
+      themeMode: ThemeMode.system,
+      theme: AppThemeData.lightThemeData.copyWith(
+        platform: defaultTargetPlatform,
       ),
+      builder: EasyLoading.init(),
+      localizationsDelegates: [
+        S.delegate,
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
+      //locale: context.watch<ConfigViewModel>().defaultLocale,
+      localeResolutionCallback: (locale, supportedLocales) {
+        print(locale);
+        // if (supportedLocales.contains(locale)) {
+        //   return locale;
+        // } else {
+        //   return const Locale('en', '');
+        // }
+        return locale;
+      },
+      // darkTheme: AppThemeData.darkThemeData.copyWith(
+      //   platform: defaultTargetPlatform,
+      // ),
+      routes: {
+        Routes.homePage: (context) => RootPage(),
+        Routes.listCategoryPage: (context) => ListCategoryPage(),
+        Routes.settingsCategoryPage: (context) => SettingsCategoryPage(),
+        Routes.mantraEditPage: (context) => MantraEditPage(),
+      },
     );
   }
 }
@@ -105,7 +111,8 @@ void _initAlertPeriod(HomeViewModel? viewModel) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   if (prefs.get('alert_period') == null) {
     prefs.setInt('alert_period', 0);
-    viewModel?.assembleRetrospectNotification(TimeOfDay(hour: 18, minute: 0), 0);
+    viewModel?.assembleRetrospectNotification(
+        TimeOfDay(hour: 18, minute: 0), 0);
   }
 }
 
@@ -115,33 +122,33 @@ Future<void> _configureLocalTimeZone() async {
   tz.setLocalLocation(tz.getLocation(timeZoneName!));
 }
 
-Future<void> _initNotificationsSettings() async{
+Future<void> _initNotificationsSettings() async {
   final NotificationAppLaunchDetails? notificationAppLaunchDetails =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
   const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings('ic_notification');
+      AndroidInitializationSettings('ic_notification');
 
   final IOSInitializationSettings initializationSettingsIOS =
-  IOSInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-      onDidReceiveLocalNotification: (
-          int id,
-          String? title,
-          String? body,
-          String? payload,
+      IOSInitializationSettings(
+          requestAlertPermission: true,
+          requestBadgePermission: true,
+          requestSoundPermission: true,
+          onDidReceiveLocalNotification: (
+            int id,
+            String? title,
+            String? body,
+            String? payload,
           ) async {
-          print('received notification: $id $title $body $payload');
-      });
+            print('received notification: $id $title $body $payload');
+          });
   final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
     iOS: initializationSettingsIOS,
   );
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onSelectNotification: (String? payload) async {
-        if (payload != null) {
-          debugPrint('notification payload: $payload');
-        }
-      });
+    if (payload != null) {
+      debugPrint('notification payload: $payload');
+    }
+  });
 }

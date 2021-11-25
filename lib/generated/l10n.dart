@@ -359,6 +359,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Cleared alert time`
+  String get cancelAlertTime {
+    return Intl.message(
+      'Cleared alert time',
+      name: 'cancelAlertTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Title`
+  String get itemAlert {
+    return Intl.message(
+      'Title',
+      name: 'itemAlert',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remark`
+  String get itemRemark {
+    return Intl.message(
+      'Remark',
+      name: 'itemRemark',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/model/model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 /// Date: 2021/10/21
 /// Description:
 ///
+
 class ActionHistoryPage extends StatefulWidget {
   const ActionHistoryPage({Key? key}) : super(key: key);
 
@@ -19,6 +21,9 @@ class ActionHistoryPage extends StatefulWidget {
 }
 
 class _ActionHistoryPageState extends State<ActionHistoryPage> {
+
+
+
   @override
   void initState() {
     super.initState();
