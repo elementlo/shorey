@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/model/model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 ///
 /// Author: Elemen
@@ -21,9 +20,6 @@ class ActionHistoryPage extends StatefulWidget {
 }
 
 class _ActionHistoryPageState extends State<ActionHistoryPage> {
-
-
-
   @override
   void initState() {
     super.initState();
@@ -34,7 +30,7 @@ class _ActionHistoryPageState extends State<ActionHistoryPage> {
   Widget build(BuildContext context) {
     final viewModel = Provider.of<HomeViewModel>(context);
     return Scaffold(
-      appBar: SparkAppBar(context: context, title: AppLocalizations.of(context)!.actionHistoryTitle),
+      appBar: SparkAppBar(context: context, title: S.of(context).actionHistoryTitle),
       body: Container(
         child: ListView.builder(
             itemCount: viewModel.userActionList?.length ?? 0,
@@ -110,7 +106,7 @@ class _ActionItem extends StatelessWidget {
     switch (action.action) {
       case 0:
         final span1 =
-            TextSpan(text: '${AppLocalizations.of(context)!.actionAdd}  ', style: TextStyle(color: Color(0xffc9cba3)));
+            TextSpan(text: '${S.of(context).actionAdd}  ', style: TextStyle(color: Color(0xffc9cba3)));
         final span2 = TextSpan(
             text: '${userAction?.updatedContent ?? ''}',
             style: TextStyle(
@@ -121,7 +117,7 @@ class _ActionItem extends StatelessWidget {
         break;
       case 1:
         final span1 =
-            TextSpan(text: '${AppLocalizations.of(context)!.actionArchived}  ', style: TextStyle(color: Color(0xffffe1a8)));
+            TextSpan(text: '${S.of(context).actionArchived}  ', style: TextStyle(color: Color(0xffffe1a8)));
         final span2 = TextSpan(
             text: '${userAction?.updatedContent ?? ''}',
             style: TextStyle(
@@ -137,7 +133,7 @@ class _ActionItem extends StatelessWidget {
               color: Colors.black.withOpacity(0.6),
             ));
         final span2 =
-            TextSpan(text: '${AppLocalizations.of(context)!.actionUpdate}  ', style: TextStyle(color: Color(0xffe26d5c)));
+            TextSpan(text: '${S.of(context).actionUpdate}  ', style: TextStyle(color: Color(0xffe26d5c)));
         final span3 = TextSpan(
             text: '${userAction?.updatedContent ?? ''}',
             style: TextStyle(

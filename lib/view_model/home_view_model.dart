@@ -9,6 +9,8 @@ import 'package:spark_list/base/view_state_model.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/model/model.dart';
+import 'package:spark_list/resource/data_provider.dart';
+import 'package:spark_list/resource/db_provider.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 ///
@@ -19,7 +21,9 @@ import 'package:timezone/timezone.dart' as tz;
 ///
 
 class HomeViewModel extends ViewStateModel {
-  HomeViewModel() {
+  final DbSparkProvider dbProvider;
+  final DataProvider dataProvider;
+  HomeViewModel(this.dbProvider, this.dataProvider) {
     _initMainFocus();
     _initMantra();
   }
@@ -45,6 +49,14 @@ class HomeViewModel extends ViewStateModel {
     notifyListeners();
   }
 
+  Future initDefaultSettings() async{
+    if(await dataProvider.getAlertPeriod() == null){
+      dataProvider.saveAlertPeriod(0);
+      assembleRetrospectNotification(
+          TimeOfDay(hour: 18, minute: 0), 0);
+    }
+  }
+
   Future _initMantra() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getString('mantra') == null || prefs.getString('mantra') == '') {
@@ -64,7 +76,7 @@ class HomeViewModel extends ViewStateModel {
   }
 
   void _initMainFocus() async {
-    mainFocusModel = await sparkProvider.getTopToDo();
+    mainFocusModel = await dbProvider.getTopToDo();
     final currentTime = DateTime.now();
     if (mainFocusModel?.createdTime != null) {
       final lastTime =
@@ -96,12 +108,12 @@ class HomeViewModel extends ViewStateModel {
   }
 
   Future queryAllHeatPoints() async {
-    heatPointsMap = await sparkProvider.queryAllHeatPoints();
+    heatPointsMap = await dbProvider.queryAllHeatPoints();
     notifyListeners();
   }
 
   Future _updateMainFocus() async {
-    mainFocusModel = await sparkProvider.getTopToDo();
+    mainFocusModel = await dbProvider.getTopToDo();
     if (mainFocusModel != null) {
       _mainFocus = mainFocusModel!.content;
       hasMainFocus = true;
@@ -110,26 +122,26 @@ class HomeViewModel extends ViewStateModel {
   }
 
   Future<ToDoModel?> queryMainFocus() async {
-    return await sparkProvider.getTopToDo();
+    return await dbProvider.getTopToDo();
   }
 
   Future updateMainFocusStatus(int status) async {
     if (mainFocusModel != null) {
       mainFocusModel!.status = status;
-      await sparkProvider.updateToDoItem(mainFocusModel!);
+      await dbProvider.updateToDoItem(mainFocusModel!);
       int difference = 0;
       if (status == 0) {
         difference = 1;
       } else if (status == 1) {
         difference = -1;
       }
-      await sparkProvider.updateHeatPoint(difference);
+      await dbProvider.updateHeatPoint(difference);
       if (mainFocusModel!.status == 0) {
         final action = UserAction();
         action.updatedContent = mainFocusModel!.content;
         action.updatedTime = DateTime.now().millisecondsSinceEpoch;
         action.action = 1;
-        await sparkProvider.insertAction(action);
+        await dbProvider.insertAction(action);
       }
     }
   }
@@ -143,32 +155,32 @@ class HomeViewModel extends ViewStateModel {
   Future saveToDo(String content, String? category,
       {String? brief, int status = 1}) async {
     final updatedTime = DateTime.now().millisecondsSinceEpoch;
-    await sparkProvider.insertToDo(ToDoModel(createdTime: updatedTime)
+    await dbProvider.insertToDo(ToDoModel(createdTime: updatedTime)
       ..content = content
       ..category = category
       ..status = status
       ..brief = brief);
 
-    await sparkProvider.insertAction(UserAction()
+    await dbProvider.insertAction(UserAction()
       ..updatedTime = updatedTime
       ..updatedContent = content
       ..action = 0);
   }
 
   Future<ToDoListModel?> queryToDoList(String? category) async {
-    ToDoListModel? toDoListModel = await sparkProvider.queryToDoList(category);
+    ToDoListModel? toDoListModel = await dbProvider.queryToDoList(category);
     indexedList[category] = toDoListModel;
     notifyListeners();
     return toDoListModel;
   }
 
   Future queryActions() async {
-    userActionList = await sparkProvider.queryActions();
+    userActionList = await dbProvider.queryActions();
     notifyListeners();
   }
 
   Future<ToDoListModel?> queryFiledList() async {
-    filedListModel = await sparkProvider.queryToDoList(null, status: 0);
+    filedListModel = await dbProvider.queryToDoList(null, status: 0);
     notifyListeners();
     return filedListModel;
   }
@@ -185,36 +197,36 @@ class HomeViewModel extends ViewStateModel {
         model.status = 0;
         break;
     }
-    await sparkProvider.updateToDoItem(model, updateContent: false);
-    await sparkProvider.updateHeatPoint(difference);
+    await dbProvider.updateToDoItem(model, updateContent: false);
+    await dbProvider.updateHeatPoint(difference);
     if (model.status == 0) {
       final action = UserAction();
       action.updatedContent = model.content;
       action.updatedTime = DateTime.now().millisecondsSinceEpoch;
       action.action = 1;
-      await sparkProvider.insertAction(action);
+      await dbProvider.insertAction(action);
     }
     notifyListeners();
   }
 
   Future clearFiledItems() async {
-    await sparkProvider.updateToDoListStatus(0, 2);
+    await dbProvider.updateToDoListStatus(0, 2);
     filedListModel = null;
     notifyListeners();
   }
 
   Future updateTodoItem(ToDoModel oldModel, ToDoModel updatedModel) async {
-    await sparkProvider.updateToDoItem(updatedModel, updateContent: true);
+    await dbProvider.updateToDoItem(updatedModel, updateContent: true);
     final action = UserAction();
     action.earlyContent = oldModel.content;
     action.updatedContent = updatedModel.content;
     action.updatedTime = DateTime.now().millisecondsSinceEpoch;
     action.action = 2;
-    await sparkProvider.insertAction(action);
+    await dbProvider.insertAction(action);
   }
 
   Future queryToDoItem(int id) async {
-    selectedModel = await sparkProvider.queryToDoItem(id);
+    selectedModel = await dbProvider.queryToDoItem(id);
   }
 
   Future<void> assembleRetrospectNotification(

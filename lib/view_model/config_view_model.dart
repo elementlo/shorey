@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:spark_list/base/view_state_model.dart';
 import 'package:spark_list/model/model.dart';
+import 'package:spark_list/resource/data_provider.dart';
+import 'package:spark_list/resource/db_provider.dart';
 
 ///
 /// Author: Elemen
@@ -17,24 +18,56 @@ class ConfigViewModel extends ViewStateModel {
   bool isSettingsOpenNotifier = false;
 
   List<CategoryItem> categoryDemosList = [];
+  final DbSparkProvider dbProvider;
+  final DataProvider dataProvider;
+  Locale? deviceLocale;
 
-  Locale? defaultLocale;
+  ConfigViewModel(this.dbProvider, this.dataProvider);
 
   void set settingsOpenNotifier(bool open) {
     isSettingsOpenNotifier = open;
     notifyListeners();
   }
-//I/flutter (24107): default: en_US
-// I/flutter (24107): zh_CN
-  void initLocale(){
-    defaultLocale = Locale(Intl.getCurrentLocale(), '');
-    print('default: ${defaultLocale}');
-    notifyListeners();
+
+  Locale? initLocale(Locale? locale) {
+    deviceLocale = locale;
+    final defaultLocale = dataProvider.defaultLocale;
+    if (defaultLocale == null) {
+      return locale;
+    } else if (defaultLocale == 'zh') {
+      return Locale('zh', '');
+    } else {
+      return Locale('en', '');
+    }
   }
 
-  void updateLocale(Locale locale){
-    defaultLocale = locale;
-    notifyListeners();
+  Future<String?> getDefaultLocale() async {
+    final locale = await dataProvider.getLocale();
+    if(locale == null){
+      return deviceLocale?.languageCode;
+    }else {
+      return locale;
+    }
+  }
+
+  Future savePerfLocale(Locale locale) async {
+    await dataProvider.saveLocale(locale);
+  }
+
+  Future<int?> getAlertPeriod() async {
+    return await dataProvider.getAlertPeriod();
+  }
+
+  Future<String?> getRetrospectTime() async {
+    return await dataProvider.getRetrospectTime();
+  }
+
+  Future saveAlertPeriod(int period) async {
+    await dataProvider.saveAlertPeriod(period);
+  }
+
+  Future saveRetrospectTime(String time) async {
+    await dataProvider.saveRetrospectTime(time);
   }
 
   void initCategoryDemosList() {

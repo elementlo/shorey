@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/pages/alert_period_page.dart';
+import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 
 ///
@@ -18,6 +20,15 @@ class SettingsCategoryPage extends StatefulWidget {
 
 class _SettingsCategoryPageState extends State<SettingsCategoryPage> {
   var switchOn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ConfigViewModel>().getDefaultLocale().then((locale) {
+      switchOn = locale == 'en';
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +61,14 @@ class _SettingsCategoryPageState extends State<SettingsCategoryPage> {
                   trailing: Switch(
                     value: switchOn,
                     activeColor: colorScheme.primary,
-                    onChanged: (isOn) {
+                    inactiveTrackColor:
+                        colorScheme.primaryVariant.withOpacity(0.8),
+                    onChanged: (isOn) async{
                       setState(() {
                         switchOn = isOn;
-                        S.load(Locale(isOn?'en':'zh',''));
+                        S.load(Locale(isOn ? 'en' : 'zh', ''));
                       });
+                      context.read<ConfigViewModel>().savePerfLocale(Locale(isOn ? 'en' : 'zh', ''));
                     },
                   ),
                 ),

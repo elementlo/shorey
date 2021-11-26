@@ -1,17 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/pages/list_category_page.dart';
 import 'package:spark_list/pages/mantra_edit_page.dart';
 import 'package:spark_list/pages/root_page.dart';
 import 'package:spark_list/pages/settings_category_page.dart';
+import 'package:spark_list/resource/data_provider.dart';
 import 'package:spark_list/resource/db_provider.dart';
 import 'package:spark_list/routes.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
@@ -23,7 +22,8 @@ import 'package:provider/provider.dart';
 import 'config/theme_data.dart';
 import 'generated/l10n.dart';
 
-late DbSparkProvider sparkProvider;
+late DbSparkProvider _dbProvider;
+late DataProvider _dataProvider;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -31,17 +31,18 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   _configureLocalTimeZone();
   await _initNotificationsSettings();
-  sparkProvider = DbSparkProvider();
-  await sparkProvider.ready;
+  _dbProvider = DbSparkProvider();
+  await _dbProvider.ready;
+  _dataProvider = DataProvider();
+  await _dataProvider.ready;
+  await _dataProvider.getLocale();
   runApp(ProviderWidget2<ConfigViewModel, HomeViewModel>(
-      ConfigViewModel(), HomeViewModel(),
+      ConfigViewModel(_dbProvider, _dataProvider),
+      HomeViewModel(_dbProvider, _dataProvider),
       onModelReady: (cViewModel, hViewModel) {
-        cViewModel?.initCategoryDemosList();
-        cViewModel?.initLocale();
-        _initAlertPeriod(hViewModel);
-        //hViewModel?.assembleRetrospectNotification();
-      },
-      child: MyApp()));
+    cViewModel?.initCategoryDemosList();
+    hViewModel?.initDefaultSettings();
+  }, child: MyApp()));
   _configLoading();
 }
 
@@ -78,21 +79,14 @@ class MyApp extends StatelessWidget {
       builder: EasyLoading.init(),
       localizationsDelegates: [
         S.delegate,
-        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
-      //locale: context.watch<ConfigViewModel>().defaultLocale,
       localeResolutionCallback: (locale, supportedLocales) {
         print(locale);
-        // if (supportedLocales.contains(locale)) {
-        //   return locale;
-        // } else {
-        //   return const Locale('en', '');
-        // }
-        return locale;
+        return context.read<ConfigViewModel>().initLocale(locale);
       },
       // darkTheme: AppThemeData.darkThemeData.copyWith(
       //   platform: defaultTargetPlatform,
@@ -104,15 +98,6 @@ class MyApp extends StatelessWidget {
         Routes.mantraEditPage: (context) => MantraEditPage(),
       },
     );
-  }
-}
-
-void _initAlertPeriod(HomeViewModel? viewModel) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  if (prefs.get('alert_period') == null) {
-    prefs.setInt('alert_period', 0);
-    viewModel?.assembleRetrospectNotification(
-        TimeOfDay(hour: 18, minute: 0), 0);
   }
 }
 

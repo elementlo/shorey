@@ -4,13 +4,14 @@ import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/generated/l10n.dart';
+import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 import 'package:spark_list/widget/settings_list_item.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 ///
 /// Author: Elemen
@@ -58,22 +59,21 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
   }
 
   void _initSelectedOption() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    selectedOption = prefs.getInt('alert_period') ?? 0;
+    selectedOption =
+        await context.read<ConfigViewModel>().getAlertPeriod() ?? 0;
     selectPeriod = optionMap.keys.elementAt(selectedOption!);
-    if (prefs.getString('retrospect_time') != null &&
-        prefs.getString('retrospect_time')!.isNotEmpty) {
-      final time = prefs.getString('retrospect_time');
-      print('init time: $time');
+    final retrospectTime =
+        await context.read<ConfigViewModel>().getRetrospectTime();
+    if (retrospectTime != null && retrospectTime.isNotEmpty) {
+      print('init time: $retrospectTime');
       var formatter = new DateFormat('Hm');
-      _time = TimeOfDay.fromDateTime(formatter.parse(time!));
+      _time = TimeOfDay.fromDateTime(formatter.parse(retrospectTime));
     }
     setState(() {});
   }
 
   Future<void> _savePeriod(AlertPeriod period) async {
     final provider = await Provider.of<HomeViewModel>(context, listen: false);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     final index = optionMap.keys.toList().indexOf(period);
     print('period ${index}');
     print('time ${_time.format(context)}');
@@ -82,8 +82,8 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
     } else {
       await provider.assembleRetrospectNotification(_time, index);
     }
-    prefs.setInt('alert_period', index);
-    prefs.setString('retrospect_time', _time.format(context));
+    context.read<ConfigViewModel>().saveAlertPeriod(index);
+    context.read<ConfigViewModel>().saveRetrospectTime(_time.format(context));
   }
 
   @override
