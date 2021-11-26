@@ -18,6 +18,9 @@ Shorey is a simple note app which is built with Flutter 2 and supports both Andr
 * 热力图记录完成事项
 * 更多功能开发中…
 
+## 分享
+[个人笔记软件Shorey开源(一) - 软件介绍/产品理念](https://mp.weixin.qq.com/s/W-3AhgCHSIQWLomPuyIPwA)
+
 ## 马上开始
 **应用运行要求:**
 1. Android 5.0 +
