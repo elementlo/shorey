@@ -389,6 +389,36 @@ class S {
       args: [],
     );
   }
+
+  /// `What we refer to as way is hesitation.`
+  String get mantra1 {
+    return Intl.message(
+      'What we refer to as way is hesitation.',
+      name: 'mantra1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Better to have, and not need, than to need, and not have.`
+  String get mantra2 {
+    return Intl.message(
+      'Better to have, and not need, than to need, and not have.',
+      name: 'mantra2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `I am free and that is why I am lost.`
+  String get mantra3 {
+    return Intl.message(
+      'I am free and that is why I am lost.',
+      name: 'mantra3',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -76,4 +76,12 @@ class DataProvider {
   Future<String?> getRetrospectTime() async {
     return await dataStore.record('retrospect_time').get(db!);
   }
+
+  Future<String?> getMantra() async {
+    return await dataStore.record('mantra').get(db!);
+  }
+
+  Future saveMantra(String mantra) async {
+    await dataStore.record('mantra').put(db!, mantra);
+  }
 }

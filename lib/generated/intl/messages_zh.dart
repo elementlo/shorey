@@ -50,6 +50,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "mainCategory": MessageLookupByLibrary.simpleMessage("类别"),
         "mainFocusToday": MessageLookupByLibrary.simpleMessage("今日聚焦"),
         "mantra": MessageLookupByLibrary.simpleMessage("格言"),
+        "mantra1": MessageLookupByLibrary.simpleMessage("我们称之为路的, 只不过是彷徨."),
+        "mantra2": MessageLookupByLibrary.simpleMessage(
+            "心脏是一座有两间卧室的房子, 一间住着痛苦, 另一间住着欢乐, 人不能笑得太响. 否则笑声会吵醒隔壁房间的痛苦."),
+        "mantra3": MessageLookupByLibrary.simpleMessage("我是自由的, 那就是我迷失的原因."),
         "noAlert": MessageLookupByLibrary.simpleMessage("不提醒"),
         "retrospect": MessageLookupByLibrary.simpleMessage("回顾"),
         "settings": MessageLookupByLibrary.simpleMessage("设置"),

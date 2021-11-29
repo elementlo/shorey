@@ -54,6 +54,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "mainFocusToday":
             MessageLookupByLibrary.simpleMessage("Main Focus Today"),
         "mantra": MessageLookupByLibrary.simpleMessage("Mantra"),
+        "mantra1": MessageLookupByLibrary.simpleMessage(
+            "What we refer to as way is hesitation."),
+        "mantra2": MessageLookupByLibrary.simpleMessage(
+            "Better to have, and not need, than to need, and not have."),
+        "mantra3": MessageLookupByLibrary.simpleMessage(
+            "I am free and that is why I am lost."),
         "noAlert": MessageLookupByLibrary.simpleMessage("No alert"),
         "retrospect": MessageLookupByLibrary.simpleMessage("Retrospect"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),

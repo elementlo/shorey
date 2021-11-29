@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spark_list/base/view_state_model.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/main.dart';
@@ -23,9 +22,9 @@ import 'package:timezone/timezone.dart' as tz;
 class HomeViewModel extends ViewStateModel {
   final DbSparkProvider dbProvider;
   final DataProvider dataProvider;
+
   HomeViewModel(this.dbProvider, this.dataProvider) {
     _initMainFocus();
-    _initMantra();
   }
 
   ToDoModel? selectedModel;
@@ -49,20 +48,24 @@ class HomeViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-  Future initDefaultSettings() async{
-    if(await dataProvider.getAlertPeriod() == null){
+  Future initDefaultSettings() async {
+    await _initDefaultAlert();
+    await _initMantra();
+  }
+
+  Future _initDefaultAlert() async {
+    if (await dataProvider.getAlertPeriod() == null) {
       dataProvider.saveAlertPeriod(0);
-      assembleRetrospectNotification(
-          TimeOfDay(hour: 18, minute: 0), 0);
+      assembleRetrospectNotification(TimeOfDay(hour: 18, minute: 0), 0);
     }
   }
 
   Future _initMantra() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('mantra') == null || prefs.getString('mantra') == '') {
+    final defaultMantra = await dataProvider.getMantra();
+    if (defaultMantra == null || defaultMantra == '') {
       mantra = Mantra.mantraList[Random().nextInt(3)];
     } else {
-      mantra = prefs.getString('mantra')!;
+      mantra = defaultMantra;
     }
     print('mantra: $mantra');
     notifyListeners();
@@ -71,8 +74,11 @@ class HomeViewModel extends ViewStateModel {
   Future saveMantra(String text) async {
     mantra = text.isEmpty ? Mantra.mantraList[Random().nextInt(3)] : text;
     notifyListeners();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('mantra', text);
+    await dataProvider.saveMantra(text);
+  }
+
+  Future<String?> getMantra() async{
+    return await dataProvider.getMantra();
   }
 
   void _initMainFocus() async {

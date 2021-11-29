@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:spark_list/generated/l10n.dart';
 import 'package:sqflite/sqflite.dart';
 
 ///
@@ -23,12 +24,12 @@ class Routes {
 
 ///mantra
 class Mantra {
-	static const String mantra1 = '我们称之为路的, 只不过是彷徨.';
-	static const String mantra2 = '心脏是一座有两间卧室的房子, 一间住着痛苦, 另一间住着欢乐, 人不能笑得太响. 否则笑声会吵醒隔壁房间的痛苦.';
-	static const String mantra3 = '我是自由的, 那就是我迷失的原因.';
-	static const String mantra4 = 'El psy kongroo.';
+	static String mantra1 = S.current.mantra1;
+	static String mantra2 = S.current.mantra2;
+	static String mantra3 = S.current.mantra3;
+	static String mantra4 = 'El psy kongroo.';
 	
-	static const List<String> mantraList = [mantra1, mantra2, mantra3, mantra4];
+	static List<String> mantraList = [mantra1, mantra2, mantra3, mantra4];
 }
 
 ///Database

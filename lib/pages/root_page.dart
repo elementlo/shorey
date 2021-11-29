@@ -4,7 +4,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/pages/curtain_page.dart';

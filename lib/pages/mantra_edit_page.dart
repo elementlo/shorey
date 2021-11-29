@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 
@@ -21,9 +20,8 @@ class _MantraEditPageState extends State<MantraEditPage> {
   String mantra = '';
 
   void _fetchMantra() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      mantra = prefs.getString('mantra') ?? '';
+    setState(() async {
+      mantra = await context.read<HomeViewModel>().getMantra() ?? '';
       _controller.text = mantra;
     });
   }
