@@ -25,6 +25,7 @@ class _PanelTextFieldState extends State<PanelTextField> {
   Widget build(BuildContext context) {
     final viewModel = Provider.of<HomeViewModel>(context);
     return Container(
+      height: 50,
       child: viewModel.hasMainFocus
           ? _buildMainFocusRow(context)
           : TextField(
@@ -40,7 +41,9 @@ class _PanelTextFieldState extends State<PanelTextField> {
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey)),
                   border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey))),
+                      borderSide: BorderSide(color: Colors.grey)),
+                  contentPadding: EdgeInsets.only(bottom: 0, top: 6)
+              ),
             ),
     );
   }
@@ -59,6 +62,9 @@ class _PanelTextFieldState extends State<PanelTextField> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(
+            height: 6,
+          ),
           Text(
             'Main Focus Today:',
             style: TextStyle(fontSize: 12),

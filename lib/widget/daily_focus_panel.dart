@@ -39,7 +39,7 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                 0.0, 30 * (1.0 - widget.animation!.value), 0.0),
             child: Padding(
               padding: const EdgeInsets.only(
-                  left: 16, right: 16, top: 16, bottom: 18),
+                  left: 16, right: 16, top: 8, bottom: 18),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -56,7 +56,7 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                   children: <Widget>[
                     Padding(
                       padding:
-                          const EdgeInsets.only(top: 16, left: 12, right: 12),
+                          const EdgeInsets.only(top: 8, left: 12, right: 12),
                       child: Row(
                         children: <Widget>[
                           Expanded(
@@ -206,6 +206,7 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                     Divider(
                       indent: 16,
                       endIndent: 16,
+                      height: 1,
                     ),
                     Container(
                       padding: const EdgeInsets.only(
