@@ -48,6 +48,7 @@ class DatabaseRef{
 	static const String alertTime = 'alert_time';
 	static const String notificationId = 'notification_id';
 	static const String filedTime = 'filed_time';
+	static const String categoryId = 'category_id';
 
 	///table - heat_map_table
 	static const String tableHeatMap = 'heat_map';
@@ -62,6 +63,10 @@ class DatabaseRef{
 	static const String earlyContent = 'early_content';
 	static const String updatedContent = 'updated_content';
 	static const String updatedTime = 'updated_time';
+
+	///table - category_list
+	static const String tableCategoryList = 'category_list';
+	static const String categoryName = 'category_name';
 }
 
 class NotificationId{

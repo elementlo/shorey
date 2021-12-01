@@ -184,3 +184,10 @@ class UserAction {
     action = json['action'];
   }
 }
+
+class CategoryDemo{
+  int? id;
+  String? name;
+
+  CategoryDemo({this.id, this.name});
+}

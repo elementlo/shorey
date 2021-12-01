@@ -42,7 +42,26 @@ class DbSparkProvider {
 
   Future _createDb(Database db) async {
     await db.execute('''
-  	CREATE TABLE ${DatabaseRef.tableToDo} (
+  	CREATE TABLE IF NOT EXISTS ${DatabaseRef.tableHeatMap} (
+  	${DatabaseRef.heatPointId} INTEGER PRIMARY KEY AUTOINCREMENT,
+  	${DatabaseRef.heatPointlevel} INT,
+  	${DatabaseRef.heatPointcreatedTime} INT NOT NULL)
+  	''');
+    await db.execute('''
+  	CREATE TABLE IF NOT EXISTS ${DatabaseRef.tableActionHistory} (
+  	${DatabaseRef.actionId} INTEGER PRIMARY KEY AUTOINCREMENT,
+  	${DatabaseRef.action} INT,
+  	${DatabaseRef.earlyContent} TEXT,
+  	${DatabaseRef.updatedContent} TEXT,
+  	${DatabaseRef.updatedTime} INT)
+  	''');
+    await db.execute('''
+  	CREATE TABLE IF NOT EXISTS ${DatabaseRef.tableCategoryList} (
+  	${DatabaseRef.columnId} INTEGER PRIMARY KEY AUTOINCREMENT,
+  	${DatabaseRef.categoryName} TEXT)
+  	''');
+    await db.execute('''
+  	CREATE TABLE IF NOT EXISTS ${DatabaseRef.tableToDo} (
   	${DatabaseRef.columnId} INTEGER PRIMARY KEY AUTOINCREMENT,
   	${DatabaseRef.toDoContent} TEXT,
   	${DatabaseRef.toDoBrief} TEXT,
@@ -51,21 +70,8 @@ class DbSparkProvider {
   	${DatabaseRef.alertTime} TEXT,
   	${DatabaseRef.status} INT,
   	${DatabaseRef.filedTime} INT,
-  	${DatabaseRef.notificationId} INT)
-  	''');
-    await db.execute('''
-  	CREATE TABLE ${DatabaseRef.tableHeatMap} (
-  	${DatabaseRef.heatPointId} INTEGER PRIMARY KEY AUTOINCREMENT,
-  	${DatabaseRef.heatPointlevel} INT,
-  	${DatabaseRef.heatPointcreatedTime} INT NOT NULL)
-  	''');
-    await db.execute('''
-  	CREATE TABLE ${DatabaseRef.tableActionHistory} (
-  	${DatabaseRef.actionId} INTEGER PRIMARY KEY AUTOINCREMENT,
-  	${DatabaseRef.action} INT,
-  	${DatabaseRef.earlyContent} TEXT,
-  	${DatabaseRef.updatedContent} TEXT,
-  	${DatabaseRef.updatedTime} INT)
+  	${DatabaseRef.notificationId} INT,
+  	FOREIGN KEY(${DatabaseRef.categoryId}) REFERENCES ${DatabaseRef.tableCategoryList}(${DatabaseRef.columnId})),
   	''');
   }
 
@@ -215,5 +221,34 @@ class DbSparkProvider {
       return UserActionList(list, reversed: true);
     }
     return null;
+  }
+
+  Future addCategory(CategoryDemo demo) async {
+    await db!.insert(DatabaseRef.tableCategoryList,
+        {'${DatabaseRef.categoryName}': demo.name});
+  }
+
+  Future<CategoryDemo?> getCategory(int id) async {
+    List<Map> list = await db!.query(DatabaseRef.tableCategoryList,
+        where: '${DatabaseRef.columnId} == ?', whereArgs: [id]);
+    if (list.isNotEmpty) {
+      return CategoryDemo(
+          id: list.first['${DatabaseRef.columnId}'],
+          name: list.first['${DatabaseRef.categoryName}']);
+    }
+    return null;
+  }
+
+  Future removeCategory(int id) async {
+    await db!.delete(DatabaseRef.tableCategoryList,
+        where: '${DatabaseRef.columnId} == ?', whereArgs: [id]);
+  }
+
+  Future updateCategory(CategoryDemo demo) async {
+    if (demo.id != null) {
+      await db!.update(DatabaseRef.tableCategoryList,
+          {'${DatabaseRef.categoryName}': demo.name},
+          where: '${DatabaseRef.columnId} = ?', whereArgs: [demo.id]);
+    }
   }
 }
