@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:spark_list/base/view_state_model.dart';
+import 'package:spark_list/database/database.dart';
 import 'package:spark_list/model/model.dart';
 import 'package:spark_list/resource/data_provider.dart';
 import 'package:spark_list/resource/db_provider.dart';
@@ -18,11 +19,12 @@ class ConfigViewModel extends ViewStateModel {
   bool isSettingsOpenNotifier = false;
 
   List<CategoryItem> categoryDemosList = [];
-  final DbSparkProvider dbProvider;
-  final DataProvider dataProvider;
-  Locale? deviceLocale;
+  final DbSparkProvider _dBProvider;
+  final DbProvider _dbProvider;
+  final DataProvider _dataProvider;
+  Locale? _deviceLocale;
 
-  ConfigViewModel(this.dbProvider, this.dataProvider);
+  ConfigViewModel(this._dBProvider, this._dataProvider, this._dbProvider);
 
   void set settingsOpenNotifier(bool open) {
     isSettingsOpenNotifier = open;
@@ -30,8 +32,8 @@ class ConfigViewModel extends ViewStateModel {
   }
 
   Locale? initLocale(Locale? locale) {
-    deviceLocale = locale;
-    final defaultLocale = dataProvider.defaultLocale;
+    _deviceLocale = locale;
+    final defaultLocale = _dataProvider.defaultLocale;
     if (defaultLocale == null) {
       return locale;
     } else if (defaultLocale == 'zh') {
@@ -42,79 +44,98 @@ class ConfigViewModel extends ViewStateModel {
   }
 
   Future<String?> getDefaultLocale() async {
-    final locale = await dataProvider.getLocale();
-    if(locale == null){
-      return deviceLocale?.languageCode;
-    }else {
+    final locale = await _dataProvider.getLocale();
+    if (locale == null) {
+      return _deviceLocale?.languageCode;
+    } else {
       return locale;
     }
   }
 
   Future savePerfLocale(Locale locale) async {
-    await dataProvider.saveLocale(locale);
+    await _dataProvider.saveLocale(locale);
   }
 
   Future<int?> getAlertPeriod() async {
-    return await dataProvider.getAlertPeriod();
+    return await _dataProvider.getAlertPeriod();
   }
 
   Future<String?> getRetrospectTime() async {
-    return await dataProvider.getRetrospectTime();
+    return await _dataProvider.getRetrospectTime();
   }
 
   Future saveAlertPeriod(int period) async {
-    await dataProvider.saveAlertPeriod(period);
+    await _dataProvider.saveAlertPeriod(period);
   }
 
   Future saveRetrospectTime(String time) async {
-    await dataProvider.saveRetrospectTime(time);
+    await _dataProvider.saveRetrospectTime(time);
   }
 
-  void initCategoryDemosList() {
-    categoryDemosList = List.of([
-      CategoryItem(
-          name: 'To Do',
+  Future getCategoryList() async {
+    final list = await _dbProvider.categoryList;
+    list.forEach((element) {
+      categoryDemosList.add(CategoryItem(
+          name: '${element.name}',
           icon: Icon(
             Icons.article_outlined,
             color: Colors.blue,
           ),
-          color: Colors.blue),
-      CategoryItem(
-          name: 'To Watch',
-          icon: Icon(
-            Icons.movie_outlined,
-            color: Colors.yellow,
-          ),
-          color: Colors.yellow),
-      CategoryItem(
-          name: 'To Read',
-          icon: Icon(
-            Icons.menu_book_outlined,
-            color: Colors.red,
-          ),
-          color: Colors.red),
-      CategoryItem(
-          name: 'Alert',
-          icon: Icon(
-            Icons.add_alert,
-            color: Colors.orangeAccent,
-          ),
-          color: Colors.orangeAccent),
-      CategoryItem(
-          name: 'Work',
-          icon: Icon(
-            Icons.work_outline,
-            color: Colors.greenAccent,
-          ),
-          color: Colors.greenAccent),
-      CategoryItem(
-          name: 'To Learn',
-          icon: Icon(
-            Icons.school_outlined,
-            color: Colors.black,
-          ),
-          color: Colors.black),
-    ]);
+          color: Colors.blue));
+    });
+    notifyListeners();
+  }
+
+  Future initCategoryDemosList() async {
+    await _dbProvider.countCategories().then((value) async {
+      if (value == 0) {
+        await _dbProvider.setCategories();
+      }
+    });
+    // categoryDemosList = List.of([
+    //   CategoryItem(
+    //       name: 'To Do',
+    //       icon: Icon(
+    //         Icons.article_outlined,
+    //         color: Colors.blue,
+    //       ),
+    //       color: Colors.blue),
+    //   CategoryItem(
+    //       name: 'To Watch',
+    //       icon: Icon(
+    //         Icons.movie_outlined,
+    //         color: Colors.yellow,
+    //       ),
+    //       color: Colors.yellow),
+    //   CategoryItem(
+    //       name: 'To Read',
+    //       icon: Icon(
+    //         Icons.menu_book_outlined,
+    //         color: Colors.red,
+    //       ),
+    //       color: Colors.red),
+    //   CategoryItem(
+    //       name: 'Alert',
+    //       icon: Icon(
+    //         Icons.add_alert,
+    //         color: Colors.orangeAccent,
+    //       ),
+    //       color: Colors.orangeAccent),
+    //   CategoryItem(
+    //       name: 'Work',
+    //       icon: Icon(
+    //         Icons.work_outline,
+    //         color: Colors.greenAccent,
+    //       ),
+    //       color: Colors.greenAccent),
+    //   CategoryItem(
+    //       name: 'To Learn',
+    //       icon: Icon(
+    //         Icons.school_outlined,
+    //         color: Colors.black,
+    //       ),
+    //       color: Colors.black),
+    // ]);
   }
 
   static SystemUiOverlayStyle resolvedSystemUiOverlayStyle() {

@@ -11,11 +11,13 @@ Shorey is a simple note app which is built with Flutter 2 and supports both Andr
 
 **特点:**
 * Google Material UI风格
+* 轻量化, 只有10m大小
 * 每日回顾, 快速知识归档
 * 简洁的记事操作
 * 设置自己的格言, 每天都有仪式感
 * 设置当天主要目标, 集中精力
 * 热力图记录完成事项
+* 国际化适配, 支持中英文切换
 * 更多功能开发中…
 
 ## 分享

@@ -70,8 +70,7 @@ class DbSparkProvider {
   	${DatabaseRef.alertTime} TEXT,
   	${DatabaseRef.status} INT,
   	${DatabaseRef.filedTime} INT,
-  	${DatabaseRef.notificationId} INT,
-  	FOREIGN KEY(${DatabaseRef.categoryId}) REFERENCES ${DatabaseRef.tableCategoryList}(${DatabaseRef.columnId})),
+  	${DatabaseRef.notificationId} INT)
   	''');
   }
 

@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:spark_list/base/view_state_model.dart';
 import 'package:spark_list/config/config.dart';
+import 'package:spark_list/database/database.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/model/model.dart';
 import 'package:spark_list/resource/data_provider.dart';
@@ -20,10 +22,11 @@ import 'package:timezone/timezone.dart' as tz;
 ///
 
 class HomeViewModel extends ViewStateModel {
-  final DbSparkProvider dbProvider;
-  final DataProvider dataProvider;
+  final DbSparkProvider dBProvider;
+  final DataProvider _dataProvider;
+  final DbProvider _dbProvider;
 
-  HomeViewModel(this.dbProvider, this.dataProvider) {
+  HomeViewModel(this.dBProvider, this._dataProvider, this._dbProvider) {
     _initMainFocus();
   }
 
@@ -54,14 +57,14 @@ class HomeViewModel extends ViewStateModel {
   }
 
   Future _initDefaultAlert() async {
-    if (await dataProvider.getAlertPeriod() == null) {
-      dataProvider.saveAlertPeriod(0);
+    if (await _dataProvider.getAlertPeriod() == null) {
+      _dataProvider.saveAlertPeriod(0);
       assembleRetrospectNotification(TimeOfDay(hour: 18, minute: 0), 0);
     }
   }
 
   Future _initMantra() async {
-    final defaultMantra = await dataProvider.getMantra();
+    final defaultMantra = await _dataProvider.getMantra();
     if (defaultMantra == null || defaultMantra == '') {
       mantra = Mantra.mantraList[Random().nextInt(3)];
     } else {
@@ -74,15 +77,15 @@ class HomeViewModel extends ViewStateModel {
   Future saveMantra(String text) async {
     mantra = text.isEmpty ? Mantra.mantraList[Random().nextInt(3)] : text;
     notifyListeners();
-    await dataProvider.saveMantra(text);
+    await _dataProvider.saveMantra(text);
   }
 
-  Future<String?> getMantra() async{
-    return await dataProvider.getMantra();
+  Future<String?> getMantra() async {
+    return await _dataProvider.getMantra();
   }
 
   void _initMainFocus() async {
-    mainFocusModel = await dbProvider.getTopToDo();
+    mainFocusModel = await dBProvider.getTopToDo();
     final currentTime = DateTime.now();
     if (mainFocusModel?.createdTime != null) {
       final lastTime =
@@ -95,6 +98,8 @@ class HomeViewModel extends ViewStateModel {
         //oneDayPassBy = true;
         // await sparkProvider.insertHeatPoint(
         //     0, currentTime.millisecondsSinceEpoch);
+        await _dbProvider.insertHeatPoint(HeatGraphCompanion(
+            level: Value(0), createdTime: Value(DateTime.now())));
       } else {
         if (mainFocusModel != null) {
           _mainFocus = mainFocusModel!.content;
@@ -109,17 +114,19 @@ class HomeViewModel extends ViewStateModel {
       print('non-mainfocus');
       // await sparkProvider.insertHeatPoint(
       //     0, currentTime.millisecondsSinceEpoch);
+      await _dbProvider.insertHeatPoint(HeatGraphCompanion(
+          level: Value(0), createdTime: Value(DateTime.now())));
     }
     notifyListeners();
   }
 
   Future queryAllHeatPoints() async {
-    heatPointsMap = await dbProvider.queryAllHeatPoints();
+    heatPointsMap = await dBProvider.queryAllHeatPoints();
     notifyListeners();
   }
 
   Future _updateMainFocus() async {
-    mainFocusModel = await dbProvider.getTopToDo();
+    mainFocusModel = await dBProvider.getTopToDo();
     if (mainFocusModel != null) {
       _mainFocus = mainFocusModel!.content;
       hasMainFocus = true;
@@ -128,26 +135,26 @@ class HomeViewModel extends ViewStateModel {
   }
 
   Future<ToDoModel?> queryMainFocus() async {
-    return await dbProvider.getTopToDo();
+    return await dBProvider.getTopToDo();
   }
 
   Future updateMainFocusStatus(int status) async {
     if (mainFocusModel != null) {
       mainFocusModel!.status = status;
-      await dbProvider.updateToDoItem(mainFocusModel!);
+      await dBProvider.updateToDoItem(mainFocusModel!);
       int difference = 0;
       if (status == 0) {
         difference = 1;
       } else if (status == 1) {
         difference = -1;
       }
-      await dbProvider.updateHeatPoint(difference);
+      await dBProvider.updateHeatPoint(difference);
       if (mainFocusModel!.status == 0) {
         final action = UserAction();
         action.updatedContent = mainFocusModel!.content;
         action.updatedTime = DateTime.now().millisecondsSinceEpoch;
         action.action = 1;
-        await dbProvider.insertAction(action);
+        await dBProvider.insertAction(action);
       }
     }
   }
@@ -161,32 +168,32 @@ class HomeViewModel extends ViewStateModel {
   Future saveToDo(String content, String? category,
       {String? brief, int status = 1}) async {
     final updatedTime = DateTime.now().millisecondsSinceEpoch;
-    await dbProvider.insertToDo(ToDoModel(createdTime: updatedTime)
+    await dBProvider.insertToDo(ToDoModel(createdTime: updatedTime)
       ..content = content
       ..category = category
       ..status = status
       ..brief = brief);
 
-    await dbProvider.insertAction(UserAction()
+    await dBProvider.insertAction(UserAction()
       ..updatedTime = updatedTime
       ..updatedContent = content
       ..action = 0);
   }
 
   Future<ToDoListModel?> queryToDoList(String? category) async {
-    ToDoListModel? toDoListModel = await dbProvider.queryToDoList(category);
+    ToDoListModel? toDoListModel = await dBProvider.queryToDoList(category);
     indexedList[category] = toDoListModel;
     notifyListeners();
     return toDoListModel;
   }
 
   Future queryActions() async {
-    userActionList = await dbProvider.queryActions();
+    userActionList = await dBProvider.queryActions();
     notifyListeners();
   }
 
   Future<ToDoListModel?> queryFiledList() async {
-    filedListModel = await dbProvider.queryToDoList(null, status: 0);
+    filedListModel = await dBProvider.queryToDoList(null, status: 0);
     notifyListeners();
     return filedListModel;
   }
@@ -203,36 +210,36 @@ class HomeViewModel extends ViewStateModel {
         model.status = 0;
         break;
     }
-    await dbProvider.updateToDoItem(model, updateContent: false);
-    await dbProvider.updateHeatPoint(difference);
+    await dBProvider.updateToDoItem(model, updateContent: false);
+    await dBProvider.updateHeatPoint(difference);
     if (model.status == 0) {
       final action = UserAction();
       action.updatedContent = model.content;
       action.updatedTime = DateTime.now().millisecondsSinceEpoch;
       action.action = 1;
-      await dbProvider.insertAction(action);
+      await dBProvider.insertAction(action);
     }
     notifyListeners();
   }
 
   Future clearFiledItems() async {
-    await dbProvider.updateToDoListStatus(0, 2);
+    await dBProvider.updateToDoListStatus(0, 2);
     filedListModel = null;
     notifyListeners();
   }
 
   Future updateTodoItem(ToDoModel oldModel, ToDoModel updatedModel) async {
-    await dbProvider.updateToDoItem(updatedModel, updateContent: true);
+    await dBProvider.updateToDoItem(updatedModel, updateContent: true);
     final action = UserAction();
     action.earlyContent = oldModel.content;
     action.updatedContent = updatedModel.content;
     action.updatedTime = DateTime.now().millisecondsSinceEpoch;
     action.action = 2;
-    await dbProvider.insertAction(action);
+    await dBProvider.insertAction(action);
   }
 
   Future queryToDoItem(int id) async {
-    selectedModel = await dbProvider.queryToDoItem(id);
+    selectedModel = await dBProvider.queryToDoItem(id);
   }
 
   Future<void> assembleRetrospectNotification(

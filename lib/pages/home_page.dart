@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 child: _CategoriesHeader(),
               ),
-              for (int i = 0; i <= 5; i++)
+              for (int i = 0; i < (context.watch<ConfigViewModel>().categoryDemosList.length); i++)
                 _AnimatedCategoryItem(
                   startDelayFraction: 0.00,
                   controller: _animationController,
