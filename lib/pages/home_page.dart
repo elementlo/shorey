@@ -58,6 +58,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<HomeViewModel>(context);
+    final configViewModel = Provider.of<ConfigViewModel>(context);
+    final categoryDemosList = configViewModel.categoryDemosList;
     return Scaffold(
       body: Stack(
         children: [
@@ -83,7 +85,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 child: _CategoriesHeader(),
               ),
-              for (int i = 0; i < (context.watch<ConfigViewModel>().categoryDemosList.length); i++)
+              for (int i = 0; i < (categoryDemosList.length); i++)
                 _AnimatedCategoryItem(
                   startDelayFraction: 0.00,
                   controller: _animationController,
@@ -92,16 +94,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         'CategoryListItem${i}',
                       ),
                       restorationId: 'home_material_category_list',
-                      category:
-                          '${context.watch<ConfigViewModel>().categoryDemosList[i].name}',
+                      category: '${categoryDemosList[i].name}',
+                      categoryId: categoryDemosList[i].id,
                       imageString: 'assets/icons/material/material.png',
-                      demoList: viewModel.indexedList[
-                          '${context.watch<ConfigViewModel>().categoryDemosList[i].name}'],
+                      demoList: (viewModel
+                          .indexedList['${categoryDemosList[i].name}']),
                       initiallyExpanded: false,
-                      icon: context
-                          .watch<ConfigViewModel>()
-                          .categoryDemosList[i]
-                          .icon,
+                      icon: categoryDemosList[i].icon,
                       onTap: (shouldOpenList) {
                         if (shouldOpenList) {
                           viewModel.queryToDoList(

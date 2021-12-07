@@ -55,6 +55,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "心脏是一座有两间卧室的房子, 一间住着痛苦, 另一间住着欢乐, 人不能笑得太响. 否则笑声会吵醒隔壁房间的痛苦."),
         "mantra3": MessageLookupByLibrary.simpleMessage("我是自由的, 那就是我迷失的原因."),
         "noAlert": MessageLookupByLibrary.simpleMessage("不提醒"),
+        "notificationTitle": MessageLookupByLibrary.simpleMessage("回顾"),
         "retrospect": MessageLookupByLibrary.simpleMessage("回顾"),
         "settings": MessageLookupByLibrary.simpleMessage("设置"),
         "shoreyMomment": MessageLookupByLibrary.simpleMessage("Shorey时刻"),

@@ -8,21 +8,21 @@ part of 'database.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
 class ToDo extends DataClass implements Insertable<ToDo> {
-  final int id;
-  final int notificationId;
-  final DateTime createdTime;
-  final DateTime? filedTime;
-  final DateTime? alertTime;
-  final String content;
-  final String? brief;
-  final String? category;
+  int id;
+  int? notificationId;
+  DateTime createdTime;
+  DateTime? filedTime;
+  DateTime? alertTime;
+  String content;
+  String? brief;
+  String? category;
 
   ///0: finished 1: going 2: deleted
-  final int status;
-  final int categoryId;
+  int status;
+  int categoryId;
   ToDo(
       {required this.id,
-      required this.notificationId,
+      this.notificationId,
       required this.createdTime,
       this.filedTime,
       this.alertTime,
@@ -37,7 +37,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       notificationId: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}notification_id'])!,
+          .mapFromDatabaseResponse(data['${effectivePrefix}notification_id']),
       createdTime: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}created_time'])!,
       filedTime: const DateTimeType()
@@ -60,7 +60,9 @@ class ToDo extends DataClass implements Insertable<ToDo> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['notification_id'] = Variable<int>(notificationId);
+    if (!nullToAbsent || notificationId != null) {
+      map['notification_id'] = Variable<int?>(notificationId);
+    }
     map['created_time'] = Variable<DateTime>(createdTime);
     if (!nullToAbsent || filedTime != null) {
       map['filed_time'] = Variable<DateTime?>(filedTime);
@@ -83,7 +85,9 @@ class ToDo extends DataClass implements Insertable<ToDo> {
   ToDosCompanion toCompanion(bool nullToAbsent) {
     return ToDosCompanion(
       id: Value(id),
-      notificationId: Value(notificationId),
+      notificationId: notificationId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notificationId),
       createdTime: Value(createdTime),
       filedTime: filedTime == null && nullToAbsent
           ? const Value.absent()
@@ -107,7 +111,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ToDo(
       id: serializer.fromJson<int>(json['id']),
-      notificationId: serializer.fromJson<int>(json['notificationId']),
+      notificationId: serializer.fromJson<int?>(json['notificationId']),
       createdTime: serializer.fromJson<DateTime>(json['createdTime']),
       filedTime: serializer.fromJson<DateTime?>(json['filedTime']),
       alertTime: serializer.fromJson<DateTime?>(json['alertTime']),
@@ -123,7 +127,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'notificationId': serializer.toJson<int>(notificationId),
+      'notificationId': serializer.toJson<int?>(notificationId),
       'createdTime': serializer.toJson<DateTime>(createdTime),
       'filedTime': serializer.toJson<DateTime?>(filedTime),
       'alertTime': serializer.toJson<DateTime?>(alertTime),
@@ -195,17 +199,17 @@ class ToDo extends DataClass implements Insertable<ToDo> {
 }
 
 class ToDosCompanion extends UpdateCompanion<ToDo> {
-  final Value<int> id;
-  final Value<int> notificationId;
-  final Value<DateTime> createdTime;
-  final Value<DateTime?> filedTime;
-  final Value<DateTime?> alertTime;
-  final Value<String> content;
-  final Value<String?> brief;
-  final Value<String?> category;
-  final Value<int> status;
-  final Value<int> categoryId;
-  const ToDosCompanion({
+  Value<int> id;
+  Value<int?> notificationId;
+  Value<DateTime> createdTime;
+  Value<DateTime?> filedTime;
+  Value<DateTime?> alertTime;
+  Value<String> content;
+  Value<String?> brief;
+  Value<String?> category;
+  Value<int> status;
+  Value<int> categoryId;
+  ToDosCompanion({
     this.id = const Value.absent(),
     this.notificationId = const Value.absent(),
     this.createdTime = const Value.absent(),
@@ -219,7 +223,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
   });
   ToDosCompanion.insert({
     this.id = const Value.absent(),
-    required int notificationId,
+    this.notificationId = const Value.absent(),
     required DateTime createdTime,
     this.filedTime = const Value.absent(),
     this.alertTime = const Value.absent(),
@@ -228,14 +232,13 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     this.category = const Value.absent(),
     required int status,
     required int categoryId,
-  })  : notificationId = Value(notificationId),
-        createdTime = Value(createdTime),
+  })  : createdTime = Value(createdTime),
         content = Value(content),
         status = Value(status),
         categoryId = Value(categoryId);
   static Insertable<ToDo> custom({
     Expression<int>? id,
-    Expression<int>? notificationId,
+    Expression<int?>? notificationId,
     Expression<DateTime>? createdTime,
     Expression<DateTime?>? filedTime,
     Expression<DateTime?>? alertTime,
@@ -261,7 +264,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
 
   ToDosCompanion copyWith(
       {Value<int>? id,
-      Value<int>? notificationId,
+      Value<int?>? notificationId,
       Value<DateTime>? createdTime,
       Value<DateTime?>? filedTime,
       Value<DateTime?>? alertTime,
@@ -291,7 +294,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       map['id'] = Variable<int>(id.value);
     }
     if (notificationId.present) {
-      map['notification_id'] = Variable<int>(notificationId.value);
+      map['notification_id'] = Variable<int?>(notificationId.value);
     }
     if (createdTime.present) {
       map['created_time'] = Variable<DateTime>(createdTime.value);
@@ -351,8 +354,8 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
   final VerificationMeta _notificationIdMeta =
       const VerificationMeta('notificationId');
   late final GeneratedColumn<int?> notificationId = GeneratedColumn<int?>(
-      'notification_id', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      'notification_id', aliasedName, true,
+      typeName: 'INTEGER', requiredDuringInsert: false);
   final VerificationMeta _createdTimeMeta =
       const VerificationMeta('createdTime');
   late final GeneratedColumn<DateTime?> createdTime =
@@ -418,8 +421,6 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
           _notificationIdMeta,
           notificationId.isAcceptableOrUnknown(
               data['notification_id']!, _notificationIdMeta));
-    } else if (isInserting) {
-      context.missing(_notificationIdMeta);
     }
     if (data.containsKey('created_time')) {
       context.handle(
@@ -483,9 +484,15 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
 }
 
 class Category extends DataClass implements Insertable<Category> {
-  final int id;
-  final String name;
-  Category({required this.id, required this.name});
+  int id;
+  String name;
+  int iconId;
+  int colorId;
+  Category(
+      {required this.id,
+      required this.name,
+      required this.iconId,
+      required this.colorId});
   factory Category.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Category(
@@ -493,6 +500,10 @@ class Category extends DataClass implements Insertable<Category> {
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       name: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      iconId: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}icon_id'])!,
+      colorId: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}color_id'])!,
     );
   }
   @override
@@ -500,6 +511,8 @@ class Category extends DataClass implements Insertable<Category> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
+    map['icon_id'] = Variable<int>(iconId);
+    map['color_id'] = Variable<int>(colorId);
     return map;
   }
 
@@ -507,6 +520,8 @@ class Category extends DataClass implements Insertable<Category> {
     return CategoriesCompanion(
       id: Value(id),
       name: Value(name),
+      iconId: Value(iconId),
+      colorId: Value(colorId),
     );
   }
 
@@ -516,6 +531,8 @@ class Category extends DataClass implements Insertable<Category> {
     return Category(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
+      iconId: serializer.fromJson<int>(json['iconId']),
+      colorId: serializer.fromJson<int>(json['colorId']),
     );
   }
   @override
@@ -524,55 +541,84 @@ class Category extends DataClass implements Insertable<Category> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
+      'iconId': serializer.toJson<int>(iconId),
+      'colorId': serializer.toJson<int>(colorId),
     };
   }
 
-  Category copyWith({int? id, String? name}) => Category(
+  Category copyWith({int? id, String? name, int? iconId, int? colorId}) =>
+      Category(
         id: id ?? this.id,
         name: name ?? this.name,
+        iconId: iconId ?? this.iconId,
+        colorId: colorId ?? this.colorId,
       );
   @override
   String toString() {
     return (StringBuffer('Category(')
           ..write('id: $id, ')
-          ..write('name: $name')
+          ..write('name: $name, ')
+          ..write('iconId: $iconId, ')
+          ..write('colorId: $colorId')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name);
+  int get hashCode => Object.hash(id, name, iconId, colorId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Category && other.id == this.id && other.name == this.name);
+      (other is Category &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.iconId == this.iconId &&
+          other.colorId == this.colorId);
 }
 
 class CategoriesCompanion extends UpdateCompanion<Category> {
-  final Value<int> id;
-  final Value<String> name;
-  const CategoriesCompanion({
+  Value<int> id;
+  Value<String> name;
+  Value<int> iconId;
+  Value<int> colorId;
+  CategoriesCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
+    this.iconId = const Value.absent(),
+    this.colorId = const Value.absent(),
   });
   CategoriesCompanion.insert({
     this.id = const Value.absent(),
     required String name,
-  }) : name = Value(name);
+    required int iconId,
+    required int colorId,
+  })  : name = Value(name),
+        iconId = Value(iconId),
+        colorId = Value(colorId);
   static Insertable<Category> custom({
     Expression<int>? id,
     Expression<String>? name,
+    Expression<int>? iconId,
+    Expression<int>? colorId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
+      if (iconId != null) 'icon_id': iconId,
+      if (colorId != null) 'color_id': colorId,
     });
   }
 
-  CategoriesCompanion copyWith({Value<int>? id, Value<String>? name}) {
+  CategoriesCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? name,
+      Value<int>? iconId,
+      Value<int>? colorId}) {
     return CategoriesCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
+      iconId: iconId ?? this.iconId,
+      colorId: colorId ?? this.colorId,
     );
   }
 
@@ -585,6 +631,12 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
+    if (iconId.present) {
+      map['icon_id'] = Variable<int>(iconId.value);
+    }
+    if (colorId.present) {
+      map['color_id'] = Variable<int>(colorId.value);
+    }
     return map;
   }
 
@@ -592,7 +644,9 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   String toString() {
     return (StringBuffer('CategoriesCompanion(')
           ..write('id: $id, ')
-          ..write('name: $name')
+          ..write('name: $name, ')
+          ..write('iconId: $iconId, ')
+          ..write('colorId: $colorId')
           ..write(')'))
         .toString();
   }
@@ -613,8 +667,16 @@ class $CategoriesTable extends Categories
   late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
       'name', aliasedName, false,
       typeName: 'TEXT', requiredDuringInsert: true);
+  final VerificationMeta _iconIdMeta = const VerificationMeta('iconId');
+  late final GeneratedColumn<int?> iconId = GeneratedColumn<int?>(
+      'icon_id', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
+  final VerificationMeta _colorIdMeta = const VerificationMeta('colorId');
+  late final GeneratedColumn<int?> colorId = GeneratedColumn<int?>(
+      'color_id', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [id, name];
+  List<GeneratedColumn> get $columns => [id, name, iconId, colorId];
   @override
   String get aliasedName => _alias ?? 'categories';
   @override
@@ -632,6 +694,18 @@ class $CategoriesTable extends Categories
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
+    }
+    if (data.containsKey('icon_id')) {
+      context.handle(_iconIdMeta,
+          iconId.isAcceptableOrUnknown(data['icon_id']!, _iconIdMeta));
+    } else if (isInserting) {
+      context.missing(_iconIdMeta);
+    }
+    if (data.containsKey('color_id')) {
+      context.handle(_colorIdMeta,
+          colorId.isAcceptableOrUnknown(data['color_id']!, _colorIdMeta));
+    } else if (isInserting) {
+      context.missing(_colorIdMeta);
     }
     return context;
   }
@@ -651,9 +725,9 @@ class $CategoriesTable extends Categories
 }
 
 class HeatPoint extends DataClass implements Insertable<HeatPoint> {
-  final int id;
-  final int level;
-  final DateTime createdTime;
+  int id;
+  int level;
+  DateTime createdTime;
   HeatPoint({required this.id, required this.level, required this.createdTime});
   factory HeatPoint.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -729,10 +803,10 @@ class HeatPoint extends DataClass implements Insertable<HeatPoint> {
 }
 
 class HeatGraphCompanion extends UpdateCompanion<HeatPoint> {
-  final Value<int> id;
-  final Value<int> level;
-  final Value<DateTime> createdTime;
-  const HeatGraphCompanion({
+  Value<int> id;
+  Value<int> level;
+  Value<DateTime> createdTime;
+  HeatGraphCompanion({
     this.id = const Value.absent(),
     this.level = const Value.absent(),
     this.createdTime = const Value.absent(),
@@ -855,25 +929,25 @@ class $HeatGraphTable extends HeatGraph
   }
 }
 
-class Action extends DataClass implements Insertable<Action> {
-  final int id;
-  final String earlyContent;
-  final String updatedContent;
-  final DateTime updatedTime;
-  final int action;
-  Action(
+class UserAction extends DataClass implements Insertable<UserAction> {
+  int id;
+  String? earlyContent;
+  String updatedContent;
+  DateTime updatedTime;
+  int action;
+  UserAction(
       {required this.id,
-      required this.earlyContent,
+      this.earlyContent,
       required this.updatedContent,
       required this.updatedTime,
       required this.action});
-  factory Action.fromData(Map<String, dynamic> data, {String? prefix}) {
+  factory UserAction.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    return Action(
+    return UserAction(
       id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       earlyContent: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}early_content'])!,
+          .mapFromDatabaseResponse(data['${effectivePrefix}early_content']),
       updatedContent: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}updated_content'])!,
       updatedTime: const DateTimeType()
@@ -886,7 +960,9 @@ class Action extends DataClass implements Insertable<Action> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['early_content'] = Variable<String>(earlyContent);
+    if (!nullToAbsent || earlyContent != null) {
+      map['early_content'] = Variable<String?>(earlyContent);
+    }
     map['updated_content'] = Variable<String>(updatedContent);
     map['updated_time'] = Variable<DateTime>(updatedTime);
     map['action'] = Variable<int>(action);
@@ -896,19 +972,21 @@ class Action extends DataClass implements Insertable<Action> {
   ActionsHistoryCompanion toCompanion(bool nullToAbsent) {
     return ActionsHistoryCompanion(
       id: Value(id),
-      earlyContent: Value(earlyContent),
+      earlyContent: earlyContent == null && nullToAbsent
+          ? const Value.absent()
+          : Value(earlyContent),
       updatedContent: Value(updatedContent),
       updatedTime: Value(updatedTime),
       action: Value(action),
     );
   }
 
-  factory Action.fromJson(Map<String, dynamic> json,
+  factory UserAction.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Action(
+    return UserAction(
       id: serializer.fromJson<int>(json['id']),
-      earlyContent: serializer.fromJson<String>(json['earlyContent']),
+      earlyContent: serializer.fromJson<String?>(json['earlyContent']),
       updatedContent: serializer.fromJson<String>(json['updatedContent']),
       updatedTime: serializer.fromJson<DateTime>(json['updatedTime']),
       action: serializer.fromJson<int>(json['action']),
@@ -919,20 +997,20 @@ class Action extends DataClass implements Insertable<Action> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'earlyContent': serializer.toJson<String>(earlyContent),
+      'earlyContent': serializer.toJson<String?>(earlyContent),
       'updatedContent': serializer.toJson<String>(updatedContent),
       'updatedTime': serializer.toJson<DateTime>(updatedTime),
       'action': serializer.toJson<int>(action),
     };
   }
 
-  Action copyWith(
+  UserAction copyWith(
           {int? id,
           String? earlyContent,
           String? updatedContent,
           DateTime? updatedTime,
           int? action}) =>
-      Action(
+      UserAction(
         id: id ?? this.id,
         earlyContent: earlyContent ?? this.earlyContent,
         updatedContent: updatedContent ?? this.updatedContent,
@@ -941,7 +1019,7 @@ class Action extends DataClass implements Insertable<Action> {
       );
   @override
   String toString() {
-    return (StringBuffer('Action(')
+    return (StringBuffer('UserAction(')
           ..write('id: $id, ')
           ..write('earlyContent: $earlyContent, ')
           ..write('updatedContent: $updatedContent, ')
@@ -957,7 +1035,7 @@ class Action extends DataClass implements Insertable<Action> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Action &&
+      (other is UserAction &&
           other.id == this.id &&
           other.earlyContent == this.earlyContent &&
           other.updatedContent == this.updatedContent &&
@@ -965,13 +1043,13 @@ class Action extends DataClass implements Insertable<Action> {
           other.action == this.action);
 }
 
-class ActionsHistoryCompanion extends UpdateCompanion<Action> {
-  final Value<int> id;
-  final Value<String> earlyContent;
-  final Value<String> updatedContent;
-  final Value<DateTime> updatedTime;
-  final Value<int> action;
-  const ActionsHistoryCompanion({
+class ActionsHistoryCompanion extends UpdateCompanion<UserAction> {
+  Value<int> id;
+  Value<String?> earlyContent;
+  Value<String> updatedContent;
+  Value<DateTime> updatedTime;
+  Value<int> action;
+  ActionsHistoryCompanion({
     this.id = const Value.absent(),
     this.earlyContent = const Value.absent(),
     this.updatedContent = const Value.absent(),
@@ -980,17 +1058,16 @@ class ActionsHistoryCompanion extends UpdateCompanion<Action> {
   });
   ActionsHistoryCompanion.insert({
     this.id = const Value.absent(),
-    required String earlyContent,
+    this.earlyContent = const Value.absent(),
     required String updatedContent,
     required DateTime updatedTime,
     required int action,
-  })  : earlyContent = Value(earlyContent),
-        updatedContent = Value(updatedContent),
+  })  : updatedContent = Value(updatedContent),
         updatedTime = Value(updatedTime),
         action = Value(action);
-  static Insertable<Action> custom({
+  static Insertable<UserAction> custom({
     Expression<int>? id,
-    Expression<String>? earlyContent,
+    Expression<String?>? earlyContent,
     Expression<String>? updatedContent,
     Expression<DateTime>? updatedTime,
     Expression<int>? action,
@@ -1006,7 +1083,7 @@ class ActionsHistoryCompanion extends UpdateCompanion<Action> {
 
   ActionsHistoryCompanion copyWith(
       {Value<int>? id,
-      Value<String>? earlyContent,
+      Value<String?>? earlyContent,
       Value<String>? updatedContent,
       Value<DateTime>? updatedTime,
       Value<int>? action}) {
@@ -1026,7 +1103,7 @@ class ActionsHistoryCompanion extends UpdateCompanion<Action> {
       map['id'] = Variable<int>(id.value);
     }
     if (earlyContent.present) {
-      map['early_content'] = Variable<String>(earlyContent.value);
+      map['early_content'] = Variable<String?>(earlyContent.value);
     }
     if (updatedContent.present) {
       map['updated_content'] = Variable<String>(updatedContent.value);
@@ -1054,7 +1131,7 @@ class ActionsHistoryCompanion extends UpdateCompanion<Action> {
 }
 
 class $ActionsHistoryTable extends ActionsHistory
-    with TableInfo<$ActionsHistoryTable, Action> {
+    with TableInfo<$ActionsHistoryTable, UserAction> {
   final GeneratedDatabase _db;
   final String? _alias;
   $ActionsHistoryTable(this._db, [this._alias]);
@@ -1067,8 +1144,8 @@ class $ActionsHistoryTable extends ActionsHistory
   final VerificationMeta _earlyContentMeta =
       const VerificationMeta('earlyContent');
   late final GeneratedColumn<String?> earlyContent = GeneratedColumn<String?>(
-      'early_content', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      'early_content', aliasedName, true,
+      typeName: 'TEXT', requiredDuringInsert: false);
   final VerificationMeta _updatedContentMeta =
       const VerificationMeta('updatedContent');
   late final GeneratedColumn<String?> updatedContent = GeneratedColumn<String?>(
@@ -1091,7 +1168,7 @@ class $ActionsHistoryTable extends ActionsHistory
   @override
   String get actualTableName => 'actions_history';
   @override
-  VerificationContext validateIntegrity(Insertable<Action> instance,
+  VerificationContext validateIntegrity(Insertable<UserAction> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1103,8 +1180,6 @@ class $ActionsHistoryTable extends ActionsHistory
           _earlyContentMeta,
           earlyContent.isAcceptableOrUnknown(
               data['early_content']!, _earlyContentMeta));
-    } else if (isInserting) {
-      context.missing(_earlyContentMeta);
     }
     if (data.containsKey('updated_content')) {
       context.handle(
@@ -1134,8 +1209,8 @@ class $ActionsHistoryTable extends ActionsHistory
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Action map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Action.fromData(data,
+  UserAction map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return UserAction.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 

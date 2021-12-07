@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:spark_list/base/view_state_model.dart';
+import 'package:spark_list/config/config.dart';
 import 'package:spark_list/database/database.dart';
 import 'package:spark_list/model/model.dart';
 import 'package:spark_list/resource/data_provider.dart';
-import 'package:spark_list/resource/db_provider.dart';
 
 ///
 /// Author: Elemen
@@ -19,12 +19,11 @@ class ConfigViewModel extends ViewStateModel {
   bool isSettingsOpenNotifier = false;
 
   List<CategoryItem> categoryDemosList = [];
-  final DbSparkProvider _dBProvider;
   final DbProvider _dbProvider;
   final DataProvider _dataProvider;
   Locale? _deviceLocale;
 
-  ConfigViewModel(this._dBProvider, this._dataProvider, this._dbProvider);
+  ConfigViewModel(this._dataProvider, this._dbProvider);
 
   void set settingsOpenNotifier(bool open) {
     isSettingsOpenNotifier = open;
@@ -75,13 +74,13 @@ class ConfigViewModel extends ViewStateModel {
   Future getCategoryList() async {
     final list = await _dbProvider.categoryList;
     list.forEach((element) {
-      categoryDemosList.add(CategoryItem(
+      if(element.name != 'mainfocus')
+      categoryDemosList.add(CategoryItem(element.id,
           name: '${element.name}',
           icon: Icon(
-            Icons.article_outlined,
-            color: Colors.blue,
-          ),
-          color: Colors.blue));
+            SIcons.iconMap[element.iconId],
+            color: Color(SColor.colorMap[element.colorId]!),
+          ),));
     });
     notifyListeners();
   }

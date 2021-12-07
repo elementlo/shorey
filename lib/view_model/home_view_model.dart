@@ -3,13 +3,12 @@ import 'dart:math';
 
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:spark_list/base/view_state_model.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/database/database.dart';
+import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/main.dart';
-import 'package:spark_list/model/model.dart';
 import 'package:spark_list/resource/data_provider.dart';
 import 'package:spark_list/resource/db_provider.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -22,16 +21,15 @@ import 'package:timezone/timezone.dart' as tz;
 ///
 
 class HomeViewModel extends ViewStateModel {
-  final DbSparkProvider dBProvider;
   final DataProvider _dataProvider;
   final DbProvider _dbProvider;
 
-  HomeViewModel(this.dBProvider, this._dataProvider, this._dbProvider) {
+  HomeViewModel(this._dataProvider, this._dbProvider) {
     _initMainFocus();
   }
 
-  ToDoModel? selectedModel;
-  Map<String?, ToDoListModel?> indexedList = Map();
+  ToDo? selectedModel;
+  Map<String?, List<ToDo?>> indexedList = Map();
   Map<String, int?> heatPointsMap = Map();
 
   String? _mainFocus = '';
@@ -42,9 +40,9 @@ class HomeViewModel extends ViewStateModel {
 
   bool get hasMainFocus => _hasMainFocus;
 
-  ToDoModel? mainFocusModel;
-  ToDoListModel? filedListModel;
-  UserActionList? userActionList;
+  ToDo? mainFocusModel;
+  List<ToDo?>? filedListModel;
+  List<UserAction?>? userActionList;
 
   set hasMainFocus(bool hasMainFocus) {
     this._hasMainFocus = hasMainFocus;
@@ -54,6 +52,7 @@ class HomeViewModel extends ViewStateModel {
   Future initDefaultSettings() async {
     await _initDefaultAlert();
     await _initMantra();
+    await _initHeatGraph();
   }
 
   Future _initDefaultAlert() async {
@@ -85,21 +84,16 @@ class HomeViewModel extends ViewStateModel {
   }
 
   void _initMainFocus() async {
-    mainFocusModel = await dBProvider.getTopToDo();
+    mainFocusModel = (await _dbProvider.queryTopMainFocus());
     final currentTime = DateTime.now();
     if (mainFocusModel?.createdTime != null) {
-      final lastTime =
-          DateTime.fromMillisecondsSinceEpoch(mainFocusModel!.createdTime!);
+      final lastTime = mainFocusModel!.createdTime;
       if (lastTime.year != currentTime.year ||
           lastTime.month != currentTime.month ||
           lastTime.day != currentTime.day) {
         print('One day passed by ...insert initial heat point...');
         _hasMainFocus = false;
-        //oneDayPassBy = true;
-        // await sparkProvider.insertHeatPoint(
-        //     0, currentTime.millisecondsSinceEpoch);
-        await _dbProvider.insertHeatPoint(HeatGraphCompanion(
-            level: Value(0), createdTime: Value(DateTime.now())));
+
       } else {
         if (mainFocusModel != null) {
           _mainFocus = mainFocusModel!.content;
@@ -112,21 +106,34 @@ class HomeViewModel extends ViewStateModel {
     } else {
       _hasMainFocus = false;
       print('non-mainfocus');
-      // await sparkProvider.insertHeatPoint(
-      //     0, currentTime.millisecondsSinceEpoch);
-      await _dbProvider.insertHeatPoint(HeatGraphCompanion(
-          level: Value(0), createdTime: Value(DateTime.now())));
     }
     notifyListeners();
   }
 
+  Future _initHeatGraph() async{
+    final heatPoint = await _dbProvider.queryTopHeatPoint();
+    if(heatPoint == null){
+      await _dbProvider.insertHeatPoint(HeatGraphCompanion(
+          level: Value(0), createdTime: Value(DateTime.now())));
+    }else{
+      final lastTime = heatPoint.createdTime;
+      final currentTime = DateTime.now();
+      if (lastTime.year != currentTime.year ||
+          lastTime.month != currentTime.month ||
+          lastTime.day != currentTime.day){
+        await _dbProvider.insertHeatPoint(HeatGraphCompanion(
+            level: Value(0), createdTime: Value(DateTime.now())));
+      }
+    }
+  }
+
   Future queryAllHeatPoints() async {
-    heatPointsMap = await dBProvider.queryAllHeatPoints();
+    heatPointsMap = await _dbProvider.heatPointList;
     notifyListeners();
   }
 
   Future _updateMainFocus() async {
-    mainFocusModel = await dBProvider.getTopToDo();
+    mainFocusModel = (await _dbProvider.queryTopMainFocus());
     if (mainFocusModel != null) {
       _mainFocus = mainFocusModel!.content;
       hasMainFocus = true;
@@ -134,71 +141,75 @@ class HomeViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-  Future<ToDoModel?> queryMainFocus() async {
-    return await dBProvider.getTopToDo();
+  Future<ToDo?> queryMainFocus() async {
+    return (await _dbProvider.queryTopMainFocus());
   }
 
   Future updateMainFocusStatus(int status) async {
     if (mainFocusModel != null) {
       mainFocusModel!.status = status;
-      await dBProvider.updateToDoItem(mainFocusModel!);
+      await _dbProvider.updateToDoItem(
+          mainFocusModel!.toCompanion(false));
       int difference = 0;
       if (status == 0) {
         difference = 1;
       } else if (status == 1) {
         difference = -1;
       }
-      await dBProvider.updateHeatPoint(difference);
+      await _dbProvider.updateHeatPoint(difference);
       if (mainFocusModel!.status == 0) {
-        final action = UserAction();
-        action.updatedContent = mainFocusModel!.content;
-        action.updatedTime = DateTime.now().millisecondsSinceEpoch;
-        action.action = 1;
-        await dBProvider.insertAction(action);
+        await _dbProvider.insertAction(ActionsHistoryCompanion(
+            updatedContent: Value(mainFocusModel!.content),
+            updatedTime: Value(DateTime.now()),
+        action: Value(1)));
       }
     }
   }
 
   Future saveMainFocus(String content, {int status = 1}) async {
-    await saveToDo(content, 'mainfocus', status: status);
+    await saveToDo(1, content, 'mainfocus', status: status);
     await _updateMainFocus();
     notifyListeners();
   }
 
-  Future saveToDo(String content, String? category,
+  Future saveToDo(int categoryId, String content, String? category,
       {String? brief, int status = 1}) async {
-    final updatedTime = DateTime.now().millisecondsSinceEpoch;
-    await dBProvider.insertToDo(ToDoModel(createdTime: updatedTime)
-      ..content = content
-      ..category = category
-      ..status = status
-      ..brief = brief);
+    final updatedTime = DateTime.now();
+    await _dbProvider.insertTodo(ToDosCompanion(
+      categoryId: Value(categoryId),
+        createdTime: Value(updatedTime),
+        content: Value(content),
+        category: Value(category),
+        status: Value(status),
+        brief: Value(brief)));
 
-    await dBProvider.insertAction(UserAction()
-      ..updatedTime = updatedTime
-      ..updatedContent = content
-      ..action = 0);
+    await _dbProvider.insertAction(ActionsHistoryCompanion(
+        updatedContent: Value(content),
+        updatedTime: Value(updatedTime),
+        action: Value(0)));
+
   }
 
-  Future<ToDoListModel?> queryToDoList(String? category) async {
-    ToDoListModel? toDoListModel = await dBProvider.queryToDoList(category);
+  Future<List<ToDo?>> queryToDoList(String? category) async {
+    List<ToDo?> toDoListModel =
+        await _dbProvider.queryToDosByCategory(category);
     indexedList[category] = toDoListModel;
     notifyListeners();
     return toDoListModel;
   }
 
   Future queryActions() async {
-    userActionList = await dBProvider.queryActions();
+    userActionList = await _dbProvider.queryActions();
     notifyListeners();
   }
 
-  Future<ToDoListModel?> queryFiledList() async {
-    filedListModel = await dBProvider.queryToDoList(null, status: 0);
+  Future<List<ToDo?>?> queryFiledList() async {
+    filedListModel = await _dbProvider.queryToDosByCategory(null, status: 0);
     notifyListeners();
     return filedListModel;
   }
 
-  Future updateTodoStatus(ToDoModel model) async {
+  Future updateTodoStatus(ToDo model) async {
     int difference = 0;
     switch (model.status) {
       case 0:
@@ -210,36 +221,36 @@ class HomeViewModel extends ViewStateModel {
         model.status = 0;
         break;
     }
-    await dBProvider.updateToDoItem(model, updateContent: false);
-    await dBProvider.updateHeatPoint(difference);
+    await _dbProvider.updateToDoItem(model.toCompanion(true),
+        updateContent: false);
+    await _dbProvider.updateHeatPoint(difference);
     if (model.status == 0) {
-      final action = UserAction();
-      action.updatedContent = model.content;
-      action.updatedTime = DateTime.now().millisecondsSinceEpoch;
-      action.action = 1;
-      await dBProvider.insertAction(action);
+      await _dbProvider.insertAction(ActionsHistoryCompanion(
+          updatedContent: Value(model.content),
+          updatedTime: Value(DateTime.now()),
+          action: Value(1)));
     }
     notifyListeners();
   }
 
   Future clearFiledItems() async {
-    await dBProvider.updateToDoListStatus(0, 2);
+    await _dbProvider.updateAllToDosStatus(0, 2);
     filedListModel = null;
     notifyListeners();
   }
 
-  Future updateTodoItem(ToDoModel oldModel, ToDoModel updatedModel) async {
-    await dBProvider.updateToDoItem(updatedModel, updateContent: true);
-    final action = UserAction();
-    action.earlyContent = oldModel.content;
-    action.updatedContent = updatedModel.content;
-    action.updatedTime = DateTime.now().millisecondsSinceEpoch;
-    action.action = 2;
-    await dBProvider.insertAction(action);
+  Future updateTodoItem(ToDo oldModel, ToDo updatedModel) async {
+    await _dbProvider.updateToDoItem(updatedModel.toCompanion(false),
+        updateContent: true);
+    await _dbProvider.insertAction(ActionsHistoryCompanion(
+      earlyContent: Value(oldModel.content),
+        updatedContent: Value(updatedModel.content),
+        updatedTime: Value(DateTime.now()),
+        action: Value(2)));
   }
 
   Future queryToDoItem(int id) async {
-    selectedModel = await dBProvider.queryToDoItem(id);
+    selectedModel = (await _dbProvider.queryToDoItem(id)).first;
   }
 
   Future<void> assembleRetrospectNotification(
@@ -250,13 +261,13 @@ class HomeViewModel extends ViewStateModel {
     var brief = '';
     if (todoList != null && todoList.length > 0) {
       for (var i = 0; i < todoList.length; i++) {
-        brief += '${todoList[i].content}、';
+        brief += '${todoList[i]?.content}、';
       }
       debugPrint('assembleRetrospectNotification: $brief');
     }
     if (brief.isNotEmpty) {
       _setNotification(
-          alertTime: alertTime, weekday: weekday, title: '回顾', body: brief);
+          alertTime: alertTime, weekday: weekday, title: '${S.current.notificationTitle}', body: brief);
     }
   }
 

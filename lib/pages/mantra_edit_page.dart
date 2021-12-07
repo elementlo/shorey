@@ -20,10 +20,9 @@ class _MantraEditPageState extends State<MantraEditPage> {
   String mantra = '';
 
   void _fetchMantra() async {
-    setState(() async {
-      mantra = await context.read<HomeViewModel>().getMantra() ?? '';
-      _controller.text = mantra;
-    });
+    mantra = await context.read<HomeViewModel>().getMantra() ?? '';
+    _controller.text = mantra;
+    setState(() {});
   }
 
   Future _saveMantra(String text) async {

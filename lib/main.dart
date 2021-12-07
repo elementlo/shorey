@@ -1,12 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/database/database.dart';
@@ -15,19 +13,15 @@ import 'package:spark_list/pages/mantra_edit_page.dart';
 import 'package:spark_list/pages/root_page.dart';
 import 'package:spark_list/pages/settings_category_page.dart';
 import 'package:spark_list/resource/data_provider.dart';
-import 'package:spark_list/resource/db_provider.dart';
 import 'package:spark_list/routes.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:provider/provider.dart';
-import 'package:path/path.dart' as p;
 
 import 'config/theme_data.dart';
 import 'generated/l10n.dart';
 
-late DbSparkProvider _dBProvider;
 late DataProvider _dataProvider;
 late DbProvider _dbProvider;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -37,15 +31,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   _configureLocalTimeZone();
   await _initNotificationsSettings();
-  _dBProvider = DbSparkProvider();
-  await _dBProvider.ready;
   _dataProvider = DataProvider();
   await _dataProvider.ready;
   await _dataProvider.getLocale();
   _dbProvider = DbProvider();
   runApp(ProviderWidget2<ConfigViewModel, HomeViewModel>(
-      ConfigViewModel(_dBProvider, _dataProvider, _dbProvider),
-      HomeViewModel(_dBProvider, _dataProvider, _dbProvider),
+      ConfigViewModel(_dataProvider, _dbProvider),
+      HomeViewModel(_dataProvider, _dbProvider),
       onModelReady: (cViewModel, hViewModel) async {
     await cViewModel?.initCategoryDemosList();
     await cViewModel?.getCategoryList();

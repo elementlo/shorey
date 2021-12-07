@@ -48,6 +48,7 @@ dependencies:
   drift: ^1.0.1
   sqlite3_flutter_libs: ^0.5.0
   path: ^1.8.0
+  ionicons: ^0.1.2
 
 dev_dependencies:
   flutter_test:

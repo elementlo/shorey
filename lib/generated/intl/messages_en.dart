@@ -61,6 +61,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "mantra3": MessageLookupByLibrary.simpleMessage(
             "I am free and that is why I am lost."),
         "noAlert": MessageLookupByLibrary.simpleMessage("No alert"),
+        "notificationTitle": MessageLookupByLibrary.simpleMessage("Retrospect"),
         "retrospect": MessageLookupByLibrary.simpleMessage("Retrospect"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "shoreyMomment": MessageLookupByLibrary.simpleMessage("Shorey moment"),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
-import 'package:spark_list/model/model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 
@@ -82,7 +83,7 @@ class _ActionItem extends StatelessWidget {
                     children: [
                       _buildRichText(userAction!, context),
                       Text(
-                        '${userAction?.formatFiledTime}',
+                        '${DateFormat('yyyy-MM-dd').format(userAction!.updatedTime)}',
                         style: TextStyle(
                             fontSize: 12, color: Colors.grey.withOpacity(0.5)),
                       ),

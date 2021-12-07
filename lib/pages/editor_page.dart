@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/config/config.dart';
+import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/model/model.dart';
@@ -32,7 +33,7 @@ enum _ExpandableSetting {
 }
 
 class TextEditorPage extends StatefulWidget {
-  final ToDoModel todoModel;
+  final ToDo todoModel;
 
   TextEditorPage(this.todoModel);
 
@@ -55,16 +56,15 @@ class _TextEditorPageState extends State<TextEditorPage>
   @override
   void initState() {
     super.initState();
-    if (widget.todoModel.alertTime != null &&
-        widget.todoModel.alertTime!.isNotEmpty) {
-      _alertDateTime = DateTime.parse(widget.todoModel.alertTime!);
+    if (widget.todoModel.alertTime != null) {
+      _alertDateTime = widget.todoModel.alertTime!;
       _selectedDate =
           '${_alertDateTime!.year}-${_alertDateTime!.month.toString().padLeft(2, '0')}'
           '-${_alertDateTime!.day.toString().padLeft(2, '0')}';
       _time = TimeOfDay.fromDateTime(_alertDateTime!);
     }
-    _titleController.text = widget.todoModel.content ??= '';
-    _briefController.text = widget.todoModel.brief ??= '';
+    _titleController.text = widget.todoModel.content;
+    _briefController.text = widget.todoModel.brief ?? '';
     _settingsPanelController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
@@ -88,12 +88,12 @@ class _TextEditorPageState extends State<TextEditorPage>
       SettingsListItem<double>(
           title: S.of(context).date,
           selectedOption: 1.0,
-          optionsMap: LinkedHashMap.of(
-              {1.0: DisplayOption(_selectedDate)}),
+          optionsMap: LinkedHashMap.of({1.0: DisplayOption(_selectedDate)}),
           onOptionChanged: (newTextScale) {},
           onTapSetting: () => onTapSetting(_ExpandableSetting.date),
           isExpanded: _expandedSettingId == _ExpandableSetting.date,
-          child: Localizations.override(context: context,
+          child: Localizations.override(
+            context: context,
             locale: Locale(Intl.getCurrentLocale()),
             child: CustomizedDatePicker([], (selection) {
               _selectedDate =
@@ -106,9 +106,8 @@ class _TextEditorPageState extends State<TextEditorPage>
         SettingsListItem<double>(
           title: S.of(context).time,
           selectedOption: 1.0,
-          optionsMap: LinkedHashMap.of({
-            1.0: DisplayOption(_time == null ? '' : _time.format(context))
-          }),
+          optionsMap: LinkedHashMap.of(
+              {1.0: DisplayOption(_time == null ? '' : _time.format(context))}),
           onOptionChanged: (newTextScale) {},
           onTapSetting: () => onTapSetting(_ExpandableSetting.time),
           isExpanded: _expandedSettingId == _ExpandableSetting.time,
@@ -235,7 +234,7 @@ class _TextEditorPageState extends State<TextEditorPage>
   }
 
   Future<void> _updateTodoItem() async {
-    final oldModel = widget.todoModel.copy();
+    final oldModel = widget.todoModel.copyWith();
     widget.todoModel.brief = _briefController.text;
     widget.todoModel.content = _titleController.text;
     String? alertTime = null;
@@ -257,7 +256,8 @@ class _TextEditorPageState extends State<TextEditorPage>
       widget.todoModel.notificationId = null;
     }
 
-    widget.todoModel.alertTime = alertTime;
+    widget.todoModel.alertTime =
+        alertTime == null ? null : DateTime.parse(alertTime);
     await context
         .read<HomeViewModel>()
         .updateTodoItem(oldModel, widget.todoModel);
@@ -318,7 +318,7 @@ class InputField extends StatelessWidget {
 class _EditorTableRow extends StatefulWidget {
   const _EditorTableRow({Key? key, this.todoModel}) : super(key: key);
 
-  final ToDoModel? todoModel;
+  final ToDo? todoModel;
 
   @override
   _EditorTableRowState createState() => _EditorTableRowState();
