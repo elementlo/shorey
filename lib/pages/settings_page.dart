@@ -54,31 +54,37 @@ class _SettingsCategoryPageState extends State<SettingsCategoryPage> {
             },
           ),
           Container(
-            child: Column(
+            padding: EdgeInsets.only(left: 16, right: 8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ListTile(
-                  title: Text(S.of(context).languages),
-                  trailing: Switch(
-                    value: switchOn,
-                    activeColor: colorScheme.primary,
-                    inactiveTrackColor:
-                        colorScheme.primaryVariant.withOpacity(0.8),
-                    onChanged: (isOn) async{
-                      setState(() {
-                        switchOn = isOn;
-                        S.load(Locale(isOn ? 'en' : 'zh', ''));
-                      });
-                      context.read<ConfigViewModel>().savePerfLocale(Locale(isOn ? 'en' : 'zh', ''));
-                    },
-                  ),
+                Expanded(
+                    child: Text(S.of(context).languages,
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold))),
+                Text(switchOn ? 'English' : '中文'),
+                Switch(
+                  value: switchOn,
+                  activeColor: colorScheme.primary,
+                  inactiveTrackColor:
+                      colorScheme.primaryVariant.withOpacity(0.8),
+                  onChanged: (isOn) async {
+                    setState(() {
+                      switchOn = isOn;
+                      S.load(Locale(isOn ? 'en' : 'zh', ''));
+                    });
+                    context
+                        .read<ConfigViewModel>()
+                        .savePerfLocale(Locale(isOn ? 'en' : 'zh', ''));
+                  },
                 ),
-                Divider(
-                  indent: 16,
-                  endIndent: 16,
-                )
               ],
             ),
           ),
+          Divider(
+            indent: 16,
+            endIndent: 16,
+          )
         ],
       ),
     );

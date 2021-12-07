@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
@@ -66,7 +67,7 @@ class _MantraEditPageState extends State<MantraEditPage> {
         child: TextField(
           controller: _controller,
           decoration: InputDecoration(
-            suffixIcon: Icon(Icons.edit),
+            suffixIcon: Icon(Ionicons.create_outline),
           ),
         ),
       ),

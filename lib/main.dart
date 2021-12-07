@@ -11,7 +11,7 @@ import 'package:spark_list/database/database.dart';
 import 'package:spark_list/pages/list_category_page.dart';
 import 'package:spark_list/pages/mantra_edit_page.dart';
 import 'package:spark_list/pages/root_page.dart';
-import 'package:spark_list/pages/settings_category_page.dart';
+import 'package:spark_list/pages/settings_page.dart';
 import 'package:spark_list/resource/data_provider.dart';
 import 'package:spark_list/routes.dart';
 import 'package:spark_list/view_model/config_view_model.dart';

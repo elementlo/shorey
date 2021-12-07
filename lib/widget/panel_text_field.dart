@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
@@ -74,12 +75,11 @@ class _PanelTextFieldState extends State<PanelTextField> {
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
             children: [
               Expanded(
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
                       finished
@@ -102,18 +102,15 @@ class _PanelTextFieldState extends State<PanelTextField> {
                   ],
                 ),
               ),
-              Container(
-                width: 18,
-                height: 18,
-                child: IconButton(
-                    padding: EdgeInsets.all(0),
-                    icon: Icon(Icons.edit, color: Colors.grey),
-                    iconSize: 16,
-                    onPressed: () {
-                      setState(() {
-                        viewModel.hasMainFocus = false;
-                      });
-                    }),
+              InkWell(
+                  onTap: () {
+                    setState(() {
+                      viewModel.hasMainFocus = false;
+                    });
+                  },
+                  child: Container(
+                    child: Icon(Ionicons.create_outline, color: Colors.grey, size: 20,),
+                  )
               )
             ],
           )
