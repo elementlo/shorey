@@ -66,5 +66,7 @@
   "mantra1": "What we refer to as way is hesitation.",
   "mantra2": "Better to have, and not need, than to need, and not have.",
   "mantra3": "I am free and that is why I am lost.",
-  "notificationTitle": "Retrospect"
+  "notificationTitle": "Retrospect",
+  "addCategory": "Add",
+  "delete_category": "Delete"
 }

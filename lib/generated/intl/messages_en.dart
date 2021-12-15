@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "actionHistoryTitle":
             MessageLookupByLibrary.simpleMessage("Actions History"),
         "actionUpdate": MessageLookupByLibrary.simpleMessage("Updated to"),
+        "addCategory": MessageLookupByLibrary.simpleMessage("Add"),
         "archivedLess": MessageLookupByLibrary.simpleMessage("Archived less"),
         "archivedList": MessageLookupByLibrary.simpleMessage("Archived"),
         "archivedMore": MessageLookupByLibrary.simpleMessage("More"),
@@ -36,6 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Cleared alert time"),
         "categoryList": MessageLookupByLibrary.simpleMessage("Category"),
         "date": MessageLookupByLibrary.simpleMessage("Date"),
+        "delete_category": MessageLookupByLibrary.simpleMessage("Delete"),
         "editMantra": MessageLookupByLibrary.simpleMessage("Edit Mantra"),
         "everyFriday": MessageLookupByLibrary.simpleMessage("Every Friday"),
         "everyMonday": MessageLookupByLibrary.simpleMessage("Every Monday"),

@@ -43,7 +43,7 @@ class ToDos extends Table {
   IntColumn get status => integer()();
 
   IntColumn get categoryId =>
-      integer().customConstraint('NULLABLE REFERENCES categories(id)')();
+      integer().customConstraint('NULLABLE REFERENCES categories(id) ON DELETE CASCADE')();
 }
 
 @DataClassName('HeatPoint')
@@ -100,6 +100,16 @@ class DbProvider extends _$DbProvider {
   @override
   int get schemaVersion => 1;
 
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      beforeOpen: (m) async{
+        await customStatement('PRAGMA foreign_keys = ON;');
+      }
+    );
+  }
+
   Future<List<Category>> get categoryList => select(categories).get();
 
   Future<Map<String, int?>> get heatPointList async {
@@ -116,13 +126,30 @@ class DbProvider extends _$DbProvider {
   Future setCategories() async {
     await batch((batch) {
       batch.insertAll(categories, [
-        CategoriesCompanion.insert(name: 'mainfocus', colorId: SColor.red, iconId: 0),
-        CategoriesCompanion.insert(name: 'To Do', colorId: SColor.blue, iconId: SIcons.article_outlined),
-        CategoriesCompanion.insert(name: 'To Watch', colorId: SColor.yellow, iconId: SIcons.movie_outlined),
-        CategoriesCompanion.insert(name: 'To Read', colorId: SColor.orangeAccent, iconId: SIcons.menu_book_outlined),
-        CategoriesCompanion.insert(name: 'Alert', colorId: SColor.red, iconId: SIcons.add_alert),
-        CategoriesCompanion.insert(name: 'Work', colorId: SColor.greenAccent, iconId: SIcons.work_outline),
-        CategoriesCompanion.insert(name: 'To Learn', colorId: SColor.black, iconId: SIcons.school_outlined),
+        CategoriesCompanion.insert(
+            name: 'mainfocus', colorId: SColor.red, iconId: 0),
+        CategoriesCompanion.insert(
+            name: 'To Do',
+            colorId: SColor.blue,
+            iconId: SIcons.article_outlined),
+        CategoriesCompanion.insert(
+            name: 'To Watch',
+            colorId: SColor.yellow,
+            iconId: SIcons.movie_outlined),
+        CategoriesCompanion.insert(
+            name: 'To Read',
+            colorId: SColor.orangeAccent,
+            iconId: SIcons.menu_book_outlined),
+        CategoriesCompanion.insert(
+            name: 'Alert', colorId: SColor.red, iconId: SIcons.add_alert),
+        CategoriesCompanion.insert(
+            name: 'Work',
+            colorId: SColor.greenAccent,
+            iconId: SIcons.work_outline),
+        CategoriesCompanion.insert(
+            name: 'To Learn',
+            colorId: SColor.black,
+            iconId: SIcons.school_outlined),
       ]);
     });
   }
@@ -134,15 +161,19 @@ class DbProvider extends _$DbProvider {
     return count;
   }
 
+  Future deleteCategory(int id) async {
+    return (delete(categories)..where((tbl) => tbl.id.equals(id))).go();
+  }
+
   Future<int> insertHeatPoint(HeatGraphCompanion entity) {
     return into(heatGraph).insert(entity);
   }
 
   Future updateHeatPoint(int difference) async {
     HeatPoint point = await (select(heatGraph)
-      ..orderBy(
-          [(t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc)])
-      ..limit(1))
+          ..orderBy(
+              [(t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc)])
+          ..limit(1))
         .getSingle();
     final level = point.level + 1;
     return (update(heatGraph)..where((tbl) => tbl.id.equals(point.id)))

@@ -10,7 +10,6 @@ import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/resource/data_provider.dart';
-import 'package:spark_list/resource/db_provider.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 ///
@@ -93,7 +92,6 @@ class HomeViewModel extends ViewStateModel {
           lastTime.day != currentTime.day) {
         print('One day passed by ...insert initial heat point...');
         _hasMainFocus = false;
-
       } else {
         if (mainFocusModel != null) {
           _mainFocus = mainFocusModel!.content;
@@ -110,21 +108,25 @@ class HomeViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-  Future _initHeatGraph() async{
+  Future _initHeatGraph() async {
     final heatPoint = await _dbProvider.queryTopHeatPoint();
-    if(heatPoint == null){
+    if (heatPoint == null) {
       await _dbProvider.insertHeatPoint(HeatGraphCompanion(
           level: Value(0), createdTime: Value(DateTime.now())));
-    }else{
+    } else {
       final lastTime = heatPoint.createdTime;
       final currentTime = DateTime.now();
       if (lastTime.year != currentTime.year ||
           lastTime.month != currentTime.month ||
-          lastTime.day != currentTime.day){
+          lastTime.day != currentTime.day) {
         await _dbProvider.insertHeatPoint(HeatGraphCompanion(
             level: Value(0), createdTime: Value(DateTime.now())));
       }
     }
+  }
+
+  Future deleteCategory(int id) async {
+    return _dbProvider.deleteCategory(id);
   }
 
   Future queryAllHeatPoints() async {
@@ -148,8 +150,7 @@ class HomeViewModel extends ViewStateModel {
   Future updateMainFocusStatus(int status) async {
     if (mainFocusModel != null) {
       mainFocusModel!.status = status;
-      await _dbProvider.updateToDoItem(
-          mainFocusModel!.toCompanion(false));
+      await _dbProvider.updateToDoItem(mainFocusModel!.toCompanion(false));
       int difference = 0;
       if (status == 0) {
         difference = 1;
@@ -161,7 +162,7 @@ class HomeViewModel extends ViewStateModel {
         await _dbProvider.insertAction(ActionsHistoryCompanion(
             updatedContent: Value(mainFocusModel!.content),
             updatedTime: Value(DateTime.now()),
-        action: Value(1)));
+            action: Value(1)));
       }
     }
   }
@@ -176,7 +177,7 @@ class HomeViewModel extends ViewStateModel {
       {String? brief, int status = 1}) async {
     final updatedTime = DateTime.now();
     await _dbProvider.insertTodo(ToDosCompanion(
-      categoryId: Value(categoryId),
+        categoryId: Value(categoryId),
         createdTime: Value(updatedTime),
         content: Value(content),
         category: Value(category),
@@ -187,7 +188,6 @@ class HomeViewModel extends ViewStateModel {
         updatedContent: Value(content),
         updatedTime: Value(updatedTime),
         action: Value(0)));
-
   }
 
   Future<List<ToDo?>> queryToDoList(String? category) async {
@@ -243,7 +243,7 @@ class HomeViewModel extends ViewStateModel {
     await _dbProvider.updateToDoItem(updatedModel.toCompanion(false),
         updateContent: true);
     await _dbProvider.insertAction(ActionsHistoryCompanion(
-      earlyContent: Value(oldModel.content),
+        earlyContent: Value(oldModel.content),
         updatedContent: Value(updatedModel.content),
         updatedTime: Value(DateTime.now()),
         action: Value(2)));
@@ -267,7 +267,10 @@ class HomeViewModel extends ViewStateModel {
     }
     if (brief.isNotEmpty) {
       _setNotification(
-          alertTime: alertTime, weekday: weekday, title: '${S.current.notificationTitle}', body: brief);
+          alertTime: alertTime,
+          weekday: weekday,
+          title: '${S.current.notificationTitle}',
+          body: brief);
     }
   }
 

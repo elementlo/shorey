@@ -429,6 +429,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Add`
+  String get addCategory {
+    return Intl.message(
+      'Add',
+      name: 'addCategory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get delete_category {
+    return Intl.message(
+      'Delete',
+      name: 'delete_category',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

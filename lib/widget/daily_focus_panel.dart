@@ -39,7 +39,7 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                 0.0, 30 * (1.0 - widget.animation!.value), 0.0),
             child: Padding(
               padding: const EdgeInsets.only(
-                  left: 16, right: 16, top: 8, bottom: 18),
+                  left: 16, right: 16, top: 8,),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,

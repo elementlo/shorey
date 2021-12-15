@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/database/database.dart';
+import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/pages/editor_page.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 
@@ -164,7 +165,7 @@ class _CategoryListItemState extends State<CategoryListItem>
       child: _shouldOpenList()!
           ? null
           : _ExpandedCategoryDemos(
-        categoryId: widget.categoryId,
+              categoryId: widget.categoryId,
               category: widget.category,
               demos: widget.demos,
               demoList: widget.demoList),
@@ -316,12 +317,30 @@ class _CategoryHeader extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              IconButton(
-                                onPressed: () {},
+                              PopupMenuButton(
                                 icon: Icon(
                                   Icons.more_horiz,
                                   color: colorScheme.primaryVariant,
                                 ),
+                                elevation: 3,
+                                padding: EdgeInsets.zero,
+                                onSelected: (value){
+                                  print(value);
+                                  context.read<HomeViewModel>().deleteCategory(2);
+                                },
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4)),
+                                itemBuilder: (context) {
+                                  return [
+                                    PopupMenuItem(
+                                        height: 28,
+                                        value: 'delete',
+                                        child: Text(
+                                          S.of(context).delete_category,
+                                          style: TextStyle(fontSize: 14, color: Colors.red),
+                                        )),
+                                  ];
+                                },
                               ),
                               Icon(
                                 Icons.keyboard_arrow_up,

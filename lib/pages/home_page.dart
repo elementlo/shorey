@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
@@ -120,31 +121,61 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 class _CategoriesHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Header(
       color: Theme.of(context).colorScheme.primaryVariant,
       text: S.of(context).mainCategory,
+      tailing: PopupMenuButton(
+        icon: Icon(
+          Icons.more_horiz,
+          color: colorScheme.primaryVariant,
+        ),
+        onSelected: (value){
+
+        },
+        elevation: 3,
+        padding: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+        itemBuilder: (context) {
+          return [
+            PopupMenuItem(
+                height: 28,
+                child: Text(
+                  S.of(context).addCategory,
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                )),
+          ];
+        },
+      ),
     );
   }
 }
 
 class Header extends StatelessWidget {
-  const Header({this.color, this.text});
+  const Header({this.color, this.tailing, required this.text});
 
   final Color? color;
   final String? text;
+  final Widget? tailing;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        top: 15,
-        bottom: 11,
+        top: 12,
       ),
-      child: Text(
-        text!,
-        style: Theme.of(context).textTheme.headline4!.apply(
-              color: color,
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              text!,
+              style: Theme.of(context).textTheme.headline4!.apply(
+                    color: color,
+                  ),
             ),
+          ),
+          if (tailing != null) tailing!
+        ],
       ),
     );
   }

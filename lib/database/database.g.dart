@@ -390,7 +390,8 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
       'category_id', aliasedName, false,
       typeName: 'INTEGER',
       requiredDuringInsert: true,
-      $customConstraints: 'NULLABLE REFERENCES categories(id)');
+      $customConstraints:
+          'NULLABLE REFERENCES categories(id) ON DELETE CASCADE');
   @override
   List<GeneratedColumn> get $columns => [
         id,
