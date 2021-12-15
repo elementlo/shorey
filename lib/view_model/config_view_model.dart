@@ -22,6 +22,7 @@ class ConfigViewModel extends ViewStateModel {
   final DbProvider _dbProvider;
   final DataProvider _dataProvider;
   Locale? _deviceLocale;
+  Stream<List<Category>>? categoryStream;
 
   ConfigViewModel(this._dataProvider, this._dbProvider);
 
@@ -72,17 +73,33 @@ class ConfigViewModel extends ViewStateModel {
   }
 
   Future getCategoryList() async {
-    final list = await _dbProvider.categoryList;
-    list.forEach((element) {
-      if(element.name != 'mainfocus')
-      categoryDemosList.add(CategoryItem(element.id,
-          name: '${element.name}',
-          icon: Icon(
-            SIcons.iconMap[element.iconId],
-            color: Color(SColor.colorMap[element.colorId]!),
-          ),));
+    categoryStream = _dbProvider.categoryList;
+    categoryStream?.listen((event) {
+      print(event);
+      categoryDemosList.clear();
+      event.forEach((element) {
+        if(element.name != 'mainfocus'){
+          categoryDemosList.add(CategoryItem(element.id,
+            name: '${element.name}',
+            icon: Icon(
+              SIcons.iconMap[element.iconId],
+              color: Color(SColor.colorMap[element.colorId]!),
+            ),));
+        }
+      });
+      notifyListeners();
     });
-    notifyListeners();
+    // final list = await _dbProvider.categoryList;
+    // list.forEach((element) {
+    //   if(element.name != 'mainfocus')
+    //   categoryDemosList.add(CategoryItem(element.id,
+    //       name: '${element.name}',
+    //       icon: Icon(
+    //         SIcons.iconMap[element.iconId],
+    //         color: Color(SColor.colorMap[element.colorId]!),
+    //       ),));
+    // });
+    // notifyListeners();
   }
 
   Future initCategoryDemosList() async {
@@ -155,5 +172,10 @@ class ConfigViewModel extends ViewStateModel {
         : SystemUiOverlayStyle.dark;
 
     return overlayStyle;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

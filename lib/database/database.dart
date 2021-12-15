@@ -110,7 +110,7 @@ class DbProvider extends _$DbProvider {
     );
   }
 
-  Future<List<Category>> get categoryList => select(categories).get();
+  Stream<List<Category>> get categoryList => select(categories).watch();
 
   Future<Map<String, int?>> get heatPointList async {
     List<HeatPoint> list = await select(heatGraph).get();
@@ -250,4 +250,5 @@ class DbProvider extends _$DbProvider {
   Future<List<UserAction>> queryActions() async {
     return select(actionsHistory).get();
   }
+
 }

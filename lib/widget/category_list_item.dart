@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
+import 'package:spark_list/model/model.dart';
 import 'package:spark_list/pages/editor_page.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 
@@ -16,25 +17,22 @@ import 'package:spark_list/view_model/home_view_model.dart';
 typedef CategoryHeaderTapCallback = Function(bool shouldOpenList);
 
 class CategoryListItem extends StatefulWidget {
-  const CategoryListItem(
+  const CategoryListItem(this.category,
       {Key? key,
       this.restorationId,
-      this.category,
       this.imageString,
       this.demos = const [''],
       this.initiallyExpanded = false,
       this.onTap,
       this.icon,
-      required this.categoryId,
       this.demoList})
       : assert(initiallyExpanded != null),
         super(key: key);
 
   //final GalleryDemoCategory category;
-  final String? category;
   final String? restorationId;
   final String? imageString;
-  final int categoryId;
+  final CategoryItem category;
 
   //final List<GalleryDemo> demos;
   final List<String> demos;
@@ -134,13 +132,13 @@ class _CategoryListItemState extends State<CategoryListItem>
       mainAxisSize: MainAxisSize.min,
       children: [
         _CategoryHeader(
+          widget.category,
           margin: _headerMargin.value,
           imagePadding: _headerImagePadding.value,
           borderRadius: _headerBorderRadius.value,
           height: _headerHeight.value,
           chevronOpacity: _headerChevronOpacity.value,
           imageString: widget.imageString,
-          category: widget.category,
           icon: widget.icon,
           onTap: _handleTap,
         ),
@@ -165,8 +163,8 @@ class _CategoryListItemState extends State<CategoryListItem>
       child: _shouldOpenList()!
           ? null
           : _ExpandedCategoryDemos(
-              categoryId: widget.categoryId,
-              category: widget.category,
+              categoryId: widget.category.id,
+              category: widget.category.name,
               demos: widget.demos,
               demoList: widget.demoList),
     );
@@ -246,7 +244,8 @@ class _ExpandedCategoryDemos extends StatelessWidget {
 }
 
 class _CategoryHeader extends StatelessWidget {
-  const _CategoryHeader({
+  const _CategoryHeader(
+    this.category, {
     Key? key,
     this.margin,
     this.imagePadding,
@@ -254,7 +253,6 @@ class _CategoryHeader extends StatelessWidget {
     this.height,
     this.chevronOpacity,
     this.imageString,
-    this.category,
     this.onTap,
     this.icon,
   }) : super(key: key);
@@ -264,7 +262,7 @@ class _CategoryHeader extends StatelessWidget {
   final double? height;
   final BorderRadiusGeometry? borderRadius;
   final String? imageString;
-  final String? category;
+  final CategoryItem category;
   final double? chevronOpacity;
   final GestureTapCallback? onTap;
   final Icon? icon;
@@ -298,7 +296,7 @@ class _CategoryHeader extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsetsDirectional.only(start: 8),
                         child: Text(
-                          category!,
+                          category.name!,
                           // style: Theme.of(context).textTheme.headline5.apply(
                           // 	color: colorScheme.onSurface,
                           // ),
@@ -324,9 +322,14 @@ class _CategoryHeader extends StatelessWidget {
                                 ),
                                 elevation: 3,
                                 padding: EdgeInsets.zero,
-                                onSelected: (value){
-                                  print(value);
-                                  context.read<HomeViewModel>().deleteCategory(2);
+                                onSelected: (value) async {
+                                  switch (value)  {
+                                    case 'delete':
+                                      await context
+                                          .read<HomeViewModel>()
+                                          .deleteCategory(category.id);
+                                      break;
+                                  }
                                 },
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4)),
@@ -337,7 +340,8 @@ class _CategoryHeader extends StatelessWidget {
                                         value: 'delete',
                                         child: Text(
                                           S.of(context).delete_category,
-                                          style: TextStyle(fontSize: 14, color: Colors.red),
+                                          style: TextStyle(
+                                              fontSize: 14, color: Colors.red),
                                         )),
                                   ];
                                 },

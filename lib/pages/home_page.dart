@@ -91,12 +91,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   startDelayFraction: 0.00,
                   controller: _animationController,
                   child: CategoryListItem(
+                  categoryDemosList[i],
                       key: PageStorageKey<String>(
                         'CategoryListItem${i}',
                       ),
                       restorationId: 'home_material_category_list',
-                      category: '${categoryDemosList[i].name}',
-                      categoryId: categoryDemosList[i].id,
                       imageString: 'assets/icons/material/material.png',
                       demoList: (viewModel
                           .indexedList['${categoryDemosList[i].name}']),
