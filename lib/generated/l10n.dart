@@ -449,6 +449,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Category Information`
+  String get categoryInformation {
+    return Intl.message(
+      'Category Information',
+      name: 'categoryInformation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name`
+  String get addCategoryName {
+    return Intl.message(
+      'Name',
+      name: 'addCategoryName',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

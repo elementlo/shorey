@@ -68,5 +68,7 @@
   "mantra3": "I am free and that is why I am lost.",
   "notificationTitle": "Retrospect",
   "addCategory": "Add",
-  "delete_category": "Delete"
+  "delete_category": "Delete",
+  "categoryInformation": "Category Information",
+  "addCategoryName": "Name"
 }

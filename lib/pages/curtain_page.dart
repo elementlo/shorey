@@ -257,7 +257,6 @@ class _SettingsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16),
       child: Material(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),

@@ -68,5 +68,7 @@
   "mantra3": "我是自由的, 那就是我迷失的原因.",
   "notificationTitle": "回顾",
   "addCategory": "添加",
-  "delete_category": "删除"
+  "delete_category": "删除",
+  "categoryInformation": "类别信息",
+  "addCategoryName": "名字"
 }

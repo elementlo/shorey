@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
+import 'package:spark_list/pages/category_info_page.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/category_list_item.dart';
@@ -130,7 +131,12 @@ class _CategoriesHeader extends StatelessWidget {
           color: colorScheme.primaryVariant,
         ),
         onSelected: (value){
-
+          switch(value){
+            case 'add':
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => CategoryInfoPage()));
+              break;
+          }
         },
         elevation: 3,
         padding: EdgeInsets.zero,
@@ -139,6 +145,7 @@ class _CategoriesHeader extends StatelessWidget {
           return [
             PopupMenuItem(
                 height: 28,
+                value: 'add',
                 child: Text(
                   S.of(context).addCategory,
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),

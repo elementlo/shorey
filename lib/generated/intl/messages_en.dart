@@ -30,11 +30,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Actions History"),
         "actionUpdate": MessageLookupByLibrary.simpleMessage("Updated to"),
         "addCategory": MessageLookupByLibrary.simpleMessage("Add"),
+        "addCategoryName": MessageLookupByLibrary.simpleMessage("Name"),
         "archivedLess": MessageLookupByLibrary.simpleMessage("Archived less"),
         "archivedList": MessageLookupByLibrary.simpleMessage("Archived"),
         "archivedMore": MessageLookupByLibrary.simpleMessage("More"),
         "cancelAlertTime":
             MessageLookupByLibrary.simpleMessage("Cleared alert time"),
+        "categoryInformation":
+            MessageLookupByLibrary.simpleMessage("Category Information"),
         "categoryList": MessageLookupByLibrary.simpleMessage("Category"),
         "date": MessageLookupByLibrary.simpleMessage("Date"),
         "delete_category": MessageLookupByLibrary.simpleMessage("Delete"),
