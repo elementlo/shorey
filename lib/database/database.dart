@@ -165,6 +165,10 @@ class DbProvider extends _$DbProvider {
     return (delete(categories)..where((tbl) => tbl.id.equals(id))).go();
   }
 
+  Future insertCategory(CategoriesCompanion entity) async{
+    return into(categories).insert(entity);
+  }
+
   Future<int> insertHeatPoint(HeatGraphCompanion entity) {
     return into(heatGraph).insert(entity);
   }

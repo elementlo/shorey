@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 class ProviderWidget<T extends ChangeNotifier?> extends StatefulWidget {
   late T model;
   final Widget? child;
-  final void Function(T? model)? onModelReady;
+  final void Function(T model)? onModelReady;
   final bool autoDispose;
 
   ProviderWidget(

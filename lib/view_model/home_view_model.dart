@@ -125,6 +125,10 @@ class HomeViewModel extends ViewStateModel {
     }
   }
 
+  Future saveCategory(CategoriesCompanion entity) async{
+    return _dbProvider.insertCategory(entity);
+  }
+
   Future deleteCategory(int id) async {
     return _dbProvider.deleteCategory(id);
   }

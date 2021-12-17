@@ -38,6 +38,12 @@ class SColor {
   static const int orangeAccent = 4;
   static const int greenAccent = 5;
   static const int black = 6;
+  static const int blueAccent = 7;
+  static const int purple = 8;
+  static const int pink = 9;
+  static const int brown = 10;
+  static const int grey = 11;
+  static const int brownAccent = 12;
 
   static const Map<int, int> colorMap = {
     red: 0xFFF44336,
@@ -45,7 +51,13 @@ class SColor {
     yellow: 0xFFFFEB3B,
     orangeAccent: 0xFFFFAB40,
     greenAccent: 0xFF69F0AE,
-    black: 0xFF000000
+    black: 0xFF000000,
+    blueAccent: 0xFF40C4FF,
+    purple: 0xFF9C27B0,
+    pink: 0xFFE91E63,
+    brown: 0xFF795548,
+    grey: 0xFF757575,
+    brownAccent: 0xFFBCAAA4
   };
 // categoryDemosList = List.of([
 //   CategoryItem(
@@ -94,12 +106,48 @@ class SColor {
 }
 
 class SIcons {
-  static const int movie_outlined = 1;
+  static const int article_outlined = 1;
   static const int menu_book_outlined = 2;
   static const int add_alert = 3;
   static const int work_outline = 4;
   static const int school_outlined = 5;
-  static const int article_outlined = 6;
+  static const int movie_outlined = 6;
+  static const int comment = 7;
+  static const int wb_incandescent = 8;
+  static const int image = 9;
+  static const int accessibility_new_rounded = 10;
+  static const int add_shopping_cart_sharp = 11;
+  static const int sports_baseball = 12;
+  static const int sports_basketball_rounded = 13;
+  static const int sports_motorsports_rounded = 14;
+  static const int emoji_food_beverage_rounded = 15;
+  static const int fastfood_rounded = 16;
+  static const int card_giftcard_rounded = 17;
+  static const int cake_rounded = 18;
+  static const int medical_services_rounded = 19;
+  static const int filter_drama_sharp = 20;
+  static const int directions_run_rounded = 21;
+  static const int account_balance_wallet_rounded = 22;
+  static const int access_alarms_outlined = 23;
+  static const int watch = 24;
+  static const int adb_rounded = 25;
+  static const int ac_unit_rounded = 26;
+  static const int car_rental_rounded = 27;
+  static const int star = 28;
+  static const int local_fire_department_outlined = 29;
+  static const int work_outline_rounded = 30;
+  static const int umbrella_outlined = 31;
+  static const int houseboat_rounded = 32;
+  static const int gamepad_rounded = 33;
+  static const int videogame_asset = 34;
+  static const int circle = 35;
+  static const int shopping_cart_rounded = 36;
+  static const int train_rounded = 37;
+  static const int headset_rounded = 38;
+  static const int music_note_rounded = 39;
+  static const int queue_music_rounded = 40;
+  static const int toys_rounded = 41;
+  static const int smart_toy_rounded = 42;
 
   static const Map<int, IconData> iconMap = {
     article_outlined: Icons.article_outlined,
@@ -108,6 +156,42 @@ class SIcons {
     add_alert: Icons.add_alert,
     work_outline: Icons.work_outline,
     school_outlined: Icons.school_outlined,
+    comment:  Icons.comment,
+    wb_incandescent: Icons.wb_incandescent,
+    image: Icons.image,
+    accessibility_new_rounded: Icons.accessibility_new_rounded,
+    add_shopping_cart_sharp: Icons.add_shopping_cart_sharp,
+    sports_baseball: Icons.sports_baseball,
+    sports_basketball_rounded: Icons.sports_basketball_rounded,
+    sports_motorsports_rounded: Icons.sports_motorsports_rounded,
+    emoji_food_beverage_rounded: Icons.emoji_food_beverage_rounded,
+    fastfood_rounded: Icons.fastfood_rounded,
+    card_giftcard_rounded: Icons.card_giftcard_rounded,
+    cake_rounded: Icons.cake_rounded,
+    medical_services_rounded: Icons.medical_services_rounded,
+    filter_drama_sharp: Icons.filter_drama_sharp,
+    directions_run_rounded: Icons.directions_run_rounded,
+    account_balance_wallet_rounded: Icons.account_balance_wallet_rounded,
+    access_alarms_outlined: Icons.access_alarms_outlined,
+    watch: Icons.watch,
+    adb_rounded: Icons.adb_rounded,
+    ac_unit_rounded: Icons.ac_unit_rounded,
+    car_rental_rounded: Icons.car_rental_rounded,
+    star: Icons.star,
+    local_fire_department_outlined: Icons.local_fire_department_outlined,
+    work_outline_rounded: Icons.work_outline_rounded,
+    umbrella_outlined: Icons.umbrella_outlined,
+    houseboat_rounded: Icons.houseboat_rounded,
+    gamepad_rounded: Icons.gamepad_rounded,
+    videogame_asset: Icons.videogame_asset,
+    circle: Icons.circle,
+    shopping_cart_rounded: Icons.shopping_cart_rounded,
+    train_rounded: Icons.train_rounded,
+    headset_rounded: Icons.headset_rounded,
+    music_note_rounded: Icons.music_note_rounded,
+    queue_music_rounded: Icons.queue_music_rounded,
+    toys_rounded: Icons.toys_rounded,
+    smart_toy_rounded: Icons.smart_toy_rounded,
   };
 }
 
