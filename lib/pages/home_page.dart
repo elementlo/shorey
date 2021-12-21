@@ -148,7 +148,7 @@ class _CategoriesHeader extends StatelessWidget {
                 value: 'add',
                 child: Text(
                   S.of(context).addCategory,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                  style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
                 )),
           ];
         },

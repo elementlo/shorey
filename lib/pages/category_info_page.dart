@@ -5,6 +5,7 @@ import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
+import 'package:spark_list/model/model.dart';
 import 'package:spark_list/view_model/category_info_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
@@ -18,7 +19,9 @@ import 'package:spark_list/widget/round_corner_rectangle.dart';
 ///
 
 class CategoryInfoPage extends StatefulWidget {
-  const CategoryInfoPage({Key? key}) : super(key: key);
+  const CategoryInfoPage({Key? key, this.editingItem}) : super(key: key);
+
+  final CategoryItem? editingItem;
 
   @override
   _CategoryInfoPageState createState() => _CategoryInfoPageState();
@@ -32,6 +35,9 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> {
   @override
   void initState() {
     super.initState();
+    if (widget.editingItem != null) {
+      _controller.text = widget.editingItem!.name!;
+    }
     _controller.addListener(() {
       _showConfirm = _controller.text.isNotEmpty;
       setState(() {});
@@ -40,19 +46,24 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    super.dispose();
   }
 
   Future _saveCategory() async {
-    // int colorId = context.read<CategoryInfoViewModel>().selectedColor;
-    // int iconId = context.read<CategoryInfoViewModel>().selectedIcon;
     int colorId = viewModel.selectedColor;
     int iconId = viewModel.selectedIcon;
     return context.read<HomeViewModel>().saveCategory(CategoriesCompanion(
         name: d.Value(_controller.text),
         colorId: d.Value(colorId),
         iconId: d.Value(iconId)));
+  }
+
+  Future _updateCategory(CategoryItem item) async {
+    return context.read<HomeViewModel>().updateCategory(CategoriesCompanion(
+        name: d.Value(item.name!),
+        iconId: d.Value(item.iconId),
+        colorId: d.Value(item.colorId)));
   }
 
   @override
@@ -62,6 +73,10 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> {
       model: CategoryInfoViewModel(),
       onModelReady: (vm) {
         viewModel = vm;
+        if (widget.editingItem != null) {
+          vm.selectedColor = widget.editingItem!.colorId;
+          vm.selectedIcon = widget.editingItem!.iconId;
+        }
       },
       child: Scaffold(
         appBar: SparkAppBar(
@@ -75,7 +90,11 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> {
                 ),
                 onPressed: () async {
                   if (_showConfirm) {
-                    await _saveCategory();
+                    if (widget.editingItem != null) {
+                      await _updateCategory(widget.editingItem!);
+                    } else {
+                      await _saveCategory();
+                    }
                     Navigator.pop(context);
                   }
                 }),
@@ -99,15 +118,6 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> {
         ),
       ),
     );
-  }
-}
-
-class _ToolbarActionButton extends StatelessWidget {
-  const _ToolbarActionButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }
 

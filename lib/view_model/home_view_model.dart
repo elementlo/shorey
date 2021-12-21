@@ -133,6 +133,10 @@ class HomeViewModel extends ViewStateModel {
     return _dbProvider.deleteCategory(id);
   }
 
+  Future updateCategory(CategoriesCompanion entity) async {
+    return _dbProvider.updateCategory(entity);
+  }
+
   Future queryAllHeatPoints() async {
     heatPointsMap = await _dbProvider.heatPointList;
     notifyListeners();

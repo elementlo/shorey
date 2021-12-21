@@ -42,8 +42,8 @@ class ToDos extends Table {
   ///0: finished 1: going 2: deleted
   IntColumn get status => integer()();
 
-  IntColumn get categoryId =>
-      integer().customConstraint('NULLABLE REFERENCES categories(id) ON DELETE CASCADE')();
+  IntColumn get categoryId => integer().customConstraint(
+      'NULLABLE REFERENCES categories(id) ON DELETE CASCADE')();
 }
 
 @DataClassName('HeatPoint')
@@ -100,14 +100,11 @@ class DbProvider extends _$DbProvider {
   @override
   int get schemaVersion => 1;
 
-
   @override
   MigrationStrategy get migration {
-    return MigrationStrategy(
-      beforeOpen: (m) async{
-        await customStatement('PRAGMA foreign_keys = ON;');
-      }
-    );
+    return MigrationStrategy(beforeOpen: (m) async {
+      await customStatement('PRAGMA foreign_keys = ON;');
+    });
   }
 
   Stream<List<Category>> get categoryList => select(categories).watch();
@@ -165,8 +162,12 @@ class DbProvider extends _$DbProvider {
     return (delete(categories)..where((tbl) => tbl.id.equals(id))).go();
   }
 
-  Future insertCategory(CategoriesCompanion entity) async{
+  Future insertCategory(CategoriesCompanion entity) async {
     return into(categories).insert(entity);
+  }
+
+  Future updateCategory(CategoriesCompanion entity) async {
+    return update(categories).replace(entity);
   }
 
   Future<int> insertHeatPoint(HeatGraphCompanion entity) {
@@ -254,5 +255,4 @@ class DbProvider extends _$DbProvider {
   Future<List<UserAction>> queryActions() async {
     return select(actionsHistory).get();
   }
-
 }

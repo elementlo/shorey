@@ -147,8 +147,10 @@ class CategoryItem {
   Icon? icon;
   Color? color;
   int id;
+  int colorId;
+  int iconId;
 
-  CategoryItem(this.id, {this.name, this.icon, this.color});
+  CategoryItem(this.id, {this.name, this.icon, this.color, required this.colorId, required this.iconId});
 }
 
 // class UserActionList extends ListModel<UserAction> {

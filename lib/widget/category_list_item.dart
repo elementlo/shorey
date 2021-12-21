@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/model/model.dart';
+import 'package:spark_list/pages/category_info_page.dart';
 import 'package:spark_list/pages/editor_page.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 
@@ -267,6 +268,49 @@ class _CategoryHeader extends StatelessWidget {
   final GestureTapCallback? onTap;
   final Icon? icon;
 
+  Widget _buildPopupMenu(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return PopupMenuButton(
+      icon: Icon(
+        Icons.more_horiz,
+        color: colorScheme.primaryVariant,
+      ),
+      elevation: 3,
+      padding: EdgeInsets.zero,
+      onSelected: (value) async {
+        switch (value) {
+          case 'delete':
+            await context.read<HomeViewModel>().deleteCategory(category.id);
+            break;
+          case 'edit':
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => CategoryInfoPage(editingItem: category,)));
+            break;
+        }
+      },
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+      itemBuilder: (context) {
+        return [
+          PopupMenuItem(
+              height: 28,
+              value: 'edit',
+              child: Text(
+                S.of(context).editCategory,
+                style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
+              )),
+          PopupMenuItem(height: 1,child: Divider()),
+          PopupMenuItem(
+              height: 28,
+              value: 'delete',
+              child: Text(
+                S.of(context).deleteCategory,
+                style: TextStyle(fontSize: 14, color: Colors.red),
+              )),
+        ];
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -315,37 +359,7 @@ class _CategoryHeader extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              PopupMenuButton(
-                                icon: Icon(
-                                  Icons.more_horiz,
-                                  color: colorScheme.primaryVariant,
-                                ),
-                                elevation: 3,
-                                padding: EdgeInsets.zero,
-                                onSelected: (value) async {
-                                  switch (value)  {
-                                    case 'delete':
-                                      await context
-                                          .read<HomeViewModel>()
-                                          .deleteCategory(category.id);
-                                      break;
-                                  }
-                                },
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4)),
-                                itemBuilder: (context) {
-                                  return [
-                                    PopupMenuItem(
-                                        height: 28,
-                                        value: 'delete',
-                                        child: Text(
-                                          S.of(context).delete_category,
-                                          style: TextStyle(
-                                              fontSize: 14, color: Colors.red),
-                                        )),
-                                  ];
-                                },
-                              ),
+                              _buildPopupMenu(context),
                               Icon(
                                 Icons.keyboard_arrow_up,
                                 color: colorScheme.primaryVariant,

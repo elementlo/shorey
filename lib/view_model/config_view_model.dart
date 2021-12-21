@@ -75,11 +75,12 @@ class ConfigViewModel extends ViewStateModel {
   Future getCategoryList() async {
     categoryStream = _dbProvider.categoryList;
     categoryStream?.listen((event) {
-      print(event);
       categoryDemosList.clear();
       event.forEach((element) {
         if(element.name != 'mainfocus'){
           categoryDemosList.add(CategoryItem(element.id,
+            colorId: element.colorId,
+            iconId: element.iconId,
             name: '${element.name}',
             icon: Icon(
               SIcons.iconMap[element.iconId],

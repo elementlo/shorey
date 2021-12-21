@@ -441,10 +441,10 @@ class S {
   }
 
   /// `Delete`
-  String get delete_category {
+  String get deleteCategory {
     return Intl.message(
       'Delete',
-      name: 'delete_category',
+      name: 'deleteCategory',
       desc: '',
       args: [],
     );
@@ -465,6 +465,16 @@ class S {
     return Intl.message(
       'Name',
       name: 'addCategoryName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit`
+  String get editCategory {
+    return Intl.message(
+      'Edit',
+      name: 'editCategory',
       desc: '',
       args: [],
     );
