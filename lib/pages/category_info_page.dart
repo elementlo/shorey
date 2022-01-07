@@ -60,10 +60,13 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> {
   }
 
   Future _updateCategory(CategoryItem item) async {
+    int colorId = viewModel.selectedColor;
+    int iconId = viewModel.selectedIcon;
     return context.read<HomeViewModel>().updateCategory(CategoriesCompanion(
-        name: d.Value(item.name!),
-        iconId: d.Value(item.iconId),
-        colorId: d.Value(item.colorId)));
+        id: d.Value(item.id),
+        name: d.Value(_controller.text),
+        iconId: d.Value(iconId),
+        colorId: d.Value(colorId)));
   }
 
   @override
