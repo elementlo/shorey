@@ -23,7 +23,7 @@ Shorey is a simple note app which is built with Flutter 2 and supports both Andr
 ## 分享
 [个人笔记软件Shorey开源(一) - 软件介绍/产品理念](https://mp.weixin.qq.com/s/W-3AhgCHSIQWLomPuyIPwA)
 
-[个人笔记软件Shorey开源(一) - 使用Flutter开发App入门](https://mp.weixin.qq.com/s/_7Kl9nJLHaX6ZbZzLKREYQ)
+[个人笔记软件Shorey开源(二) - 使用Flutter开发App入门](https://mp.weixin.qq.com/s/_7Kl9nJLHaX6ZbZzLKREYQ)
 
 ## 马上开始
 **应用运行要求:**
