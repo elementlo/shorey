@@ -71,5 +71,9 @@
   "deleteCategory": "Delete",
   "categoryInformation": "Category Information",
   "addCategoryName": "Name",
-  "editCategory": "Edit"
+  "editCategory": "Edit",
+  "bindNotion": "Link Notion",
+  "notion": "Notion account",
+  "linkNotionDatabase": "Link database",
+  "notionToken": "Notion token"
 }

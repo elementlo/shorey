@@ -71,5 +71,9 @@
   "deleteCategory": "删除",
   "categoryInformation": "类别信息",
   "addCategoryName": "名字",
-  "editCategory": "编辑"
+  "editCategory": "编辑",
+  "bindNotion": "关联Notion",
+  "notion": "Notion账户",
+  "linkNotionDatabase": "关联数据库",
+  "notionToken": "Notion token"
 }
