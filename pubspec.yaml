@@ -49,6 +49,7 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.0
   path: ^1.8.0
   ionicons: ^0.1.2
+  dio: ^4.0.4
 
 dev_dependencies:
   flutter_test:

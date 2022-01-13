@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/pages/alert_period_page.dart';
-import 'package:spark_list/pages/bind_notion_page.dart';
+import 'package:spark_list/pages/link_notion_page.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 
@@ -58,7 +58,7 @@ class _SettingsCategoryPageState extends State<SettingsCategoryPage> {
             title: S.of(context).bindNotion,
             onPressed: () {
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => BindNotionPage()));
+                  MaterialPageRoute(builder: (context) => LinkNotionPage()));
             },
           ),
           Container(

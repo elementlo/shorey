@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -13,6 +16,7 @@ import 'package:spark_list/pages/mantra_edit_page.dart';
 import 'package:spark_list/pages/root_page.dart';
 import 'package:spark_list/pages/settings_page.dart';
 import 'package:spark_list/resource/data_provider.dart';
+import 'package:spark_list/resource/http.dart';
 import 'package:spark_list/routes.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
@@ -35,6 +39,7 @@ void main() async {
   await _dataProvider.ready;
   await _dataProvider.getLocale();
   _dbProvider = DbProvider();
+  _configHttpClient();
   runApp(ProviderWidget2<ConfigViewModel, HomeViewModel>(
       ConfigViewModel(_dataProvider, _dbProvider),
       HomeViewModel(_dataProvider, _dbProvider),
@@ -44,6 +49,23 @@ void main() async {
     hViewModel?.initDefaultSettings();
   }, child: MyApp()));
   _configLoading();
+}
+
+_parseAndDecode(String response) {
+  return jsonDecode(response);
+}
+
+parseJson(String text) {
+  return compute(_parseAndDecode, text);
+}
+
+void _configHttpClient(){
+  dio.interceptors.add(LogInterceptor(responseBody: true, responseHeader: false));
+  dio.options.baseUrl = 'https://api.notion.com/';
+  dio.options.headers.addAll({'Notion-Version':'2021-05-13'});
+  dio.options.connectTimeout = 5000;
+  dio.options.receiveTimeout = 7000;
+  (dio.transformer as DefaultTransformer).jsonDecodeCallback = parseJson;
 }
 
 void _configLoading() {

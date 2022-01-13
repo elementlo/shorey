@@ -1,12 +1,15 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/pages/curtain_page.dart';
+import 'package:spark_list/resource/http.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/settings_icon/icon.dart' as settings_icon;
@@ -36,6 +39,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _requestPermissions();
+    _addErrorInterceptor();
     _settingsPanelController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
@@ -65,6 +69,18 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
           badge: true,
           sound: true,
         );
+  }
+
+  void _addErrorInterceptor() {
+    dio.interceptors.add(InterceptorsWrapper(onError: (e, handler) {
+      if (e.response != null) {
+        Fluttertoast.showToast(
+            msg: e.response?.data['message'] ?? 'Network error');
+        handler.next(e);
+      } else {
+        handler.next(e);
+      }
+    }));
   }
 
   void _toggleSettings(BuildContext context) {

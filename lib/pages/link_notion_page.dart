@@ -1,9 +1,12 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/generated/l10n.dart';
+import 'package:spark_list/view_model/link_notion_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 import 'package:spark_list/widget/settings_list_item.dart';
+import 'package:provider/provider.dart';
 
 ///
 /// Author: Elemen
@@ -13,18 +16,19 @@ import 'package:spark_list/widget/settings_list_item.dart';
 ///
 enum _ExpandableSetting { textScale, time }
 
-class BindNotionPage extends StatefulWidget {
-  const BindNotionPage({Key? key}) : super(key: key);
+class LinkNotionPage extends StatefulWidget {
+  const LinkNotionPage({Key? key}) : super(key: key);
 
   @override
-  _BindNotionPageState createState() => _BindNotionPageState();
+  _LinkNotionPageState createState() => _LinkNotionPageState();
 }
 
-class _BindNotionPageState extends State<BindNotionPage>
+class _LinkNotionPageState extends State<LinkNotionPage>
     with TickerProviderStateMixin {
   late Animation<double> _staggerSettingsItemsAnimation;
   late AnimationController _settingsPanelController;
   _ExpandableSetting? _expandedSettingId;
+  final TextEditingController _inputController = TextEditingController();
 
   void onTapSetting(_ExpandableSetting settingId) {
     setState(() {
@@ -42,54 +46,6 @@ class _BindNotionPageState extends State<BindNotionPage>
         _expandedSettingId = null;
       });
     }
-  }
-
-  Widget _buildAccountCard() {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Column(
-      children: [
-        TextField(
-          onSubmitted: (String finalInput) async {
-            print('onsubmit: ${finalInput}');
-            if (finalInput.isNotEmpty) {}
-          },
-          decoration: InputDecoration(
-              labelText: S.of(context).notionToken,
-              labelStyle: TextStyle(color: Colors.grey),
-              focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey)),
-              border: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey)),
-              suffix: Container(
-                width: 25,
-                height: 25,
-                child: IconButton(
-                    padding: EdgeInsets.all(0),
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.check,
-                      color: colorScheme.onSecondary,
-                    )),
-              ),
-              contentPadding: EdgeInsets.only(top: 10)),
-        ),
-        ListTile(
-          contentPadding: EdgeInsets.only(left: 0),
-          leading: CircleAvatar(
-            backgroundColor: Colors.black,
-            radius: 30,
-            backgroundImage: NetworkImage(
-                'https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF',),
-          ),
-          title: Text('1111'),
-          subtitle: Text('2222'),
-          trailing: IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.title),
-          ),
-        ),
-      ],
-    );
   }
 
   @override
@@ -122,7 +78,7 @@ class _BindNotionPageState extends State<BindNotionPage>
         },
         onTapSetting: () => onTapSetting(_ExpandableSetting.textScale),
         isExpanded: _expandedSettingId == _ExpandableSetting.textScale,
-        child: _buildAccountCard(),
+        child: _NotionAccountCard(controller: _inputController,),
       ),
       SettingsListItem<double>(
         title: S.of(context).linkNotionDatabase,
@@ -134,30 +90,33 @@ class _BindNotionPageState extends State<BindNotionPage>
         child: Container(),
       ),
     ];
-    return Scaffold(
-      appBar: SparkAppBar(
-        context: context,
-        title: S.of(context).bindNotion,
-      ),
-      body: Material(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        child: Padding(
-          padding: const EdgeInsets.only(
-            bottom: 64,
-          ),
-          // Remove ListView top padding as it is already accounted for.
-          child: ListView(
-            children: [
-              const SizedBox(height: 12),
-              ...[
-                _AnimateSettingsListItems(
-                  animation: _staggerSettingsItemsAnimation,
-                  children: settingsListItems,
-                ),
+    return ProviderWidget<LinkNotionViewModel>(
+      model: LinkNotionViewModel(),
+      child: Scaffold(
+        appBar: SparkAppBar(
+          context: context,
+          title: S.of(context).bindNotion,
+        ),
+        body: Material(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: Padding(
+            padding: const EdgeInsets.only(
+              bottom: 64,
+            ),
+            // Remove ListView top padding as it is already accounted for.
+            child: ListView(
+              children: [
                 const SizedBox(height: 12),
-                //Divider(thickness: 2, height: 0, color: colorScheme.background),
+                ...[
+                  _AnimateSettingsListItems(
+                    animation: _staggerSettingsItemsAnimation,
+                    children: settingsListItems,
+                  ),
+                  const SizedBox(height: 12),
+                  //Divider(thickness: 2, height: 0, color: colorScheme.background),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
@@ -204,6 +163,66 @@ class _AnimateSettingsListItems extends StatelessWidget {
               },
               child: child,
             ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NotionAccountCard extends StatelessWidget {
+  final TextEditingController controller;
+
+  const _NotionAccountCard({Key? key, required this.controller}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      height: 150,
+      child: Column(
+        children: [
+          TextField(
+            controller: controller,
+            decoration: InputDecoration(
+                labelText: S.of(context).notionToken,
+                labelStyle: TextStyle(color: Colors.grey),
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey)),
+                border: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey)),
+                suffix: Container(
+                  width: 25,
+                  height: 25,
+                  child: IconButton(
+                      padding: EdgeInsets.all(0),
+                      onPressed: () {
+                        if(controller.text.isNotEmpty){
+                          context.read<LinkNotionViewModel>().syncUserInfo(controller.text);
+                        }
+                      },
+                      icon: Icon(
+                        Icons.check,
+                        color: colorScheme.onSecondary,
+                      )),
+                ),
+                contentPadding: EdgeInsets.only(top: 10)),
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.only(left: 0),
+            leading: CircleAvatar(
+              backgroundColor: Colors.black,
+              radius: 30,
+              backgroundImage: NetworkImage(
+                'https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF',
+              ),
+            ),
+            title: Text('1111'),
+            subtitle: Text('2222'),
+            trailing: IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.title),
+            ),
+          ),
         ],
       ),
     );
