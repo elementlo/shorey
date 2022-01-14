@@ -217,7 +217,7 @@ class _ExpandedCategoryDemos extends StatelessWidget {
       child: TextField(
         controller: _controller,
         decoration: InputDecoration(
-          hintText: 'Add a task',
+          hintText: 'Add one',
           hintStyle: TextStyle(
             color: Theme.of(context).colorScheme.background,
             fontSize: 14,

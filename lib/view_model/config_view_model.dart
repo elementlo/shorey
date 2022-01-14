@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:spark_list/base/view_state_model.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/database/database.dart';
+import 'package:spark_list/main.dart';
 import 'package:spark_list/model/model.dart';
 import 'package:spark_list/resource/data_provider.dart';
 
@@ -19,12 +20,8 @@ class ConfigViewModel extends ViewStateModel {
   bool isSettingsOpenNotifier = false;
 
   List<CategoryItem> categoryDemosList = [];
-  final DbProvider _dbProvider;
-  final DataProvider _dataProvider;
   Locale? _deviceLocale;
   Stream<List<Category>>? categoryStream;
-
-  ConfigViewModel(this._dataProvider, this._dbProvider);
 
   void set settingsOpenNotifier(bool open) {
     isSettingsOpenNotifier = open;
@@ -33,7 +30,7 @@ class ConfigViewModel extends ViewStateModel {
 
   Locale? initLocale(Locale? locale) {
     _deviceLocale = locale;
-    final defaultLocale = _dataProvider.defaultLocale;
+    final defaultLocale = dsProvider.defaultLocale;
     if (defaultLocale == null) {
       return locale;
     } else if (defaultLocale == 'zh') {
@@ -44,7 +41,7 @@ class ConfigViewModel extends ViewStateModel {
   }
 
   Future<String?> getDefaultLocale() async {
-    final locale = await _dataProvider.getLocale();
+    final locale = await dsProvider.getLocale();
     if (locale == null) {
       return _deviceLocale?.languageCode;
     } else {
@@ -53,27 +50,27 @@ class ConfigViewModel extends ViewStateModel {
   }
 
   Future savePerfLocale(Locale locale) async {
-    await _dataProvider.saveLocale(locale);
+    await dsProvider.saveLocale(locale);
   }
 
   Future<int?> getAlertPeriod() async {
-    return await _dataProvider.getAlertPeriod();
+    return await dsProvider.getAlertPeriod();
   }
 
   Future<String?> getRetrospectTime() async {
-    return await _dataProvider.getRetrospectTime();
+    return await dsProvider.getRetrospectTime();
   }
 
   Future saveAlertPeriod(int period) async {
-    await _dataProvider.saveAlertPeriod(period);
+    await dsProvider.saveAlertPeriod(period);
   }
 
   Future saveRetrospectTime(String time) async {
-    await _dataProvider.saveRetrospectTime(time);
+    await dsProvider.saveRetrospectTime(time);
   }
 
   Future getCategoryList() async {
-    categoryStream = _dbProvider.categoryList;
+    categoryStream = dbProvider.categoryList;
     categoryStream?.listen((event) {
       categoryDemosList.clear();
       event.forEach((element) {
@@ -104,9 +101,9 @@ class ConfigViewModel extends ViewStateModel {
   }
 
   Future initCategoryDemosList() async {
-    await _dbProvider.countCategories().then((value) async {
+    await dbProvider.countCategories().then((value) async {
       if (value == 0) {
-        await _dbProvider.setCategories();
+        await dbProvider.setCategories();
       }
     });
     // categoryDemosList = List.of([

@@ -26,8 +26,8 @@ import 'package:timezone/timezone.dart' as tz;
 import 'config/theme_data.dart';
 import 'generated/l10n.dart';
 
-late DataProvider _dataProvider;
-late DbProvider _dbProvider;
+late DataStoreProvider dsProvider;
+late DatabaseProvider dbProvider;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -35,14 +35,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   _configureLocalTimeZone();
   await _initNotificationsSettings();
-  _dataProvider = DataProvider();
-  await _dataProvider.ready;
-  await _dataProvider.getLocale();
-  _dbProvider = DbProvider();
+  dsProvider = DataStoreProvider();
+  await dsProvider.ready;
+  await dsProvider.getLocale();
+  dbProvider = DatabaseProvider();
   _configHttpClient();
   runApp(ProviderWidget2<ConfigViewModel, HomeViewModel>(
-      ConfigViewModel(_dataProvider, _dbProvider),
-      HomeViewModel(_dataProvider, _dbProvider),
+      ConfigViewModel(),
+      HomeViewModel(),
       onModelReady: (cViewModel, hViewModel) async {
     await cViewModel?.initCategoryDemosList();
     await cViewModel?.getCategoryList();

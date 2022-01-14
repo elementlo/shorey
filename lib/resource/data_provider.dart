@@ -3,6 +3,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
+import 'package:spark_list/model/notion_model.dart';
 import 'package:synchronized/synchronized.dart';
 
 ///
@@ -12,7 +13,7 @@ import 'package:synchronized/synchronized.dart';
 /// Description:
 ///
 
-class DataProvider {
+class DataStoreProvider {
   static const String storeName = 'store.db';
   static const int kVersion1 = 1;
   final lock = Lock(reentrant: true);
@@ -22,7 +23,7 @@ class DataProvider {
 
   final dataStore = StoreRef.main();
 
-  DataProvider();
+  DataStoreProvider();
 
   Future<Database> open() async {
     final path = await getApplicationDocumentsDirectory();
@@ -83,5 +84,22 @@ class DataProvider {
 
   Future saveMantra(String mantra) async {
     await dataStore.record('mantra').put(db!, mantra);
+  }
+
+  Future saveNotionUser(Results user) {
+    return dataStore.record('notion_user').put(db!, user.toJson());
+  }
+
+  Future<Results?> getNotionUser() async {
+    final user =
+        await dataStore.record('notion_user').get(db!) as Map<String, dynamic>?;
+    if (user != null) {
+      return Results.fromJson(user);
+    }
+    return null;
+  }
+
+  Future deleteNotionUser() {
+    return dataStore.record('notion_user').delete(db!);
   }
 }

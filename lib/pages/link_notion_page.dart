@@ -1,12 +1,14 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:provider/provider.dart';
 import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/generated/l10n.dart';
+import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/view_model/link_notion_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 import 'package:spark_list/widget/settings_list_item.dart';
-import 'package:provider/provider.dart';
 
 ///
 /// Author: Elemen
@@ -78,7 +80,9 @@ class _LinkNotionPageState extends State<LinkNotionPage>
         },
         onTapSetting: () => onTapSetting(_ExpandableSetting.textScale),
         isExpanded: _expandedSettingId == _ExpandableSetting.textScale,
-        child: _NotionAccountCard(controller: _inputController,),
+        child: _NotionAccountCard(
+          controller: _inputController,
+        ),
       ),
       SettingsListItem<double>(
         title: S.of(context).linkNotionDatabase,
@@ -169,58 +173,104 @@ class _AnimateSettingsListItems extends StatelessWidget {
   }
 }
 
-class _NotionAccountCard extends StatelessWidget {
+class _NotionAccountCard extends StatefulWidget {
   final TextEditingController controller;
 
-  const _NotionAccountCard({Key? key, required this.controller}) : super(key: key);
+  const _NotionAccountCard({Key? key, required this.controller})
+      : super(key: key);
+
+  @override
+  State<_NotionAccountCard> createState() => _NotionAccountCardState();
+}
+
+class _NotionAccountCardState extends State<_NotionAccountCard> {
+  var offStageCard = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final avatarUrl = context.watch<LinkNotionViewModel>().avatarUrl;
+    offStageCard = avatarUrl == '';
     return Container(
-      height: 150,
+      height: 90,
+      padding: EdgeInsets.only(top: 10),
       child: Column(
         children: [
-          TextField(
-            controller: controller,
-            decoration: InputDecoration(
-                labelText: S.of(context).notionToken,
-                labelStyle: TextStyle(color: Colors.grey),
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey)),
-                border: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey)),
-                suffix: Container(
-                  width: 25,
-                  height: 25,
-                  child: IconButton(
-                      padding: EdgeInsets.all(0),
-                      onPressed: () {
-                        if(controller.text.isNotEmpty){
-                          context.read<LinkNotionViewModel>().syncUserInfo(controller.text);
-                        }
-                      },
-                      icon: Icon(
-                        Icons.check,
-                        color: colorScheme.onSecondary,
-                      )),
-                ),
-                contentPadding: EdgeInsets.only(top: 10)),
-          ),
-          ListTile(
-            contentPadding: EdgeInsets.only(left: 0),
-            leading: CircleAvatar(
-              backgroundColor: Colors.black,
-              radius: 30,
-              backgroundImage: NetworkImage(
-                'https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF',
-              ),
+          Offstage(
+            offstage: !offStageCard,
+            child: TextField(
+              controller: widget.controller,
+              decoration: InputDecoration(
+                  labelText: S.of(context).notionToken,
+                  labelStyle: TextStyle(color: Colors.grey),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey)),
+                  border: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey)),
+                  suffix: Container(
+                    width: 25,
+                    height: 25,
+                    child: IconButton(
+                        padding: EdgeInsets.all(0),
+                        onPressed: () async {
+                          if (widget.controller.text.isNotEmpty) {
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            EasyLoading.show();
+                            final user = await context
+                                .read<LinkNotionViewModel>()
+                                .syncUserInfo(widget.controller.text);
+                            if (user != null) {
+                              offStageCard = false;
+                              setState(() {});
+                            }
+                            EasyLoading.dismiss();
+                          }
+                        },
+                        icon: Icon(
+                          Icons.check,
+                          color: colorScheme.onSecondary,
+                        )),
+                  ),
+                  contentPadding: EdgeInsets.only(top: 10)),
             ),
-            title: Text('1111'),
-            subtitle: Text('2222'),
-            trailing: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.title),
+          ),
+          Offstage(
+            offstage: offStageCard,
+            child: ListTile(
+              contentPadding: EdgeInsets.only(
+                left: 0,
+                right: 0,
+              ),
+              leading: CircleAvatar(
+                radius: 30,
+                backgroundImage: avatarUrl == ''
+                    ? null
+                    : NetworkImage(
+                        '${context.watch<LinkNotionViewModel>().avatarUrl}',
+                      ),
+              ),
+              title: Text('${context.watch<LinkNotionViewModel>().name}'),
+              subtitle: Text('${context.watch<LinkNotionViewModel>().email}'),
+              trailing: SizedBox(
+                height: 20,
+                width: 20,
+                child: IconButton(
+                  iconSize: 20,
+                  padding: EdgeInsets.all(0),
+                  onPressed: () {
+                    context.read<LinkNotionViewModel>().deleteUser();
+                  },
+                  icon: Icon(
+                    Icons.clear,
+                    color: Colors.grey.shade400,
+                  ),
+                ),
+              ),
             ),
           ),
         ],

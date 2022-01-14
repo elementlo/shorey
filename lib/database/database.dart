@@ -94,8 +94,8 @@ LazyDatabase _openConnection() {
 }
 
 @DriftDatabase(tables: [ToDos, Categories, HeatGraph, ActionsHistory])
-class DbProvider extends _$DbProvider {
-  DbProvider() : super(_openConnection());
+class DatabaseProvider extends _$DbProvider {
+  DatabaseProvider() : super(_openConnection());
 
   @override
   int get schemaVersion => 1;
@@ -158,15 +158,15 @@ class DbProvider extends _$DbProvider {
     return count;
   }
 
-  Future deleteCategory(int id) async {
+  Future deleteCategory(int id) {
     return (delete(categories)..where((tbl) => tbl.id.equals(id))).go();
   }
 
-  Future insertCategory(CategoriesCompanion entity) async {
+  Future insertCategory(CategoriesCompanion entity) {
     return into(categories).insert(entity);
   }
 
-  Future updateCategory(CategoriesCompanion entity) async {
+  Future updateCategory(CategoriesCompanion entity) {
     return update(categories).replace(entity);
   }
 

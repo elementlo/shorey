@@ -149,7 +149,7 @@ class _SettingsListItemState<T> extends State<SettingsListItem<T>>
           color: colorScheme.secondaryVariant,
           margin: const EdgeInsetsDirectional.only(bottom: 40),
           padding:
-              const EdgeInsetsDirectional.only(start: 24, end: 24, bottom: 20),
+              const EdgeInsetsDirectional.only(start: 24, end: 24, bottom: 0),
           child: widget.child
           //CustomizedDatePicker([])
           ),
