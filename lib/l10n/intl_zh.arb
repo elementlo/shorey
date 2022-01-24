@@ -74,6 +74,8 @@
   "editCategory": "编辑",
   "bindNotion": "关联Notion",
   "notion": "Notion账户",
-  "linkNotionDatabase": "关联数据库",
-  "notionToken": "Notion token"
+  "linkNotionDatabase": "关联根页面",
+  "notionToken": "Notion token",
+  "linkNotionInfo": "填写下面两项信息使Shorey与Notion连接",
+  "notionPageId": "Page ID"
 }

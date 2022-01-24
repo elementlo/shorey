@@ -2,7 +2,7 @@ import 'package:spark_list/base/view_state_model.dart';
 import 'package:spark_list/config/api.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/model/notion_model.dart';
-import 'package:spark_list/resource/http.dart';
+import 'package:spark_list/resource/http_provider.dart';
 
 ///
 /// Author: Elemen
@@ -27,7 +27,7 @@ class LinkNotionViewModel extends ViewStateModel {
     });
   }
 
-  Future<Results?> syncUserInfo(String token) async {
+  Future<Results?> linkNotionAccount(String token) async {
     dio.options.headers.addAll({'Authorization': 'Bearer $token'});
     final response = await dio.get(notionUsers);
     if (response.success) {
@@ -38,6 +38,7 @@ class LinkNotionViewModel extends ViewStateModel {
           avatarUrl = user.avatarUrl;
           name = user.name;
           email = user.person?.email;
+          user.token = token;
           notifyListeners();
           dsProvider.saveNotionUser(user);
           return user;
@@ -53,5 +54,14 @@ class LinkNotionViewModel extends ViewStateModel {
     name = '';
     notifyListeners();
     return dsProvider.deleteNotionUser();
+  }
+
+  Future linkNotionDatabase(String databaseId) async{
+    final response = await dio.get('${retrieveNotionPages}/${databaseId}');
+    if(response.success){
+      final database = NotionDatabase.fromJson(response.data);
+      print(database);
+    }
+
   }
 }

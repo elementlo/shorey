@@ -5,4 +5,6 @@
 /// Description: 
 ///
 
- const String notionUsers = 'v1/users';
+const String notionUsers = 'v1/users';
+const String retrieveNotionDatabase = 'v1/databases';
+const String retrieveNotionPages = 'v1/pages';

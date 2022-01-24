@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:spark_list/base/view_state_model.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/database/database.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/model/model.dart';
 import 'package:spark_list/resource/data_provider.dart';
+import 'package:spark_list/resource/http_provider.dart';
 
 ///
 /// Author: Elemen
@@ -26,6 +29,14 @@ class ConfigViewModel extends ViewStateModel {
   void set settingsOpenNotifier(bool open) {
     isSettingsOpenNotifier = open;
     notifyListeners();
+  }
+
+  Future configDio() async {
+    final user = await dsProvider.getNotionUser();
+    if(user != null){
+     final token = user.token;
+     dio.options.headers.addAll({'Authorization': 'Bearer $token'});
+    }
   }
 
   Locale? initLocale(Locale? locale) {
@@ -74,7 +85,7 @@ class ConfigViewModel extends ViewStateModel {
     categoryStream?.listen((event) {
       categoryDemosList.clear();
       event.forEach((element) {
-        if(element.name != 'mainfocus'){
+        if (element.name != 'mainfocus') {
           categoryDemosList.add(CategoryItem(element.id,
             colorId: element.colorId,
             iconId: element.iconId,

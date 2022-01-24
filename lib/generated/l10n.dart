@@ -500,10 +500,10 @@ class S {
     );
   }
 
-  /// `Link database`
+  /// `Link root page`
   String get linkNotionDatabase {
     return Intl.message(
-      'Link database',
+      'Link root page',
       name: 'linkNotionDatabase',
       desc: '',
       args: [],
@@ -515,6 +515,26 @@ class S {
     return Intl.message(
       'Notion token',
       name: 'notionToken',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fill in the blanks to link Notion`
+  String get linkNotionInfo {
+    return Intl.message(
+      'Fill in the blanks to link Notion',
+      name: 'linkNotionInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Page ID`
+  String get notionPageId {
+    return Intl.message(
+      'Page ID',
+      name: 'notionPageId',
       desc: '',
       args: [],
     );

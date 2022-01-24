@@ -26,60 +26,60 @@ class _CurtainPageState extends State<CurtainPage> {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white12,
-      child: ListView(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Header(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: ListView(
+          children: [
+            Header(
               color: Colors.black,
               text: S.of(context).shoreyMomment,
             ),
-          ),
-          SizedBox(
-            height: 16,
-          ),
-          _MomentGrid(),
-          SizedBox(height: 8),
-          SizedBox(height: 8),
-          _SettingsRow(
-            title: S.of(context).actionHistory,
-            onTap: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => ActionHistoryPage()));
-            },
-          ),
-          SizedBox(height: 8),
-          _SettingsRow(
-            title: S.of(context).actionArchived,
-            onTap: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => FiledEventsPage()));
-            },
-          ),
-          SizedBox(height: 8),
-          _SettingsRow(
-            title: S.of(context).settings,
-            onTap: () {
-              Navigator.of(context).pushNamed(Routes.settingsCategoryPage);
-            },
-          ),
-          SizedBox(height: 20),
-          Divider(),
-          _aboutView(),
-          Divider(),
-          SizedBox(height: 40),
-          Image.asset(
-            'assets/images/img_logo_grey.png',
-            width: 30,
-            height: 30,
-            isAntiAlias: true,
-            filterQuality: FilterQuality.medium,
-          ),
-          SizedBox(height: 8,),
-          Align(
-              child: Text('@Elemen', style: TextStyle(color: Colors.grey, fontSize: 12),),
-          )
-        ],
+            SizedBox(
+              height: 16,
+            ),
+            _MomentGrid(),
+            SizedBox(height: 8),
+            SizedBox(height: 8),
+            _SettingsRow(
+              title: S.of(context).actionHistory,
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ActionHistoryPage()));
+              },
+            ),
+            SizedBox(height: 8),
+            _SettingsRow(
+              title: S.of(context).actionArchived,
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => FiledEventsPage()));
+              },
+            ),
+            SizedBox(height: 8),
+            _SettingsRow(
+              title: S.of(context).settings,
+              onTap: () {
+                Navigator.of(context).pushNamed(Routes.settingsCategoryPage);
+              },
+            ),
+            SizedBox(height: 20),
+            Divider(),
+            _aboutView(),
+            Divider(),
+            SizedBox(height: 40),
+            Image.asset(
+              'assets/images/img_logo_grey.png',
+              width: 30,
+              height: 30,
+              isAntiAlias: true,
+              filterQuality: FilterQuality.medium,
+            ),
+            SizedBox(height: 8,),
+            Align(
+                child: Text('@Elemen', style: TextStyle(color: Colors.grey, fontSize: 12),),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -123,7 +123,6 @@ class _MomentGrid extends StatelessWidget {
         .width;
     final cellWidth = (width - 32 - 25 * 13) / 2;
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16),
       alignment: Alignment.center,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8), color: Colors.white

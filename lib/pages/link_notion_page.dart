@@ -5,7 +5,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/generated/l10n.dart';
-import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/view_model/link_notion_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 import 'package:spark_list/widget/settings_list_item.dart';
@@ -16,7 +15,7 @@ import 'package:spark_list/widget/settings_list_item.dart';
 /// Date: 2022/1/11
 /// Description:
 ///
-enum _ExpandableSetting { textScale, time }
+enum _ExpandableSetting { linkNotionAccount, time }
 
 class LinkNotionPage extends StatefulWidget {
   const LinkNotionPage({Key? key}) : super(key: key);
@@ -31,6 +30,7 @@ class _LinkNotionPageState extends State<LinkNotionPage>
   late AnimationController _settingsPanelController;
   _ExpandableSetting? _expandedSettingId;
   final TextEditingController _inputController = TextEditingController();
+  final TextEditingController _databaseController = TextEditingController();
 
   void onTapSetting(_ExpandableSetting settingId) {
     setState(() {
@@ -68,18 +68,19 @@ class _LinkNotionPageState extends State<LinkNotionPage>
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final settingsListItems = [
+  List<Widget> _buildListItem(BuildContext context) {
+    return [
       SettingsListItem<double>(
         title: S.of(context).notion,
-        optionsMap: LinkedHashMap.of({1.0: DisplayOption('')}),
-        selectedOption: MediaQuery.of(context).textScaleFactor,
+        optionsMap: LinkedHashMap.of({
+          1.0: DisplayOption('${context.watch<LinkNotionViewModel>().name}')
+        }),
+        selectedOption: 1.0,
         onOptionChanged: (value) {
           print(value);
         },
-        onTapSetting: () => onTapSetting(_ExpandableSetting.textScale),
-        isExpanded: _expandedSettingId == _ExpandableSetting.textScale,
+        onTapSetting: () => onTapSetting(_ExpandableSetting.linkNotionAccount),
+        isExpanded: _expandedSettingId == _ExpandableSetting.linkNotionAccount,
         child: _NotionAccountCard(
           controller: _inputController,
         ),
@@ -91,9 +92,15 @@ class _LinkNotionPageState extends State<LinkNotionPage>
         onOptionChanged: (newTextScale) {},
         onTapSetting: () => onTapSetting(_ExpandableSetting.time),
         isExpanded: _expandedSettingId == _ExpandableSetting.time,
-        child: Container(),
+        child: _NotionDatabaseCard(
+          controller: _databaseController,
+        ),
       ),
     ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return ProviderWidget<LinkNotionViewModel>(
       model: LinkNotionViewModel(),
       child: Scaffold(
@@ -107,14 +114,25 @@ class _LinkNotionPageState extends State<LinkNotionPage>
             padding: const EdgeInsets.only(
               bottom: 64,
             ),
-            // Remove ListView top padding as it is already accounted for.
             child: ListView(
               children: [
                 const SizedBox(height: 12),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  child: Text(
+                    S.of(context).linkNotionInfo,
+                    style: TextStyle(fontSize: 13, color: Colors.grey),
+                  ),
+                ),
                 ...[
-                  _AnimateSettingsListItems(
-                    animation: _staggerSettingsItemsAnimation,
-                    children: settingsListItems,
+                  Consumer<LinkNotionViewModel>(
+                    builder: (context, vm, child) {
+                      return _AnimateSettingsListItems(
+                        animation: _staggerSettingsItemsAnimation,
+                        children: _buildListItem(context),
+                      );
+                    },
                   ),
                   const SizedBox(height: 12),
                   //Divider(thickness: 2, height: 0, color: colorScheme.background),
@@ -223,9 +241,108 @@ class _NotionAccountCardState extends State<_NotionAccountCard> {
                             EasyLoading.show();
                             final user = await context
                                 .read<LinkNotionViewModel>()
-                                .syncUserInfo(widget.controller.text);
+                                .linkNotionAccount(widget.controller.text);
                             if (user != null) {
                               offStageCard = false;
+                              setState(() {});
+                            }
+                            EasyLoading.dismiss();
+                          }
+                        },
+                        icon: Icon(
+                          Icons.check,
+                          color: colorScheme.onSecondary,
+                        )),
+                  ),
+                  contentPadding: EdgeInsets.only(top: 10)),
+            ),
+          ),
+          Offstage(
+            offstage: offStageCard,
+            child: ListTile(
+              contentPadding: EdgeInsets.only(
+                left: 0,
+                right: 0,
+              ),
+              leading: CircleAvatar(
+                radius: 30,
+                backgroundImage: avatarUrl == ''
+                    ? null
+                    : NetworkImage(
+                        '${context.watch<LinkNotionViewModel>().avatarUrl}',
+                      ),
+              ),
+              title: Text('${context.watch<LinkNotionViewModel>().name}'),
+              subtitle: Text('${context.watch<LinkNotionViewModel>().email}'),
+              trailing: SizedBox(
+                height: 20,
+                width: 20,
+                child: IconButton(
+                  iconSize: 20,
+                  padding: EdgeInsets.all(0),
+                  onPressed: () {
+                    context.read<LinkNotionViewModel>().deleteUser();
+                  },
+                  icon: Icon(
+                    Icons.clear,
+                    color: Colors.grey.shade400,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NotionDatabaseCard extends StatefulWidget {
+  final TextEditingController controller;
+
+  const _NotionDatabaseCard({Key? key, required this.controller})
+      : super(key: key);
+
+  @override
+  State<_NotionDatabaseCard> createState() => _NotionDatabaseCardState();
+}
+
+class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
+  var offStageCard = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final avatarUrl = context.watch<LinkNotionViewModel>().avatarUrl;
+    return Container(
+      height: 90,
+      padding: EdgeInsets.only(top: 10),
+      child: Column(
+        children: [
+          Offstage(
+            offstage: !offStageCard,
+            child: TextField(
+              controller: widget.controller,
+              decoration: InputDecoration(
+                  labelText: S.of(context).notionPageId,
+                  labelStyle: TextStyle(color: Colors.grey),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey)),
+                  border: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey)),
+                  suffix: Container(
+                    width: 25,
+                    height: 25,
+                    child: IconButton(
+                        padding: EdgeInsets.all(0),
+                        onPressed: () async {
+                          if (widget.controller.text.isNotEmpty) {
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            EasyLoading.show();
+                            final database = await context
+                                .read<LinkNotionViewModel>()
+                                .linkNotionDatabase(widget.controller.text);
+                            if (database != null) {
                               setState(() {});
                             }
                             EasyLoading.dismiss();

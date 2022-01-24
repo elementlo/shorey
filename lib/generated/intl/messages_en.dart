@@ -58,7 +58,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "itemRemark": MessageLookupByLibrary.simpleMessage("Remark"),
         "languages": MessageLookupByLibrary.simpleMessage("Languages"),
         "linkNotionDatabase":
-            MessageLookupByLibrary.simpleMessage("Link database"),
+            MessageLookupByLibrary.simpleMessage("Link root page"),
+        "linkNotionInfo": MessageLookupByLibrary.simpleMessage(
+            "Fill in the blanks to link Notion"),
         "mainCategory": MessageLookupByLibrary.simpleMessage("Category"),
         "mainFocusToday":
             MessageLookupByLibrary.simpleMessage("Main Focus Today"),
@@ -72,6 +74,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "noAlert": MessageLookupByLibrary.simpleMessage("No alert"),
         "notificationTitle": MessageLookupByLibrary.simpleMessage("Retrospect"),
         "notion": MessageLookupByLibrary.simpleMessage("Notion account"),
+        "notionPageId": MessageLookupByLibrary.simpleMessage("Page ID"),
         "notionToken": MessageLookupByLibrary.simpleMessage("Notion token"),
         "retrospect": MessageLookupByLibrary.simpleMessage("Retrospect"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),

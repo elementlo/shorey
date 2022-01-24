@@ -53,7 +53,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "itemAlert": MessageLookupByLibrary.simpleMessage("标题"),
         "itemRemark": MessageLookupByLibrary.simpleMessage("备注"),
         "languages": MessageLookupByLibrary.simpleMessage("语言"),
-        "linkNotionDatabase": MessageLookupByLibrary.simpleMessage("关联数据库"),
+        "linkNotionDatabase": MessageLookupByLibrary.simpleMessage("关联根页面"),
+        "linkNotionInfo":
+            MessageLookupByLibrary.simpleMessage("填写下面两项信息使Shorey与Notion连接"),
         "mainCategory": MessageLookupByLibrary.simpleMessage("类别"),
         "mainFocusToday": MessageLookupByLibrary.simpleMessage("今日聚焦"),
         "mantra": MessageLookupByLibrary.simpleMessage("格言"),
@@ -64,6 +66,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "noAlert": MessageLookupByLibrary.simpleMessage("不提醒"),
         "notificationTitle": MessageLookupByLibrary.simpleMessage("回顾"),
         "notion": MessageLookupByLibrary.simpleMessage("Notion账户"),
+        "notionPageId": MessageLookupByLibrary.simpleMessage("Page ID"),
         "notionToken": MessageLookupByLibrary.simpleMessage("Notion token"),
         "retrospect": MessageLookupByLibrary.simpleMessage("回顾"),
         "settings": MessageLookupByLibrary.simpleMessage("设置"),
