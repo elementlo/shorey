@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:spark_list/model/notion_model.dart';
+import 'package:spark_list/model/notion_page_model.dart';
 import 'package:synchronized/synchronized.dart';
 
 ///
@@ -101,5 +102,22 @@ class DataStoreProvider {
 
   Future deleteNotionUser() {
     return dataStore.record('notion_user').delete(db!);
+  }
+
+  Future saveRootNotionPage(NotionPage page) {
+    return dataStore.record('root_notion_page').put(db!, page.toJson());
+  }
+
+  Future<NotionPage?> getRootNotionPage() async {
+    final page =
+        await dataStore.record('root_notion_page').get(db!) as Map<String, dynamic>?;
+    if (page != null) {
+      return NotionPage.fromJson(page);
+    }
+    return null;
+  }
+
+  Future deleteRootNotionPage(){
+    return dataStore.record('root_notion_page').delete(db!);
   }
 }

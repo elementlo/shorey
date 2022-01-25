@@ -205,11 +205,6 @@ class _NotionAccountCardState extends State<_NotionAccountCard> {
   var offStageCard = true;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final avatarUrl = context.watch<LinkNotionViewModel>().avatarUrl;
@@ -308,15 +303,17 @@ class _NotionDatabaseCard extends StatefulWidget {
 }
 
 class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
-  var offStageCard = false;
+  var offStageCard = true;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final avatarUrl = context.watch<LinkNotionViewModel>().avatarUrl;
+    final title = context.watch<LinkNotionViewModel>().title;
+    offStageCard = title == '';
     return Container(
-      height: 90,
       padding: EdgeInsets.only(top: 10),
+      width: double.infinity,
+      height: 230,
       child: Column(
         children: [
           Offstage(
@@ -341,8 +338,9 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                             EasyLoading.show();
                             final database = await context
                                 .read<LinkNotionViewModel>()
-                                .linkNotionDatabase(widget.controller.text);
+                                .linkNotionRootPage(widget.controller.text);
                             if (database != null) {
+                              offStageCard = false;
                               setState(() {});
                             }
                             EasyLoading.dismiss();
@@ -358,35 +356,32 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
           ),
           Offstage(
             offstage: offStageCard,
-            child: ListTile(
-              contentPadding: EdgeInsets.only(
-                left: 0,
-                right: 0,
-              ),
-              leading: CircleAvatar(
-                radius: 30,
-                backgroundImage: avatarUrl == ''
-                    ? null
-                    : NetworkImage(
-                        '${context.watch<LinkNotionViewModel>().avatarUrl}',
-                      ),
-              ),
-              title: Text('${context.watch<LinkNotionViewModel>().name}'),
-              subtitle: Text('${context.watch<LinkNotionViewModel>().email}'),
-              trailing: SizedBox(
-                height: 20,
-                width: 20,
-                child: IconButton(
-                  iconSize: 20,
-                  padding: EdgeInsets.all(0),
-                  onPressed: () {
-                    context.read<LinkNotionViewModel>().deleteUser();
-                  },
-                  icon: Icon(
-                    Icons.clear,
-                    color: Colors.grey.shade400,
+            child: Card(
+              elevation: 1,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              child: Column(
+                children: [
+                  Container(
+                    height: 130,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+                        image: DecorationImage(fit: BoxFit.cover,
+                            image: NetworkImage(
+                                '${context.watch<LinkNotionViewModel>().coverUrl}',))),
                   ),
-                ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      child:
+                          Row(
+                            children: [
+                              Text('${context.watch<LinkNotionViewModel>().titleIcon}'),
+                              Text('${context.watch<LinkNotionViewModel>().title}'),
+                            ],
+                          ))
+                ],
               ),
             ),
           ),
