@@ -48,7 +48,7 @@ class HomeViewModel extends ViewStateModel {
 
   Future initDefaultSettings() async {
     await _initDefaultAlert();
-    await _initMantra();
+    await initMantra();
     await _initHeatGraph();
   }
 
@@ -59,7 +59,7 @@ class HomeViewModel extends ViewStateModel {
     }
   }
 
-  Future _initMantra() async {
+  Future initMantra() async {
     final defaultMantra = await dsProvider.getMantra();
     if (defaultMantra == null || defaultMantra == '') {
       mantra = Mantra.mantraList[Random().nextInt(3)];
