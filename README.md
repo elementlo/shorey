@@ -24,6 +24,9 @@ Now I focus on linking Notion, in order to make Notion your backend knowledge da
 * 国际化适配, 支持中英文切换
 * 更多功能开发中…
 
+> 软件还在开发阶段，可能会有颠覆性的改变，请注意。It is still under developing, breaking changes may occur.
+
+
 ## 分享
 [个人笔记软件Shorey开源(一) - 软件介绍/产品理念](https://mp.weixin.qq.com/s/W-3AhgCHSIQWLomPuyIPwA)
 
