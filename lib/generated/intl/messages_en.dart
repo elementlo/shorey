@@ -58,7 +58,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "itemRemark": MessageLookupByLibrary.simpleMessage("Remark"),
         "languages": MessageLookupByLibrary.simpleMessage("Languages"),
         "linkNotionDatabase":
-            MessageLookupByLibrary.simpleMessage("Link root page"),
+            MessageLookupByLibrary.simpleMessage("Link Notion database"),
         "linkNotionInfo": MessageLookupByLibrary.simpleMessage(
             "Fill in the blanks to link Notion"),
         "mainCategory": MessageLookupByLibrary.simpleMessage("Category"),

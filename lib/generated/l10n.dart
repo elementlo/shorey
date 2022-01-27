@@ -500,10 +500,10 @@ class S {
     );
   }
 
-  /// `Link root page`
+  /// `Link Notion database`
   String get linkNotionDatabase {
     return Intl.message(
-      'Link root page',
+      'Link Notion database',
       name: 'linkNotionDatabase',
       desc: '',
       args: [],

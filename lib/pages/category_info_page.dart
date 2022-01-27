@@ -1,5 +1,8 @@
+import 'dart:collection';
+
 import 'package:drift/drift.dart' as d;
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/config/config.dart';
@@ -9,7 +12,9 @@ import 'package:spark_list/model/model.dart';
 import 'package:spark_list/view_model/category_info_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
+import 'package:spark_list/widget/category_list_item.dart';
 import 'package:spark_list/widget/round_corner_rectangle.dart';
+import 'package:spark_list/widget/settings_list_item.dart';
 
 ///
 /// Author: Elemen
@@ -17,6 +22,8 @@ import 'package:spark_list/widget/round_corner_rectangle.dart';
 /// Date: 2021/12/15
 /// Description:
 ///
+
+enum _ExpandableSetting { linkNotionAccount, time }
 
 class CategoryInfoPage extends StatefulWidget {
   const CategoryInfoPage({Key? key, this.editingItem}) : super(key: key);
@@ -27,10 +34,14 @@ class CategoryInfoPage extends StatefulWidget {
   _CategoryInfoPageState createState() => _CategoryInfoPageState();
 }
 
-class _CategoryInfoPageState extends State<CategoryInfoPage> {
+class _CategoryInfoPageState extends State<CategoryInfoPage> with TickerProviderStateMixin {
   final _controller = TextEditingController();
   var _showConfirm = false;
   late CategoryInfoViewModel viewModel;
+  _ExpandableSetting? _expandedSettingId;
+  late Animation<double> _staggerSettingsItemsAnimation;
+  late AnimationController _settingsPanelController;
+  final TextEditingController _databaseController = TextEditingController();
 
   @override
   void initState() {
@@ -42,12 +53,44 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> {
       _showConfirm = _controller.text.isNotEmpty;
       setState(() {});
     });
+
+    _settingsPanelController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _settingsPanelController.addStatusListener(_closeSettingId);
+    _staggerSettingsItemsAnimation = CurvedAnimation(
+      parent: _settingsPanelController,
+      curve: const Interval(
+        0.5,
+        1.0,
+        curve: Curves.easeIn,
+      ),
+    );
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void onTapSetting(_ExpandableSetting settingId) {
+    setState(() {
+      if (_expandedSettingId == settingId) {
+        _expandedSettingId = null;
+      } else {
+        _expandedSettingId = settingId;
+      }
+    });
+  }
+
+  void _closeSettingId(AnimationStatus status) {
+    if (status == AnimationStatus.dismissed) {
+      setState(() {
+        _expandedSettingId = null;
+      });
+    }
   }
 
   Future _saveCategory() async {
@@ -104,7 +147,6 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> {
           ],
         ),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16),
           child: ListView(
             children: [
               _EditNameArea(_controller),
@@ -115,7 +157,26 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> {
               SizedBox(
                 height: 20,
               ),
-              _IconSelector()
+              _IconSelector(),
+              SizedBox(
+                height: 20,
+              ),
+              AnimateSettingsListItems(
+                animation: _staggerSettingsItemsAnimation,
+                children: [
+                  SettingsListItem<double>(
+                    title: S.of(context).linkNotionDatabase,
+                    selectedOption: 1.0,
+                    optionsMap: LinkedHashMap.of({1.0: DisplayOption('')}),
+                    onOptionChanged: (newTextScale) {},
+                    onTapSetting: () => onTapSetting(_ExpandableSetting.time),
+                    isExpanded: _expandedSettingId == _ExpandableSetting.time,
+                    child: _NotionDatabaseCard(
+                      controller: _databaseController,
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -138,6 +199,7 @@ class _EditNameAreaState extends State<_EditNameArea> {
   Widget build(BuildContext context) {
     return RoundCornerRectangle(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      margin: EdgeInsets.symmetric(horizontal: 16,),
       child: Column(
         children: [
           Container(
@@ -174,19 +236,22 @@ class _ColorSelectorState extends State<_ColorSelector> {
   @override
   Widget build(BuildContext context) {
     final spacing = (MediaQuery.of(context).size.width - 16 * 4 - 45 * 6) / 5;
-    return RoundCornerRectangle(
-      child: Wrap(
-        alignment: WrapAlignment.center,
-        spacing: spacing,
-        runSpacing: 12,
-        children: [
-          for (int i = 1; i <= 12; i++)
-            GestureDetector(
-                onTap: () {
-                  context.read<CategoryInfoViewModel>().selectedColor = i;
-                },
-                child: _buildCell(i)),
-        ],
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: RoundCornerRectangle(
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          spacing: spacing,
+          runSpacing: 12,
+          children: [
+            for (int i = 1; i <= 12; i++)
+              GestureDetector(
+                  onTap: () {
+                    context.read<CategoryInfoViewModel>().selectedColor = i;
+                  },
+                  child: _buildCell(i)),
+          ],
+        ),
       ),
     );
   }
@@ -221,19 +286,22 @@ class _IconSelectorState extends State<_IconSelector> {
   @override
   Widget build(BuildContext context) {
     final spacing = (MediaQuery.of(context).size.width - 16 * 4 - 45 * 6) / 5;
-    return RoundCornerRectangle(
-      child: Wrap(
-        alignment: WrapAlignment.center,
-        spacing: spacing,
-        runSpacing: 12,
-        children: [
-          for (int i = 1; i <= 42; i++)
-            GestureDetector(
-                onTap: () {
-                  context.read<CategoryInfoViewModel>().selectedIcon = i;
-                },
-                child: _buildCell(i)),
-        ],
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16,),
+      child: RoundCornerRectangle(
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          spacing: spacing,
+          runSpacing: 12,
+          children: [
+            for (int i = 1; i <= 42; i++)
+              GestureDetector(
+                  onTap: () {
+                    context.read<CategoryInfoViewModel>().selectedIcon = i;
+                  },
+                  child: _buildCell(i)),
+          ],
+        ),
       ),
     );
   }
@@ -258,6 +326,157 @@ class _IconSelectorState extends State<_IconSelector> {
             size: 28,
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _NotionDatabaseCard extends StatefulWidget {
+  final TextEditingController controller;
+
+  const _NotionDatabaseCard({Key? key, required this.controller})
+      : super(key: key);
+
+  @override
+  State<_NotionDatabaseCard> createState() => _NotionDatabaseCardState();
+}
+
+class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
+  var offStageCard = true;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final title = context.watch<CategoryInfoViewModel>().title;
+    offStageCard = title == '';
+    return Container(
+      padding: EdgeInsets.only(top: 10),
+      width: double.infinity,
+      height: 230,
+      child: Column(
+        children: [
+          Offstage(
+            offstage: !offStageCard,
+            child: Column(
+              children: [
+                TextField(
+                  controller: widget.controller,
+                  decoration: InputDecoration(
+                      labelText: S.of(context).notionPageId,
+                      labelStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey)),
+                      border: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey)),
+                      suffix: Container(
+                        width: 25,
+                        height: 25,
+                        child: IconButton(
+                            padding: EdgeInsets.all(0),
+                            onPressed: () async {
+                              if (widget.controller.text.isNotEmpty) {
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
+                                EasyLoading.show();
+                                final database = await context
+                                    .read<CategoryInfoViewModel>()
+                                    .linkNotionRootPage(widget.controller.text);
+                                if (database != null) {
+                                  offStageCard = false;
+                                  setState(() {});
+                                }
+                                EasyLoading.dismiss();
+                              }
+                            },
+                            icon: Icon(
+                              Icons.check,
+                              color: colorScheme.onSecondary,
+                            )),
+                      ),
+                      contentPadding: EdgeInsets.only(top: 10)),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                      child: Icon(
+                        Icons.wb_incandescent,
+                        size: 15,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    Expanded(
+                        child: Text(
+                          '可选项, 配置一个全局的Notion根页面, 添加记事时可选择默认都同步在此页面上',
+                          style: TextStyle(
+                              fontSize: 13, color: Colors.grey),
+                        )),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Offstage(
+            offstage: offStageCard,
+            child: Card(
+              elevation: 1,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        height: 130,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                topRight: Radius.circular(8)),
+                            image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(
+                                  '${context.watch<CategoryInfoViewModel>().coverUrl}',
+                                ))),
+                      ),
+                      Positioned(
+                          right: 0,
+                          top: 0,
+                          child: IconButton(
+                            iconSize: 20,
+                            padding: EdgeInsets.all(0),
+                            onPressed: () {
+                              context
+                                  .read<CategoryInfoViewModel>()
+                                  .deleteNotionRootPage();
+                            },
+                            icon: Icon(
+                              Icons.clear,
+                              color: Colors.grey.shade400,
+                            ),
+                          ))
+                    ],
+                  ),
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      padding:
+                      EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      child: Row(
+                        children: [
+                          Text(
+                              '${context.watch<CategoryInfoViewModel>().titleIcon}'),
+                          Text('${context.watch<CategoryInfoViewModel>().title}'),
+                        ],
+                      ))
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

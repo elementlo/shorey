@@ -74,7 +74,7 @@
   "editCategory": "Edit",
   "bindNotion": "Link Notion",
   "notion": "Notion account",
-  "linkNotionDatabase": "Link root page",
+  "linkNotionDatabase": "Link Notion database",
   "notionToken": "Notion token",
   "linkNotionInfo": "Fill in the blanks to link Notion",
   "notionPageId": "Page ID"

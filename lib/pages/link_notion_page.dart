@@ -7,6 +7,7 @@ import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/view_model/link_notion_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
+import 'package:spark_list/widget/category_list_item.dart';
 import 'package:spark_list/widget/settings_list_item.dart';
 
 ///
@@ -88,7 +89,7 @@ class _LinkNotionPageState extends State<LinkNotionPage>
       SettingsListItem<double>(
         title: S.of(context).linkNotionDatabase,
         selectedOption: 1.0,
-        optionsMap: LinkedHashMap.of({1.0: DisplayOption('')}),
+        optionsMap: LinkedHashMap.of({1.0: DisplayOption('${context.watch<LinkNotionViewModel>().title}')}),
         onOptionChanged: (newTextScale) {},
         onTapSetting: () => onTapSetting(_ExpandableSetting.time),
         isExpanded: _expandedSettingId == _ExpandableSetting.time,
@@ -116,7 +117,6 @@ class _LinkNotionPageState extends State<LinkNotionPage>
             ),
             child: ListView(
               children: [
-                const SizedBox(height: 12),
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -128,7 +128,7 @@ class _LinkNotionPageState extends State<LinkNotionPage>
                 ...[
                   Consumer<LinkNotionViewModel>(
                     builder: (context, vm, child) {
-                      return _AnimateSettingsListItems(
+                      return AnimateSettingsListItems(
                         animation: _staggerSettingsItemsAnimation,
                         children: _buildListItem(context),
                       );
@@ -141,51 +141,6 @@ class _LinkNotionPageState extends State<LinkNotionPage>
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _AnimateSettingsListItems extends StatelessWidget {
-  const _AnimateSettingsListItems({
-    Key? key,
-    required this.animation,
-    required this.children,
-  }) : super(key: key);
-
-  final Animation<double> animation;
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    final dividingPadding = 4.0;
-    final topPaddingTween = Tween<double>(
-      begin: 0,
-      end: children.length * dividingPadding,
-    );
-    final dividerTween = Tween<double>(
-      begin: 0,
-      end: dividingPadding,
-    );
-
-    return Padding(
-      padding: EdgeInsets.only(top: topPaddingTween.animate(animation).value),
-      child: Column(
-        children: [
-          for (Widget child in children)
-            AnimatedBuilder(
-              animation: animation,
-              builder: (context, child) {
-                return Padding(
-                  padding: EdgeInsets.only(
-                    top: dividerTween.animate(animation).value,
-                  ),
-                  child: child,
-                );
-              },
-              child: child,
-            ),
-        ],
       ),
     );
   }

@@ -53,7 +53,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "itemAlert": MessageLookupByLibrary.simpleMessage("标题"),
         "itemRemark": MessageLookupByLibrary.simpleMessage("备注"),
         "languages": MessageLookupByLibrary.simpleMessage("语言"),
-        "linkNotionDatabase": MessageLookupByLibrary.simpleMessage("关联根页面"),
+        "linkNotionDatabase":
+            MessageLookupByLibrary.simpleMessage("关联Notion数据库"),
         "linkNotionInfo":
             MessageLookupByLibrary.simpleMessage("填写下面两项信息使Shorey与Notion连接"),
         "mainCategory": MessageLookupByLibrary.simpleMessage("类别"),

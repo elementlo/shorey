@@ -195,7 +195,6 @@ class _ExpandedCategoryDemos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      // Makes integration tests possible.
       key: ValueKey('${category}DemoList'),
       children: [
         if (demoList != null && demoList!.length > 0)
@@ -217,13 +216,12 @@ class _ExpandedCategoryDemos extends StatelessWidget {
       child: TextField(
         controller: _controller,
         decoration: InputDecoration(
-          hintText: 'Add one',
+          hintText: 'Write something',
           hintStyle: TextStyle(
             color: Theme.of(context).colorScheme.background,
             fontSize: 14,
           ),
           enabledBorder: UnderlineInputBorder(
-            //未选中时候的颜色
             borderSide:
                 BorderSide(color: Theme.of(context).colorScheme.background),
           ),
@@ -461,5 +459,50 @@ class CategoryDemoItem extends StatelessWidget {
               ),
             ),
           );
+  }
+}
+
+class AnimateSettingsListItems extends StatelessWidget {
+  const AnimateSettingsListItems({
+    Key? key,
+    required this.animation,
+    required this.children,
+  }) : super(key: key);
+
+  final Animation<double> animation;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final dividingPadding = 4.0;
+    final topPaddingTween = Tween<double>(
+      begin: 0,
+      end: children.length * dividingPadding,
+    );
+    final dividerTween = Tween<double>(
+      begin: 0,
+      end: dividingPadding,
+    );
+
+    return Padding(
+      padding: EdgeInsets.only(top: topPaddingTween.animate(animation).value),
+      child: Column(
+        children: [
+          for (Widget child in children)
+            AnimatedBuilder(
+              animation: animation,
+              builder: (context, child) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    top: dividerTween.animate(animation).value,
+                  ),
+                  child: child,
+                );
+              },
+              child: child,
+            ),
+        ],
+      ),
+    );
   }
 }

@@ -14,6 +14,7 @@ import 'package:spark_list/model/model.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
+import 'package:spark_list/widget/category_list_item.dart';
 import 'package:spark_list/widget/customized_date_picker.dart';
 import 'package:spark_list/widget/settings_list_item.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -197,7 +198,7 @@ class _TextEditorPageState extends State<TextEditorPage>
               height: 16,
             ),
             ...[
-              _AnimateSettingsListItems(
+              AnimateSettingsListItems(
                 animation: _staggerSettingsItemsAnimation,
                 children: settingsListItems,
               ),
@@ -393,50 +394,5 @@ class _EditorTableRowState extends State<_EditorTableRow> {
       }
     }
     return Colors.white;
-  }
-}
-
-class _AnimateSettingsListItems extends StatelessWidget {
-  const _AnimateSettingsListItems({
-    Key? key,
-    required this.animation,
-    required this.children,
-  }) : super(key: key);
-
-  final Animation<double> animation;
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    final dividingPadding = 4.0;
-    final topPaddingTween = Tween<double>(
-      begin: 0,
-      end: children.length * dividingPadding,
-    );
-    final dividerTween = Tween<double>(
-      begin: 0,
-      end: dividingPadding,
-    );
-
-    return Padding(
-      padding: EdgeInsets.only(top: topPaddingTween.animate(animation).value),
-      child: Column(
-        children: [
-          for (Widget child in children)
-            AnimatedBuilder(
-              animation: animation,
-              builder: (context, child) {
-                return Padding(
-                  padding: EdgeInsets.only(
-                    top: dividerTween.animate(animation).value,
-                  ),
-                  child: child,
-                );
-              },
-              child: child,
-            ),
-        ],
-      ),
-    );
   }
 }
