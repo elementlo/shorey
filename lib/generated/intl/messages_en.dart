@@ -75,6 +75,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "notificationTitle": MessageLookupByLibrary.simpleMessage("Retrospect"),
         "notion": MessageLookupByLibrary.simpleMessage("Notion account"),
         "notionPageId": MessageLookupByLibrary.simpleMessage("Page ID"),
+        "notionPrompt": MessageLookupByLibrary.simpleMessage(
+            "Optional, first link Notion account in Shorey settings, then link Notion database here, after that, your reminders will be synced with Notion database"),
         "notionToken": MessageLookupByLibrary.simpleMessage("Notion token"),
         "retrospect": MessageLookupByLibrary.simpleMessage("Retrospect"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),

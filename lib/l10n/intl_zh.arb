@@ -77,5 +77,6 @@
   "linkNotionDatabase": "关联Notion数据库",
   "notionToken": "Notion token",
   "linkNotionInfo": "填写下面两项信息使Shorey与Notion连接",
-  "notionPageId": "Page ID"
+  "notionPageId": "Page ID",
+  "notionPrompt": "可选项, 在Shorey设置中关联Notion账号后, 此处关联Notion数据库, 随后记事会同步到对应的数据库中"
 }

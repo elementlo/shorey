@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
 import 'package:spark_list/database/database.dart';
 
 ///
@@ -15,6 +14,7 @@ class VerboseTodo {
 
   VerboseTodo(this.todo, this.category);
 }
+
 // class ToDoModel {
 //   int? id;
 //   int? createdTime;
@@ -144,13 +144,20 @@ class VerboseTodo {
 //
 class CategoryItem {
   String? name;
+  String? notionDatabaseId;
   Icon? icon;
   Color? color;
   int id;
   int colorId;
   int iconId;
 
-  CategoryItem(this.id, {this.name, this.icon, this.color, required this.colorId, required this.iconId});
+  CategoryItem(this.id,
+      {this.name,
+      this.icon,
+      this.color,
+      this.notionDatabaseId,
+      required this.colorId,
+      required this.iconId});
 }
 
 // class UserActionList extends ListModel<UserAction> {
@@ -195,10 +202,9 @@ class CategoryItem {
 //   }
 // }
 
-class CategoryDemo{
+class CategoryDemo {
   int? id;
   String? name;
 
   CategoryDemo({this.id, this.name});
 }
-

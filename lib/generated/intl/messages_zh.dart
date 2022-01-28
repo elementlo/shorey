@@ -68,6 +68,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "notificationTitle": MessageLookupByLibrary.simpleMessage("回顾"),
         "notion": MessageLookupByLibrary.simpleMessage("Notion账户"),
         "notionPageId": MessageLookupByLibrary.simpleMessage("Page ID"),
+        "notionPrompt": MessageLookupByLibrary.simpleMessage(
+            "可选项, 在Shorey设置中关联Notion账号后, 此处关联Notion数据库, 随后记事会同步到对应的数据库中"),
         "notionToken": MessageLookupByLibrary.simpleMessage("Notion token"),
         "retrospect": MessageLookupByLibrary.simpleMessage("回顾"),
         "settings": MessageLookupByLibrary.simpleMessage("设置"),

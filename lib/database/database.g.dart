@@ -497,11 +497,13 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
 class Category extends DataClass implements Insertable<Category> {
   int id;
   String name;
+  String? notionDatabaseId;
   int iconId;
   int colorId;
   Category(
       {required this.id,
       required this.name,
+      this.notionDatabaseId,
       required this.iconId,
       required this.colorId});
   factory Category.fromData(Map<String, dynamic> data, {String? prefix}) {
@@ -511,6 +513,8 @@ class Category extends DataClass implements Insertable<Category> {
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       name: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      notionDatabaseId: const StringType().mapFromDatabaseResponse(
+          data['${effectivePrefix}notion_database_id']),
       iconId: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}icon_id'])!,
       colorId: const IntType()
@@ -522,6 +526,9 @@ class Category extends DataClass implements Insertable<Category> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
+    if (!nullToAbsent || notionDatabaseId != null) {
+      map['notion_database_id'] = Variable<String?>(notionDatabaseId);
+    }
     map['icon_id'] = Variable<int>(iconId);
     map['color_id'] = Variable<int>(colorId);
     return map;
@@ -531,6 +538,9 @@ class Category extends DataClass implements Insertable<Category> {
     return CategoriesCompanion(
       id: Value(id),
       name: Value(name),
+      notionDatabaseId: notionDatabaseId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notionDatabaseId),
       iconId: Value(iconId),
       colorId: Value(colorId),
     );
@@ -542,6 +552,7 @@ class Category extends DataClass implements Insertable<Category> {
     return Category(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
+      notionDatabaseId: serializer.fromJson<String?>(json['notionDatabaseId']),
       iconId: serializer.fromJson<int>(json['iconId']),
       colorId: serializer.fromJson<int>(json['colorId']),
     );
@@ -552,15 +563,22 @@ class Category extends DataClass implements Insertable<Category> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
+      'notionDatabaseId': serializer.toJson<String?>(notionDatabaseId),
       'iconId': serializer.toJson<int>(iconId),
       'colorId': serializer.toJson<int>(colorId),
     };
   }
 
-  Category copyWith({int? id, String? name, int? iconId, int? colorId}) =>
+  Category copyWith(
+          {int? id,
+          String? name,
+          String? notionDatabaseId,
+          int? iconId,
+          int? colorId}) =>
       Category(
         id: id ?? this.id,
         name: name ?? this.name,
+        notionDatabaseId: notionDatabaseId ?? this.notionDatabaseId,
         iconId: iconId ?? this.iconId,
         colorId: colorId ?? this.colorId,
       );
@@ -569,6 +587,7 @@ class Category extends DataClass implements Insertable<Category> {
     return (StringBuffer('Category(')
           ..write('id: $id, ')
           ..write('name: $name, ')
+          ..write('notionDatabaseId: $notionDatabaseId, ')
           ..write('iconId: $iconId, ')
           ..write('colorId: $colorId')
           ..write(')'))
@@ -576,13 +595,14 @@ class Category extends DataClass implements Insertable<Category> {
   }
 
   @override
-  int get hashCode => Object.hash(id, name, iconId, colorId);
+  int get hashCode => Object.hash(id, name, notionDatabaseId, iconId, colorId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Category &&
           other.id == this.id &&
           other.name == this.name &&
+          other.notionDatabaseId == this.notionDatabaseId &&
           other.iconId == this.iconId &&
           other.colorId == this.colorId);
 }
@@ -590,17 +610,20 @@ class Category extends DataClass implements Insertable<Category> {
 class CategoriesCompanion extends UpdateCompanion<Category> {
   Value<int> id;
   Value<String> name;
+  Value<String?> notionDatabaseId;
   Value<int> iconId;
   Value<int> colorId;
   CategoriesCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
+    this.notionDatabaseId = const Value.absent(),
     this.iconId = const Value.absent(),
     this.colorId = const Value.absent(),
   });
   CategoriesCompanion.insert({
     this.id = const Value.absent(),
     required String name,
+    this.notionDatabaseId = const Value.absent(),
     required int iconId,
     required int colorId,
   })  : name = Value(name),
@@ -609,12 +632,14 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   static Insertable<Category> custom({
     Expression<int>? id,
     Expression<String>? name,
+    Expression<String?>? notionDatabaseId,
     Expression<int>? iconId,
     Expression<int>? colorId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
+      if (notionDatabaseId != null) 'notion_database_id': notionDatabaseId,
       if (iconId != null) 'icon_id': iconId,
       if (colorId != null) 'color_id': colorId,
     });
@@ -623,11 +648,13 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   CategoriesCompanion copyWith(
       {Value<int>? id,
       Value<String>? name,
+      Value<String?>? notionDatabaseId,
       Value<int>? iconId,
       Value<int>? colorId}) {
     return CategoriesCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
+      notionDatabaseId: notionDatabaseId ?? this.notionDatabaseId,
       iconId: iconId ?? this.iconId,
       colorId: colorId ?? this.colorId,
     );
@@ -641,6 +668,9 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
+    }
+    if (notionDatabaseId.present) {
+      map['notion_database_id'] = Variable<String?>(notionDatabaseId.value);
     }
     if (iconId.present) {
       map['icon_id'] = Variable<int>(iconId.value);
@@ -656,6 +686,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     return (StringBuffer('CategoriesCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
+          ..write('notionDatabaseId: $notionDatabaseId, ')
           ..write('iconId: $iconId, ')
           ..write('colorId: $colorId')
           ..write(')'))
@@ -680,6 +711,12 @@ class $CategoriesTable extends Categories
   late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
       'name', aliasedName, false,
       type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _notionDatabaseIdMeta =
+      const VerificationMeta('notionDatabaseId');
+  @override
+  late final GeneratedColumn<String?> notionDatabaseId =
+      GeneratedColumn<String?>('notion_database_id', aliasedName, true,
+          type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _iconIdMeta = const VerificationMeta('iconId');
   @override
   late final GeneratedColumn<int?> iconId = GeneratedColumn<int?>(
@@ -691,7 +728,8 @@ class $CategoriesTable extends Categories
       'color_id', aliasedName, false,
       type: const IntType(), requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [id, name, iconId, colorId];
+  List<GeneratedColumn> get $columns =>
+      [id, name, notionDatabaseId, iconId, colorId];
   @override
   String get aliasedName => _alias ?? 'categories';
   @override
@@ -709,6 +747,12 @@ class $CategoriesTable extends Categories
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
+    }
+    if (data.containsKey('notion_database_id')) {
+      context.handle(
+          _notionDatabaseIdMeta,
+          notionDatabaseId.isAcceptableOrUnknown(
+              data['notion_database_id']!, _notionDatabaseIdMeta));
     }
     if (data.containsKey('icon_id')) {
       context.handle(_iconIdMeta,
@@ -1243,8 +1287,8 @@ class $ActionsHistoryTable extends ActionsHistory
   }
 }
 
-abstract class _$DbProvider extends GeneratedDatabase {
-  _$DbProvider(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+abstract class _$DatabaseProvider extends GeneratedDatabase {
+  _$DatabaseProvider(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $ToDosTable toDos = $ToDosTable(this);
   late final $CategoriesTable categories = $CategoriesTable(this);
   late final $HeatGraphTable heatGraph = $HeatGraphTable(this);

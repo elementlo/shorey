@@ -30,12 +30,10 @@ class CategoryListItem extends StatefulWidget {
       : assert(initiallyExpanded != null),
         super(key: key);
 
-  //final GalleryDemoCategory category;
   final String? restorationId;
   final String? imageString;
   final CategoryItem category;
 
-  //final List<GalleryDemo> demos;
   final List<String> demos;
   final List<ToDo?>? demoList;
   final bool initiallyExpanded;
@@ -281,8 +279,10 @@ class _CategoryHeader extends StatelessWidget {
             await context.read<HomeViewModel>().deleteCategory(category.id);
             break;
           case 'edit':
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => CategoryInfoPage(editingItem: category,)));
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => CategoryInfoPage(
+                      editingItem: category,
+                    )));
             break;
         }
       },
@@ -296,7 +296,7 @@ class _CategoryHeader extends StatelessWidget {
                 S.of(context).editCategory,
                 style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
               )),
-          PopupMenuItem(height: 1,child: Divider()),
+          PopupMenuItem(height: 1, child: Divider()),
           PopupMenuItem(
               height: 28,
               value: 'delete',

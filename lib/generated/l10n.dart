@@ -539,6 +539,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Optional, first link Notion account in Shorey settings, then link Notion database here, after that, your reminders will be synced with Notion database`
+  String get notionPrompt {
+    return Intl.message(
+      'Optional, first link Notion account in Shorey settings, then link Notion database here, after that, your reminders will be synced with Notion database',
+      name: 'notionPrompt',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

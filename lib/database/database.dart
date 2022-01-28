@@ -74,6 +74,8 @@ class Categories extends Table {
 
   TextColumn get name => text()();
 
+  TextColumn get notionDatabaseId => text().nullable()();
+
   IntColumn get iconId => integer()();
 
   IntColumn get colorId => integer()();
@@ -94,7 +96,7 @@ LazyDatabase _openConnection() {
 }
 
 @DriftDatabase(tables: [ToDos, Categories, HeatGraph, ActionsHistory])
-class DatabaseProvider extends _$DbProvider {
+class DatabaseProvider extends _$DatabaseProvider {
   DatabaseProvider() : super(_openConnection());
 
   @override

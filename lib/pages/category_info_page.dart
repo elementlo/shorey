@@ -23,7 +23,7 @@ import 'package:spark_list/widget/settings_list_item.dart';
 /// Description:
 ///
 
-enum _ExpandableSetting { linkNotionAccount, time }
+enum _ExpandableSetting { linkNotionDatabase }
 
 class CategoryInfoPage extends StatefulWidget {
   const CategoryInfoPage({Key? key, this.editingItem}) : super(key: key);
@@ -34,7 +34,8 @@ class CategoryInfoPage extends StatefulWidget {
   _CategoryInfoPageState createState() => _CategoryInfoPageState();
 }
 
-class _CategoryInfoPageState extends State<CategoryInfoPage> with TickerProviderStateMixin {
+class _CategoryInfoPageState extends State<CategoryInfoPage>
+    with TickerProviderStateMixin {
   final _controller = TextEditingController();
   var _showConfirm = false;
   late CategoryInfoViewModel viewModel;
@@ -42,6 +43,7 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> with TickerProvider
   late Animation<double> _staggerSettingsItemsAnimation;
   late AnimationController _settingsPanelController;
   final TextEditingController _databaseController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -72,10 +74,19 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> with TickerProvider
   @override
   void dispose() {
     _controller.dispose();
+    _settingsPanelController.dispose();
+    _databaseController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   void onTapSetting(_ExpandableSetting settingId) {
+    Future.delayed(Duration(milliseconds: 300), () {
+      final extent = _scrollController.position.maxScrollExtent;
+      if (extent > 0)
+        _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
+    });
     setState(() {
       if (_expandedSettingId == settingId) {
         _expandedSettingId = null;
@@ -96,27 +107,31 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> with TickerProvider
   Future _saveCategory() async {
     int colorId = viewModel.selectedColor;
     int iconId = viewModel.selectedIcon;
+    String? notionDatabaseId = viewModel.notionDatabaseId;
     return context.read<HomeViewModel>().saveCategory(CategoriesCompanion(
         name: d.Value(_controller.text),
         colorId: d.Value(colorId),
-        iconId: d.Value(iconId)));
+        iconId: d.Value(iconId),
+        notionDatabaseId: d.Value(notionDatabaseId)));
   }
 
   Future _updateCategory(CategoryItem item) async {
     int colorId = viewModel.selectedColor;
     int iconId = viewModel.selectedIcon;
+    String? notionDatabaseId = viewModel.notionDatabaseId;
     return context.read<HomeViewModel>().updateCategory(CategoriesCompanion(
         id: d.Value(item.id),
         name: d.Value(_controller.text),
         iconId: d.Value(iconId),
-        colorId: d.Value(colorId)));
+        colorId: d.Value(colorId),
+        notionDatabaseId: d.Value(notionDatabaseId)));
   }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return ProviderWidget<CategoryInfoViewModel>(
-      model: CategoryInfoViewModel(),
+      model: CategoryInfoViewModel(category: widget.editingItem),
       onModelReady: (vm) {
         viewModel = vm;
         if (widget.editingItem != null) {
@@ -148,6 +163,7 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> with TickerProvider
         ),
         body: Container(
           child: ListView(
+            controller: _scrollController,
             children: [
               _EditNameArea(_controller),
               SizedBox(
@@ -169,8 +185,10 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> with TickerProvider
                     selectedOption: 1.0,
                     optionsMap: LinkedHashMap.of({1.0: DisplayOption('')}),
                     onOptionChanged: (newTextScale) {},
-                    onTapSetting: () => onTapSetting(_ExpandableSetting.time),
-                    isExpanded: _expandedSettingId == _ExpandableSetting.time,
+                    onTapSetting: () =>
+                        onTapSetting(_ExpandableSetting.linkNotionDatabase),
+                    isExpanded: _expandedSettingId ==
+                        _ExpandableSetting.linkNotionDatabase,
                     child: _NotionDatabaseCard(
                       controller: _databaseController,
                     ),
@@ -199,7 +217,9 @@ class _EditNameAreaState extends State<_EditNameArea> {
   Widget build(BuildContext context) {
     return RoundCornerRectangle(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      margin: EdgeInsets.symmetric(horizontal: 16,),
+      margin: EdgeInsets.symmetric(
+        horizontal: 16,
+      ),
       child: Column(
         children: [
           Container(
@@ -287,7 +307,9 @@ class _IconSelectorState extends State<_IconSelector> {
   Widget build(BuildContext context) {
     final spacing = (MediaQuery.of(context).size.width - 16 * 4 - 45 * 6) / 5;
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16,),
+      padding: EdgeInsets.symmetric(
+        horizontal: 16,
+      ),
       child: RoundCornerRectangle(
         child: Wrap(
           alignment: WrapAlignment.center,
@@ -380,7 +402,7 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                                 EasyLoading.show();
                                 final database = await context
                                     .read<CategoryInfoViewModel>()
-                                    .linkNotionRootPage(widget.controller.text);
+                                    .linkNotionDatabase(widget.controller.text);
                                 if (database != null) {
                                   offStageCard = false;
                                   setState(() {});
@@ -411,10 +433,9 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                     ),
                     Expanded(
                         child: Text(
-                          '可选项, 配置一个全局的Notion根页面, 添加记事时可选择默认都同步在此页面上',
-                          style: TextStyle(
-                              fontSize: 13, color: Colors.grey),
-                        )),
+                      S.of(context).notionPrompt,
+                      style: TextStyle(fontSize: 13, color: Colors.grey),
+                    )),
                   ],
                 )
               ],
@@ -464,12 +485,13 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                   Container(
                       alignment: Alignment.centerLeft,
                       padding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                       child: Row(
                         children: [
                           Text(
                               '${context.watch<CategoryInfoViewModel>().titleIcon}'),
-                          Text('${context.watch<CategoryInfoViewModel>().title}'),
+                          Text(
+                              '${context.watch<CategoryInfoViewModel>().title}'),
                         ],
                       ))
                 ],
