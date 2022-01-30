@@ -69,7 +69,7 @@ class _SettingsCategoryPageState extends State<SettingsCategoryPage> {
               children: [
                 Expanded(
                     child: Text(S.of(context).languages,
-                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))),
+                        style: TextStyle(color: Colors.black,))),
                 Text(switchOn ? '中文' : 'English'),
                 Switch(
                   value: switchOn,

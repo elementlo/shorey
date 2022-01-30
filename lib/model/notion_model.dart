@@ -1,3 +1,5 @@
+import 'package:spark_list/model/model.dart';
+
 ///
 /// Author: Elemen
 /// Github: https://github.com/elementlo
@@ -37,7 +39,7 @@ class NotionUsersInfo {
   }
 }
 
-class Results {
+class Results with ModelMixin {
   String? object;
   String? id;
   String? name;
@@ -69,6 +71,7 @@ class Results {
     bot = json['bot'] != null ? new Bot.fromJson(json['bot']) : null;
   }
 
+  @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['object'] = this.object;

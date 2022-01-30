@@ -10,6 +10,7 @@ import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/model/notion_model.dart';
+import 'package:spark_list/resource/data_provider.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 ///
@@ -53,14 +54,15 @@ class HomeViewModel extends ViewStateModel {
   }
 
   Future _initDefaultAlert() async {
-    if (await dsProvider.getAlertPeriod() == null) {
-      dsProvider.saveAlertPeriod(0);
+    if (await dsProvider.getValue<int>(StoreKey.alertPeriod) == null) {
+      await dsProvider.saveValue<int>(StoreKey.alertPeriod, 0);
+      await dsProvider.saveValue<String>(StoreKey.retrospectTime, '18:00');
       assembleRetrospectNotification(TimeOfDay(hour: 18, minute: 0), 0);
     }
   }
 
   Future initMantra() async {
-    final defaultMantra = await dsProvider.getMantra();
+    final defaultMantra = await dsProvider.getValue<String>(StoreKey.mantra);
     if (defaultMantra == null || defaultMantra == '') {
       mantra = Mantra.mantraList[Random().nextInt(3)];
     } else {
@@ -73,11 +75,11 @@ class HomeViewModel extends ViewStateModel {
   Future saveMantra(String text) async {
     mantra = text.isEmpty ? Mantra.mantraList[Random().nextInt(3)] : text;
     notifyListeners();
-    await dsProvider.saveMantra(text);
+    await dsProvider.saveValue<String>(StoreKey.mantra, text);
   }
 
   Future<String?> getMantra() async {
-    return await dsProvider.getMantra();
+    return await dsProvider.getValue<String>(StoreKey.mantra);
   }
 
   void _initMainFocus() async {

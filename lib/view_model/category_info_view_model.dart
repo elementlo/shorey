@@ -57,11 +57,11 @@ class CategoryInfoViewModel extends ViewStateModel {
     return null;
   }
 
-  Future deleteNotionRootPage() {
-    coverUrl = '';
-    title = '';
-    titleIcon = '';
-    notifyListeners();
-    return dsProvider.deleteRootNotionPage();
-  }
+  // Future deleteNotionRootPage() {
+  //   coverUrl = '';
+  //   title = '';
+  //   titleIcon = '';
+  //   notifyListeners();
+  //   return dsProvider.deleteRootNotionPage();
+  // }
 }

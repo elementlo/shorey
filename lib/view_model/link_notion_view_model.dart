@@ -3,6 +3,7 @@ import 'package:spark_list/config/api.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/model/notion_model.dart';
 import 'package:spark_list/model/notion_page_model.dart';
+import 'package:spark_list/resource/data_provider.dart';
 import 'package:spark_list/resource/http_provider.dart';
 
 ///
@@ -21,19 +22,12 @@ class LinkNotionViewModel extends ViewStateModel {
   String? titleIcon = '';
 
   LinkNotionViewModel() {
-    dsProvider.getNotionUser().then((value) {
+    dsProvider.getValue<Map<String, dynamic>>(StoreKey.notionUser).then((value) {
       if (value != null) {
-        avatarUrl = value.avatarUrl ?? '';
-        email = value.person?.email ?? '';
-        name = value.name ?? '';
-        notifyListeners();
-      }
-    });
-    dsProvider.getRootNotionPage().then((page) {
-      if (page != null) {
-        coverUrl = page.cover?.external?.url ?? '';
-        title = page.properties?.title?.title?[0].plainText ?? '';
-        titleIcon = page.icon?.type == 'emoji' ? page.icon?.emoji : '';
+        final user = Results.fromJson(value);
+        avatarUrl = user.avatarUrl ?? '';
+        email = user.person?.email ?? '';
+        name = user.name ?? '';
         notifyListeners();
       }
     });
@@ -52,7 +46,7 @@ class LinkNotionViewModel extends ViewStateModel {
           email = user.person?.email;
           user.token = token;
           notifyListeners();
-          dsProvider.saveNotionUser(user);
+          dsProvider.saveValue<Map<String, dynamic>>(StoreKey.notionUser, user.toJson());
           return user;
         }
       }
@@ -65,29 +59,6 @@ class LinkNotionViewModel extends ViewStateModel {
     email = '';
     name = '';
     notifyListeners();
-    await dsProvider.deleteRootNotionPage();
-    await dsProvider.deleteNotionUser();
-  }
-
-  Future<NotionPage?> linkNotionRootPage(String pageId) async {
-    final response = await dio.get('${retrieveNotionPages}/${pageId}');
-    if (response.success) {
-      final page = NotionPage.fromJson(response.data);
-      coverUrl = page.cover?.external?.url;
-      title = page.properties?.title?.title?[0].plainText;
-      titleIcon = page.icon?.type == 'emoji' ? page.icon?.emoji : '';
-      notifyListeners();
-      dsProvider.saveRootNotionPage(page);
-      return page;
-    }
-    return null;
-  }
-
-  Future deleteNotionRootPage() {
-    coverUrl = '';
-    title = '';
-    titleIcon = '';
-    notifyListeners();
-    return dsProvider.deleteRootNotionPage();
+    await dsProvider.deleteValue(StoreKey.notionUser);
   }
 }

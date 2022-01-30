@@ -5,6 +5,8 @@ import 'package:spark_list/config/config.dart';
 import 'package:spark_list/database/database.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/model/model.dart';
+import 'package:spark_list/model/notion_model.dart';
+import 'package:spark_list/resource/data_provider.dart';
 import 'package:spark_list/resource/http_provider.dart';
 
 ///
@@ -29,9 +31,9 @@ class ConfigViewModel extends ViewStateModel {
   }
 
   Future configDio() async {
-    final user = await dsProvider.getNotionUser();
-    if (user != null) {
-      final token = user.token;
+    final map = await dsProvider.getValue<Map<String, dynamic>>(StoreKey.notionUser);
+    if (map != null) {
+      final token = Results.fromJson(map).token;
       dio.options.headers.addAll({'Authorization': 'Bearer $token'});
     }
   }
@@ -62,19 +64,19 @@ class ConfigViewModel extends ViewStateModel {
   }
 
   Future<int?> getAlertPeriod() async {
-    return await dsProvider.getAlertPeriod();
+    return await dsProvider.getValue<int>(StoreKey.alertPeriod);
   }
 
   Future<String?> getRetrospectTime() async {
-    return await dsProvider.getRetrospectTime();
+    return await dsProvider.getValue<String>(StoreKey.retrospectTime);
   }
 
   Future saveAlertPeriod(int period) async {
-    await dsProvider.saveAlertPeriod(period);
+    await dsProvider.saveValue<int>(StoreKey.alertPeriod, period);
   }
 
   Future saveRetrospectTime(String time) async {
-    await dsProvider.saveRetrospectTime(time);
+    await dsProvider.saveValue<String>(StoreKey.retrospectTime, time);
   }
 
   Future getCategoryList() async {

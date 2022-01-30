@@ -471,9 +471,9 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                             iconSize: 20,
                             padding: EdgeInsets.all(0),
                             onPressed: () {
-                              context
-                                  .read<CategoryInfoViewModel>()
-                                  .deleteNotionRootPage();
+                              // context
+                              //     .read<CategoryInfoViewModel>()
+                              //     .deleteNotionRootPage();
                             },
                             icon: Icon(
                               Icons.clear,

@@ -86,17 +86,17 @@ class _LinkNotionPageState extends State<LinkNotionPage>
           controller: _inputController,
         ),
       ),
-      SettingsListItem<double>(
-        title: S.of(context).linkNotionDatabase,
-        selectedOption: 1.0,
-        optionsMap: LinkedHashMap.of({1.0: DisplayOption('${context.watch<LinkNotionViewModel>().title}')}),
-        onOptionChanged: (newTextScale) {},
-        onTapSetting: () => onTapSetting(_ExpandableSetting.time),
-        isExpanded: _expandedSettingId == _ExpandableSetting.time,
-        child: _NotionDatabaseCard(
-          controller: _databaseController,
-        ),
-      ),
+      // SettingsListItem<double>(
+      //   title: S.of(context).linkNotionDatabase,
+      //   selectedOption: 1.0,
+      //   optionsMap: LinkedHashMap.of({1.0: DisplayOption('${context.watch<LinkNotionViewModel>().title}')}),
+      //   onOptionChanged: (newTextScale) {},
+      //   onTapSetting: () => onTapSetting(_ExpandableSetting.time),
+      //   isExpanded: _expandedSettingId == _ExpandableSetting.time,
+      //   child: _NotionDatabaseCard(
+      //     controller: _databaseController,
+      //   ),
+      // ),
     ];
   }
 
@@ -247,153 +247,153 @@ class _NotionAccountCardState extends State<_NotionAccountCard> {
   }
 }
 
-class _NotionDatabaseCard extends StatefulWidget {
-  final TextEditingController controller;
-
-  const _NotionDatabaseCard({Key? key, required this.controller})
-      : super(key: key);
-
-  @override
-  State<_NotionDatabaseCard> createState() => _NotionDatabaseCardState();
-}
-
-class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
-  var offStageCard = true;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final title = context.watch<LinkNotionViewModel>().title;
-    offStageCard = title == '';
-    return Container(
-      padding: EdgeInsets.only(top: 10),
-      width: double.infinity,
-      height: 230,
-      child: Column(
-        children: [
-          Offstage(
-            offstage: !offStageCard,
-            child: Column(
-              children: [
-                TextField(
-                  controller: widget.controller,
-                  decoration: InputDecoration(
-                      labelText: S.of(context).notionPageId,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey)),
-                      border: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey)),
-                      suffix: Container(
-                        width: 25,
-                        height: 25,
-                        child: IconButton(
-                            padding: EdgeInsets.all(0),
-                            onPressed: () async {
-                              if (widget.controller.text.isNotEmpty) {
-                                FocusScope.of(context)
-                                    .requestFocus(FocusNode());
-                                EasyLoading.show();
-                                final database = await context
-                                    .read<LinkNotionViewModel>()
-                                    .linkNotionRootPage(widget.controller.text);
-                                if (database != null) {
-                                  offStageCard = false;
-                                  setState(() {});
-                                }
-                                EasyLoading.dismiss();
-                              }
-                            },
-                            icon: Icon(
-                              Icons.check,
-                              color: colorScheme.onSecondary,
-                            )),
-                      ),
-                      contentPadding: EdgeInsets.only(top: 10)),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                      child: Icon(
-                        Icons.wb_incandescent,
-                        size: 15,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Expanded(
-                        child: Text(
-                      '可选项, 配置一个全局的Notion根页面, 添加记事时可选择默认都同步在此页面上',
-                      style: TextStyle(
-                          fontSize: 13, color: Colors.grey),
-                    )),
-                  ],
-                )
-              ],
-            ),
-          ),
-          Offstage(
-            offstage: offStageCard,
-            child: Card(
-              elevation: 1,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      Container(
-                        height: 130,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                topRight: Radius.circular(8)),
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(
-                                  '${context.watch<LinkNotionViewModel>().coverUrl}',
-                                ))),
-                      ),
-                      Positioned(
-                          right: 0,
-                          top: 0,
-                          child: IconButton(
-                            iconSize: 20,
-                            padding: EdgeInsets.all(0),
-                            onPressed: () {
-                              context
-                                  .read<LinkNotionViewModel>()
-                                  .deleteNotionRootPage();
-                            },
-                            icon: Icon(
-                              Icons.clear,
-                              color: Colors.grey.shade400,
-                            ),
-                          ))
-                    ],
-                  ),
-                  Container(
-                      alignment: Alignment.centerLeft,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                      child: Row(
-                        children: [
-                          Text(
-                              '${context.watch<LinkNotionViewModel>().titleIcon}'),
-                          Text('${context.watch<LinkNotionViewModel>().title}'),
-                        ],
-                      ))
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+// class _NotionDatabaseCard extends StatefulWidget {
+//   final TextEditingController controller;
+//
+//   const _NotionDatabaseCard({Key? key, required this.controller})
+//       : super(key: key);
+//
+//   @override
+//   State<_NotionDatabaseCard> createState() => _NotionDatabaseCardState();
+// }
+//
+// class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
+//   var offStageCard = true;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final colorScheme = Theme.of(context).colorScheme;
+//     final title = context.watch<LinkNotionViewModel>().title;
+//     offStageCard = title == '';
+//     return Container(
+//       padding: EdgeInsets.only(top: 10),
+//       width: double.infinity,
+//       height: 230,
+//       child: Column(
+//         children: [
+//           Offstage(
+//             offstage: !offStageCard,
+//             child: Column(
+//               children: [
+//                 TextField(
+//                   controller: widget.controller,
+//                   decoration: InputDecoration(
+//                       labelText: S.of(context).notionPageId,
+//                       labelStyle: TextStyle(color: Colors.grey),
+//                       focusedBorder: UnderlineInputBorder(
+//                           borderSide: BorderSide(color: Colors.grey)),
+//                       border: UnderlineInputBorder(
+//                           borderSide: BorderSide(color: Colors.grey)),
+//                       suffix: Container(
+//                         width: 25,
+//                         height: 25,
+//                         child: IconButton(
+//                             padding: EdgeInsets.all(0),
+//                             onPressed: () async {
+//                               if (widget.controller.text.isNotEmpty) {
+//                                 FocusScope.of(context)
+//                                     .requestFocus(FocusNode());
+//                                 EasyLoading.show();
+//                                 final database = await context
+//                                     .read<LinkNotionViewModel>()
+//                                     .linkNotionRootPage(widget.controller.text);
+//                                 if (database != null) {
+//                                   offStageCard = false;
+//                                   setState(() {});
+//                                 }
+//                                 EasyLoading.dismiss();
+//                               }
+//                             },
+//                             icon: Icon(
+//                               Icons.check,
+//                               color: colorScheme.onSecondary,
+//                             )),
+//                       ),
+//                       contentPadding: EdgeInsets.only(top: 10)),
+//                 ),
+//                 SizedBox(
+//                   height: 20,
+//                 ),
+//                 Row(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Padding(
+//                       padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+//                       child: Icon(
+//                         Icons.wb_incandescent,
+//                         size: 15,
+//                         color: Colors.grey,
+//                       ),
+//                     ),
+//                     Expanded(
+//                         child: Text(
+//                       '可选项, 配置一个全局的Notion根页面, 添加记事时可选择默认都同步在此页面上',
+//                       style: TextStyle(
+//                           fontSize: 13, color: Colors.grey),
+//                     )),
+//                   ],
+//                 )
+//               ],
+//             ),
+//           ),
+//           Offstage(
+//             offstage: offStageCard,
+//             child: Card(
+//               elevation: 1,
+//               shape: RoundedRectangleBorder(
+//                   borderRadius: BorderRadius.circular(8)),
+//               child: Column(
+//                 children: [
+//                   Stack(
+//                     children: [
+//                       Container(
+//                         height: 130,
+//                         width: double.infinity,
+//                         decoration: BoxDecoration(
+//                             borderRadius: BorderRadius.only(
+//                                 topLeft: Radius.circular(8),
+//                                 topRight: Radius.circular(8)),
+//                             image: DecorationImage(
+//                                 fit: BoxFit.cover,
+//                                 image: NetworkImage(
+//                                   '${context.watch<LinkNotionViewModel>().coverUrl}',
+//                                 ))),
+//                       ),
+//                       Positioned(
+//                           right: 0,
+//                           top: 0,
+//                           child: IconButton(
+//                             iconSize: 20,
+//                             padding: EdgeInsets.all(0),
+//                             onPressed: () {
+//                               context
+//                                   .read<LinkNotionViewModel>()
+//                                   .deleteNotionRootPage();
+//                             },
+//                             icon: Icon(
+//                               Icons.clear,
+//                               color: Colors.grey.shade400,
+//                             ),
+//                           ))
+//                     ],
+//                   ),
+//                   Container(
+//                       alignment: Alignment.centerLeft,
+//                       padding:
+//                           EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+//                       child: Row(
+//                         children: [
+//                           Text(
+//                               '${context.watch<LinkNotionViewModel>().titleIcon}'),
+//                           Text('${context.watch<LinkNotionViewModel>().title}'),
+//                         ],
+//                       ))
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

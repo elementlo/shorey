@@ -15,6 +15,10 @@ class VerboseTodo {
   VerboseTodo(this.todo, this.category);
 }
 
+abstract class ModelMixin {
+  Map<String, dynamic> toJson();
+}
+
 // class ToDoModel {
 //   int? id;
 //   int? createdTime;
