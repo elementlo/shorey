@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:spark_list/config/api.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/model/notion_model.dart';
 import 'package:spark_list/resource/data_provider.dart';
 import 'package:spark_list/resource/http_provider.dart';
-import 'package:spark_list/workflow/workflow.dart';
-
-import '../view_model/link_notion_view_model.dart';
 
 ///
 /// Author: Elemen
@@ -16,10 +12,10 @@ import '../view_model/link_notion_view_model.dart';
 /// Description:
 ///
 
-class NotionWorkFlow with ChangeNotifier{
-  NotionWorkFlow._() : actions = _NotionActions();
+class NotionWorkFlow with ChangeNotifier {
+  NotionWorkFlow._() : _actions = _NotionActions();
   static final NotionWorkFlow _instance = NotionWorkFlow._();
-  _NotionActions actions;
+  _NotionActions _actions;
   Results? user;
 
   factory NotionWorkFlow() {
@@ -27,9 +23,9 @@ class NotionWorkFlow with ChangeNotifier{
   }
 
   Future<Results?> linkNotionAccount(String token) async {
-    final result = await actions.retrieveUser(token);
+    final result = await _actions.retrieveUser(token);
     if (result != null) {
-      await actions.persistUser(result);
+      await _actions.persistUser(result);
       user = result;
       notifyListeners();
       return user;
@@ -37,8 +33,16 @@ class NotionWorkFlow with ChangeNotifier{
     return null;
   }
 
-  Future deleteUser() async{
-    return actions.deleteUser();
+  Future deleteUser() async {
+    user = null;
+    notifyListeners();
+    return _actions.deleteUser();
+  }
+
+  Future<Results?> getUser() async {
+    user = await _actions.getUser();
+    notifyListeners();
+    return user;
   }
 }
 
@@ -66,12 +70,21 @@ class _NotionActions {
     return null;
   }
 
-  Future persistUser(Results user) async {
+  Future persistUser(Results user) {
     return dsProvider.saveValue<Map<String, dynamic>>(
         StoreKey.notionUser, user.toJson());
   }
 
-  Future deleteUser() async{
+  Future deleteUser() {
     return dsProvider.deleteValue(StoreKey.notionUser);
+  }
+
+  Future<Results?> getUser() async {
+    final value =
+        await dsProvider.getValue<Map<String, dynamic>>(StoreKey.notionUser);
+    if (value != null) {
+      return Results.fromJson(value);
+    }
+    return null;
   }
 }
