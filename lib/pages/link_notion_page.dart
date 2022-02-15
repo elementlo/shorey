@@ -3,12 +3,12 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
-import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/view_model/link_notion_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 import 'package:spark_list/widget/category_list_item.dart';
 import 'package:spark_list/widget/settings_list_item.dart';
+import 'package:spark_list/workflow/notion_workflow.dart';
 
 ///
 /// Author: Elemen
@@ -31,7 +31,6 @@ class _LinkNotionPageState extends State<LinkNotionPage>
   late AnimationController _settingsPanelController;
   _ExpandableSetting? _expandedSettingId;
   final TextEditingController _inputController = TextEditingController();
-  final TextEditingController _databaseController = TextEditingController();
 
   void onTapSetting(_ExpandableSetting settingId) {
     setState(() {
@@ -102,8 +101,16 @@ class _LinkNotionPageState extends State<LinkNotionPage>
 
   @override
   Widget build(BuildContext context) {
-    return ProviderWidget<LinkNotionViewModel>(
-      model: LinkNotionViewModel(),
+    return ChangeNotifierProxyProvider<NotionWorkFlow, LinkNotionViewModel>(
+      create: (context) => LinkNotionViewModel(),
+      update: (context, workflow, viewModel) {
+        if (workflow.user != null) {
+          viewModel!.avatarUrl = workflow.user?.avatarUrl ?? '';
+          viewModel.email = workflow.user?.person?.email ?? '';
+          viewModel.name = workflow.user?.name ?? '';
+        }
+        return viewModel!;
+      },
       child: Scaffold(
         appBar: SparkAppBar(
           context: context,
@@ -190,7 +197,7 @@ class _NotionAccountCardState extends State<_NotionAccountCard> {
                             FocusScope.of(context).requestFocus(FocusNode());
                             EasyLoading.show();
                             final user = await context
-                                .read<LinkNotionViewModel>()
+                                .read<NotionWorkFlow>()
                                 .linkNotionAccount(widget.controller.text);
                             if (user != null) {
                               offStageCard = false;

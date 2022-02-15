@@ -17,42 +17,39 @@ class LinkNotionViewModel extends ViewStateModel {
   String? avatarUrl = '';
   String? email = '';
   String? name = '';
-  String? coverUrl = '';
-  String? title = '';
-  String? titleIcon = '';
 
   LinkNotionViewModel() {
-    dsProvider.getValue<Map<String, dynamic>>(StoreKey.notionUser).then((value) {
-      if (value != null) {
-        final user = Results.fromJson(value);
-        avatarUrl = user.avatarUrl ?? '';
-        email = user.person?.email ?? '';
-        name = user.name ?? '';
-        notifyListeners();
-      }
-    });
+    // dsProvider.getValue<Map<String, dynamic>>(StoreKey.notionUser).then((value) {
+    //   if (value != null) {
+    //     final user = Results.fromJson(value);
+    //     avatarUrl = user.avatarUrl ?? '';
+    //     email = user.person?.email ?? '';
+    //     name = user.name ?? '';
+    //     notifyListeners();
+    //   }
+    // });
   }
 
-  Future<Results?> linkNotionAccount(String token) async {
-    dio.options.headers.addAll({'Authorization': 'Bearer $token'});
-    final response = await dio.get(notionUsers);
-    if (response.success) {
-      final users = NotionUsersInfo.fromJson(response.data);
-      for (int i = 0; i < (users.results?.length ?? 0); i++) {
-        final user = users.results![i];
-        if (user.type == 'person') {
-          avatarUrl = user.avatarUrl;
-          name = user.name;
-          email = user.person?.email;
-          user.token = token;
-          notifyListeners();
-          dsProvider.saveValue<Map<String, dynamic>>(StoreKey.notionUser, user.toJson());
-          return user;
-        }
-      }
-    }
-    return null;
-  }
+  // Future<Results?> linkNotionAccount(String token) async {
+  //   dio.options.headers.addAll({'Authorization': 'Bearer $token'});
+  //   final response = await dio.get(notionUsers);
+  //   if (response.success) {
+  //     final users = NotionUsersInfo.fromJson(response.data);
+  //     for (int i = 0; i < (users.results?.length ?? 0); i++) {
+  //       final user = users.results![i];
+  //       if (user.type == 'person') {
+  //         avatarUrl = user.avatarUrl;
+  //         name = user.name;
+  //         email = user.person?.email;
+  //         user.token = token;
+  //         notifyListeners();
+  //         dsProvider.saveValue<Map<String, dynamic>>(StoreKey.notionUser, user.toJson());
+  //         return user;
+  //       }
+  //     }
+  //   }
+  //   return null;
+  // }
 
   Future deleteUser() async {
     avatarUrl = '';

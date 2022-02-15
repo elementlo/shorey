@@ -20,6 +20,7 @@ import 'package:spark_list/resource/http_provider.dart';
 import 'package:spark_list/routes.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
+import 'package:spark_list/workflow/notion_workflow.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -41,13 +42,14 @@ void main() async {
   dbProvider = DatabaseProvider();
   _configHttpClient();
   runApp(ProviderWidget2<ConfigViewModel, HomeViewModel>(
-      ConfigViewModel(),
-      HomeViewModel(),
+      ConfigViewModel(), HomeViewModel(),
       onModelReady: (cViewModel, hViewModel) async {
     await cViewModel?.initCategoryDemosList();
     await cViewModel?.getCategoryList();
     hViewModel?.initDefaultSettings();
-  }, child: MyApp()));
+  },
+      child: ChangeNotifierProvider(
+          create: (context) => NotionWorkFlow(), child: MyApp())));
   _configLoading();
 }
 
@@ -59,10 +61,11 @@ parseJson(String text) {
   return compute(_parseAndDecode, text);
 }
 
-void _configHttpClient(){
-  dio.interceptors.add(LogInterceptor(responseBody: true, responseHeader: false));
+void _configHttpClient() {
+  dio.interceptors
+      .add(LogInterceptor(responseBody: true, responseHeader: false));
   dio.options.baseUrl = 'https://api.notion.com/';
-  dio.options.headers.addAll({'Notion-Version':'2021-05-13'});
+  dio.options.headers.addAll({'Notion-Version': '2021-05-13'});
   dio.options.connectTimeout = 5000;
   dio.options.receiveTimeout = 7000;
   (dio.transformer as DefaultTransformer).jsonDecodeCallback = parseJson;

@@ -89,7 +89,6 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _initSelectedOption();
-    _checkUncompetedTasks();
     _settingsPanelController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
@@ -224,7 +223,5 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
       },
     );
   }
-
-  void _checkUncompetedTasks() {}
 }
 

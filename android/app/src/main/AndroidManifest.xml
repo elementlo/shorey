@@ -18,7 +18,7 @@
     </queries>
 
     <application
-        android:name="io.flutter.app.FlutterApplication"
+        android:name="${applicationName}"
         android:label="Shorey"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher">
