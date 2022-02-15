@@ -23,12 +23,22 @@ class Routes {
 
 ///mantra
 class Mantra {
+
   static String mantra1 = S.current.mantra1;
   static String mantra2 = S.current.mantra2;
   static String mantra3 = S.current.mantra3;
   static String mantra4 = 'El psy kongroo.';
 
-  static List<String> mantraList = [mantra1, mantra2, mantra3, mantra4];
+  static List<String> get mantraList => updateMantra();
+
+  static List<String> updateMantra(){
+    mantra1 = S.current.mantra1;
+    mantra2 = S.current.mantra2;
+    mantra3 = S.current.mantra3;
+    mantra4 = 'El psy kongroo.';
+    return [mantra1, mantra2, mantra3, mantra4];
+  }
+
 }
 
 class SColor {

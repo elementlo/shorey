@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/pages/alert_period_page.dart';
+import 'package:spark_list/pages/link_notion_page.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
+import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 
 ///
@@ -53,6 +55,13 @@ class _SettingsCategoryPageState extends State<SettingsCategoryPage> {
                   MaterialPageRoute(builder: (context) => AlertPeriodPage()));
             },
           ),
+          _SettingItem(
+            title: S.of(context).bindNotion,
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => LinkNotionPage()));
+            },
+          ),
           Container(
             padding: EdgeInsets.only(left: 16, right: 8),
             child: Row(
@@ -60,9 +69,8 @@ class _SettingsCategoryPageState extends State<SettingsCategoryPage> {
               children: [
                 Expanded(
                     child: Text(S.of(context).languages,
-                        style: TextStyle(
-                            color: Colors.black))),
-                Text(switchOn ? 'English' : '中文'),
+                        style: TextStyle(color: Colors.black))),
+                Text(switchOn ? '中文' : 'English'),
                 Switch(
                   value: switchOn,
                   activeColor: colorScheme.primary,
@@ -71,11 +79,16 @@ class _SettingsCategoryPageState extends State<SettingsCategoryPage> {
                   onChanged: (isOn) async {
                     setState(() {
                       switchOn = isOn;
-                      S.load(Locale(isOn ? 'en' : 'zh', ''));
+                      S
+                          .load(Locale(isOn ? 'en' : 'zh', ''))
+                          .then((value) async {
+                        await context
+                            .read<ConfigViewModel>()
+                            .savePerfLocale(Locale(isOn ? 'en' : 'zh', ''));
+                        Mantra.updateMantra();
+                        await context.read<HomeViewModel>().initMantra();
+                      });
                     });
-                    context
-                        .read<ConfigViewModel>()
-                        .savePerfLocale(Locale(isOn ? 'en' : 'zh', ''));
                   },
                 ),
               ],

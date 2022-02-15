@@ -34,6 +34,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "archivedLess": MessageLookupByLibrary.simpleMessage("Archived less"),
         "archivedList": MessageLookupByLibrary.simpleMessage("Archived"),
         "archivedMore": MessageLookupByLibrary.simpleMessage("More"),
+        "bindNotion": MessageLookupByLibrary.simpleMessage("Link Notion"),
         "cancelAlertTime":
             MessageLookupByLibrary.simpleMessage("Cleared alert time"),
         "categoryInformation":
@@ -56,6 +57,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "itemAlert": MessageLookupByLibrary.simpleMessage("Title"),
         "itemRemark": MessageLookupByLibrary.simpleMessage("Remark"),
         "languages": MessageLookupByLibrary.simpleMessage("Languages"),
+        "linkNotionDatabase":
+            MessageLookupByLibrary.simpleMessage("Link root page"),
+        "linkNotionInfo": MessageLookupByLibrary.simpleMessage(
+            "Fill in the blanks to link Notion"),
         "mainCategory": MessageLookupByLibrary.simpleMessage("Category"),
         "mainFocusToday":
             MessageLookupByLibrary.simpleMessage("Main Focus Today"),
@@ -68,6 +73,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "I am free and that is why I am lost."),
         "noAlert": MessageLookupByLibrary.simpleMessage("No alert"),
         "notificationTitle": MessageLookupByLibrary.simpleMessage("Retrospect"),
+        "notion": MessageLookupByLibrary.simpleMessage("Notion account"),
+        "notionPageId": MessageLookupByLibrary.simpleMessage("Page ID"),
+        "notionToken": MessageLookupByLibrary.simpleMessage("Notion token"),
         "retrospect": MessageLookupByLibrary.simpleMessage("Retrospect"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "shoreyMomment": MessageLookupByLibrary.simpleMessage("Shorey moment"),

@@ -5,9 +5,13 @@
   Shorey
   <br>
 </h1>
-这是一款开源笔记应用, 支持Android/iOS双平台, 使用Flutter 2开发, 体验Flutter的同时也希望做一个能成为个人知识中转站的应用,  任重道远 :)
+这是一款开源笔记应用, 支持Android/iOS双平台, 使用Flutter 2开发, 体验Flutter的同时也希望做一个能成为个人知识中转站的应用, 让你更方便的把平时收集到的信息记录下来, 最后沉淀到知识库中.
+
+后边会先开发联动Notion, 让你的Notion成为后台知识库.
 
 Shorey is a simple note app which is built with Flutter 2 and supports both Android/iOS platforms. It provides me full experience of interacting with Flutter and in the meantime I hope it can be your knowledge/memory transition tool, and yes, there still much work to do.
+
+Now I focus on linking Notion, in order to make Notion your backend knowledge database.  
 
 **特点:**
 * Google Material UI风格
@@ -20,17 +24,22 @@ Shorey is a simple note app which is built with Flutter 2 and supports both Andr
 * 国际化适配, 支持中英文切换
 * 更多功能开发中…
 
+> 软件还在开发阶段，可能会有颠覆性的改变，请注意。It is still under developing, breaking changes may occur.
+
+
 ## 分享
 [个人笔记软件Shorey开源(一) - 软件介绍/产品理念](https://mp.weixin.qq.com/s/W-3AhgCHSIQWLomPuyIPwA)
 
+[个人笔记软件Shorey开源(二) - 使用Flutter开发App入门](https://mp.weixin.qq.com/s/_7Kl9nJLHaX6ZbZzLKREYQ)
+
 ## 马上开始
 **应用运行要求:**
-1. Android 5.0 +
+1. Android 5.0+
 2. iOS 10+
 
 **项目编译要求:**
 1. Android SDK 28/Xcode 13
-2. Flutter SDK 2.5.3
+2. Flutter SDK 2.8.1
 
 ## 应用展示
 UI部分大量参考了Flutter官方的Gallery应用. 另外还在关于页埋了个小彩蛋, 希望喜欢.
@@ -44,7 +53,7 @@ Android: 可直接在Release板块下载apk体验.或使用下方二维码下载
 ![lqHI](https://user-images.githubusercontent.com/10020581/140268740-ff2558a8-c8d3-4ae6-ac08-8b9bec2a1c10.png)
 
 
-iOS: 可下载源码使用 flutter run --release 编译体验, 后期考虑上testflight.
+iOS: 可下载源码使用 $ flutter run --release 编译体验, 后期考虑上testflight.
 
 
 ## 技术架构

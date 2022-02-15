@@ -479,6 +479,66 @@ class S {
       args: [],
     );
   }
+
+  /// `Link Notion`
+  String get bindNotion {
+    return Intl.message(
+      'Link Notion',
+      name: 'bindNotion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notion account`
+  String get notion {
+    return Intl.message(
+      'Notion account',
+      name: 'notion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Link root page`
+  String get linkNotionDatabase {
+    return Intl.message(
+      'Link root page',
+      name: 'linkNotionDatabase',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notion token`
+  String get notionToken {
+    return Intl.message(
+      'Notion token',
+      name: 'notionToken',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fill in the blanks to link Notion`
+  String get linkNotionInfo {
+    return Intl.message(
+      'Fill in the blanks to link Notion',
+      name: 'linkNotionInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Page ID`
+  String get notionPageId {
+    return Intl.message(
+      'Page ID',
+      name: 'notionPageId',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
