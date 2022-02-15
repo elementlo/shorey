@@ -346,49 +346,59 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
   final String? _alias;
   $ToDosTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
       'id', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _notificationIdMeta =
       const VerificationMeta('notificationId');
+  @override
   late final GeneratedColumn<int?> notificationId = GeneratedColumn<int?>(
       'notification_id', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _createdTimeMeta =
       const VerificationMeta('createdTime');
+  @override
   late final GeneratedColumn<DateTime?> createdTime =
       GeneratedColumn<DateTime?>('created_time', aliasedName, false,
-          typeName: 'INTEGER', requiredDuringInsert: true);
+          type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _filedTimeMeta = const VerificationMeta('filedTime');
+  @override
   late final GeneratedColumn<DateTime?> filedTime = GeneratedColumn<DateTime?>(
       'filed_time', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _alertTimeMeta = const VerificationMeta('alertTime');
+  @override
   late final GeneratedColumn<DateTime?> alertTime = GeneratedColumn<DateTime?>(
       'alert_time', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _contentMeta = const VerificationMeta('content');
+  @override
   late final GeneratedColumn<String?> content = GeneratedColumn<String?>(
       'content', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _briefMeta = const VerificationMeta('brief');
+  @override
   late final GeneratedColumn<String?> brief = GeneratedColumn<String?>(
       'brief', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _categoryMeta = const VerificationMeta('category');
+  @override
   late final GeneratedColumn<String?> category = GeneratedColumn<String?>(
       'category', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
   late final GeneratedColumn<int?> status = GeneratedColumn<int?>(
       'status', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _categoryIdMeta = const VerificationMeta('categoryId');
+  @override
   late final GeneratedColumn<int?> categoryId = GeneratedColumn<int?>(
       'category_id', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: true,
       $customConstraints:
           'NULLABLE REFERENCES categories(id) ON DELETE CASCADE');
@@ -659,23 +669,27 @@ class $CategoriesTable extends Categories
   final String? _alias;
   $CategoriesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
       'id', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
   late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
       'name', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _iconIdMeta = const VerificationMeta('iconId');
+  @override
   late final GeneratedColumn<int?> iconId = GeneratedColumn<int?>(
       'icon_id', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _colorIdMeta = const VerificationMeta('colorId');
+  @override
   late final GeneratedColumn<int?> colorId = GeneratedColumn<int?>(
       'color_id', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [id, name, iconId, colorId];
   @override
@@ -871,20 +885,23 @@ class $HeatGraphTable extends HeatGraph
   final String? _alias;
   $HeatGraphTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
       'id', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _levelMeta = const VerificationMeta('level');
+  @override
   late final GeneratedColumn<int?> level = GeneratedColumn<int?>(
       'level', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _createdTimeMeta =
       const VerificationMeta('createdTime');
+  @override
   late final GeneratedColumn<DateTime?> createdTime =
       GeneratedColumn<DateTime?>('created_time', aliasedName, false,
-          typeName: 'INTEGER', requiredDuringInsert: true);
+          type: const IntType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [id, level, createdTime];
   @override
@@ -1137,30 +1154,35 @@ class $ActionsHistoryTable extends ActionsHistory
   final String? _alias;
   $ActionsHistoryTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
       'id', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _earlyContentMeta =
       const VerificationMeta('earlyContent');
+  @override
   late final GeneratedColumn<String?> earlyContent = GeneratedColumn<String?>(
       'early_content', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _updatedContentMeta =
       const VerificationMeta('updatedContent');
+  @override
   late final GeneratedColumn<String?> updatedContent = GeneratedColumn<String?>(
       'updated_content', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _updatedTimeMeta =
       const VerificationMeta('updatedTime');
+  @override
   late final GeneratedColumn<DateTime?> updatedTime =
       GeneratedColumn<DateTime?>('updated_time', aliasedName, false,
-          typeName: 'INTEGER', requiredDuringInsert: true);
+          type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _actionMeta = const VerificationMeta('action');
+  @override
   late final GeneratedColumn<int?> action = GeneratedColumn<int?>(
       'action', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
       [id, earlyContent, updatedContent, updatedTime, action];
