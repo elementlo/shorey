@@ -16,5 +16,5 @@ class LinkNotionViewModel extends ViewStateModel {
     this.user = user;
     notifyListeners();
   }
-  
+
 }

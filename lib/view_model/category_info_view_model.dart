@@ -1,9 +1,6 @@
 import 'package:spark_list/base/view_state_model.dart';
-import 'package:spark_list/config/api.dart';
-import 'package:spark_list/main.dart';
 import 'package:spark_list/model/model.dart';
 import 'package:spark_list/model/notion_database_model.dart';
-import 'package:spark_list/resource/http_provider.dart';
 
 ///
 /// Author: Elemen
@@ -15,18 +12,27 @@ import 'package:spark_list/resource/http_provider.dart';
 class CategoryInfoViewModel extends ViewStateModel {
   int _selectedColor = 1;
   int _selectedIcon = 1;
-  String? coverUrl = '';
-  String? title = '';
-  String? titleIcon = '';
-  String? notionDatabaseId = '';
+
+  // String? coverUrl = '';
+  // String? title = '';
+  // String? titleIcon = '';
+  // String? notionDatabaseId = '';
+  NotionDatabase? database;
+
+  set setDatabase(NotionDatabase? database) {
+    this.database = database;
+    notifyListeners();
+  }
 
   int get selectedColor => _selectedColor;
 
   CategoryInfoViewModel({CategoryItem? category}) {
     if (category != null) {
+      selectedColor = category.colorId;
+      selectedIcon = category.iconId;
       if (category.notionDatabaseId != null &&
           category.notionDatabaseId != '') {
-        linkNotionDatabase(category.notionDatabaseId!);
+        //linkNotionDatabase(category.notionDatabaseId!);
       }
     }
   }
@@ -43,25 +49,25 @@ class CategoryInfoViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-  Future<NotionDatabase?> linkNotionDatabase(String databaseId) async {
-    final response = await dio.get('${retrieveNotionDatabase}/${databaseId}');
-    if (response.success) {
-      final database = NotionDatabase.fromJson(response.data);
-      coverUrl = database.cover?.external?.url ?? '';
-      titleIcon = database.icon?.type == 'emoji' ? database.icon?.emoji : '';
-      title = database.title?[0].plainText;
-      notionDatabaseId = databaseId;
-      notifyListeners();
-      return database;
-    }
-    return null;
-  }
+// Future<NotionDatabase?> linkNotionDatabase(String databaseId) async {
+//   final response = await dio.get('${retrieveNotionDatabase}/${databaseId}');
+//   if (response.success) {
+//     final database = NotionDatabase.fromJson(response.data);
+//     coverUrl = database.cover?.external?.url ?? '';
+//     titleIcon = database.icon?.type == 'emoji' ? database.icon?.emoji : '';
+//     title = database.title?[0].plainText;
+//     notionDatabaseId = databaseId;
+//     notifyListeners();
+//     return database;
+//   }
+//   return null;
+// }
 
-  // Future deleteNotionRootPage() {
-  //   coverUrl = '';
-  //   title = '';
-  //   titleIcon = '';
-  //   notifyListeners();
-  //   return dsProvider.deleteRootNotionPage();
-  // }
+// Future deleteNotionRootPage() {
+//   coverUrl = '';
+//   title = '';
+//   titleIcon = '';
+//   notifyListeners();
+//   return dsProvider.deleteRootNotionPage();
+// }
 }

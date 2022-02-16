@@ -15,6 +15,7 @@ import 'package:spark_list/widget/app_bar.dart';
 import 'package:spark_list/widget/category_list_item.dart';
 import 'package:spark_list/widget/round_corner_rectangle.dart';
 import 'package:spark_list/widget/settings_list_item.dart';
+import 'package:spark_list/workflow/notion_workflow.dart';
 
 ///
 /// Author: Elemen
@@ -38,7 +39,8 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
     with TickerProviderStateMixin {
   final _controller = TextEditingController();
   var _showConfirm = false;
-  late CategoryInfoViewModel viewModel;
+
+  //late CategoryInfoViewModel viewModel;
   _ExpandableSetting? _expandedSettingId;
   late Animation<double> _staggerSettingsItemsAnimation;
   late AnimationController _settingsPanelController;
@@ -104,10 +106,11 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
     }
   }
 
-  Future _saveCategory() async {
+  Future _saveCategory(BuildContext context) async {
+    final viewModel = Provider.of<CategoryInfoViewModel>(context);
     int colorId = viewModel.selectedColor;
     int iconId = viewModel.selectedIcon;
-    String? notionDatabaseId = viewModel.notionDatabaseId;
+    String? notionDatabaseId = viewModel.database?.id;
     return context.read<HomeViewModel>().saveCategory(CategoriesCompanion(
         name: d.Value(_controller.text),
         colorId: d.Value(colorId),
@@ -115,10 +118,11 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
         notionDatabaseId: d.Value(notionDatabaseId)));
   }
 
-  Future _updateCategory(CategoryItem item) async {
+  Future _updateCategory(BuildContext context, CategoryItem item) async {
+    final viewModel = Provider.of<CategoryInfoViewModel>(context);
     int colorId = viewModel.selectedColor;
     int iconId = viewModel.selectedIcon;
-    String? notionDatabaseId = viewModel.notionDatabaseId;
+    String? notionDatabaseId = viewModel.database?.id;
     return context.read<HomeViewModel>().updateCategory(CategoriesCompanion(
         id: d.Value(item.id),
         name: d.Value(_controller.text),
@@ -130,35 +134,38 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return ProviderWidget<CategoryInfoViewModel>(
-      model: CategoryInfoViewModel(category: widget.editingItem),
-      onModelReady: (vm) {
-        viewModel = vm;
-        if (widget.editingItem != null) {
-          vm.selectedColor = widget.editingItem!.colorId;
-          vm.selectedIcon = widget.editingItem!.iconId;
-        }
+    return ChangeNotifierProxyProvider<NotionWorkFlow, CategoryInfoViewModel>(
+      create: (context) => CategoryInfoViewModel(category: widget.editingItem),
+      update: (context, workflow, viewModel) {
+        viewModel!.setDatabase = workflow.database;
+        return viewModel;
       },
       child: Scaffold(
         appBar: SparkAppBar(
           context: context,
           title: S.of(context).categoryInformation,
           actions: [
-            IconButton(
-                icon: Icon(
-                  Icons.check,
-                  color: _showConfirm ? colorScheme.onSecondary : Colors.grey,
-                ),
-                onPressed: () async {
-                  if (_showConfirm) {
-                    if (widget.editingItem != null) {
-                      await _updateCategory(widget.editingItem!);
-                    } else {
-                      await _saveCategory();
-                    }
-                    Navigator.pop(context);
-                  }
-                }),
+            Consumer<CategoryInfoViewModel>(
+              builder: (BuildContext context, value, Widget? child) {
+                return IconButton(
+                    icon: Icon(
+                      Icons.check,
+                      color: _showConfirm
+                          ? colorScheme.onSecondary
+                          : Colors.grey,
+                    ),
+                    onPressed: () async {
+                      if (_showConfirm) {
+                        if (widget.editingItem != null) {
+                          await _updateCategory(context, widget.editingItem!);
+                        } else {
+                          await _saveCategory(context);
+                        }
+                        Navigator.pop(context);
+                      }
+                    });
+              },
+            ),
           ],
         ),
         body: Container(
@@ -369,8 +376,8 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final title = context.watch<CategoryInfoViewModel>().title;
-    offStageCard = title == '';
+    final database = Provider.of<CategoryInfoViewModel>(context).database;
+    offStageCard = database == null;
     return Container(
       padding: EdgeInsets.only(top: 10),
       width: double.infinity,
@@ -401,7 +408,7 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                                     .requestFocus(FocusNode());
                                 EasyLoading.show();
                                 final database = await context
-                                    .read<CategoryInfoViewModel>()
+                                    .read<NotionWorkFlow>()
                                     .linkNotionDatabase(widget.controller.text);
                                 if (database != null) {
                                   offStageCard = false;
@@ -461,7 +468,7 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                             image: DecorationImage(
                                 fit: BoxFit.cover,
                                 image: NetworkImage(
-                                  '${context.watch<CategoryInfoViewModel>().coverUrl}',
+                                  '${database?.cover?.external?.url ?? ''}',
                                 ))),
                       ),
                       Positioned(
@@ -489,9 +496,8 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                       child: Row(
                         children: [
                           Text(
-                              '${context.watch<CategoryInfoViewModel>().titleIcon}'),
-                          Text(
-                              '${context.watch<CategoryInfoViewModel>().title}'),
+                              '${database?.icon?.type == 'emoji' ? database?.icon?.emoji : ''}'),
+                          Text('${database?.title?[0].plainText}'),
                         ],
                       ))
                 ],
