@@ -40,7 +40,6 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
   final _controller = TextEditingController();
   var _showConfirm = false;
 
-  //late CategoryInfoViewModel viewModel;
   _ExpandableSetting? _expandedSettingId;
   late Animation<double> _staggerSettingsItemsAnimation;
   late AnimationController _settingsPanelController;
@@ -71,6 +70,10 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
         curve: Curves.easeIn,
       ),
     );
+    if (widget.editingItem?.notionDatabaseId != null &&
+        widget.editingItem?.notionDatabaseId != '') {
+      context.read<NotionWorkFlow>().linkNotionDatabase(widget.editingItem!.notionDatabaseId!);
+    }
   }
 
   @override

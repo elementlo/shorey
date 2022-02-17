@@ -30,10 +30,6 @@ class CategoryInfoViewModel extends ViewStateModel {
     if (category != null) {
       selectedColor = category.colorId;
       selectedIcon = category.iconId;
-      if (category.notionDatabaseId != null &&
-          category.notionDatabaseId != '') {
-        //linkNotionDatabase(category.notionDatabaseId!);
-      }
     }
   }
 
