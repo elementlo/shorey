@@ -1,0 +1,12 @@
+<i>Shorey</i> is a simple note app which is built with Flutter 2 and supports both Android/iOS platforms. It provides me full experience of interacting with Flutter and in the meantime I hope it can be your knowledge/memory transition tool, and yes, there still much work to do.
+
+<br><b>Features:</b></p>
+
+* Google Material UI
+* Lightweight, only 10mb
+* Retrospect everyday to organize information faster
+* Concise note-taking
+* Set the mantra to inspire yourself
+* Set the main goal to stay focus
+* Keep track of the Heat map
+* Supports simple Chinese and English
