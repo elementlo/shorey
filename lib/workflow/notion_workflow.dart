@@ -18,13 +18,12 @@ class NotionWorkFlow with ChangeNotifier {
   static final NotionWorkFlow _instance = NotionWorkFlow._();
   _NotionActions _actions;
   Results? user;
-  NotionDatabase? database;
 
   factory NotionWorkFlow() {
     return _instance;
   }
 
-  Future<Results?> linkNotionAccount(String token) async {
+  Future<Results?> linkAccount(String token) async {
     final result = await _actions.retrieveUser(token);
     if (result != null) {
       result.token = token;
@@ -36,7 +35,7 @@ class NotionWorkFlow with ChangeNotifier {
     return null;
   }
 
-  Future deleteUser() async {
+  Future deleteUser() {
     user = null;
     notifyListeners();
     return _actions.deleteUser();
@@ -48,15 +47,14 @@ class NotionWorkFlow with ChangeNotifier {
     return user;
   }
 
-  Future<NotionDatabase?> linkNotionDatabase(String databaseId) async {
+  Future<NotionDatabase?> linkDatabase(String databaseId) async {
     final result = await _actions.retrieveDatabase(databaseId);
     if(result != null){
-      database = result;
-      notifyListeners();
       return result;
     }
     return null;
   }
+
 }
 
 class _NotionActions {
@@ -109,4 +107,5 @@ class _NotionActions {
     }
     return null;
   }
+
 }

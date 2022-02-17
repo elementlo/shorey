@@ -186,7 +186,7 @@ class _NotionAccountCardState extends State<_NotionAccountCard> {
                             EasyLoading.show();
                             final user = await context
                                 .read<NotionWorkFlow>()
-                                .linkNotionAccount(widget.controller.text);
+                                .linkAccount(widget.controller.text);
                             if (user != null) {
                               offStageCard = false;
                               setState(() {});

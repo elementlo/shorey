@@ -13,10 +13,6 @@ class CategoryInfoViewModel extends ViewStateModel {
   int _selectedColor = 1;
   int _selectedIcon = 1;
 
-  // String? coverUrl = '';
-  // String? title = '';
-  // String? titleIcon = '';
-  // String? notionDatabaseId = '';
   NotionDatabase? database;
 
   set setDatabase(NotionDatabase? database) {
@@ -45,25 +41,7 @@ class CategoryInfoViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-// Future<NotionDatabase?> linkNotionDatabase(String databaseId) async {
-//   final response = await dio.get('${retrieveNotionDatabase}/${databaseId}');
-//   if (response.success) {
-//     final database = NotionDatabase.fromJson(response.data);
-//     coverUrl = database.cover?.external?.url ?? '';
-//     titleIcon = database.icon?.type == 'emoji' ? database.icon?.emoji : '';
-//     title = database.title?[0].plainText;
-//     notionDatabaseId = databaseId;
-//     notifyListeners();
-//     return database;
-//   }
-//   return null;
-// }
-
-// Future deleteNotionRootPage() {
-//   coverUrl = '';
-//   title = '';
-//   titleIcon = '';
-//   notifyListeners();
-//   return dsProvider.deleteRootNotionPage();
-// }
+  void unlinkNotionDatabase() {
+    setDatabase = null;
+  }
 }

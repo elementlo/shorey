@@ -70,10 +70,6 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
         curve: Curves.easeIn,
       ),
     );
-    if (widget.editingItem?.notionDatabaseId != null &&
-        widget.editingItem?.notionDatabaseId != '') {
-      context.read<NotionWorkFlow>().linkNotionDatabase(widget.editingItem!.notionDatabaseId!);
-    }
   }
 
   @override
@@ -110,7 +106,8 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
   }
 
   Future _saveCategory(BuildContext context) async {
-    final viewModel = Provider.of<CategoryInfoViewModel>(context);
+    final viewModel =
+        Provider.of<CategoryInfoViewModel>(context, listen: false);
     int colorId = viewModel.selectedColor;
     int iconId = viewModel.selectedIcon;
     String? notionDatabaseId = viewModel.database?.id;
@@ -122,7 +119,8 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
   }
 
   Future _updateCategory(BuildContext context, CategoryItem item) async {
-    final viewModel = Provider.of<CategoryInfoViewModel>(context);
+    final viewModel =
+        Provider.of<CategoryInfoViewModel>(context, listen: false);
     int colorId = viewModel.selectedColor;
     int iconId = viewModel.selectedIcon;
     String? notionDatabaseId = viewModel.database?.id;
@@ -137,11 +135,20 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return ChangeNotifierProxyProvider<NotionWorkFlow, CategoryInfoViewModel>(
-      create: (context) => CategoryInfoViewModel(category: widget.editingItem),
-      update: (context, workflow, viewModel) {
-        viewModel!.setDatabase = workflow.database;
-        return viewModel;
+    return ProviderWidget<CategoryInfoViewModel>(
+      model: CategoryInfoViewModel(),
+      // create: (context) => CategoryInfoViewModel(category: widget.editingItem),
+      // update: (context, workflow, viewModel) {
+      //   viewModel!.setDatabase = workflow.database;
+      //   return viewModel;
+      // },
+      onModelReady: (vm) async {
+        if (widget.editingItem?.notionDatabaseId != null &&
+            widget.editingItem?.notionDatabaseId != '') {
+          vm.setDatabase = await context
+              .read<NotionWorkFlow>()
+              .linkDatabase(widget.editingItem!.notionDatabaseId!);
+        }
       },
       child: Scaffold(
         appBar: SparkAppBar(
@@ -153,9 +160,8 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
                 return IconButton(
                     icon: Icon(
                       Icons.check,
-                      color: _showConfirm
-                          ? colorScheme.onSecondary
-                          : Colors.grey,
+                      color:
+                          _showConfirm ? colorScheme.onSecondary : Colors.grey,
                     ),
                     onPressed: () async {
                       if (_showConfirm) {
@@ -379,7 +385,8 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final database = Provider.of<CategoryInfoViewModel>(context).database;
+    final viewModel = Provider.of<CategoryInfoViewModel>(context);
+    final database = viewModel.database;
     offStageCard = database == null;
     return Container(
       padding: EdgeInsets.only(top: 10),
@@ -410,10 +417,11 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                                 FocusScope.of(context)
                                     .requestFocus(FocusNode());
                                 EasyLoading.show();
-                                final database = await context
+                                final result = await context
                                     .read<NotionWorkFlow>()
-                                    .linkNotionDatabase(widget.controller.text);
-                                if (database != null) {
+                                    .linkDatabase(widget.controller.text);
+                                viewModel.setDatabase = result;
+                                if (result != null) {
                                   offStageCard = false;
                                   setState(() {});
                                 }
@@ -481,9 +489,9 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                             iconSize: 20,
                             padding: EdgeInsets.all(0),
                             onPressed: () {
-                              // context
-                              //     .read<CategoryInfoViewModel>()
-                              //     .deleteNotionRootPage();
+                              context
+                                  .read<CategoryInfoViewModel>()
+                                  .unlinkNotionDatabase();
                             },
                             icon: Icon(
                               Icons.clear,
