@@ -94,7 +94,7 @@ LazyDatabase _openConnection() {
 }
 
 @DriftDatabase(tables: [ToDos, Categories, HeatGraph, ActionsHistory])
-class DatabaseProvider extends _$DbProvider {
+class DatabaseProvider extends _$DatabaseProvider {
   DatabaseProvider() : super(_openConnection());
 
   @override

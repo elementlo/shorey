@@ -1243,8 +1243,8 @@ class $ActionsHistoryTable extends ActionsHistory
   }
 }
 
-abstract class _$DbProvider extends GeneratedDatabase {
-  _$DbProvider(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+abstract class _$DatabaseProvider extends GeneratedDatabase {
+  _$DatabaseProvider(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $ToDosTable toDos = $ToDosTable(this);
   late final $CategoriesTable categories = $CategoriesTable(this);
   late final $HeatGraphTable heatGraph = $HeatGraphTable(this);
