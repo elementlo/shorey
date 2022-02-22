@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:spark_list/config/api.dart';
 import 'package:spark_list/main.dart';
@@ -5,6 +7,7 @@ import 'package:spark_list/model/notion_database_model.dart';
 import 'package:spark_list/model/notion_model.dart';
 import 'package:spark_list/resource/data_provider.dart';
 import 'package:spark_list/resource/http_provider.dart';
+import 'package:spark_list/widget/category_list_item.dart';
 
 ///
 /// Author: Elemen
@@ -49,12 +52,19 @@ class NotionWorkFlow with ChangeNotifier {
 
   Future<NotionDatabase?> linkDatabase(String databaseId) async {
     final result = await _actions.retrieveDatabase(databaseId);
-    if(result != null){
+    if (result != null) {
       return result;
     }
     return null;
   }
 
+  Future addItem() async {
+    return _actions.addItem();
+  }
+
+  Future createDatabase(String pageId) async {
+    return _actions.createDatabase(pageId);
+  }
 }
 
 class _NotionActions {
@@ -82,13 +92,12 @@ class _NotionActions {
   }
 
   Future<NotionDatabase?> retrieveDatabase(String databaseId) async {
-    final response = await dio.get('${retrieveNotionDatabase}/${databaseId}');
+    final response = await dio.get('${notionDatabase}/${databaseId}');
     if (response.success) {
       return NotionDatabase.fromJson(response.data);
     }
     return null;
   }
-
 
   Future persistUser(Results user) {
     return dsProvider.saveValue<Map<String, dynamic>>(
@@ -108,4 +117,14 @@ class _NotionActions {
     return null;
   }
 
+  Future addItem() async {
+    final response = await dio.post('${notionPages}', data: jsonMap);
+    if (response.success) {}
+    return null;
+  }
+
+  Future<NotionDatabase?> createDatabase(String pageId) async {
+    final response =
+        await dio.post('${notionDatabase}', data: jsonDecode(database));
+  }
 }

@@ -7,6 +7,7 @@ import 'package:spark_list/model/model.dart';
 import 'package:spark_list/pages/category_info_page.dart';
 import 'package:spark_list/pages/editor_page.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
+import 'package:spark_list/workflow/notion_workflow.dart';
 
 ///
 /// Author: Elemen
@@ -16,6 +17,50 @@ import 'package:spark_list/view_model/home_view_model.dart';
 ///
 
 typedef CategoryHeaderTapCallback = Function(bool shouldOpenList);
+
+Map jsonMap = {
+  'parent': {'database_id': 'd71ecb243d73428eaadd78ae80db555c'},
+  'properties': {
+    'title': {
+      'title': [
+        {
+          'text': {'content': '111111'}
+        }
+      ]
+    },
+    'Date': {
+      'date': {
+        'start': '2020-12-08T12:00:00Z'
+      }
+    }
+  }
+};
+
+String database = '''
+{
+    \"parent\": {
+        \"type\": \"page_id\",
+        \"page_id\": \"9e9456d4fe354036b14b1f581b626fe4\"
+    },
+    \"title\": [
+        {
+            \"type\": \"text\",
+            \"text\": {
+                \"content\": \"Grocery List\",
+                \"link\": null
+            }
+        }
+    ],
+    \"properties\": {
+        \"Name\": {
+            \"title\": {}
+        },
+        \"Last ordered\": {
+            \"date\": {}
+        }
+    }
+}
+''';
 
 class CategoryListItem extends StatefulWidget {
   const CategoryListItem(this.category,
@@ -179,12 +224,9 @@ class _ExpandedCategoryDemos extends StatelessWidget {
     this.demoList,
   }) : super(key: key);
 
-  //
-  // final GalleryDemoCategory category;
   final String? category;
   final int categoryId;
 
-  // final List<GalleryDemo> demos;
   final List<String>? demos;
 
   final List<ToDo?>? demoList;
@@ -233,6 +275,7 @@ class _ExpandedCategoryDemos extends StatelessWidget {
             await viewModel.saveToDo(categoryId, input, category);
             _controller.text = '';
             await viewModel.queryToDoList(category);
+            context.read<NotionWorkFlow>().addItem();
           }
         },
       ),

@@ -42,20 +42,20 @@ class _SettingsCategoryPageState extends State<SettingsCategoryPage> {
       ),
       body: ListView(
         children: [
-          _SettingItem(
+          SettingItem(
             title: S.of(context).editMantra,
             onPressed: () {
               Navigator.of(context).pushNamed(Routes.mantraEditPage);
             },
           ),
-          _SettingItem(
+          SettingItem(
             title: S.of(context).retrospect,
             onPressed: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => AlertPeriodPage()));
             },
           ),
-          _SettingItem(
+          SettingItem(
             title: S.of(context).bindNotion,
             onPressed: () {
               Navigator.of(context).push(
@@ -104,11 +104,11 @@ class _SettingsCategoryPageState extends State<SettingsCategoryPage> {
   }
 }
 
-class _SettingItem extends StatelessWidget {
+class SettingItem extends StatelessWidget {
   final String? title;
   final VoidCallback? onPressed;
 
-  _SettingItem({this.title, this.onPressed});
+  SettingItem({this.title, this.onPressed});
 
   @override
   Widget build(BuildContext context) {

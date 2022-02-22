@@ -40,7 +40,7 @@ class _CurtainPageState extends State<CurtainPage> {
             _MomentGrid(),
             SizedBox(height: 8),
             SizedBox(height: 8),
-            _SettingsRow(
+            SettingsRow(
               title: S.of(context).actionHistory,
               onTap: () {
                 Navigator.of(context).push(
@@ -48,7 +48,7 @@ class _CurtainPageState extends State<CurtainPage> {
               },
             ),
             SizedBox(height: 8),
-            _SettingsRow(
+            SettingsRow(
               title: S.of(context).actionArchived,
               onTap: () {
                 Navigator.of(context).push(
@@ -56,7 +56,7 @@ class _CurtainPageState extends State<CurtainPage> {
               },
             ),
             SizedBox(height: 8),
-            _SettingsRow(
+            SettingsRow(
               title: S.of(context).settings,
               onTap: () {
                 Navigator.of(context).pushNamed(Routes.settingsCategoryPage);
@@ -247,11 +247,11 @@ class _MomentGrid extends StatelessWidget {
   }
 }
 
-class _SettingsRow extends StatelessWidget {
+class SettingsRow extends StatelessWidget {
   final String? title;
   final VoidCallback? onTap;
 
-  _SettingsRow({this.title, this.onTap});
+  SettingsRow({this.title, this.onTap});
 
   @override
   Widget build(BuildContext context) {

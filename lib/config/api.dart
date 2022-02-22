@@ -6,5 +6,5 @@
 ///
 
 const String notionUsers = 'v1/users';
-const String retrieveNotionDatabase = 'v1/databases';
-const String retrieveNotionPages = 'v1/pages';
+const String notionDatabase = 'v1/databases';
+const String notionPages = 'v1/pages';

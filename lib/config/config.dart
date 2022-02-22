@@ -11,6 +11,7 @@ import 'package:spark_list/generated/l10n.dart';
 ///
 
 const double galleryHeaderHeight = 64;
+final categoryTypes = [S.current.taskList];
 
 ///pages
 class Routes {
@@ -69,50 +70,6 @@ class SColor {
     grey: 0xFF757575,
     brownAccent: 0xFFBCAAA4
   };
-// categoryDemosList = List.of([
-//   CategoryItem(
-//       name: 'To Do',
-//       icon: Icon(
-//         Icons.article_outlined,
-//         color: Colors.blue,
-//       ),
-//       color: Colors.blue),
-//   CategoryItem(
-//       name: 'To Watch',
-//       icon: Icon(
-//         Icons.movie_outlined,
-//         color: Colors.yellow,
-//       ),
-//       color: Colors.yellow),
-//   CategoryItem(
-//       name: 'To Read',
-//       icon: Icon(
-//         Icons.menu_book_outlined,
-//         color: Colors.red,
-//       ),
-//       color: Colors.red),
-//   CategoryItem(
-//       name: 'Alert',
-//       icon: Icon(
-//         Icons.add_alert,
-//         color: Colors.orangeAccent,
-//       ),
-//       color: Colors.orangeAccent),
-//   CategoryItem(
-//       name: 'Work',
-//       icon: Icon(
-//         Icons.work_outline,
-//         color: Colors.greenAccent,
-//       ),
-//       color: Colors.greenAccent),
-//   CategoryItem(
-//       name: 'To Learn',
-//       icon: Icon(
-//         Icons.school_outlined,
-//         color: Colors.black,
-//       ),
-//       color: Colors.black),
-// ]);
 }
 
 class SIcons {
@@ -205,45 +162,9 @@ class SIcons {
   };
 }
 
-///Database
-// class DatabaseRef{
-// 	static const String DbName = 'spark_list_db.db';
-// 	static const int kVersion = 1;
-// 	static const String columnId = '_id';
-//
-// 	///table - to_do_table
-// 	static const String tableToDo = 'to_do';
-// 	static const String toDoContent = 'content';
-// 	static const String toDoBrief = 'brief';
-// 	static const String toDoCreatedTime = 'created_time';
-// 	static const String status = 'status';
-// 	static const String category = 'category';
-// 	static const String alertTime = 'alert_time';
-// 	static const String notificationId = 'notification_id';
-// 	static const String filedTime = 'filed_time';
-// 	static const String categoryId = 'category_id';
-//
-// 	///table - heat_map_table
-// 	static const String tableHeatMap = 'heat_map';
-// 	static const String heatPointlevel = 'level';
-// 	static const String heatPointId = '_id';
-// 	static const String heatPointcreatedTime = 'created_time';
-//
-// 	///table - action_history_table
-// 	static const String tableActionHistory = 'action_history';
-// 	static const String actionId = '_id';
-// 	static const String action = 'action';
-// 	static const String earlyContent = 'early_content';
-// 	static const String updatedContent = 'updated_content';
-// 	static const String updatedTime = 'updated_time';
-//
-// 	///table - category_list
-// 	static const String tableCategoryList = 'category_list';
-// 	static const String categoryName = 'category_name';
-// }
-
 class NotificationId {
   static const String mainChannelId = 'todo-alert';
   static const String retrospectChannelId = 'retrospect-alert';
   static const int retrospectId = 20210601;
 }
+

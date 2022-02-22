@@ -40,6 +40,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "categoryInformation":
             MessageLookupByLibrary.simpleMessage("Category Information"),
         "categoryList": MessageLookupByLibrary.simpleMessage("Category"),
+        "categoryType":
+            MessageLookupByLibrary.simpleMessage("Notion template type"),
+        "categoryTypeTips": MessageLookupByLibrary.simpleMessage(
+            "Different template reflects different database pattern in Notion"),
         "date": MessageLookupByLibrary.simpleMessage("Date"),
         "deleteCategory": MessageLookupByLibrary.simpleMessage("Delete"),
         "editCategory": MessageLookupByLibrary.simpleMessage("Edit"),
@@ -74,6 +78,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "noAlert": MessageLookupByLibrary.simpleMessage("No alert"),
         "notificationTitle": MessageLookupByLibrary.simpleMessage("Retrospect"),
         "notion": MessageLookupByLibrary.simpleMessage("Notion account"),
+        "notionDatabasePageTitle":
+            MessageLookupByLibrary.simpleMessage("Notion Database"),
         "notionPageId": MessageLookupByLibrary.simpleMessage("Page ID"),
         "notionPrompt": MessageLookupByLibrary.simpleMessage(
             "Optional, first link Notion account in Shorey settings, then link Notion database here, after that, your reminders will be synced with Notion database"),
@@ -81,6 +87,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "retrospect": MessageLookupByLibrary.simpleMessage("Retrospect"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "shoreyMomment": MessageLookupByLibrary.simpleMessage("Shorey moment"),
+        "taskList": MessageLookupByLibrary.simpleMessage("Task List"),
         "time": MessageLookupByLibrary.simpleMessage("Time"),
         "today": MessageLookupByLibrary.simpleMessage("Today")
       };

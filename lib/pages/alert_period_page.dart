@@ -21,7 +21,7 @@ import 'package:spark_list/widget/settings_list_item.dart';
 
 enum _ExpandableSetting { textScale, time }
 
-enum AlertPeriod { daily, mon, tue, wed, thu, fri, sat, sun, none }
+enum _AlertPeriod { daily, mon, tue, wed, thu, fri, sat, sun, none }
 
 class AlertPeriodPage extends StatefulWidget {
   @override
@@ -34,7 +34,7 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
   late Animation<double> _staggerSettingsItemsAnimation;
   late AnimationController _settingsPanelController;
   _ExpandableSetting? _expandedSettingId;
-  AlertPeriod selectPeriod = AlertPeriod.daily;
+  _AlertPeriod selectPeriod = _AlertPeriod.daily;
   TimeOfDay _time = TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 1);
   int? selectedOption;
   late Map optionMap;
@@ -71,7 +71,7 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
     setState(() {});
   }
 
-  Future<void> _savePeriod(AlertPeriod period) async {
+  Future<void> _savePeriod(_AlertPeriod period) async {
     final provider = await Provider.of<HomeViewModel>(context, listen: false);
     final index = optionMap.keys.toList().indexOf(period);
     print('period ${index}');
@@ -107,15 +107,15 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     optionMap = LinkedHashMap.of({
-      AlertPeriod.daily: S.of(context).everyday,
-      AlertPeriod.mon: S.of(context).everyMonday,
-      AlertPeriod.tue: S.of(context).everyTuesday,
-      AlertPeriod.wed: S.of(context).everyWednesday,
-      AlertPeriod.thu: S.of(context).everyThursday,
-      AlertPeriod.fri: S.of(context).everyFriday,
-      AlertPeriod.sat: S.of(context).everySaturday,
-      AlertPeriod.sun: S.of(context).everySunday,
-      AlertPeriod.none: S.of(context).noAlert,
+      _AlertPeriod.daily: S.of(context).everyday,
+      _AlertPeriod.mon: S.of(context).everyMonday,
+      _AlertPeriod.tue: S.of(context).everyTuesday,
+      _AlertPeriod.wed: S.of(context).everyWednesday,
+      _AlertPeriod.thu: S.of(context).everyThursday,
+      _AlertPeriod.fri: S.of(context).everyFriday,
+      _AlertPeriod.sat: S.of(context).everySaturday,
+      _AlertPeriod.sun: S.of(context).everySunday,
+      _AlertPeriod.none: S.of(context).noAlert,
     });
     final colorScheme = Theme.of(context).colorScheme;
     final settingsListItems = [
@@ -203,7 +203,7 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
       itemCount: _expandedSettingId == _ExpandableSetting.textScale ? 9 : 0,
       itemBuilder: (context, index) {
         final displayOption = optionMap.values.elementAt(index);
-        return RadioListTile<AlertPeriod>(
+        return RadioListTile<_AlertPeriod>(
           value: optionMap.keys.elementAt(index),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

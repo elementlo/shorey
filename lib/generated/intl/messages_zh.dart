@@ -37,6 +37,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancelAlertTime": MessageLookupByLibrary.simpleMessage("已取消提醒时间"),
         "categoryInformation": MessageLookupByLibrary.simpleMessage("类别信息"),
         "categoryList": MessageLookupByLibrary.simpleMessage("类别"),
+        "categoryType": MessageLookupByLibrary.simpleMessage("Notion模板类型"),
+        "categoryTypeTips":
+            MessageLookupByLibrary.simpleMessage("不同模板对应Notion中不同样式的数据库"),
         "date": MessageLookupByLibrary.simpleMessage("日期"),
         "deleteCategory": MessageLookupByLibrary.simpleMessage("删除"),
         "editCategory": MessageLookupByLibrary.simpleMessage("编辑"),
@@ -56,7 +59,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "linkNotionDatabase":
             MessageLookupByLibrary.simpleMessage("关联Notion数据库"),
         "linkNotionInfo":
-            MessageLookupByLibrary.simpleMessage("填写下面两项信息使Shorey与Notion连接"),
+            MessageLookupByLibrary.simpleMessage("填写下面信息使Shorey与Notion账户绑定"),
         "mainCategory": MessageLookupByLibrary.simpleMessage("类别"),
         "mainFocusToday": MessageLookupByLibrary.simpleMessage("今日聚焦"),
         "mantra": MessageLookupByLibrary.simpleMessage("格言"),
@@ -67,6 +70,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "noAlert": MessageLookupByLibrary.simpleMessage("不提醒"),
         "notificationTitle": MessageLookupByLibrary.simpleMessage("回顾"),
         "notion": MessageLookupByLibrary.simpleMessage("Notion账户"),
+        "notionDatabasePageTitle":
+            MessageLookupByLibrary.simpleMessage("Notion数据库"),
         "notionPageId": MessageLookupByLibrary.simpleMessage("Page ID"),
         "notionPrompt": MessageLookupByLibrary.simpleMessage(
             "可选项, 在Shorey设置中关联Notion账号后, 此处关联Notion数据库, 随后记事会同步到对应的数据库中"),
@@ -74,6 +79,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "retrospect": MessageLookupByLibrary.simpleMessage("回顾"),
         "settings": MessageLookupByLibrary.simpleMessage("设置"),
         "shoreyMomment": MessageLookupByLibrary.simpleMessage("Shorey时刻"),
+        "taskList": MessageLookupByLibrary.simpleMessage("待办清单"),
         "time": MessageLookupByLibrary.simpleMessage("时间"),
         "today": MessageLookupByLibrary.simpleMessage("今天")
       };

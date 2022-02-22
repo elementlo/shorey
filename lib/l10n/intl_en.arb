@@ -78,5 +78,9 @@
   "notionToken": "Notion token",
   "linkNotionInfo": "Fill in the blanks to link Notion",
   "notionPageId": "Page ID",
-  "notionPrompt": "Optional, first link Notion account in Shorey settings, then link Notion database here, after that, your reminders will be synced with Notion database"
+  "notionPrompt": "Optional, first link Notion account in Shorey settings, then link Notion database here, after that, your reminders will be synced with Notion database",
+  "notionDatabasePageTitle": "Notion Database",
+  "taskList": "Task List",
+  "categoryType": "Notion template type",
+  "categoryTypeTips": "Different template reflects different database pattern in Notion"
 }

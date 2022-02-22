@@ -549,6 +549,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Notion Database`
+  String get notionDatabasePageTitle {
+    return Intl.message(
+      'Notion Database',
+      name: 'notionDatabasePageTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Task List`
+  String get taskList {
+    return Intl.message(
+      'Task List',
+      name: 'taskList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notion template type`
+  String get categoryType {
+    return Intl.message(
+      'Notion template type',
+      name: 'categoryType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Different template reflects different database pattern in Notion`
+  String get categoryTypeTips {
+    return Intl.message(
+      'Different template reflects different database pattern in Notion',
+      name: 'categoryTypeTips',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

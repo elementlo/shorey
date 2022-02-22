@@ -10,6 +10,7 @@ import 'package:dio/dio.dart';
 var dio = Dio();
 
 extension ResponseExt on Response{
-
   bool get success => this.statusCode == 200;
+  bool get notFound => this.data?['code'] == 'object_not_found';
 }
+

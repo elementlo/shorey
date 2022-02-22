@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:drift/drift.dart' as d;
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -9,13 +7,15 @@ import 'package:spark_list/config/config.dart';
 import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/model/model.dart';
+import 'package:spark_list/pages/curtain_page.dart';
+import 'package:spark_list/pages/settings_page.dart';
 import 'package:spark_list/view_model/category_info_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
-import 'package:spark_list/widget/category_list_item.dart';
 import 'package:spark_list/widget/round_corner_rectangle.dart';
-import 'package:spark_list/widget/settings_list_item.dart';
 import 'package:spark_list/workflow/notion_workflow.dart';
+
+import 'notion_database_page.dart';
 
 ///
 /// Author: Elemen
@@ -39,7 +39,6 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
     with TickerProviderStateMixin {
   final _controller = TextEditingController();
   var _showConfirm = false;
-
   _ExpandableSetting? _expandedSettingId;
   late Animation<double> _staggerSettingsItemsAnimation;
   late AnimationController _settingsPanelController;
@@ -193,24 +192,35 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
               SizedBox(
                 height: 20,
               ),
-              AnimateSettingsListItems(
-                animation: _staggerSettingsItemsAnimation,
-                children: [
-                  SettingsListItem<double>(
-                    title: S.of(context).linkNotionDatabase,
-                    selectedOption: 1.0,
-                    optionsMap: LinkedHashMap.of({1.0: DisplayOption('')}),
-                    onOptionChanged: (newTextScale) {},
-                    onTapSetting: () =>
-                        onTapSetting(_ExpandableSetting.linkNotionDatabase),
-                    isExpanded: _expandedSettingId ==
-                        _ExpandableSetting.linkNotionDatabase,
-                    child: _NotionDatabaseCard(
-                      controller: _databaseController,
-                    ),
-                  ),
-                ],
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: SettingsRow(
+                  title: S.of(context).linkNotionDatabase,
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => NotionDatabasePage()));
+                  },
+                ),
               ),
+              SizedBox(height: 20,),
+              // AnimateSettingsListItems(
+              //   animation: _staggerSettingsItemsAnimation,
+              //   children: [
+              //     SettingsListItem<double>(
+              //       title: S.of(context).linkNotionDatabase,
+              //       selectedOption: 1.0,
+              //       optionsMap: LinkedHashMap.of({1.0: DisplayOption('')}),
+              //       onOptionChanged: (newTextScale) {},
+              //       onTapSetting: () =>
+              //           onTapSetting(_ExpandableSetting.linkNotionDatabase),
+              //       isExpanded: _expandedSettingId ==
+              //           _ExpandableSetting.linkNotionDatabase,
+              //       child: _NotionDatabaseCard(
+              //         controller: _databaseController,
+              //       ),
+              //     ),
+              //   ],
+              // ),
             ],
           ),
         ),
@@ -364,158 +374,6 @@ class _IconSelectorState extends State<_IconSelector> {
             size: 28,
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _NotionDatabaseCard extends StatefulWidget {
-  final TextEditingController controller;
-
-  const _NotionDatabaseCard({Key? key, required this.controller})
-      : super(key: key);
-
-  @override
-  State<_NotionDatabaseCard> createState() => _NotionDatabaseCardState();
-}
-
-class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
-  var offStageCard = true;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final viewModel = Provider.of<CategoryInfoViewModel>(context);
-    final database = viewModel.database;
-    offStageCard = database == null;
-    return Container(
-      padding: EdgeInsets.only(top: 10),
-      width: double.infinity,
-      height: 230,
-      child: Column(
-        children: [
-          Offstage(
-            offstage: !offStageCard,
-            child: Column(
-              children: [
-                TextField(
-                  controller: widget.controller,
-                  decoration: InputDecoration(
-                      labelText: S.of(context).notionPageId,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey)),
-                      border: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey)),
-                      suffix: Container(
-                        width: 25,
-                        height: 25,
-                        child: IconButton(
-                            padding: EdgeInsets.all(0),
-                            onPressed: () async {
-                              if (widget.controller.text.isNotEmpty) {
-                                FocusScope.of(context)
-                                    .requestFocus(FocusNode());
-                                EasyLoading.show();
-                                final result = await context
-                                    .read<NotionWorkFlow>()
-                                    .linkDatabase(widget.controller.text);
-                                viewModel.setDatabase = result;
-                                if (result != null) {
-                                  offStageCard = false;
-                                  setState(() {});
-                                }
-                                EasyLoading.dismiss();
-                              }
-                            },
-                            icon: Icon(
-                              Icons.check,
-                              color: colorScheme.onSecondary,
-                            )),
-                      ),
-                      contentPadding: EdgeInsets.only(top: 10)),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                      child: Icon(
-                        Icons.wb_incandescent,
-                        size: 15,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Expanded(
-                        child: Text(
-                      S.of(context).notionPrompt,
-                      style: TextStyle(fontSize: 13, color: Colors.grey),
-                    )),
-                  ],
-                )
-              ],
-            ),
-          ),
-          Offstage(
-            offstage: offStageCard,
-            child: Card(
-              elevation: 1,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      Container(
-                        height: 130,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                topRight: Radius.circular(8)),
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(
-                                  '${database?.cover?.external?.url ?? ''}',
-                                ))),
-                      ),
-                      Positioned(
-                          right: 0,
-                          top: 0,
-                          child: IconButton(
-                            iconSize: 20,
-                            padding: EdgeInsets.all(0),
-                            onPressed: () {
-                              context
-                                  .read<CategoryInfoViewModel>()
-                                  .unlinkNotionDatabase();
-                            },
-                            icon: Icon(
-                              Icons.clear,
-                              color: Colors.grey.shade400,
-                            ),
-                          ))
-                    ],
-                  ),
-                  Container(
-                      alignment: Alignment.centerLeft,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                      child: Row(
-                        children: [
-                          Text(
-                              '${database?.icon?.type == 'emoji' ? database?.icon?.emoji : ''}'),
-                          Text('${database?.title?[0].plainText}'),
-                        ],
-                      ))
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
