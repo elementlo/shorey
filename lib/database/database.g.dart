@@ -342,9 +342,10 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
 }
 
 class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ToDosTable(this._db, [this._alias]);
+  $ToDosTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
@@ -490,7 +491,7 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
 
   @override
   $ToDosTable createAlias(String alias) {
-    return $ToDosTable(_db, alias);
+    return $ToDosTable(attachedDatabase, alias);
   }
 }
 
@@ -696,9 +697,10 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
 
 class $CategoriesTable extends Categories
     with TableInfo<$CategoriesTable, Category> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $CategoriesTable(this._db, [this._alias]);
+  $CategoriesTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
@@ -779,7 +781,7 @@ class $CategoriesTable extends Categories
 
   @override
   $CategoriesTable createAlias(String alias) {
-    return $CategoriesTable(_db, alias);
+    return $CategoriesTable(attachedDatabase, alias);
   }
 }
 
@@ -925,9 +927,10 @@ class HeatGraphCompanion extends UpdateCompanion<HeatPoint> {
 
 class $HeatGraphTable extends HeatGraph
     with TableInfo<$HeatGraphTable, HeatPoint> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $HeatGraphTable(this._db, [this._alias]);
+  $HeatGraphTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
@@ -987,7 +990,7 @@ class $HeatGraphTable extends HeatGraph
 
   @override
   $HeatGraphTable createAlias(String alias) {
-    return $HeatGraphTable(_db, alias);
+    return $HeatGraphTable(attachedDatabase, alias);
   }
 }
 
@@ -1194,9 +1197,10 @@ class ActionsHistoryCompanion extends UpdateCompanion<UserAction> {
 
 class $ActionsHistoryTable extends ActionsHistory
     with TableInfo<$ActionsHistoryTable, UserAction> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ActionsHistoryTable(this._db, [this._alias]);
+  $ActionsHistoryTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
@@ -1283,7 +1287,7 @@ class $ActionsHistoryTable extends ActionsHistory
 
   @override
   $ActionsHistoryTable createAlias(String alias) {
-    return $ActionsHistoryTable(_db, alias);
+    return $ActionsHistoryTable(attachedDatabase, alias);
   }
 }
 
