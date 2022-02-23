@@ -71,7 +71,6 @@ Flutter Gallery
 Flutter 插件:
 * Provider
 * pull_to_refresh
-* google_fonts
 * shared_preferences
 * fluttertoast
 * sqflite

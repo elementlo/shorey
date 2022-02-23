@@ -32,10 +32,10 @@ class Header extends StatelessWidget {
       ),
       child: Text(
         text!,
-        style: Theme.of(context).textTheme.headline4!.apply(
-              color: color,
-              fontSizeDelta: 0,
-            ),
+        style: Theme.of(context)
+            .textTheme
+            .headline4!
+            .apply(color: color, fontSizeFactor: 1, fontSizeDelta: 0),
       ),
     );
   }

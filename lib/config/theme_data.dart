@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 ///
 /// Author: Elemen
@@ -21,9 +20,9 @@ class AppThemeData {
 	static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
 		return ThemeData(
 			colorScheme: colorScheme,
-			textTheme: _textTheme,
 			// Matches manifest.json colors and background color.
 			primaryColor: const Color(0xFFF7F8FA),
+			textTheme: _textTheme,
 			appBarTheme: AppBarTheme(
 				textTheme: _textTheme.apply(bodyColor: colorScheme.onPrimary),
 				color: colorScheme.background,
@@ -84,17 +83,17 @@ class AppThemeData {
 	static const _medium = FontWeight.w500;
 	static const _semiBold = FontWeight.w600;
 	static const _bold = FontWeight.w700;
-	
+
 	static final TextTheme _textTheme = TextTheme(
-		headline4: GoogleFonts.montserrat(fontWeight: _bold, fontSize: 20.0),
-		caption: GoogleFonts.oswald(fontWeight: _semiBold, fontSize: 16.0),
-		headline5: GoogleFonts.oswald(fontWeight: _medium, fontSize: 16.0),
-		subtitle1: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 16.0),
-		overline: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 12.0),
-		bodyText1: GoogleFonts.montserrat(fontWeight: _regular, fontSize: 14.0),
-		subtitle2: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 14.0),
-		bodyText2: GoogleFonts.montserrat(fontWeight: _regular, fontSize: 16.0),
-		headline6: GoogleFonts.montserrat(fontWeight: _bold, fontSize: 16.0),
-		button: GoogleFonts.montserrat(fontWeight: _semiBold, fontSize: 14.0),
+		headline4: TextStyle(fontWeight: _bold, fontSize: 20.0),
+		caption: TextStyle(fontWeight: _semiBold, fontSize: 16.0),
+		headline5: TextStyle(fontWeight: _medium, fontSize: 16.0),
+		subtitle1: TextStyle(fontWeight: _medium, fontSize: 16.0),
+		overline: TextStyle(fontWeight: _medium, fontSize: 12.0),
+		bodyText1: TextStyle(fontWeight: _regular, fontSize: 14.0),
+		subtitle2: TextStyle(fontWeight: _medium, fontSize: 14.0),
+		bodyText2: TextStyle(fontWeight: _regular, fontSize: 16.0),
+		headline6: TextStyle(fontWeight: _bold, fontSize: 16.0),
+		button: TextStyle(fontWeight: _semiBold, fontSize: 14.0),
 	);
 }
