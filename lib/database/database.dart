@@ -76,6 +76,8 @@ class Categories extends Table {
 
   TextColumn get notionDatabaseId => text().nullable()();
 
+  IntColumn get notionDatabaseType => integer().nullable()();
+
   IntColumn get iconId => integer()();
 
   IntColumn get colorId => integer()();

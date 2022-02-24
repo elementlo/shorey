@@ -136,18 +136,13 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
     final colorScheme = Theme.of(context).colorScheme;
     return ProviderWidget<CategoryInfoViewModel>(
       model: CategoryInfoViewModel(),
-      // create: (context) => CategoryInfoViewModel(category: widget.editingItem),
-      // update: (context, workflow, viewModel) {
-      //   viewModel!.setDatabase = workflow.database;
-      //   return viewModel;
-      // },
       onModelReady: (vm) async {
-        if (widget.editingItem?.notionDatabaseId != null &&
-            widget.editingItem?.notionDatabaseId != '') {
-          vm.setDatabase = await context
-              .read<NotionWorkFlow>()
-              .linkDatabase(widget.editingItem!.notionDatabaseId!);
-        }
+        // if (widget.editingItem?.notionDatabaseId != null &&
+        //     widget.editingItem?.notionDatabaseId != '') {
+        //   vm.setDatabase = await context
+        //       .read<NotionWorkFlow>()
+        //       .linkDatabase(widget.editingItem!.notionDatabaseId!);
+        // }
       },
       child: Scaffold(
         appBar: SparkAppBar(

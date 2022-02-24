@@ -80,7 +80,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "notion": MessageLookupByLibrary.simpleMessage("Notion account"),
         "notionDatabasePageTitle":
             MessageLookupByLibrary.simpleMessage("Notion Database"),
-        "notionPageId": MessageLookupByLibrary.simpleMessage("Page ID"),
+        "notionPageId":
+            MessageLookupByLibrary.simpleMessage("Page ID/Database ID"),
         "notionPrompt": MessageLookupByLibrary.simpleMessage(
             "Optional, first link Notion account in Shorey settings, then link Notion database here, after that, your reminders will be synced with Notion database"),
         "notionToken": MessageLookupByLibrary.simpleMessage("Notion token"),
@@ -88,6 +89,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "shoreyMomment": MessageLookupByLibrary.simpleMessage("Shorey moment"),
         "taskList": MessageLookupByLibrary.simpleMessage("Task List"),
+        "templateDiaryTitle": MessageLookupByLibrary.simpleMessage("Diary"),
         "time": MessageLookupByLibrary.simpleMessage("Time"),
         "today": MessageLookupByLibrary.simpleMessage("Today")
       };

@@ -72,7 +72,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "notion": MessageLookupByLibrary.simpleMessage("Notion账户"),
         "notionDatabasePageTitle":
             MessageLookupByLibrary.simpleMessage("Notion数据库"),
-        "notionPageId": MessageLookupByLibrary.simpleMessage("Page ID"),
+        "notionPageId":
+            MessageLookupByLibrary.simpleMessage("Page ID/Database ID"),
         "notionPrompt": MessageLookupByLibrary.simpleMessage(
             "可选项, 在Shorey设置中关联Notion账号后, 此处关联Notion数据库, 随后记事会同步到对应的数据库中"),
         "notionToken": MessageLookupByLibrary.simpleMessage("Notion token"),
@@ -80,6 +81,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "settings": MessageLookupByLibrary.simpleMessage("设置"),
         "shoreyMomment": MessageLookupByLibrary.simpleMessage("Shorey时刻"),
         "taskList": MessageLookupByLibrary.simpleMessage("待办清单"),
+        "templateDiaryTitle": MessageLookupByLibrary.simpleMessage("日记"),
         "time": MessageLookupByLibrary.simpleMessage("时间"),
         "today": MessageLookupByLibrary.simpleMessage("今天")
       };

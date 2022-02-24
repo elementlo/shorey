@@ -530,10 +530,10 @@ class S {
     );
   }
 
-  /// `Page ID`
+  /// `Page ID/Database ID`
   String get notionPageId {
     return Intl.message(
-      'Page ID',
+      'Page ID/Database ID',
       name: 'notionPageId',
       desc: '',
       args: [],
@@ -585,6 +585,16 @@ class S {
     return Intl.message(
       'Different template reflects different database pattern in Notion',
       name: 'categoryTypeTips',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Diary`
+  String get templateDiaryTitle {
+    return Intl.message(
+      'Diary',
+      name: 'templateDiaryTitle',
       desc: '',
       args: [],
     );

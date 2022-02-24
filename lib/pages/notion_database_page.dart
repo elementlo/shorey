@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/base/provider_widget.dart';
-import 'package:spark_list/config/config.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/view_model/notion_database_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
@@ -33,12 +32,17 @@ class _NotionDatabasePageState extends State<NotionDatabasePage>
     with TickerProviderStateMixin {
   late Animation<double> _staggerSettingsItemsAnimation;
   late AnimationController _settingsPanelController;
-  _ExpandableSetting? _expandedSettingId;
   final TextEditingController _databaseController = TextEditingController();
+
+  _ExpandableSetting? _expandedSettingId;
+
+  late List<String> _categoryTypes;
+  late int _selectedOption;
 
   @override
   void initState() {
     super.initState();
+    _selectedOption = 0;
     _settingsPanelController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
@@ -57,6 +61,10 @@ class _NotionDatabasePageState extends State<NotionDatabasePage>
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    _categoryTypes = [
+      S.of(context).taskList,
+      S.of(context).templateDiaryTitle,
+    ];
     return ProviderWidget<NotionDatabaseViewModel>(
       model: NotionDatabaseViewModel(),
       child: Scaffold(
@@ -66,7 +74,7 @@ class _NotionDatabasePageState extends State<NotionDatabasePage>
           actions: [
             IconButton(
                 icon: Icon(
-                  Icons.check,
+                  Icons.clear,
                   color: colorScheme.onSecondary,
                 ),
                 onPressed: () async {
@@ -82,8 +90,10 @@ class _NotionDatabasePageState extends State<NotionDatabasePage>
                 children: [
                   SettingsListItem<double>(
                     title: S.of(context).categoryType,
-                    optionsMap: LinkedHashMap.of({1.0: DisplayOption('')}),
-                    selectedOption: MediaQuery.of(context).textScaleFactor,
+                    optionsMap: LinkedHashMap.of({
+                      1.0: DisplayOption('${_categoryTypes[_selectedOption]}'),
+                    }),
+                    selectedOption: 1.0,
                     onOptionChanged: (newTextScale) {
                       print(newTextScale);
                     },
@@ -92,14 +102,6 @@ class _NotionDatabasePageState extends State<NotionDatabasePage>
                     isExpanded:
                         _expandedSettingId == _ExpandableSetting.categoryType,
                     child: _optionChildList(colorScheme),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 16),
-                    child: Text(
-                      S.of(context).categoryTypeTips,
-                      style: TextStyle(fontSize: 13, color: Colors.grey),
-                    ),
                   ),
                   SettingsListItem<double>(
                     title: S.of(context).linkNotionDatabase,
@@ -142,28 +144,31 @@ class _NotionDatabasePageState extends State<NotionDatabasePage>
   }
 
   Widget _optionChildList(ColorScheme colorScheme) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: categoryTypes.length,
-      itemBuilder: (context, index) {
-        return RadioListTile<String>(
-          value: categoryTypes[index],
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(categoryTypes[index],
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 16),
+      child: ListView.builder(
+        itemCount: _categoryTypes.length + 1,
+        itemExtent: 45,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return TipsTextView(S.of(context).categoryTypeTips);
+          } else {
+            return RadioListTile<String>(
+              value: _categoryTypes[index - 1],
+              title: Text(_categoryTypes[index - 1],
                   style: TextStyle(color: Colors.black, fontSize: 14)),
-            ],
-          ),
-          groupValue: categoryTypes[0],
-          onChanged: (option) {
-            //selectPeriod = option!;
-            setState(() {});
-          },
-          activeColor: colorScheme.onSecondary,
-          dense: true,
-        );
-      },
+              groupValue: _categoryTypes[_selectedOption],
+              onChanged: (option) {
+                _selectedOption = _categoryTypes.indexOf(option!);
+                setState(() {});
+              },
+              activeColor: colorScheme.onSecondary,
+              dense: true,
+            );
+          }
+        },
+      ),
     );
   }
 }
@@ -188,10 +193,11 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
     final database = viewModel.database;
     offStageCard = database == null;
     return Container(
-      padding: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(top: 50),
       width: double.infinity,
       height: 230,
-      child: Column(
+      alignment: Alignment.bottomCenter,
+      child: Stack(
         children: [
           Offstage(
             offstage: !offStageCard,
@@ -199,6 +205,7 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
               children: [
                 TextField(
                   controller: widget.controller,
+                  maxLines: 1,
                   decoration: InputDecoration(
                       labelText: S.of(context).notionPageId,
                       labelStyle: TextStyle(color: Colors.grey),
@@ -219,11 +226,13 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                                 final result = await context
                                     .read<NotionWorkFlow>()
                                     .linkDatabase(widget.controller.text);
-                                //viewModel.setDatabase = result;
                                 if (result != null) {
                                   offStageCard = false;
+                                  viewModel.setDatabase = result;
                                   setState(() {});
-                                } else {}
+                                } else {
+
+                                }
                                 EasyLoading.dismiss();
                               }
                             },
@@ -237,24 +246,7 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                 SizedBox(
                   height: 20,
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                      child: Icon(
-                        Icons.wb_incandescent,
-                        size: 15,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Expanded(
-                        child: Text(
-                      S.of(context).notionPrompt,
-                      style: TextStyle(fontSize: 13, color: Colors.grey),
-                    )),
-                  ],
-                )
+                TipsTextView(S.of(context).notionPrompt),
               ],
             ),
           ),
@@ -314,6 +306,37 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class TipsTextView extends StatelessWidget {
+  final String tips;
+
+  const TipsTextView(this.tips, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 20,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            child: Icon(
+              Icons.wb_incandescent,
+              size: 15,
+              color: Colors.grey,
+            ),
+          ),
+          Expanded(
+              child: Text(
+            tips,
+            style: TextStyle(fontSize: 13, color: Colors.grey),
+          )),
         ],
       ),
     );

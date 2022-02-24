@@ -201,17 +201,13 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: _expandedSettingId == _ExpandableSetting.textScale ? 9 : 0,
+      itemExtent: 45,
       itemBuilder: (context, index) {
         final displayOption = optionMap.values.elementAt(index);
         return RadioListTile<_AlertPeriod>(
           value: optionMap.keys.elementAt(index),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(displayOption,
-                  style: TextStyle(color: Colors.black, fontSize: 14)),
-            ],
-          ),
+          title: Text(displayOption,
+              style: TextStyle(color: Colors.black, fontSize: 14)),
           groupValue: selectPeriod,
           onChanged: (option) {
             selectPeriod = option!;

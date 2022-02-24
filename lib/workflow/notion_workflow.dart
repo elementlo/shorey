@@ -51,11 +51,7 @@ class NotionWorkFlow with ChangeNotifier {
   }
 
   Future<NotionDatabase?> linkDatabase(String databaseId) async {
-    final result = await _actions.retrieveDatabase(databaseId);
-    if (result != null) {
-      return result;
-    }
-    return null;
+    return _actions.retrieveDatabase(databaseId);
   }
 
   Future addItem() async {

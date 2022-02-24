@@ -77,10 +77,11 @@
   "linkNotionDatabase": "关联Notion数据库",
   "notionToken": "Notion token",
   "linkNotionInfo": "填写下面信息使Shorey与Notion账户绑定",
-  "notionPageId": "Page ID",
+  "notionPageId": "Page ID/Database ID",
   "notionPrompt": "可选项, 在Shorey设置中关联Notion账号后, 此处关联Notion数据库, 随后记事会同步到对应的数据库中",
   "notionDatabasePageTitle": "Notion数据库",
   "taskList": "待办清单",
   "categoryType": "Notion模板类型",
-  "categoryTypeTips": "不同模板对应Notion中不同样式的数据库"
+  "categoryTypeTips": "不同模板对应Notion中不同样式的数据库",
+  "templateDiaryTitle": "日记"
 }

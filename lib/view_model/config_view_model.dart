@@ -100,17 +100,6 @@ class ConfigViewModel extends ViewStateModel {
       });
       notifyListeners();
     });
-    // final list = await _dbProvider.categoryList;
-    // list.forEach((element) {
-    //   if(element.name != 'mainfocus')
-    //   categoryDemosList.add(CategoryItem(element.id,
-    //       name: '${element.name}',
-    //       icon: Icon(
-    //         SIcons.iconMap[element.iconId],
-    //         color: Color(SColor.colorMap[element.colorId]!),
-    //       ),));
-    // });
-    // notifyListeners();
   }
 
   Future initCategoryDemosList() async {
@@ -119,50 +108,6 @@ class ConfigViewModel extends ViewStateModel {
         await dbProvider.setCategories();
       }
     });
-    // categoryDemosList = List.of([
-    //   CategoryItem(
-    //       name: 'To Do',
-    //       icon: Icon(
-    //         Icons.article_outlined,
-    //         color: Colors.blue,
-    //       ),
-    //       color: Colors.blue),
-    //   CategoryItem(
-    //       name: 'To Watch',
-    //       icon: Icon(
-    //         Icons.movie_outlined,
-    //         color: Colors.yellow,
-    //       ),
-    //       color: Colors.yellow),
-    //   CategoryItem(
-    //       name: 'To Read',
-    //       icon: Icon(
-    //         Icons.menu_book_outlined,
-    //         color: Colors.red,
-    //       ),
-    //       color: Colors.red),
-    //   CategoryItem(
-    //       name: 'Alert',
-    //       icon: Icon(
-    //         Icons.add_alert,
-    //         color: Colors.orangeAccent,
-    //       ),
-    //       color: Colors.orangeAccent),
-    //   CategoryItem(
-    //       name: 'Work',
-    //       icon: Icon(
-    //         Icons.work_outline,
-    //         color: Colors.greenAccent,
-    //       ),
-    //       color: Colors.greenAccent),
-    //   CategoryItem(
-    //       name: 'To Learn',
-    //       icon: Icon(
-    //         Icons.school_outlined,
-    //         color: Colors.black,
-    //       ),
-    //       color: Colors.black),
-    // ]);
   }
 
   static SystemUiOverlayStyle resolvedSystemUiOverlayStyle() {

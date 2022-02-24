@@ -11,7 +11,6 @@ import 'package:spark_list/generated/l10n.dart';
 ///
 
 const double galleryHeaderHeight = 64;
-final categoryTypes = [S.current.taskList];
 
 ///pages
 class Routes {
