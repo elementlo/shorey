@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:spark_list/config/api.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/model/notion_database_model.dart';
+import 'package:spark_list/model/notion_database_template.dart';
 import 'package:spark_list/model/notion_model.dart';
 import 'package:spark_list/resource/data_provider.dart';
 import 'package:spark_list/resource/http_provider.dart';
@@ -121,6 +122,6 @@ class _NotionActions {
 
   Future<NotionDatabase?> createDatabase(String pageId) async {
     final response =
-        await dio.post('${notionDatabase}', data: jsonDecode(database));
+        await dio.post('${notionDatabase}', data: NotionDatabaseTemplate.taskList(pageId));
   }
 }

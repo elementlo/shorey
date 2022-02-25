@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 ///
 /// Author: Elemen
 /// Github: https://github.com/elementlo
@@ -6,8 +8,8 @@
 ///
 
 class NotionDatabaseTemplate {
-  static dynamic taskList(int pageId) {
-    return '''
+  static String taskList(String pageId) {
+    return jsonEncode('''
 {
   "parent": {
     "type": "page_id",
@@ -66,6 +68,6 @@ class NotionDatabaseTemplate {
 	}
   }
 }
-    ''';
+    ''');
   }
 }
