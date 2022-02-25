@@ -23,6 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "aboutShorey": MessageLookupByLibrary.simpleMessage("About Shorey"),
+        "achievedItemsTitle": MessageLookupByLibrary.simpleMessage("Achieved"),
         "actionAdd": MessageLookupByLibrary.simpleMessage("Added"),
         "actionArchived": MessageLookupByLibrary.simpleMessage("Archived"),
         "actionHistory": MessageLookupByLibrary.simpleMessage("History"),
@@ -71,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Better to have, and not need, than to need, and not have."),
         "mantra3": MessageLookupByLibrary.simpleMessage(
             "I am free and that is why I am lost."),
+        "mantraEditTitle": MessageLookupByLibrary.simpleMessage("Edit Mantra"),
         "noAlert": MessageLookupByLibrary.simpleMessage("No alert"),
         "notificationTitle": MessageLookupByLibrary.simpleMessage("Retrospect"),
         "notion": MessageLookupByLibrary.simpleMessage("Notion account"),
@@ -80,6 +82,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "shoreyMomment": MessageLookupByLibrary.simpleMessage("Shorey moment"),
         "time": MessageLookupByLibrary.simpleMessage("Time"),
+        "tipsNotionId": MessageLookupByLibrary.simpleMessage(
+            "Optional, config a global Notion page to store all your tasks"),
         "today": MessageLookupByLibrary.simpleMessage("Today")
       };
 }

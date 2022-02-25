@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/database/database.dart';
+import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/model/model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
@@ -41,7 +42,7 @@ class _FiledEventsPageState extends State<FiledEventsPage> {
     return Scaffold(
       appBar: SparkAppBar(
         context: context,
-        title: '已归档',
+        title: S.of(context).achievedItemsTitle,
         actions: [
           IconButton(
               icon: Icon(

@@ -23,6 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "aboutShorey": MessageLookupByLibrary.simpleMessage("关于Shorey"),
+        "achievedItemsTitle": MessageLookupByLibrary.simpleMessage("已归档"),
         "actionAdd": MessageLookupByLibrary.simpleMessage("添加"),
         "actionArchived": MessageLookupByLibrary.simpleMessage("归档"),
         "actionHistory": MessageLookupByLibrary.simpleMessage("历史"),
@@ -63,6 +64,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "mantra2": MessageLookupByLibrary.simpleMessage(
             "心脏是一座有两间卧室的房子, 一间住着痛苦, 另一间住着欢乐, 人不能笑得太响. 否则笑声会吵醒隔壁房间的痛苦."),
         "mantra3": MessageLookupByLibrary.simpleMessage("我是自由的, 那就是我迷失的原因."),
+        "mantraEditTitle": MessageLookupByLibrary.simpleMessage("编辑Mantra"),
         "noAlert": MessageLookupByLibrary.simpleMessage("不提醒"),
         "notificationTitle": MessageLookupByLibrary.simpleMessage("回顾"),
         "notion": MessageLookupByLibrary.simpleMessage("Notion账户"),
@@ -72,6 +74,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "settings": MessageLookupByLibrary.simpleMessage("设置"),
         "shoreyMomment": MessageLookupByLibrary.simpleMessage("Shorey时刻"),
         "time": MessageLookupByLibrary.simpleMessage("时间"),
+        "tipsNotionId": MessageLookupByLibrary.simpleMessage(
+            "可选项, 配置一个全局的Notion根页面, 添加记事时可选择默认都同步在此页面上"),
         "today": MessageLookupByLibrary.simpleMessage("今天")
       };
 }

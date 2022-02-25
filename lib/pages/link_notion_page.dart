@@ -372,7 +372,7 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                     ),
                     Expanded(
                         child: Text(
-                      '可选项, 配置一个全局的Notion根页面, 添加记事时可选择默认都同步在此页面上',
+                      S.of(context).tipsNotionId,
                       style: TextStyle(
                           fontSize: 13, color: Colors.grey),
                     )),

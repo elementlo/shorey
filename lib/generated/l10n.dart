@@ -539,6 +539,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Achieved`
+  String get achievedItemsTitle {
+    return Intl.message(
+      'Achieved',
+      name: 'achievedItemsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Mantra`
+  String get mantraEditTitle {
+    return Intl.message(
+      'Edit Mantra',
+      name: 'mantraEditTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Optional, config a global Notion page to store all your tasks`
+  String get tipsNotionId {
+    return Intl.message(
+      'Optional, config a global Notion page to store all your tasks',
+      name: 'tipsNotionId',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

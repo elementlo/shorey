@@ -24,6 +24,7 @@ class CurtainPage extends StatefulWidget {
 class _CurtainPageState extends State<CurtainPage> {
   @override
   Widget build(BuildContext context) {
+    Provider.of<HomeViewModel>(context);
     return Material(
       color: Colors.white12,
       child: Padding(
