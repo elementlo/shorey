@@ -193,10 +193,9 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
     final database = viewModel.database;
     offStageCard = database == null;
     return Container(
-      padding: EdgeInsets.only(top: 50),
+      padding: EdgeInsets.only(top: offStageCard?50:20),
       width: double.infinity,
-      height: 230,
-      alignment: Alignment.bottomCenter,
+      height: 210,
       child: Stack(
         children: [
           Offstage(
@@ -231,7 +230,12 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                                   viewModel.setDatabase = result;
                                   setState(() {});
                                 } else {
-
+                                  final result = await context.read<NotionWorkFlow>().createDatabase(widget.controller.text);
+                                  if(result !=null){
+                                    offStageCard = false;
+                                    viewModel.setDatabase = result;
+                                    setState(() {});
+                                  }
                                 }
                                 EasyLoading.dismiss();
                               }
@@ -258,44 +262,47 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                   borderRadius: BorderRadius.circular(8)),
               child: Column(
                 children: [
-                  Stack(
-                    children: [
-                      Container(
-                        height: 130,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                topRight: Radius.circular(8)),
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(
-                                  '${database?.cover?.external?.url ?? ''}',
-                                ))),
-                      ),
-                      Positioned(
-                          right: 0,
-                          top: 0,
-                          child: IconButton(
-                            iconSize: 20,
-                            padding: EdgeInsets.all(0),
-                            onPressed: () {
-                              // context
-                              //     .read<CategoryInfoViewModel>()
-                              //     .unlinkNotionDatabase();
-                            },
-                            icon: Icon(
-                              Icons.clear,
-                              color: Colors.grey.shade400,
-                            ),
-                          ))
-                    ],
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8)),
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                    '${database?.cover?.external?.url ?? ''}',
+                                  ))),
+                        ),
+                        Positioned(
+                            right: 0,
+                            top: 0,
+                            child: IconButton(
+                              iconSize: 20,
+                              padding: EdgeInsets.all(0),
+                              onPressed: () {
+                                // context
+                                //     .read<CategoryInfoViewModel>()
+                                //     .unlinkNotionDatabase();
+                              },
+                              icon: Icon(
+                                Icons.clear,
+                                color: Colors.grey.shade400,
+                              ),
+                            ))
+                      ],
+                    ),
                   ),
                   Container(
+                    height: 40,
                       alignment: Alignment.centerLeft,
                       padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                          EdgeInsets.symmetric(horizontal: 16,),
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                               '${database?.icon?.type == 'emoji' ? database?.icon?.emoji : ''}'),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:spark_list/config/api.dart';
 import 'package:spark_list/main.dart';
@@ -89,9 +90,13 @@ class _NotionActions {
   }
 
   Future<NotionDatabase?> retrieveDatabase(String databaseId) async {
-    final response = await dio.get('${notionDatabase}/${databaseId}');
-    if (response.success) {
-      return NotionDatabase.fromJson(response.data);
+    try{
+      final response = await dio.get('${notionDatabase}/${databaseId}');
+      if (response.success) {
+        return NotionDatabase.fromJson(response.data);
+      }
+    } on DioError catch(e){
+      debugPrint(e.message);
     }
     return null;
   }
@@ -123,5 +128,9 @@ class _NotionActions {
   Future<NotionDatabase?> createDatabase(String pageId) async {
     final response =
         await dio.post('${notionDatabase}', data: NotionDatabaseTemplate.taskList(pageId));
+    if(response.success){
+      return NotionDatabase.fromJson(response.data);
+    }
+    return null;
   }
 }
