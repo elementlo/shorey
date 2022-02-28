@@ -27,7 +27,7 @@ class _SettingsCategoryPageState extends State<SettingsCategoryPage> {
   void initState() {
     super.initState();
     context.read<ConfigViewModel>().getDefaultLocale().then((locale) {
-      _switchOn = !(locale == 'en');
+      _switchOn = locale == 'en';
       setState(() {});
     });
   }
@@ -79,6 +79,7 @@ class _SettingsCategoryPageState extends State<SettingsCategoryPage> {
                   onChanged: (isOn) async {
                     setState(() {
                       _switchOn = isOn;
+                      print('switch is on: ${isOn}');
                       S
                           .load(Locale(isOn ? 'en' : 'zh', ''))
                           .then((value) async {

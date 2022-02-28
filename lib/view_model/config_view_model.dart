@@ -39,16 +39,19 @@ class ConfigViewModel extends ViewStateModel {
   }
 
   Locale? initLocale(Locale? locale, Iterable<Locale> supportedLocales) {
-    _deviceLocale = locale;
     final defaultLocale = dsProvider.defaultLocale;
     if (defaultLocale == null) {
-      if(!supportedLocales.contains(locale)){
+      if(locale?.languageCode != 'en' && locale?.languageCode != 'zh'){
+        _deviceLocale = Locale('en', '');
         return Locale('en', '');
       }
+      _deviceLocale = locale;
       return locale;
     } else if (defaultLocale == 'zh') {
+      _deviceLocale = Locale('zh', '');
       return Locale('zh', '');
     } else {
+      _deviceLocale = Locale('en', '');
       return Locale('en', '');
     }
   }
