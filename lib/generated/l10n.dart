@@ -540,11 +540,11 @@ class S {
     );
   }
 
-  /// `Achieved`
-  String get achievedItemsTitle {
+  /// `Archived`
+  String get archivedItemsTitle {
     return Intl.message(
-      'Achieved',
-      name: 'achievedItemsTitle',
+      'Archived',
+      name: 'archivedItemsTitle',
       desc: '',
       args: [],
     );
@@ -565,6 +565,16 @@ class S {
     return Intl.message(
       'Optional, config a global Notion page to store all your tasks',
       name: 'tipsNotionId',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure to delete all the archived items?`
+  String get sureToDeleteArchived {
+    return Intl.message(
+      'Are you sure to delete all the archived items?',
+      name: 'sureToDeleteArchived',
       desc: '',
       args: [],
     );

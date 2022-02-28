@@ -23,7 +23,6 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "aboutShorey": MessageLookupByLibrary.simpleMessage("关于Shorey"),
-        "achievedItemsTitle": MessageLookupByLibrary.simpleMessage("已归档"),
         "actionAdd": MessageLookupByLibrary.simpleMessage("添加"),
         "actionArchived": MessageLookupByLibrary.simpleMessage("归档"),
         "actionHistory": MessageLookupByLibrary.simpleMessage("历史"),
@@ -31,6 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "actionUpdate": MessageLookupByLibrary.simpleMessage("更新为"),
         "addCategory": MessageLookupByLibrary.simpleMessage("添加"),
         "addCategoryName": MessageLookupByLibrary.simpleMessage("名字"),
+        "archivedItemsTitle": MessageLookupByLibrary.simpleMessage("已归档"),
         "archivedLess": MessageLookupByLibrary.simpleMessage("归档较少"),
         "archivedList": MessageLookupByLibrary.simpleMessage("已归档"),
         "archivedMore": MessageLookupByLibrary.simpleMessage("较多"),
@@ -73,6 +73,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "retrospect": MessageLookupByLibrary.simpleMessage("回顾"),
         "settings": MessageLookupByLibrary.simpleMessage("设置"),
         "shoreyMomment": MessageLookupByLibrary.simpleMessage("Shorey时刻"),
+        "sureToDeleteArchived":
+            MessageLookupByLibrary.simpleMessage("确定要删除所有归档条目吗?"),
         "time": MessageLookupByLibrary.simpleMessage("时间"),
         "tipsNotionId": MessageLookupByLibrary.simpleMessage(
             "可选项, 配置一个全局的Notion根页面, 添加记事时可选择默认都同步在此页面上"),

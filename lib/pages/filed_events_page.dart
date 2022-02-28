@@ -42,7 +42,7 @@ class _FiledEventsPageState extends State<FiledEventsPage> {
     return Scaffold(
       appBar: SparkAppBar(
         context: context,
-        title: S.of(context).achievedItemsTitle,
+        title: S.of(context).archivedItemsTitle,
         actions: [
           IconButton(
               icon: Icon(
@@ -68,7 +68,7 @@ class _FiledEventsPageState extends State<FiledEventsPage> {
         builder: (context) {
           return AlertDialog(
             content: Text(
-              '确定要删除所有归档条目吗?',
+              S.of(context).sureToDeleteArchived,
               style: TextStyle(color: colorScheme.onSecondary),
             ),
             actions: [

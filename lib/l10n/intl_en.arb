@@ -78,7 +78,8 @@
   "notionToken": "Notion token",
   "linkNotionInfo": "Fill in the blanks to link Notion",
   "notionPageId": "Page ID",
-  "achievedItemsTitle": "Achieved",
+  "archivedItemsTitle": "Archived",
   "mantraEditTitle": "Edit Mantra",
-  "tipsNotionId": "Optional, config a global Notion page to store all your tasks"
+  "tipsNotionId": "Optional, config a global Notion page to store all your tasks",
+  "sureToDeleteArchived": "Are you sure to delete all the archived items?"
 }

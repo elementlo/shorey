@@ -23,7 +23,6 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "aboutShorey": MessageLookupByLibrary.simpleMessage("About Shorey"),
-        "achievedItemsTitle": MessageLookupByLibrary.simpleMessage("Achieved"),
         "actionAdd": MessageLookupByLibrary.simpleMessage("Added"),
         "actionArchived": MessageLookupByLibrary.simpleMessage("Archived"),
         "actionHistory": MessageLookupByLibrary.simpleMessage("History"),
@@ -32,6 +31,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "actionUpdate": MessageLookupByLibrary.simpleMessage("Updated to"),
         "addCategory": MessageLookupByLibrary.simpleMessage("Add"),
         "addCategoryName": MessageLookupByLibrary.simpleMessage("Name"),
+        "archivedItemsTitle": MessageLookupByLibrary.simpleMessage("Archived"),
         "archivedLess": MessageLookupByLibrary.simpleMessage("Archived less"),
         "archivedList": MessageLookupByLibrary.simpleMessage("Archived"),
         "archivedMore": MessageLookupByLibrary.simpleMessage("More"),
@@ -81,6 +81,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "retrospect": MessageLookupByLibrary.simpleMessage("Retrospect"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "shoreyMomment": MessageLookupByLibrary.simpleMessage("Shorey moment"),
+        "sureToDeleteArchived": MessageLookupByLibrary.simpleMessage(
+            "Are you sure to delete all the archived items?"),
         "time": MessageLookupByLibrary.simpleMessage("Time"),
         "tipsNotionId": MessageLookupByLibrary.simpleMessage(
             "Optional, config a global Notion page to store all your tasks"),
