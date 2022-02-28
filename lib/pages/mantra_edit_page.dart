@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
+import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 
@@ -48,7 +49,7 @@ class _MantraEditPageState extends State<MantraEditPage> {
     return Scaffold(
       appBar: SparkAppBar(
         context: context,
-        title: '编辑Mantra',
+        title: S.of(context).mantraEditTitle,
         actions: [
           IconButton(
               icon: Icon(

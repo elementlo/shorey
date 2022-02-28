@@ -30,6 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "actionUpdate": MessageLookupByLibrary.simpleMessage("更新为"),
         "addCategory": MessageLookupByLibrary.simpleMessage("添加"),
         "addCategoryName": MessageLookupByLibrary.simpleMessage("名字"),
+        "archivedItemsTitle": MessageLookupByLibrary.simpleMessage("已归档"),
         "archivedLess": MessageLookupByLibrary.simpleMessage("归档较少"),
         "archivedList": MessageLookupByLibrary.simpleMessage("已归档"),
         "archivedMore": MessageLookupByLibrary.simpleMessage("较多"),
@@ -59,7 +60,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "linkNotionDatabase":
             MessageLookupByLibrary.simpleMessage("关联Notion数据库"),
         "linkNotionInfo":
-            MessageLookupByLibrary.simpleMessage("填写下面信息使Shorey与Notion账户绑定"),
+            MessageLookupByLibrary.simpleMessage("填写下面两项信息使Shorey与Notion连接"),
         "mainCategory": MessageLookupByLibrary.simpleMessage("类别"),
         "mainFocusToday": MessageLookupByLibrary.simpleMessage("今日聚焦"),
         "mantra": MessageLookupByLibrary.simpleMessage("格言"),
@@ -67,6 +68,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "mantra2": MessageLookupByLibrary.simpleMessage(
             "心脏是一座有两间卧室的房子, 一间住着痛苦, 另一间住着欢乐, 人不能笑得太响. 否则笑声会吵醒隔壁房间的痛苦."),
         "mantra3": MessageLookupByLibrary.simpleMessage("我是自由的, 那就是我迷失的原因."),
+        "mantraEditTitle": MessageLookupByLibrary.simpleMessage("编辑Mantra"),
         "noAlert": MessageLookupByLibrary.simpleMessage("不提醒"),
         "notificationTitle": MessageLookupByLibrary.simpleMessage("回顾"),
         "notion": MessageLookupByLibrary.simpleMessage("Notion账户"),
@@ -80,9 +82,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "retrospect": MessageLookupByLibrary.simpleMessage("回顾"),
         "settings": MessageLookupByLibrary.simpleMessage("设置"),
         "shoreyMomment": MessageLookupByLibrary.simpleMessage("Shorey时刻"),
+        "sureToDeleteArchived":
+            MessageLookupByLibrary.simpleMessage("确定要删除所有归档条目吗?"),
         "taskList": MessageLookupByLibrary.simpleMessage("待办清单"),
         "templateDiaryTitle": MessageLookupByLibrary.simpleMessage("日记"),
         "time": MessageLookupByLibrary.simpleMessage("时间"),
+        "tipsNotionId": MessageLookupByLibrary.simpleMessage(
+            "可选项, 配置一个全局的Notion根页面, 添加记事时可选择默认都同步在此页面上"),
         "today": MessageLookupByLibrary.simpleMessage("今天")
       };
 }

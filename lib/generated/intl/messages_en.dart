@@ -31,6 +31,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "actionUpdate": MessageLookupByLibrary.simpleMessage("Updated to"),
         "addCategory": MessageLookupByLibrary.simpleMessage("Add"),
         "addCategoryName": MessageLookupByLibrary.simpleMessage("Name"),
+        "archivedItemsTitle": MessageLookupByLibrary.simpleMessage("Archived"),
         "archivedLess": MessageLookupByLibrary.simpleMessage("Archived less"),
         "archivedList": MessageLookupByLibrary.simpleMessage("Archived"),
         "archivedMore": MessageLookupByLibrary.simpleMessage("More"),
@@ -75,6 +76,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Better to have, and not need, than to need, and not have."),
         "mantra3": MessageLookupByLibrary.simpleMessage(
             "I am free and that is why I am lost."),
+        "mantraEditTitle": MessageLookupByLibrary.simpleMessage("Edit Mantra"),
         "noAlert": MessageLookupByLibrary.simpleMessage("No alert"),
         "notificationTitle": MessageLookupByLibrary.simpleMessage("Retrospect"),
         "notion": MessageLookupByLibrary.simpleMessage("Notion account"),
@@ -88,9 +90,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "retrospect": MessageLookupByLibrary.simpleMessage("Retrospect"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "shoreyMomment": MessageLookupByLibrary.simpleMessage("Shorey moment"),
+        "sureToDeleteArchived": MessageLookupByLibrary.simpleMessage(
+            "Are you sure to delete all the archived items?"),
         "taskList": MessageLookupByLibrary.simpleMessage("Task List"),
         "templateDiaryTitle": MessageLookupByLibrary.simpleMessage("Diary"),
         "time": MessageLookupByLibrary.simpleMessage("Time"),
+        "tipsNotionId": MessageLookupByLibrary.simpleMessage(
+            "Optional, config a global Notion page to store all your tasks"),
         "today": MessageLookupByLibrary.simpleMessage("Today")
       };
 }

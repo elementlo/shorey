@@ -111,7 +111,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: S.delegate.supportedLocales,
       localeResolutionCallback: (locale, supportedLocales) {
         print(locale);
-        return context.read<ConfigViewModel>().initLocale(locale);
+        return context.read<ConfigViewModel>().initLocale(locale, supportedLocales);
       },
       // darkTheme: AppThemeData.darkThemeData.copyWith(
       //   platform: defaultTargetPlatform,

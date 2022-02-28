@@ -20,9 +20,9 @@ class AppThemeData {
 	static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
 		return ThemeData(
 			colorScheme: colorScheme,
-			textTheme: _textTheme,
 			// Matches manifest.json colors and background color.
 			primaryColor: const Color(0xFFF7F8FA),
+			textTheme: _textTheme,
 			appBarTheme: AppBarTheme(
 				textTheme: _textTheme.apply(bodyColor: colorScheme.onPrimary),
 				color: colorScheme.background,
@@ -83,7 +83,7 @@ class AppThemeData {
 	static const _medium = FontWeight.w500;
 	static const _semiBold = FontWeight.w600;
 	static const _bold = FontWeight.w700;
-	
+
 	static final TextTheme _textTheme = TextTheme(
 		headline4: TextStyle(fontWeight: _bold, fontSize: 20.0),
 		caption: TextStyle(fontWeight: _semiBold, fontSize: 16.0),

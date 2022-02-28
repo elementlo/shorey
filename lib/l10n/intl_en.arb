@@ -83,5 +83,9 @@
   "taskList": "Task List",
   "categoryType": "Notion template type",
   "categoryTypeTips": "Different template reflects different database pattern in Notion",
-  "templateDiaryTitle": "Diary"
+  "templateDiaryTitle": "Diary",
+  "archivedItemsTitle": "Archived",
+  "mantraEditTitle": "Edit Mantra",
+  "tipsNotionId": "Optional, config a global Notion page to store all your tasks",
+  "sureToDeleteArchived": "Are you sure to delete all the archived items?"
 }

@@ -21,13 +21,13 @@ class SettingsCategoryPage extends StatefulWidget {
 }
 
 class _SettingsCategoryPageState extends State<SettingsCategoryPage> {
-  var switchOn = false;
+  var _switchOn = false;
 
   @override
   void initState() {
     super.initState();
     context.read<ConfigViewModel>().getDefaultLocale().then((locale) {
-      switchOn = locale == 'en';
+      _switchOn = !(locale == 'en');
       setState(() {});
     });
   }
@@ -69,16 +69,16 @@ class _SettingsCategoryPageState extends State<SettingsCategoryPage> {
               children: [
                 Expanded(
                     child: Text(S.of(context).languages,
-                        style: TextStyle(color: Colors.black,))),
-                Text(switchOn ? '中文' : 'English'),
+                        style: TextStyle(color: Colors.black))),
+                Text(_switchOn ? '中文' : 'English'),
                 Switch(
-                  value: switchOn,
+                  value: _switchOn,
                   activeColor: colorScheme.primary,
                   inactiveTrackColor:
                       colorScheme.primaryVariant.withOpacity(0.8),
                   onChanged: (isOn) async {
                     setState(() {
-                      switchOn = isOn;
+                      _switchOn = isOn;
                       S
                           .load(Locale(isOn ? 'en' : 'zh', ''))
                           .then((value) async {

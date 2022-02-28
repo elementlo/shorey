@@ -215,7 +215,7 @@ class _CategoryListItemState extends State<CategoryListItem>
   }
 }
 
-class _ExpandedCategoryDemos extends StatelessWidget {
+class _ExpandedCategoryDemos extends StatefulWidget {
   _ExpandedCategoryDemos({
     Key? key,
     this.category,
@@ -230,17 +230,29 @@ class _ExpandedCategoryDemos extends StatelessWidget {
   final List<String>? demos;
 
   final List<ToDo?>? demoList;
-  final TextEditingController _controller = TextEditingController();
+
+  @override
+  State<_ExpandedCategoryDemos> createState() => _ExpandedCategoryDemosState();
+}
+
+class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      key: ValueKey('${category}DemoList'),
+      key: ValueKey('${widget.category}DemoList'),
       children: [
-        if (demoList != null && demoList!.length > 0)
-          for (int i = 0; i < demoList!.length; i++)
+        if (widget.demoList != null && widget.demoList!.length > 0)
+          for (int i = 0; i < widget.demoList!.length; i++)
             CategoryDemoItem(
-              model: demoList![i],
+              model: widget.demoList![i],
             ),
         _buildNewTaskField(context),
         const SizedBox(height: 12), // Extra space below.
@@ -272,10 +284,9 @@ class _ExpandedCategoryDemos extends StatelessWidget {
         onSubmitted: (input) async {
           print(input);
           if (input != '' && input != null) {
-            await viewModel.saveToDo(categoryId, input, category);
-            _controller.text = '';
-            await viewModel.queryToDoList(category);
-            context.read<NotionWorkFlow>().addItem();
+            await viewModel.saveToDo(widget.categoryId, input, widget.category);
+            await viewModel.queryToDoList(widget.category);
+            _controller.clear();
           }
         },
       ),

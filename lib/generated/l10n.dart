@@ -599,6 +599,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Archived`
+  String get archivedItemsTitle {
+    return Intl.message(
+      'Archived',
+      name: 'archivedItemsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Mantra`
+  String get mantraEditTitle {
+    return Intl.message(
+      'Edit Mantra',
+      name: 'mantraEditTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Optional, config a global Notion page to store all your tasks`
+  String get tipsNotionId {
+    return Intl.message(
+      'Optional, config a global Notion page to store all your tasks',
+      name: 'tipsNotionId',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure to delete all the archived items?`
+  String get sureToDeleteArchived {
+    return Intl.message(
+      'Are you sure to delete all the archived items?',
+      name: 'sureToDeleteArchived',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
