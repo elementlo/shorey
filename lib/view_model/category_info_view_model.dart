@@ -41,7 +41,4 @@ class CategoryInfoViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-  void unlinkNotionDatabase() {
-    setDatabase = null;
-  }
 }

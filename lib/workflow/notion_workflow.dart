@@ -60,7 +60,7 @@ class NotionWorkFlow with ChangeNotifier {
     return _actions.addItem();
   }
 
-  Future createDatabase(String pageId) async {
+  Future<NotionDatabase?> createDatabase(String pageId) {
     return _actions.createDatabase(pageId);
   }
 }

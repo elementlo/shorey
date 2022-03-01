@@ -16,4 +16,11 @@ class NotionDatabaseViewModel extends ViewStateModel{
     this.database = database;
     notifyListeners();
   }
+
+
+
+  void unlinkNotionDatabase() {
+    setDatabase = null;
+  }
+
 }

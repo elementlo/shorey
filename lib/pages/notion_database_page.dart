@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/generated/l10n.dart';
+import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/view_model/notion_database_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 import 'package:spark_list/widget/category_list_item.dart';
@@ -187,15 +188,31 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
   var offStageCard = true;
 
   @override
+  void initState() {
+    super.initState();
+    final databaseId = context.read<HomeViewModel>().notionDatabaseId;
+    if ( databaseId!= null) {
+      context
+          .read<NotionWorkFlow>()
+          .linkDatabase(databaseId).then((result) {
+            if(result != null){
+              offStageCard = false;
+              context.read<NotionDatabaseViewModel>().setDatabase = result;
+            }
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final viewModel = Provider.of<NotionDatabaseViewModel>(context);
     final database = viewModel.database;
     offStageCard = database == null;
     return Container(
-      padding: EdgeInsets.only(top: offStageCard?50:20),
+      padding: EdgeInsets.only(top: offStageCard ? 50 : 20, bottom: 20),
       width: double.infinity,
-      height: 210,
+      height: 230,
       child: Stack(
         children: [
           Offstage(
@@ -229,12 +246,21 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                                   offStageCard = false;
                                   viewModel.setDatabase = result;
                                   setState(() {});
+                                  context
+                                      .read<HomeViewModel>()
+                                      .notionDatabaseId = result.id;
                                 } else {
-                                  final result = await context.read<NotionWorkFlow>().createDatabase(widget.controller.text);
-                                  if(result !=null){
+                                  EasyLoading.show();
+                                  final result = await context
+                                      .read<NotionWorkFlow>()
+                                      .createDatabase(widget.controller.text);
+                                  if (result != null) {
                                     offStageCard = false;
                                     viewModel.setDatabase = result;
                                     setState(() {});
+                                    context
+                                        .read<HomeViewModel>()
+                                        .notionDatabaseId = result.id;
                                   }
                                 }
                                 EasyLoading.dismiss();
@@ -284,9 +310,11 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                               iconSize: 20,
                               padding: EdgeInsets.all(0),
                               onPressed: () {
-                                // context
-                                //     .read<CategoryInfoViewModel>()
-                                //     .unlinkNotionDatabase();
+                                context
+                                    .read<NotionDatabaseViewModel>()
+                                    .unlinkNotionDatabase();
+                                context.read<HomeViewModel>().notionDatabaseId =
+                                    null;
                               },
                               icon: Icon(
                                 Icons.clear,
@@ -297,10 +325,11 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                     ),
                   ),
                   Container(
-                    height: 40,
+                      height: 40,
                       alignment: Alignment.centerLeft,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16,),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                      ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [

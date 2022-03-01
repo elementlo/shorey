@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart' as d;
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/config/config.dart';
@@ -8,12 +7,10 @@ import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/model/model.dart';
 import 'package:spark_list/pages/curtain_page.dart';
-import 'package:spark_list/pages/settings_page.dart';
 import 'package:spark_list/view_model/category_info_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 import 'package:spark_list/widget/round_corner_rectangle.dart';
-import 'package:spark_list/workflow/notion_workflow.dart';
 
 import 'notion_database_page.dart';
 
@@ -40,7 +37,6 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
   final _controller = TextEditingController();
   var _showConfirm = false;
   _ExpandableSetting? _expandedSettingId;
-  late Animation<double> _staggerSettingsItemsAnimation;
   late AnimationController _settingsPanelController;
   final TextEditingController _databaseController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -61,14 +57,12 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
       duration: const Duration(milliseconds: 200),
     );
     _settingsPanelController.addStatusListener(_closeSettingId);
-    _staggerSettingsItemsAnimation = CurvedAnimation(
-      parent: _settingsPanelController,
-      curve: const Interval(
-        0.5,
-        1.0,
-        curve: Curves.easeIn,
-      ),
-    );
+  }
+
+  @override
+  void deactivate() {
+    context.read<HomeViewModel>().notionDatabaseId = null;
+    super.deactivate();
   }
 
   @override
@@ -136,14 +130,6 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
     final colorScheme = Theme.of(context).colorScheme;
     return ProviderWidget<CategoryInfoViewModel>(
       model: CategoryInfoViewModel(),
-      onModelReady: (vm) async {
-        // if (widget.editingItem?.notionDatabaseId != null &&
-        //     widget.editingItem?.notionDatabaseId != '') {
-        //   vm.setDatabase = await context
-        //       .read<NotionWorkFlow>()
-        //       .linkDatabase(widget.editingItem!.notionDatabaseId!);
-        // }
-      },
       child: Scaffold(
         appBar: SparkAppBar(
           context: context,
@@ -193,29 +179,15 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
                   title: S.of(context).linkNotionDatabase,
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => NotionDatabasePage()));
+                        builder: (context) => NotionDatabasePage())).then((value) {
+                          print('onback: ${value}');
+                    });
                   },
                 ),
               ),
-              SizedBox(height: 20,),
-              // AnimateSettingsListItems(
-              //   animation: _staggerSettingsItemsAnimation,
-              //   children: [
-              //     SettingsListItem<double>(
-              //       title: S.of(context).linkNotionDatabase,
-              //       selectedOption: 1.0,
-              //       optionsMap: LinkedHashMap.of({1.0: DisplayOption('')}),
-              //       onOptionChanged: (newTextScale) {},
-              //       onTapSetting: () =>
-              //           onTapSetting(_ExpandableSetting.linkNotionDatabase),
-              //       isExpanded: _expandedSettingId ==
-              //           _ExpandableSetting.linkNotionDatabase,
-              //       child: _NotionDatabaseCard(
-              //         controller: _databaseController,
-              //       ),
-              //     ),
-              //   ],
-              // ),
+              SizedBox(
+                height: 20,
+              ),
             ],
           ),
         ),

@@ -86,6 +86,9 @@ Flutter 插件:
 * lottie
 * flutter_easyloading
 * url_launcher
+* dio
+* drift
+* sembast
 
 ## 关于我
 作者是一名前端开发, 对大前端技术都很有兴趣. 欢迎对Flutter/前端有同样兴趣或者技术问题的邮件联系.
