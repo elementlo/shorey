@@ -78,7 +78,7 @@
   "notionToken": "Notion token",
   "linkNotionInfo": "Fill in the blanks to link Notion",
   "notionPageId": "Page ID/Database ID",
-  "notionPrompt": "Optional, first link Notion account in Shorey settings, then link Notion database here, after that, your reminders will be synced with Notion database",
+  "notionPrompt": "Use Page ID if you want to create a subpage in the specified parent page; Use Database ID if you want to link a exist database",
   "notionDatabasePageTitle": "Notion Database",
   "taskList": "Task List",
   "categoryType": "Notion template type",
@@ -87,5 +87,6 @@
   "archivedItemsTitle": "Archived",
   "mantraEditTitle": "Edit Mantra",
   "tipsNotionId": "Optional, config a global Notion page to store all your tasks",
-  "sureToDeleteArchived": "Are you sure to delete all the archived items?"
+  "sureToDeleteArchived": "Are you sure to delete all the archived items?",
+  "linkNotionIfYouWant": "Link a Notion account in Shorey's setting menu with a token could sync your items with a Notion database."
 }

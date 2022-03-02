@@ -499,12 +499,14 @@ class Category extends DataClass implements Insertable<Category> {
   int id;
   String name;
   String? notionDatabaseId;
+  int? notionDatabaseType;
   int iconId;
   int colorId;
   Category(
       {required this.id,
       required this.name,
       this.notionDatabaseId,
+      this.notionDatabaseType,
       required this.iconId,
       required this.colorId});
   factory Category.fromData(Map<String, dynamic> data, {String? prefix}) {
@@ -516,6 +518,8 @@ class Category extends DataClass implements Insertable<Category> {
           .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
       notionDatabaseId: const StringType().mapFromDatabaseResponse(
           data['${effectivePrefix}notion_database_id']),
+      notionDatabaseType: const IntType().mapFromDatabaseResponse(
+          data['${effectivePrefix}notion_database_type']),
       iconId: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}icon_id'])!,
       colorId: const IntType()
@@ -530,6 +534,9 @@ class Category extends DataClass implements Insertable<Category> {
     if (!nullToAbsent || notionDatabaseId != null) {
       map['notion_database_id'] = Variable<String?>(notionDatabaseId);
     }
+    if (!nullToAbsent || notionDatabaseType != null) {
+      map['notion_database_type'] = Variable<int?>(notionDatabaseType);
+    }
     map['icon_id'] = Variable<int>(iconId);
     map['color_id'] = Variable<int>(colorId);
     return map;
@@ -542,6 +549,9 @@ class Category extends DataClass implements Insertable<Category> {
       notionDatabaseId: notionDatabaseId == null && nullToAbsent
           ? const Value.absent()
           : Value(notionDatabaseId),
+      notionDatabaseType: notionDatabaseType == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notionDatabaseType),
       iconId: Value(iconId),
       colorId: Value(colorId),
     );
@@ -554,6 +564,7 @@ class Category extends DataClass implements Insertable<Category> {
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       notionDatabaseId: serializer.fromJson<String?>(json['notionDatabaseId']),
+      notionDatabaseType: serializer.fromJson<int?>(json['notionDatabaseType']),
       iconId: serializer.fromJson<int>(json['iconId']),
       colorId: serializer.fromJson<int>(json['colorId']),
     );
@@ -565,6 +576,7 @@ class Category extends DataClass implements Insertable<Category> {
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'notionDatabaseId': serializer.toJson<String?>(notionDatabaseId),
+      'notionDatabaseType': serializer.toJson<int?>(notionDatabaseType),
       'iconId': serializer.toJson<int>(iconId),
       'colorId': serializer.toJson<int>(colorId),
     };
@@ -574,12 +586,14 @@ class Category extends DataClass implements Insertable<Category> {
           {int? id,
           String? name,
           String? notionDatabaseId,
+          int? notionDatabaseType,
           int? iconId,
           int? colorId}) =>
       Category(
         id: id ?? this.id,
         name: name ?? this.name,
         notionDatabaseId: notionDatabaseId ?? this.notionDatabaseId,
+        notionDatabaseType: notionDatabaseType ?? this.notionDatabaseType,
         iconId: iconId ?? this.iconId,
         colorId: colorId ?? this.colorId,
       );
@@ -589,6 +603,7 @@ class Category extends DataClass implements Insertable<Category> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('notionDatabaseId: $notionDatabaseId, ')
+          ..write('notionDatabaseType: $notionDatabaseType, ')
           ..write('iconId: $iconId, ')
           ..write('colorId: $colorId')
           ..write(')'))
@@ -596,7 +611,8 @@ class Category extends DataClass implements Insertable<Category> {
   }
 
   @override
-  int get hashCode => Object.hash(id, name, notionDatabaseId, iconId, colorId);
+  int get hashCode => Object.hash(
+      id, name, notionDatabaseId, notionDatabaseType, iconId, colorId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -604,6 +620,7 @@ class Category extends DataClass implements Insertable<Category> {
           other.id == this.id &&
           other.name == this.name &&
           other.notionDatabaseId == this.notionDatabaseId &&
+          other.notionDatabaseType == this.notionDatabaseType &&
           other.iconId == this.iconId &&
           other.colorId == this.colorId);
 }
@@ -612,12 +629,14 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   Value<int> id;
   Value<String> name;
   Value<String?> notionDatabaseId;
+  Value<int?> notionDatabaseType;
   Value<int> iconId;
   Value<int> colorId;
   CategoriesCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.notionDatabaseId = const Value.absent(),
+    this.notionDatabaseType = const Value.absent(),
     this.iconId = const Value.absent(),
     this.colorId = const Value.absent(),
   });
@@ -625,6 +644,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     this.id = const Value.absent(),
     required String name,
     this.notionDatabaseId = const Value.absent(),
+    this.notionDatabaseType = const Value.absent(),
     required int iconId,
     required int colorId,
   })  : name = Value(name),
@@ -634,6 +654,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     Expression<int>? id,
     Expression<String>? name,
     Expression<String?>? notionDatabaseId,
+    Expression<int?>? notionDatabaseType,
     Expression<int>? iconId,
     Expression<int>? colorId,
   }) {
@@ -641,6 +662,8 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (notionDatabaseId != null) 'notion_database_id': notionDatabaseId,
+      if (notionDatabaseType != null)
+        'notion_database_type': notionDatabaseType,
       if (iconId != null) 'icon_id': iconId,
       if (colorId != null) 'color_id': colorId,
     });
@@ -650,12 +673,14 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
       {Value<int>? id,
       Value<String>? name,
       Value<String?>? notionDatabaseId,
+      Value<int?>? notionDatabaseType,
       Value<int>? iconId,
       Value<int>? colorId}) {
     return CategoriesCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       notionDatabaseId: notionDatabaseId ?? this.notionDatabaseId,
+      notionDatabaseType: notionDatabaseType ?? this.notionDatabaseType,
       iconId: iconId ?? this.iconId,
       colorId: colorId ?? this.colorId,
     );
@@ -673,6 +698,9 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     if (notionDatabaseId.present) {
       map['notion_database_id'] = Variable<String?>(notionDatabaseId.value);
     }
+    if (notionDatabaseType.present) {
+      map['notion_database_type'] = Variable<int?>(notionDatabaseType.value);
+    }
     if (iconId.present) {
       map['icon_id'] = Variable<int>(iconId.value);
     }
@@ -688,6 +716,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('notionDatabaseId: $notionDatabaseId, ')
+          ..write('notionDatabaseType: $notionDatabaseType, ')
           ..write('iconId: $iconId, ')
           ..write('colorId: $colorId')
           ..write(')'))
@@ -719,6 +748,12 @@ class $CategoriesTable extends Categories
   late final GeneratedColumn<String?> notionDatabaseId =
       GeneratedColumn<String?>('notion_database_id', aliasedName, true,
           type: const StringType(), requiredDuringInsert: false);
+  final VerificationMeta _notionDatabaseTypeMeta =
+      const VerificationMeta('notionDatabaseType');
+  @override
+  late final GeneratedColumn<int?> notionDatabaseType = GeneratedColumn<int?>(
+      'notion_database_type', aliasedName, true,
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _iconIdMeta = const VerificationMeta('iconId');
   @override
   late final GeneratedColumn<int?> iconId = GeneratedColumn<int?>(
@@ -731,7 +766,7 @@ class $CategoriesTable extends Categories
       type: const IntType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, name, notionDatabaseId, iconId, colorId];
+      [id, name, notionDatabaseId, notionDatabaseType, iconId, colorId];
   @override
   String get aliasedName => _alias ?? 'categories';
   @override
@@ -755,6 +790,12 @@ class $CategoriesTable extends Categories
           _notionDatabaseIdMeta,
           notionDatabaseId.isAcceptableOrUnknown(
               data['notion_database_id']!, _notionDatabaseIdMeta));
+    }
+    if (data.containsKey('notion_database_type')) {
+      context.handle(
+          _notionDatabaseTypeMeta,
+          notionDatabaseType.isAcceptableOrUnknown(
+              data['notion_database_type']!, _notionDatabaseTypeMeta));
     }
     if (data.containsKey('icon_id')) {
       context.handle(_iconIdMeta,

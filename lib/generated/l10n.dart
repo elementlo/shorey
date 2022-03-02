@@ -540,10 +540,10 @@ class S {
     );
   }
 
-  /// `Optional, first link Notion account in Shorey settings, then link Notion database here, after that, your reminders will be synced with Notion database`
+  /// `Use Page ID if you want to create a subpage in the specified parent page; Use Database ID if you want to link a exist database`
   String get notionPrompt {
     return Intl.message(
-      'Optional, first link Notion account in Shorey settings, then link Notion database here, after that, your reminders will be synced with Notion database',
+      'Use Page ID if you want to create a subpage in the specified parent page; Use Database ID if you want to link a exist database',
       name: 'notionPrompt',
       desc: '',
       args: [],
@@ -635,6 +635,16 @@ class S {
     return Intl.message(
       'Are you sure to delete all the archived items?',
       name: 'sureToDeleteArchived',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Link a Notion account in Shorey's setting menu with a token could sync your items with a Notion database.`
+  String get linkNotionIfYouWant {
+    return Intl.message(
+      'Link a Notion account in Shorey\'s setting menu with a token could sync your items with a Notion database.',
+      name: 'linkNotionIfYouWant',
       desc: '',
       args: [],
     );

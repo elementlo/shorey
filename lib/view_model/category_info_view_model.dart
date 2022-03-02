@@ -1,6 +1,9 @@
 import 'package:spark_list/base/view_state_model.dart';
+import 'package:spark_list/main.dart';
 import 'package:spark_list/model/model.dart';
 import 'package:spark_list/model/notion_database_model.dart';
+import 'package:spark_list/model/notion_model.dart';
+import 'package:spark_list/resource/data_provider.dart';
 
 ///
 /// Author: Elemen
@@ -41,4 +44,17 @@ class CategoryInfoViewModel extends ViewStateModel {
     notifyListeners();
   }
 
+  void unlinkNotionDatabase() {
+    setDatabase = null;
+  }
+
+  Future<bool> checkLinkingStatus() async {
+    final map =
+        await dsProvider.getValue<Map<String, dynamic>>(StoreKey.notionUser);
+    if (map != null) {
+      final token = Results.fromJson(map).token;
+      return (token != null && token.isNotEmpty);
+    }
+    return false;
+  }
 }

@@ -77,7 +77,7 @@
   "linkNotionDatabase": "关联Notion数据库",
   "notionToken": "Notion token",
   "notionPageId": "Page ID/Database ID",
-  "notionPrompt": "可选项, 在Shorey设置中关联Notion账号后, 此处关联Notion数据库, 随后记事会同步到对应的数据库中",
+  "notionPrompt": "如使用Page ID会在这个页面新建一个子页面作为数据库; 如使用Database ID, 则会绑定这个数据库",
   "notionDatabasePageTitle": "Notion数据库",
   "taskList": "待办清单",
   "categoryType": "Notion模板类型",
@@ -87,5 +87,6 @@
   "archivedItemsTitle": "已归档",
   "mantraEditTitle": "编辑Mantra",
   "tipsNotionId": "可选项, 配置一个全局的Notion根页面, 添加记事时可选择默认都同步在此页面上",
-  "sureToDeleteArchived": "确定要删除所有归档条目吗?"
+  "sureToDeleteArchived": "确定要删除所有归档条目吗?",
+  "linkNotionIfYouWant": "在Shorey的设置中绑定Notion账户, 可以同步你的笔记到Notion数据库中"
 }

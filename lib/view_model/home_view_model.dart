@@ -33,7 +33,6 @@ class HomeViewModel extends ViewStateModel {
   String? _mainFocus = '';
   bool _hasMainFocus = true;
   String mantra = '';
-  String? notionDatabaseId;
 
   String? get mainFocus => _mainFocus;
 

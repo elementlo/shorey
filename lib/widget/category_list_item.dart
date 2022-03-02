@@ -7,7 +7,6 @@ import 'package:spark_list/model/model.dart';
 import 'package:spark_list/pages/category_info_page.dart';
 import 'package:spark_list/pages/editor_page.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
-import 'package:spark_list/workflow/notion_workflow.dart';
 
 ///
 /// Author: Elemen
@@ -29,9 +28,7 @@ Map jsonMap = {
       ]
     },
     'Date': {
-      'date': {
-        'start': '2020-12-08T12:00:00Z'
-      }
+      'date': {'start': '2020-12-08T12:00:00Z'}
     }
   }
 };
@@ -267,19 +264,42 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
       padding: EdgeInsets.only(bottom: 5, left: 32, right: 8),
       child: TextField(
         controller: _controller,
+        textAlignVertical: TextAlignVertical.top,
         decoration: InputDecoration(
-          hintText: 'Write something',
-          hintStyle: TextStyle(
-            color: Theme.of(context).colorScheme.background,
-            fontSize: 14,
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide:
-                BorderSide(color: Theme.of(context).colorScheme.background),
-          ),
-          border: UnderlineInputBorder(
+            hintText: 'Write something...',
+            contentPadding: EdgeInsets.only(left: 5,),
+            hintStyle: TextStyle(
+              color: Theme.of(context).colorScheme.background,
+              fontSize: 14,
+            ),
+            focusedBorder: UnderlineInputBorder(
               borderSide:
-                  BorderSide(color: Theme.of(context).colorScheme.background)),
+              BorderSide(color: Theme.of(context).colorScheme.background),
+            ),
+            enabledBorder: UnderlineInputBorder(
+              borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.background),
+            ),
+            border: UnderlineInputBorder(
+                borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.background),
+            ),
+        suffix: Container(
+          // width: 25,
+          // height: 25,
+          // // decoration: BoxDecoration(
+          // //   border: Border.all(color: Colors.black)
+          // // ),
+          child: IconButton(
+              padding: EdgeInsets.all(0),
+              onPressed: () async {
+
+              },
+              icon: Icon(
+                Icons.arrow_forward_rounded,
+                color: Theme.of(context).colorScheme.onSecondary,
+              )),
+        )
         ),
         onSubmitted: (input) async {
           print(input);

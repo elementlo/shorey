@@ -64,6 +64,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "languages": MessageLookupByLibrary.simpleMessage("Languages"),
         "linkNotionDatabase":
             MessageLookupByLibrary.simpleMessage("Link Notion database"),
+        "linkNotionIfYouWant": MessageLookupByLibrary.simpleMessage(
+            "Link a Notion account in Shorey\'s setting menu with a token could sync your items with a Notion database."),
         "linkNotionInfo": MessageLookupByLibrary.simpleMessage(
             "Fill in the blanks to link Notion"),
         "mainCategory": MessageLookupByLibrary.simpleMessage("Category"),
@@ -85,7 +87,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "notionPageId":
             MessageLookupByLibrary.simpleMessage("Page ID/Database ID"),
         "notionPrompt": MessageLookupByLibrary.simpleMessage(
-            "Optional, first link Notion account in Shorey settings, then link Notion database here, after that, your reminders will be synced with Notion database"),
+            "Use Page ID if you want to create a subpage in the specified parent page; Use Database ID if you want to link a exist database"),
         "notionToken": MessageLookupByLibrary.simpleMessage("Notion token"),
         "retrospect": MessageLookupByLibrary.simpleMessage("Retrospect"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),

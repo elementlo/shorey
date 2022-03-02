@@ -59,6 +59,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "languages": MessageLookupByLibrary.simpleMessage("语言"),
         "linkNotionDatabase":
             MessageLookupByLibrary.simpleMessage("关联Notion数据库"),
+        "linkNotionIfYouWant": MessageLookupByLibrary.simpleMessage(
+            "在Shorey的设置中绑定Notion账户, 可以同步你的笔记到Notion数据库中"),
         "linkNotionInfo":
             MessageLookupByLibrary.simpleMessage("填写下面两项信息使Shorey与Notion连接"),
         "mainCategory": MessageLookupByLibrary.simpleMessage("类别"),
@@ -77,7 +79,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "notionPageId":
             MessageLookupByLibrary.simpleMessage("Page ID/Database ID"),
         "notionPrompt": MessageLookupByLibrary.simpleMessage(
-            "可选项, 在Shorey设置中关联Notion账号后, 此处关联Notion数据库, 随后记事会同步到对应的数据库中"),
+            "如使用Page ID会在这个页面新建一个子页面作为数据库; 如使用Database ID, 则会绑定这个数据库"),
         "notionToken": MessageLookupByLibrary.simpleMessage("Notion token"),
         "retrospect": MessageLookupByLibrary.simpleMessage("回顾"),
         "settings": MessageLookupByLibrary.simpleMessage("设置"),

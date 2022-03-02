@@ -74,8 +74,8 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
 
   void _configDio() {
     dio.interceptors.add(InterceptorsWrapper(onError: (e, handler) {
+      EasyLoading.dismiss();
       if (e.response != null) {
-        EasyLoading.dismiss();
         Fluttertoast.showToast(
             msg: e.response?.data['message'] ?? 'Network error');
         handler.next(e);

@@ -39,22 +39,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 800),
     );
     _animationController.value = 1.0;
-    // if (widget.isSplashPageAnimationFinished) {
-    //   // To avoid the animation from running when changing the window size from
-    //   // desktop to mobile, we do not animate our widget if the
-    //   // splash page animation is finished on initState.
-    //   _animationController.value = 1.0;
-    // } else {
-    //   // Start our animation halfway through the splash page animation.
-    //   _launchTimer = Timer(
-    //     const Duration(
-    //       milliseconds: splashPageAnimationDurationInMilliseconds ~/ 2,
-    //     ),
-    //         () {
-    //       _animationController.forward();
-    //     },
-    //   );
-    // }
   }
 
   @override
