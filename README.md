@@ -48,11 +48,16 @@ UI部分大量参考了Flutter官方的Gallery应用. 此外还在关于页埋�
 
 
 ## 体验
+### APK
 Android: 可直接在Release板块下载apk体验.或使用下方二维码下载.
 
+### QRcode
 ![lqHI](https://user-images.githubusercontent.com/10020581/140268740-ff2558a8-c8d3-4ae6-ac08-8b9bec2a1c10.png)
 
+### F-Droid
+应用目前也已经上架了[F-Droid](https://f-droid.org/zh_Hans/packages/com.elementlo.spark_list/)
 
+### iOS
 iOS: 可下载源码使用 $ flutter run --release 编译体验, 后期考虑上testflight.
 
 
