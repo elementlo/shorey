@@ -32,6 +32,8 @@ class ToDos extends Table {
 
   TextColumn get category => text().nullable()();
 
+  TextColumn get tags => text().nullable()();
+
   //
   // String get formatFiledTime {
   //   var formatter = new DateFormat('yyyy-MM-dd');
@@ -208,7 +210,7 @@ class DatabaseProvider extends _$DatabaseProvider {
     return point;
   }
 
-  Future insertTodo(ToDosCompanion entity) {
+  Future<int> insertTodo(ToDosCompanion entity) {
     return into(toDos).insert(entity);
   }
 

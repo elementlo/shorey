@@ -56,8 +56,8 @@ class NotionWorkFlow with ChangeNotifier {
     return _actions.retrieveDatabase(databaseId);
   }
 
-  Future addItem() async {
-    return _actions.addItem();
+  Future addTaskItem(String databaseId) async {
+    return _actions.addTaskItem(databaseId);
   }
 
   Future<NotionDatabase?> createDatabase(String pageId) {
@@ -119,8 +119,8 @@ class _NotionActions {
     return null;
   }
 
-  Future addItem() async {
-    final response = await dio.post('${notionPages}', data: jsonMap);
+  Future addTaskItem(String databaseId) async {
+    final response = await dio.post('${notionPages}', data: NotionDatabaseTemplate.taskItem(databaseId));
     if (response.success) {}
     return null;
   }

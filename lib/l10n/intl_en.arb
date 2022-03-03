@@ -88,5 +88,6 @@
   "mantraEditTitle": "Edit Mantra",
   "tipsNotionId": "Optional, config a global Notion page to store all your tasks",
   "sureToDeleteArchived": "Are you sure to delete all the archived items?",
-  "linkNotionIfYouWant": "Link a Notion account in Shorey's setting menu with a token could sync your items with a Notion database."
+  "linkNotionIfYouWant": "Link a Notion account in Shorey's setting menu with a token could sync your items with a Notion database.",
+  "addNewTaskTitle": "Title"
 }

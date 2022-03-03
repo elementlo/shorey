@@ -16,6 +16,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
   String content;
   String? brief;
   String? category;
+  String? tags;
 
   ///0: finished 1: going 2: deleted
   int status;
@@ -29,6 +30,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       required this.content,
       this.brief,
       this.category,
+      this.tags,
       required this.status,
       required this.categoryId});
   factory ToDo.fromData(Map<String, dynamic> data, {String? prefix}) {
@@ -50,6 +52,8 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           .mapFromDatabaseResponse(data['${effectivePrefix}brief']),
       category: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}category']),
+      tags: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}tags']),
       status: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}status'])!,
       categoryId: const IntType()
@@ -77,6 +81,9 @@ class ToDo extends DataClass implements Insertable<ToDo> {
     if (!nullToAbsent || category != null) {
       map['category'] = Variable<String?>(category);
     }
+    if (!nullToAbsent || tags != null) {
+      map['tags'] = Variable<String?>(tags);
+    }
     map['status'] = Variable<int>(status);
     map['category_id'] = Variable<int>(categoryId);
     return map;
@@ -101,6 +108,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       category: category == null && nullToAbsent
           ? const Value.absent()
           : Value(category),
+      tags: tags == null && nullToAbsent ? const Value.absent() : Value(tags),
       status: Value(status),
       categoryId: Value(categoryId),
     );
@@ -118,6 +126,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       content: serializer.fromJson<String>(json['content']),
       brief: serializer.fromJson<String?>(json['brief']),
       category: serializer.fromJson<String?>(json['category']),
+      tags: serializer.fromJson<String?>(json['tags']),
       status: serializer.fromJson<int>(json['status']),
       categoryId: serializer.fromJson<int>(json['categoryId']),
     );
@@ -134,6 +143,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       'content': serializer.toJson<String>(content),
       'brief': serializer.toJson<String?>(brief),
       'category': serializer.toJson<String?>(category),
+      'tags': serializer.toJson<String?>(tags),
       'status': serializer.toJson<int>(status),
       'categoryId': serializer.toJson<int>(categoryId),
     };
@@ -148,6 +158,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           String? content,
           String? brief,
           String? category,
+          String? tags,
           int? status,
           int? categoryId}) =>
       ToDo(
@@ -159,6 +170,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
         content: content ?? this.content,
         brief: brief ?? this.brief,
         category: category ?? this.category,
+        tags: tags ?? this.tags,
         status: status ?? this.status,
         categoryId: categoryId ?? this.categoryId,
       );
@@ -173,6 +185,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           ..write('content: $content, ')
           ..write('brief: $brief, ')
           ..write('category: $category, ')
+          ..write('tags: $tags, ')
           ..write('status: $status, ')
           ..write('categoryId: $categoryId')
           ..write(')'))
@@ -181,7 +194,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
 
   @override
   int get hashCode => Object.hash(id, notificationId, createdTime, filedTime,
-      alertTime, content, brief, category, status, categoryId);
+      alertTime, content, brief, category, tags, status, categoryId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -194,6 +207,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           other.content == this.content &&
           other.brief == this.brief &&
           other.category == this.category &&
+          other.tags == this.tags &&
           other.status == this.status &&
           other.categoryId == this.categoryId);
 }
@@ -207,6 +221,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
   Value<String> content;
   Value<String?> brief;
   Value<String?> category;
+  Value<String?> tags;
   Value<int> status;
   Value<int> categoryId;
   ToDosCompanion({
@@ -218,6 +233,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     this.content = const Value.absent(),
     this.brief = const Value.absent(),
     this.category = const Value.absent(),
+    this.tags = const Value.absent(),
     this.status = const Value.absent(),
     this.categoryId = const Value.absent(),
   });
@@ -230,6 +246,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     required String content,
     this.brief = const Value.absent(),
     this.category = const Value.absent(),
+    this.tags = const Value.absent(),
     required int status,
     required int categoryId,
   })  : createdTime = Value(createdTime),
@@ -245,6 +262,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     Expression<String>? content,
     Expression<String?>? brief,
     Expression<String?>? category,
+    Expression<String?>? tags,
     Expression<int>? status,
     Expression<int>? categoryId,
   }) {
@@ -257,6 +275,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       if (content != null) 'content': content,
       if (brief != null) 'brief': brief,
       if (category != null) 'category': category,
+      if (tags != null) 'tags': tags,
       if (status != null) 'status': status,
       if (categoryId != null) 'category_id': categoryId,
     });
@@ -271,6 +290,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       Value<String>? content,
       Value<String?>? brief,
       Value<String?>? category,
+      Value<String?>? tags,
       Value<int>? status,
       Value<int>? categoryId}) {
     return ToDosCompanion(
@@ -282,6 +302,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       content: content ?? this.content,
       brief: brief ?? this.brief,
       category: category ?? this.category,
+      tags: tags ?? this.tags,
       status: status ?? this.status,
       categoryId: categoryId ?? this.categoryId,
     );
@@ -314,6 +335,9 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     if (category.present) {
       map['category'] = Variable<String?>(category.value);
     }
+    if (tags.present) {
+      map['tags'] = Variable<String?>(tags.value);
+    }
     if (status.present) {
       map['status'] = Variable<int>(status.value);
     }
@@ -334,6 +358,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
           ..write('content: $content, ')
           ..write('brief: $brief, ')
           ..write('category: $category, ')
+          ..write('tags: $tags, ')
           ..write('status: $status, ')
           ..write('categoryId: $categoryId')
           ..write(')'))
@@ -390,6 +415,11 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
   late final GeneratedColumn<String?> category = GeneratedColumn<String?>(
       'category', aliasedName, true,
       type: const StringType(), requiredDuringInsert: false);
+  final VerificationMeta _tagsMeta = const VerificationMeta('tags');
+  @override
+  late final GeneratedColumn<String?> tags = GeneratedColumn<String?>(
+      'tags', aliasedName, true,
+      type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _statusMeta = const VerificationMeta('status');
   @override
   late final GeneratedColumn<int?> status = GeneratedColumn<int?>(
@@ -413,6 +443,7 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
         content,
         brief,
         category,
+        tags,
         status,
         categoryId
       ];
@@ -463,6 +494,10 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
     if (data.containsKey('category')) {
       context.handle(_categoryMeta,
           category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
+    }
+    if (data.containsKey('tags')) {
+      context.handle(
+          _tagsMeta, tags.isAcceptableOrUnknown(data['tags']!, _tagsMeta));
     }
     if (data.containsKey('status')) {
       context.handle(_statusMeta,

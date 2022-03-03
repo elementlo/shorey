@@ -649,6 +649,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Title`
+  String get addNewTaskTitle {
+    return Intl.message(
+      'Title',
+      name: 'addNewTaskTitle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -14,6 +14,7 @@ import 'package:spark_list/resource/http_provider.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/settings_icon/icon.dart' as settings_icon;
+import 'package:spark_list/workflow/notion_workflow.dart';
 
 import 'home_page.dart';
 
@@ -72,7 +73,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
         );
   }
 
-  void _configDio() {
+  Future _configDio() async {
     dio.interceptors.add(InterceptorsWrapper(onError: (e, handler) {
       EasyLoading.dismiss();
       if (e.response != null) {
@@ -83,11 +84,11 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
         handler.next(e);
       }
     }));
-    context.read<ConfigViewModel>().configDio();
+    final user = await context.read<NotionWorkFlow>().getUser();
+    context.read<ConfigViewModel>().configDio(user);
   }
 
   void _toggleSettings(BuildContext context) {
-    // Animate the settings panel to open or close.
     final cfVModel = Provider.of<ConfigViewModel>(context, listen: false);
     if (cfVModel.isSettingsOpenNotifier) {
       _settingsPanelController!.reverse();

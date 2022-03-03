@@ -21,6 +21,10 @@ class ConfigViewModel extends ViewStateModel {
 
   bool isSettingsOpenNotifier = false;
 
+  bool _linkedNotion = false;
+
+  bool get linkedNotion => _linkedNotion;
+
   List<CategoryItem> categoryDemosList = [];
   Locale? _deviceLocale;
   Stream<List<Category>>? categoryStream;
@@ -30,18 +34,21 @@ class ConfigViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-  Future configDio() async {
-    final map = await dsProvider.getValue<Map<String, dynamic>>(StoreKey.notionUser);
-    if (map != null) {
-      final token = Results.fromJson(map).token;
-      dio.options.headers.addAll({'Authorization': 'Bearer $token'});
+  void updateLinkedStatus(bool linked){
+    _linkedNotion = linked;
+  }
+
+  Future configDio(Results? user) async {
+    if (user?.token != null) {
+      updateLinkedStatus(true);
+      dio.options.headers.addAll({'Authorization': 'Bearer ${user?.token}'});
     }
   }
 
   Locale? initLocale(Locale? locale, Iterable<Locale> supportedLocales) {
     final defaultLocale = dsProvider.defaultLocale;
     if (defaultLocale == null) {
-      if(locale?.languageCode != 'en' && locale?.languageCode != 'zh'){
+      if (locale?.languageCode != 'en' && locale?.languageCode != 'zh') {
         _deviceLocale = Locale('en', '');
         return Locale('en', '');
       }

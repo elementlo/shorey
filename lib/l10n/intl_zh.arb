@@ -88,5 +88,6 @@
   "mantraEditTitle": "编辑Mantra",
   "tipsNotionId": "可选项, 配置一个全局的Notion根页面, 添加记事时可选择默认都同步在此页面上",
   "sureToDeleteArchived": "确定要删除所有归档条目吗?",
-  "linkNotionIfYouWant": "在Shorey的设置中绑定Notion账户, 可以同步你的笔记到Notion数据库中"
+  "linkNotionIfYouWant": "在Shorey的设置中绑定Notion账户, 可以同步你的笔记到Notion数据库中",
+  "addNewTaskTitle": "标题"
 }

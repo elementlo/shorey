@@ -31,6 +31,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "actionUpdate": MessageLookupByLibrary.simpleMessage("Updated to"),
         "addCategory": MessageLookupByLibrary.simpleMessage("Add"),
         "addCategoryName": MessageLookupByLibrary.simpleMessage("Name"),
+        "addNewTaskTitle": MessageLookupByLibrary.simpleMessage("Title"),
         "archivedItemsTitle": MessageLookupByLibrary.simpleMessage("Archived"),
         "archivedLess": MessageLookupByLibrary.simpleMessage("Archived less"),
         "archivedList": MessageLookupByLibrary.simpleMessage("Archived"),

@@ -7,6 +7,9 @@ import 'package:spark_list/model/model.dart';
 import 'package:spark_list/pages/category_info_page.dart';
 import 'package:spark_list/pages/editor_page.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
+import 'package:spark_list/workflow/notion_workflow.dart';
+
+import '../view_model/config_view_model.dart';
 
 ///
 /// Author: Elemen
@@ -16,48 +19,6 @@ import 'package:spark_list/view_model/home_view_model.dart';
 ///
 
 typedef CategoryHeaderTapCallback = Function(bool shouldOpenList);
-
-Map jsonMap = {
-  'parent': {'database_id': 'd71ecb243d73428eaadd78ae80db555c'},
-  'properties': {
-    'title': {
-      'title': [
-        {
-          'text': {'content': '111111'}
-        }
-      ]
-    },
-    'Date': {
-      'date': {'start': '2020-12-08T12:00:00Z'}
-    }
-  }
-};
-
-String database = '''
-{
-    \"parent\": {
-        \"type\": \"page_id\",
-        \"page_id\": \"9e9456d4fe354036b14b1f581b626fe4\"
-    },
-    \"title\": [
-        {
-            \"type\": \"text\",
-            \"text\": {
-                \"content\": \"Grocery List\",
-                \"link\": null
-            }
-        }
-    ],
-    \"properties\": {
-        \"Name\": {
-            \"title\": {}
-        },
-        \"Last ordered\": {
-            \"date\": {}
-        }
-    }
-}
-''';
 
 class CategoryListItem extends StatefulWidget {
   const CategoryListItem(this.category,
@@ -206,6 +167,7 @@ class _CategoryListItemState extends State<CategoryListItem>
           : _ExpandedCategoryDemos(
               categoryId: widget.category.id,
               category: widget.category.name,
+              notionDatabaseId: widget.category.notionDatabaseId,
               demos: widget.demos,
               demoList: widget.demoList),
     );
@@ -219,10 +181,12 @@ class _ExpandedCategoryDemos extends StatefulWidget {
     required this.categoryId,
     this.demos,
     this.demoList,
+    this.notionDatabaseId,
   }) : super(key: key);
 
   final String? category;
   final int categoryId;
+  final String? notionDatabaseId;
 
   final List<String>? demos;
 
@@ -234,6 +198,7 @@ class _ExpandedCategoryDemos extends StatefulWidget {
 
 class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
   late TextEditingController _controller;
+  bool _linked = false;
 
   @override
   void initState() {
@@ -267,46 +232,66 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
         textAlignVertical: TextAlignVertical.top,
         decoration: InputDecoration(
             hintText: 'Write something...',
-            contentPadding: EdgeInsets.only(left: 5,),
+            contentPadding: EdgeInsets.only(
+              left: 5,
+            ),
             hintStyle: TextStyle(
               color: Theme.of(context).colorScheme.background,
               fontSize: 14,
             ),
             focusedBorder: UnderlineInputBorder(
               borderSide:
-              BorderSide(color: Theme.of(context).colorScheme.background),
+                  BorderSide(color: Theme.of(context).colorScheme.background),
             ),
             enabledBorder: UnderlineInputBorder(
               borderSide:
                   BorderSide(color: Theme.of(context).colorScheme.background),
             ),
             border: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.background),
+              borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.background),
             ),
-        suffix: Container(
-          // width: 25,
-          // height: 25,
-          // // decoration: BoxDecoration(
-          // //   border: Border.all(color: Colors.black)
-          // // ),
-          child: IconButton(
-              padding: EdgeInsets.all(0),
-              onPressed: () async {
-
-              },
-              icon: Icon(
-                Icons.arrow_forward_rounded,
-                color: Theme.of(context).colorScheme.onSecondary,
-              )),
-        )
-        ),
+            suffix: Container(
+              child: IconButton(
+                  padding: EdgeInsets.all(0),
+                  onPressed: () async {
+                    final content = _controller.text.isNotEmpty
+                        ? _controller.text
+                        : S.of(context).addNewTaskTitle;
+                    final dateTime = DateTime.now();
+                    final index = await viewModel.saveToDo(
+                        widget.categoryId, content, widget.category,
+                        dateTime: dateTime);
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(
+                            builder: (context) => TextEditorPage(ToDo(
+                                id: index,
+                                content: content,
+                                status: 1,
+                                category: widget.category,
+                                categoryId: widget.categoryId,
+                                createdTime: dateTime))))
+                        .then((result) {
+                      context
+                          .read<HomeViewModel>()
+                          .queryToDoList(widget.category);
+                    });
+                  },
+                  icon: Icon(
+                    Icons.arrow_forward_rounded,
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  )),
+            )),
         onSubmitted: (input) async {
           print(input);
           if (input != '' && input != null) {
             await viewModel.saveToDo(widget.categoryId, input, widget.category);
             await viewModel.queryToDoList(widget.category);
             _controller.clear();
+            if (widget.notionDatabaseId != null &&
+                context.read<ConfigViewModel>().linkedNotion) {
+              context.read<NotionWorkFlow>().addTaskItem(widget.notionDatabaseId!);
+            }
           }
         },
       ),
@@ -451,10 +436,13 @@ class _CategoryHeader extends StatelessWidget {
 }
 
 class CategoryDemoItem extends StatelessWidget {
-  CategoryDemoItem({Key? key, required this.model}) : super(key: key);
+  CategoryDemoItem({Key? key, this.onPress, required this.model})
+      : super(key: key);
 
   final ToDo? model;
   String? _cachedCategory;
+
+  VoidCallback? onPress;
 
   @override
   Widget build(BuildContext context) {
@@ -512,9 +500,10 @@ class CategoryDemoItem extends StatelessWidget {
                                     ? Colors.grey
                                     : Colors.black),
                           ),
-                          if (model!.brief != null)
+                          if (model!.brief != null && model!.brief != '')
                             Text(
                               model!.brief ?? '',
+                              maxLines: 3,
                               style: textTheme.overline!.apply(
                                 color: colorScheme.onSurface.withOpacity(0.5),
                               ),

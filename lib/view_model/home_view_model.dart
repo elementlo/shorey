@@ -181,12 +181,14 @@ class HomeViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-  Future saveToDo(int categoryId, String content, String? category,
-      {String? brief, int status = 1}) async {
-    final updatedTime = DateTime.now();
-    await dbProvider.insertTodo(ToDosCompanion(
+  Future<int> saveToDo(int categoryId, String content, String? category,
+      {String? brief, int status = 1, DateTime? dateTime}) async {
+    if(dateTime == null){
+      dateTime = DateTime.now();
+    }
+    final index = await dbProvider.insertTodo(ToDosCompanion(
         categoryId: Value(categoryId),
-        createdTime: Value(updatedTime),
+        createdTime: Value(dateTime),
         content: Value(content),
         category: Value(category),
         status: Value(status),
@@ -194,8 +196,9 @@ class HomeViewModel extends ViewStateModel {
 
     await dbProvider.insertAction(ActionsHistoryCompanion(
         updatedContent: Value(content),
-        updatedTime: Value(updatedTime),
+        updatedTime: Value(dateTime),
         action: Value(0)));
+    return index;
   }
 
   Future<List<ToDo?>> queryToDoList(String? category) async {
