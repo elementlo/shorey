@@ -1,15 +1,13 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:spark_list/config/api.dart';
+import 'package:spark_list/database/database.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/model/notion_database_model.dart';
 import 'package:spark_list/model/notion_database_template.dart';
 import 'package:spark_list/model/notion_model.dart';
 import 'package:spark_list/resource/data_provider.dart';
 import 'package:spark_list/resource/http_provider.dart';
-import 'package:spark_list/widget/category_list_item.dart';
 
 ///
 /// Author: Elemen
@@ -56,8 +54,8 @@ class NotionWorkFlow with ChangeNotifier {
     return _actions.retrieveDatabase(databaseId);
   }
 
-  Future addTaskItem(String databaseId) async {
-    return _actions.addTaskItem(databaseId);
+  Future addTaskItem(String databaseId, ToDo todo) async {
+    return _actions.addTaskItem(databaseId, todo);
   }
 
   Future<NotionDatabase?> createDatabase(String pageId) {
@@ -90,12 +88,12 @@ class _NotionActions {
   }
 
   Future<NotionDatabase?> retrieveDatabase(String databaseId) async {
-    try{
+    try {
       final response = await dio.get('${notionDatabase}/${databaseId}');
       if (response.success) {
         return NotionDatabase.fromJson(response.data);
       }
-    } on DioError catch(e){
+    } on DioError catch (e) {
       debugPrint(e.message);
     }
     return null;
@@ -119,17 +117,27 @@ class _NotionActions {
     return null;
   }
 
-  Future addTaskItem(String databaseId) async {
-    final response = await dio.post('${notionPages}', data: NotionDatabaseTemplate.taskItem(databaseId));
+  Future addTaskItem(String databaseId, ToDo todo) async {
+    final param = await NotionDatabaseTemplate.taskItem(databaseId,
+        title: todo.content,
+        brief: todo.brief??'',
+        tags: ['${todo.category}'],
+        statusTitle: todo.statusTitle,
+        createdTime: todo.createdTime.toIso8601String(),
+        reminderTime: todo.alertTime?.toIso8601String());
+    final response = await dio.post('${notionPages}',
+        data: param);
     if (response.success) {}
     return null;
   }
 
   Future<NotionDatabase?> createDatabase(String pageId) async {
-    final response =
-        await dio.post('${notionDatabase}', data: NotionDatabaseTemplate.taskList(pageId));
-    if(response.success){
-      return NotionDatabase.fromJson(response.data);
+    final param = await NotionDatabaseTemplate.taskList(pageId);
+    if (param != null) {
+      final response = await dio.post('${notionDatabase}', data: param);
+      if (response.success) {
+        return NotionDatabase.fromJson(response.data);
+      }
     }
     return null;
   }

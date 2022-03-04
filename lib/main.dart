@@ -65,7 +65,7 @@ void _configHttpClient() {
   dio.interceptors
       .add(LogInterceptor(responseBody: true, responseHeader: false));
   dio.options.baseUrl = 'https://api.notion.com/';
-  dio.options.headers.addAll({'Notion-Version': '2021-05-13'});
+  dio.options.headers.addAll({'Notion-Version': notionApiVersion});
   dio.options.connectTimeout = 5000;
   dio.options.receiveTimeout = 7000;
   (dio.transformer as DefaultTransformer).jsonDecodeCallback = parseJson;

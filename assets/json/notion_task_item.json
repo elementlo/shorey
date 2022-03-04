@@ -1,0 +1,53 @@
+{
+  "parent": {
+    "database_id": "?"
+  },
+  "properties": {
+    "Title": {
+      "title": [
+        {
+          "text": {
+            "content": "?"
+          }
+        }
+      ]
+    },
+    "Status": {
+      "select": {
+        "name": "On Going"
+      }
+    },
+    "Tags": {
+      "multi_select": [
+        {
+          "name": "?"
+        }
+      ]
+    },
+    "Duration": {
+      "date": {
+        "start": "2020-12-08",
+        "end": null
+      }
+    }
+  },
+  "children": [
+    {
+      "object": "block",
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "?",
+              "link": {
+                "url": "https://en.wikipedia.org/wiki/Lacinato_kale"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

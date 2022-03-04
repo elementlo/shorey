@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
+
 ///
 /// Author: Elemen
 /// Github: https://github.com/elementlo
@@ -8,128 +10,65 @@ import 'dart:convert';
 ///
 
 class NotionDatabaseTemplate {
-  static dynamic taskList(String pageId) {
-    return jsonDecode('''
-{
-    "parent": {
-        "type": "page_id",
-        "page_id": "${pageId}"
-    },
-    "title": [
-        {
-            "type": "text",
-            "text": {
-                "content": "Task List",
-                "link": null
-            }
-        }
-    ],
-    "properties": {
-        "Title": {
-            "title": {}
-        },
-        "Note": {
-            "rich_text": {}
-        },
-        "Duration": {
-            "date": {}
-        },
-        "Status": {
-            "select": {
-                "options": [
-                    {
-                        "name": "On Going",
-                        "color": "blue"
-                    },
-                    {
-                        "name": "Archived",
-                        "color": "orange"
-                    },
-                    {
-                        "name": "Later",
-                        "color": "purple"
-                    },
-                    {
-                        "name": "Deleted",
-                        "color": "gray"
-                    }
-                ]
-            }
-        },
-        "Tags": {
-            "type": "multi_select",
-            "multi_select": {
-                "options": []
-            }
-        },
-        "Links": {
-            "url": {}
-        }
+  static const String jsonTaskList = 'assets/json/notion_task_list.json';
+  static const String jsonTaskItem = 'assets/json/notion_task_item.json';
+  static const String jPageId = 'page_id';
+  static const String jParent = 'parent';
+  static const String jDatabaseId = 'database_id';
+  static const String jProperties = 'properties';
+  static const String jTypeTitle = 'title';
+  static const String jTypeText = 'text';
+  static const String jTypeContent = 'content';
+  static const String jTypeSelect = 'select';
+  static const String jTypeName = 'name';
+  static const String jTypeMultiSelect = 'multi_select';
+  static const String jTypeChildren = 'children';
+  static const String jTypeObject = 'object';
+  static const String jTypeParagraph = 'paragraph';
+  static const String jTypeDate = 'date';
+  static const String jTypeStart = 'start';
+  static const String jTypeEnd = 'end';
+  static const String jTypeRichText = 'rich_text';
+
+  static const String jStatus = 'Status';
+  static const String jTitle = 'Title';
+  static const String jTags = 'Tags';
+  static const String jDuration = 'Duration';
+  static const String jReminderTime = 'Reminder Time';
+
+  static Future<dynamic?> taskList(String pageId) async {
+    final json = await rootBundle.loadString(jsonTaskList);
+    if (json != null) {
+      final map = jsonDecode(json);
+      map[jParent][jPageId] = pageId;
+      return map;
     }
-}
-    ''');
+    return null;
   }
 
-  static dynamic taskItem(String databaseId) {
-    return jsonDecode('''
- {
-    "parent": {
-        "database_id": "${databaseId}"
-    },
-    "properties": {
-        "Title": {
-            "title": [
-                {
-                    "text": {
-                        "content": "New Media Article"
-                    }
-                }
-            ]
-        },
-        "Status": {
-            "select": {
-                "name": "On Going"
-            }
-        },
-        "Tags":{
-            "multi_select":[
-                {
-                    "name": "category"
-                }
-            ]
-        },
-        "Duration": {
-            "date": {
-                "start": "2020-12-08T12:00:00Z",
-                "end": null
-            }
-        },
-        "Links": {
-            "url": "https://www.nytimes.com/2018/10/21/opinion/who-will-teach-silicon-valley-to-be-ethical.html"
-        },
-        "Note": {
-            "rich_text": [
-                {
-                    "type": "text",
-                    "text": {
-                        "content": "Some think chief ethics officers could help technology companies navigate political and social questions.",
-                        "link": null
-                    },
-                    "annotations": {
-                        "bold": false,
-                        "italic": false,
-                        "strikethrough": false,
-                        "underline": false,
-                        "code": false,
-                        "color": "default"
-                    },
-                    "plain_text": "Some think chief ethics officers could help technology companies navigate political and social questions.",
-                    "href": null
-                }
-            ]
-        }
+  static dynamic taskItem(String databaseId,
+      {required String title,
+      required String statusTitle,
+      required String createdTime,
+      String? brief,
+      String? endTime,
+      List<String>? tags,
+      String? reminderTime}) async {
+    final json = await rootBundle.loadString(jsonTaskItem);
+    if (json != null) {
+      final map = jsonDecode(json);
+      map[jParent][jDatabaseId] = databaseId;
+      map[jProperties][jTitle][jTypeTitle][0][jTypeText][jTypeContent] = title;
+      map[jProperties][jStatus][jTypeSelect][jTypeName] = statusTitle;
+      map[jProperties][jTags][jTypeMultiSelect][0][jTypeName] = tags?[0];
+      map[jProperties][jDuration][jTypeDate][jTypeStart] = createdTime;
+      map[jProperties][jDuration][jTypeDate][jTypeEnd] = endTime;
+      if (reminderTime != null)
+        map[jProperties][jReminderTime][jTypeDate][jTypeStart] = reminderTime;
+      map[jTypeChildren][0][jTypeParagraph][jTypeRichText][0][jTypeText]
+          [jTypeContent] = brief;
+      return map;
     }
-}
-    ''');
+    return null;
   }
 }

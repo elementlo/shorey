@@ -285,12 +285,24 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
         onSubmitted: (input) async {
           print(input);
           if (input != '' && input != null) {
-            await viewModel.saveToDo(widget.categoryId, input, widget.category);
+            final dateTime = DateTime.now();
+            final index = await viewModel.saveToDo(
+                widget.categoryId, input, widget.category,
+                dateTime: dateTime);
             await viewModel.queryToDoList(widget.category);
             _controller.clear();
             if (widget.notionDatabaseId != null &&
                 context.read<ConfigViewModel>().linkedNotion) {
-              context.read<NotionWorkFlow>().addTaskItem(widget.notionDatabaseId!);
+              context.read<NotionWorkFlow>().addTaskItem(
+                  widget.notionDatabaseId!,
+                  ToDo(
+                    id: index,
+                    content: input,
+                    createdTime: dateTime,
+                    categoryId: widget.categoryId,
+                    status: 1,
+                    category: widget.category,
+                  ));
             }
           }
         },

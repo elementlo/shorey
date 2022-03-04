@@ -11,7 +11,7 @@ import 'package:spark_list/generated/l10n.dart';
 ///
 
 const double galleryHeaderHeight = 64;
-
+const String notionApiVersion = '2022-02-22';
 ///pages
 class Routes {
   static const String homePage = '/';

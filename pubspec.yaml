@@ -75,6 +75,7 @@ flutter:
     - assets/images/
     - assets/icons/material/
     - assets/anim/
+    - assets/json/
 
   generate: true
   # An image asset can refer to one or more resolution-specific "variants", see
