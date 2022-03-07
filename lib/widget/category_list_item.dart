@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' as d;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -198,7 +199,6 @@ class _ExpandedCategoryDemos extends StatefulWidget {
 
 class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
   late TextEditingController _controller;
-  bool _linked = false;
 
   @override
   void initState() {
@@ -215,6 +215,7 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
           for (int i = 0; i < widget.demoList!.length; i++)
             CategoryDemoItem(
               model: widget.demoList![i],
+              notionDatabaseId: widget.notionDatabaseId,
             ),
         _buildNewTaskField(context),
         const SizedBox(height: 12), // Extra space below.
@@ -258,20 +259,26 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
                     final content = _controller.text.isNotEmpty
                         ? _controller.text
                         : S.of(context).addNewTaskTitle;
-                    final dateTime = DateTime.now();
-                    final index = await viewModel.saveToDo(
-                        widget.categoryId, content, widget.category,
-                        dateTime: dateTime);
+
+                    /// unsave item now
+                    // final index = await viewModel.saveToDo(
+                    //     widget.categoryId, content, widget.category,
+                    //     dateTime: dateTime);
                     Navigator.of(context)
                         .push(MaterialPageRoute(
-                            builder: (context) => TextEditorPage(ToDo(
-                                id: index,
-                                content: content,
-                                status: 1,
-                                category: widget.category,
-                                categoryId: widget.categoryId,
-                                createdTime: dateTime))))
+                            builder: (context) => TextEditorPage(
+                                ToDo(
+                                    id: -1,
+                                    content: content,
+                                    status: 1,
+                                    category: widget.category,
+                                    categoryId: widget.categoryId,
+                                    createdTime: DateTime.now()),
+                                notionDatabaseId: widget.notionDatabaseId)))
                         .then((result) {
+                      if (result == 0) {
+                        _controller.clear();
+                      }
                       context
                           .read<HomeViewModel>()
                           .queryToDoList(widget.category);
@@ -286,9 +293,12 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
           print(input);
           if (input != '' && input != null) {
             final dateTime = DateTime.now();
-            final index = await viewModel.saveToDo(
-                widget.categoryId, input, widget.category,
-                dateTime: dateTime);
+            final index = await viewModel.saveToDo(ToDosCompanion(
+                categoryId: d.Value(widget.categoryId),
+                status: d.Value(1),
+                content: d.Value(input),
+                category: d.Value(widget.category),
+                createdTime: d.Value(dateTime)));
             await viewModel.queryToDoList(widget.category);
             _controller.clear();
             if (widget.notionDatabaseId != null &&
@@ -448,13 +458,12 @@ class _CategoryHeader extends StatelessWidget {
 }
 
 class CategoryDemoItem extends StatelessWidget {
-  CategoryDemoItem({Key? key, this.onPress, required this.model})
+  CategoryDemoItem({Key? key, this.notionDatabaseId, required this.model})
       : super(key: key);
 
   final ToDo? model;
   String? _cachedCategory;
-
-  VoidCallback? onPress;
+  String? notionDatabaseId;
 
   @override
   Widget build(BuildContext context) {
@@ -470,7 +479,8 @@ class CategoryDemoItem extends StatelessWidget {
                 _cachedCategory = model!.category;
                 Navigator.of(context)
                     .push(MaterialPageRoute(
-                        builder: (context) => TextEditorPage(model!)))
+                        builder: (context) => TextEditorPage(model!,
+                            notionDatabaseId: notionDatabaseId)))
                     .then((result) {
                   context.read<HomeViewModel>().queryToDoList(_cachedCategory);
                 });

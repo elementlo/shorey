@@ -61,6 +61,10 @@ class NotionWorkFlow with ChangeNotifier {
   Future<NotionDatabase?> createDatabase(String pageId) {
     return _actions.createDatabase(pageId);
   }
+
+  Future updateTaskProperties(String pageId, Map param){
+    return _actions.updateTaskProperties(pageId, param);
+  }
 }
 
 class _NotionActions {
@@ -140,5 +144,10 @@ class _NotionActions {
       }
     }
     return null;
+  }
+
+  Future updateTaskProperties(String pageId, Map param) async {
+    final response = await dio.patch('${notionPages}/${pageId}', data: param);
+
   }
 }

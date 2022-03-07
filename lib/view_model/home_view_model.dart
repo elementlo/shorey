@@ -176,27 +176,22 @@ class HomeViewModel extends ViewStateModel {
   }
 
   Future saveMainFocus(String content, {int status = 1}) async {
-    await saveToDo(1, content, 'mainfocus', status: status);
+    await saveToDo(ToDosCompanion(
+      categoryId: Value(1),
+      content: Value(content),
+      category: Value('mainfocus'),
+      status: Value(status),
+    ));
     await _updateMainFocus();
     notifyListeners();
   }
 
-  Future<int> saveToDo(int categoryId, String content, String? category,
-      {String? brief, int status = 1, DateTime? dateTime}) async {
-    if(dateTime == null){
-      dateTime = DateTime.now();
-    }
-    final index = await dbProvider.insertTodo(ToDosCompanion(
-        categoryId: Value(categoryId),
-        createdTime: Value(dateTime),
-        content: Value(content),
-        category: Value(category),
-        status: Value(status),
-        brief: Value(brief)));
+  Future<int> saveToDo(ToDosCompanion todo) async {
+    final index = await dbProvider.insertTodo(todo);
 
     await dbProvider.insertAction(ActionsHistoryCompanion(
-        updatedContent: Value(content),
-        updatedTime: Value(dateTime),
+        updatedContent: Value(todo.content.value),
+        updatedTime: Value(todo.createdTime.value),
         action: Value(0)));
     return index;
   }

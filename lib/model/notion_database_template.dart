@@ -63,8 +63,13 @@ class NotionDatabaseTemplate {
       map[jProperties][jTags][jTypeMultiSelect][0][jTypeName] = tags?[0];
       map[jProperties][jDuration][jTypeDate][jTypeStart] = createdTime;
       map[jProperties][jDuration][jTypeDate][jTypeEnd] = endTime;
-      if (reminderTime != null)
-        map[jProperties][jReminderTime][jTypeDate][jTypeStart] = reminderTime;
+      if (reminderTime != null && reminderTime.isNotEmpty) {
+        map[jProperties][jReminderTime] = {
+          "date": {
+            "start": "${reminderTime}",
+          }
+        };
+      }
       map[jTypeChildren][0][jTypeParagraph][jTypeRichText][0][jTypeText]
           [jTypeContent] = brief;
       return map;

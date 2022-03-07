@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:day_night_time_picker/day_night_time_picker.dart';
+import 'package:drift/drift.dart' as d;
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,6 +18,7 @@ import 'package:spark_list/widget/app_bar.dart';
 import 'package:spark_list/widget/category_list_item.dart';
 import 'package:spark_list/widget/customized_date_picker.dart';
 import 'package:spark_list/widget/settings_list_item.dart';
+import 'package:spark_list/workflow/notion_workflow.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 import 'list_category_page.dart';
@@ -35,8 +37,9 @@ enum _ExpandableSetting {
 
 class TextEditorPage extends StatefulWidget {
   final ToDo todoModel;
+  final String? notionDatabaseId;
 
-  TextEditorPage(this.todoModel);
+  TextEditorPage(this.todoModel,{this.notionDatabaseId});
 
   @override
   _TextEditorPageState createState() => _TextEditorPageState();
@@ -91,7 +94,7 @@ class _TextEditorPageState extends State<TextEditorPage>
           selectedOption: 1.0,
           optionsMap: LinkedHashMap.of({1.0: DisplayOption(_selectedDate)}),
           onOptionChanged: (newTextScale) {},
-          onTapSetting: () => onTapSetting(_ExpandableSetting.date),
+          onTapSetting: () => _onTapSetting(_ExpandableSetting.date),
           isExpanded: _expandedSettingId == _ExpandableSetting.date,
           child: Localizations.override(
             context: context,
@@ -110,7 +113,7 @@ class _TextEditorPageState extends State<TextEditorPage>
           optionsMap: LinkedHashMap.of(
               {1.0: DisplayOption(_time == null ? '' : _time.format(context))}),
           onOptionChanged: (newTextScale) {},
-          onTapSetting: () => onTapSetting(_ExpandableSetting.time),
+          onTapSetting: () => _onTapSetting(_ExpandableSetting.time),
           isExpanded: _expandedSettingId == _ExpandableSetting.time,
           child: createInlinePicker(
               accentColor: colorScheme.onSecondary,
@@ -152,8 +155,8 @@ class _TextEditorPageState extends State<TextEditorPage>
                 color: colorScheme.onSecondary,
               ),
               onPressed: () async {
-                await _updateTodoItem();
-                Navigator.pop(context);
+                await _submitTodoItem();
+                Navigator.pop(context, 0);
               }),
         ],
       ),
@@ -203,8 +206,6 @@ class _TextEditorPageState extends State<TextEditorPage>
                 children: settingsListItems,
               ),
               const SizedBox(height: 16),
-
-              //Divider(thickness: 2, height: 0, color: colorScheme.background),
             ],
           ],
         ),
@@ -234,7 +235,7 @@ class _TextEditorPageState extends State<TextEditorPage>
     await flutterLocalNotificationsPlugin.cancel(notificationId);
   }
 
-  Future<void> _updateTodoItem() async {
+  Future<void> _submitTodoItem() async {
     final oldModel = widget.todoModel.copyWith();
     widget.todoModel.brief = _briefController.text;
     widget.todoModel.content = _titleController.text;
@@ -259,12 +260,42 @@ class _TextEditorPageState extends State<TextEditorPage>
 
     widget.todoModel.alertTime =
         alertTime == null ? null : DateTime.parse(alertTime);
-    await context
-        .read<HomeViewModel>()
-        .updateTodoItem(oldModel, widget.todoModel);
+    if (widget.todoModel.id == -1) {
+      await context.read<HomeViewModel>().saveToDo(ToDosCompanion(
+        categoryId: d.Value(widget.todoModel.categoryId),
+        content: d.Value(widget.todoModel.content),
+        category: d.Value(widget.todoModel.category),
+        createdTime: d.Value(DateTime.now()),
+        status: d.Value(1),
+        brief: d.Value(widget.todoModel.brief),
+        alertTime: d.Value(widget.todoModel.alertTime),
+      ));
+    } else {
+      await context
+          .read<HomeViewModel>()
+          .updateTodoItem(oldModel, widget.todoModel);
+    }
+
+    if (widget.notionDatabaseId != null &&
+        context.read<ConfigViewModel>().linkedNotion){
+      if (widget.todoModel.id == -1){
+        context.read<NotionWorkFlow>().addTaskItem(
+            widget.notionDatabaseId!,
+            ToDo(
+              id: 0,
+              content: widget.todoModel.content,
+              createdTime: widget.todoModel.createdTime,
+              categoryId: widget.todoModel.categoryId,
+              status: 1,
+              category: widget.todoModel.category,
+              brief: widget.todoModel.brief,
+              alertTime: widget.todoModel.alertTime,
+            ));
+      }
+    }
   }
 
-  void onTapSetting(_ExpandableSetting settingId) {
+  void _onTapSetting(_ExpandableSetting settingId) {
     Future.delayed(Duration(milliseconds: 300), () {
       final extent = _controller.position.maxScrollExtent;
       if (extent > 0)
