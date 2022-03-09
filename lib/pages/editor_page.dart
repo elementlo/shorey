@@ -7,11 +7,13 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:spark_list/base/ext.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/model/model.dart';
+import 'package:spark_list/pages/root_page.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
@@ -39,7 +41,7 @@ class TextEditorPage extends StatefulWidget {
   final ToDo todoModel;
   final String? notionDatabaseId;
 
-  TextEditorPage(this.todoModel,{this.notionDatabaseId});
+  TextEditorPage(this.todoModel, {this.notionDatabaseId});
 
   @override
   _TextEditorPageState createState() => _TextEditorPageState();
@@ -49,13 +51,17 @@ class _TextEditorPageState extends State<TextEditorPage>
     with TickerProviderStateMixin {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _briefController = TextEditingController();
+  final ScrollController _controller = ScrollController();
+
+  late AnimationController _settingsPanelController;
+
   _ExpandableSetting? _expandedSettingId;
   late Animation<double> _staggerSettingsItemsAnimation;
-  late AnimationController _settingsPanelController;
-  final ScrollController _controller = ScrollController();
+
   TimeOfDay _time = TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 1);
   String _selectedDate = '';
   DateTime? _alertDateTime = null;
+  ToDo? oldModel;
 
   @override
   void initState() {
@@ -155,7 +161,7 @@ class _TextEditorPageState extends State<TextEditorPage>
                 color: colorScheme.onSecondary,
               ),
               onPressed: () async {
-                await _submitTodoItem();
+                _syncWithNotion(await _saveItem());
                 Navigator.pop(context, 0);
               }),
         ],
@@ -235,8 +241,8 @@ class _TextEditorPageState extends State<TextEditorPage>
     await flutterLocalNotificationsPlugin.cancel(notificationId);
   }
 
-  Future<void> _submitTodoItem() async {
-    final oldModel = widget.todoModel.copyWith();
+  Future _saveItem() async {
+    oldModel = widget.todoModel.copyWith();
     widget.todoModel.brief = _briefController.text;
     widget.todoModel.content = _titleController.text;
     String? alertTime = null;
@@ -260,26 +266,29 @@ class _TextEditorPageState extends State<TextEditorPage>
 
     widget.todoModel.alertTime =
         alertTime == null ? null : DateTime.parse(alertTime);
+    var index = -1;
     if (widget.todoModel.id == -1) {
-      await context.read<HomeViewModel>().saveToDo(ToDosCompanion(
-        categoryId: d.Value(widget.todoModel.categoryId),
-        content: d.Value(widget.todoModel.content),
-        category: d.Value(widget.todoModel.category),
-        createdTime: d.Value(DateTime.now()),
-        status: d.Value(1),
-        brief: d.Value(widget.todoModel.brief),
-        alertTime: d.Value(widget.todoModel.alertTime),
-      ));
+      index = await context.read<HomeViewModel>().saveToDo(ToDosCompanion(
+            categoryId: d.Value(widget.todoModel.categoryId),
+            content: d.Value(widget.todoModel.content),
+            category: d.Value(widget.todoModel.category),
+            createdTime: d.Value(DateTime.now()),
+            status: d.Value(1),
+            brief: d.Value(widget.todoModel.brief),
+            alertTime: d.Value(widget.todoModel.alertTime),
+          ));
     } else {
-      await context
-          .read<HomeViewModel>()
-          .updateTodoItem(oldModel, widget.todoModel);
+      await context.read<HomeViewModel>().updateTodoItem(
+          oldModel!.toCompanion(false), widget.todoModel.toCompanion(false));
     }
+    return index;
+  }
 
+  Future<void> _syncWithNotion(int index) async {
     if (widget.notionDatabaseId != null &&
-        context.read<ConfigViewModel>().linkedNotion){
-      if (widget.todoModel.id == -1){
-        context.read<NotionWorkFlow>().addTaskItem(
+        context.read<ConfigViewModel>().linkedNotion) {
+      if (widget.todoModel.id == -1) {
+        final pageId = await context.read<NotionWorkFlow>().addTaskItem(
             widget.notionDatabaseId!,
             ToDo(
               id: 0,
@@ -291,7 +300,26 @@ class _TextEditorPageState extends State<TextEditorPage>
               brief: widget.todoModel.brief,
               alertTime: widget.todoModel.alertTime,
             ));
+        if (index != -1) {
+          _updatePageId(index, pageId);
+        }
+      } else {
+        if (!widget.todoModel.equals(oldModel!)) {
+          context
+              .read<NotionWorkFlow>()
+              .updateTaskProperties(widget.todoModel.pageId, widget.todoModel);
+        }
       }
+    }
+  }
+
+  Future _updatePageId(int index, String? pageId) async {
+    if (pageId != null) {
+      final companion =
+          ToDosCompanion(id: d.Value(index), pageId: d.Value(pageId));
+      await appContext
+          .read<HomeViewModel>()
+          .updateTodoItem(companion, companion);
     }
   }
 

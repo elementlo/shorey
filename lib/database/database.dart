@@ -34,6 +34,8 @@ class ToDos extends Table {
 
   TextColumn get tags => text().nullable()();
 
+  TextColumn get pageId => text().nullable()();
+
   //
   // String get formatFiledTime {
   //   var formatter = new DateFormat('yyyy-MM-dd');
@@ -214,25 +216,10 @@ class DatabaseProvider extends _$DatabaseProvider {
     return into(toDos).insert(entity);
   }
 
-  Future updateToDoItem(ToDosCompanion entity, {bool updateContent = true}) {
-    ToDosCompanion target;
-    if (updateContent) {
-      target = ToDosCompanion(
-          status: entity.status,
-          content: entity.content,
-          brief: entity.brief,
-          category: entity.category,
-          alertTime: entity.alertTime,
-          notificationId: entity.notificationId);
-    } else {
-      target = ToDosCompanion(
-          status: entity.status,
-          filedTime: entity.status.value == 0
-              ? Value(DateTime.now())
-              : Value.absent());
-    }
+  Future updateToDoItem(ToDosCompanion entity) {
+    entity.status == 0? entity.filedTime = Value(DateTime.now()):entity.filedTime = Value.absent();
     return (update(toDos)..where((tbl) => tbl.id.equals(entity.id.value)))
-        .write(target);
+        .write(entity);
   }
 
   Future updateAllToDosStatus(int currentStatus, int updatedStatus) {

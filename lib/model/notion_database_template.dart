@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 class NotionDatabaseTemplate {
   static const String jsonTaskList = 'assets/json/notion_task_list.json';
   static const String jsonTaskItem = 'assets/json/notion_task_item.json';
+
   static const String jPageId = 'page_id';
   static const String jParent = 'parent';
   static const String jDatabaseId = 'database_id';
@@ -75,5 +76,35 @@ class NotionDatabaseTemplate {
       return map;
     }
     return null;
+  }
+
+  static dynamic itemProperties({
+    String? title,
+    List<String>? tags,
+    String? reminderTime,
+  }) {
+    final map = Map<String, dynamic>();
+    if (title != null && title.isNotEmpty) {
+      map[jTitle] = {
+        'title': [
+          {'text': '${title}'}
+        ]
+      };
+    }
+    if (tags != null && tags.length > 0) {
+      map[jTags] = {
+        'multi_select': [
+          {'name': '${tags[0]}'}
+        ]
+      };
+    }
+    if (reminderTime != null && reminderTime.isNotEmpty) {
+      map[jReminderTime] = {
+        "date": {
+          "start": "${reminderTime}",
+        }
+      };
+    }
+    return map;
   }
 }

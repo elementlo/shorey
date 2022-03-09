@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:spark_list/base/ext.dart';
 import 'package:spark_list/config/api.dart';
 import 'package:spark_list/database/database.dart';
 import 'package:spark_list/main.dart';
@@ -54,7 +55,7 @@ class NotionWorkFlow with ChangeNotifier {
     return _actions.retrieveDatabase(databaseId);
   }
 
-  Future addTaskItem(String databaseId, ToDo todo) async {
+  Future<String?> addTaskItem(String databaseId, ToDo todo) async {
     return _actions.addTaskItem(databaseId, todo);
   }
 
@@ -62,8 +63,8 @@ class NotionWorkFlow with ChangeNotifier {
     return _actions.createDatabase(pageId);
   }
 
-  Future updateTaskProperties(String pageId, Map param){
-    return _actions.updateTaskProperties(pageId, param);
+  Future updateTaskProperties(String? pageId, ToDo todo) {
+    return _actions.updateTaskProperties(pageId, todo);
   }
 }
 
@@ -121,17 +122,18 @@ class _NotionActions {
     return null;
   }
 
-  Future addTaskItem(String databaseId, ToDo todo) async {
+  Future<String?> addTaskItem(String databaseId, ToDo todo) async {
     final param = await NotionDatabaseTemplate.taskItem(databaseId,
         title: todo.content,
-        brief: todo.brief??'',
+        brief: todo.brief ?? '',
         tags: ['${todo.category}'],
         statusTitle: todo.statusTitle,
         createdTime: todo.createdTime.toIso8601String(),
         reminderTime: todo.alertTime?.toIso8601String());
-    final response = await dio.post('${notionPages}',
-        data: param);
-    if (response.success) {}
+    final response = await dio.post('${notionPages}', data: param);
+    if (response.success) {
+      return response.data['id'];
+    }
     return null;
   }
 
@@ -146,8 +148,13 @@ class _NotionActions {
     return null;
   }
 
-  Future updateTaskProperties(String pageId, Map param) async {
-    final response = await dio.patch('${notionPages}/${pageId}', data: param);
-
+  Future updateTaskProperties(String? pageId, ToDo todo) async {
+    if (pageId != null && pageId != '') {
+      final param = await NotionDatabaseTemplate.itemProperties(
+          title: todo.content,
+          tags: ['${todo.category}'],
+          reminderTime: todo.alertTime?.toIso8601String());
+      final response = await dio.patch('${notionPages}/${pageId}', data: param);
+    }
   }
 }

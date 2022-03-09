@@ -27,6 +27,8 @@ import 'home_page.dart';
 const double _settingsButtonWidth = 64;
 const double _settingsButtonHeightMobile = 40;
 
+late BuildContext appContext;
+
 class RootPage extends StatefulWidget {
   @override
   _RootPageState createState() => _RootPageState();
@@ -40,8 +42,10 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    appContext = context;
     _requestPermissions();
     _configDio();
+    EasyLoading.instance..dismissOnTap = true;
     _settingsPanelController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),

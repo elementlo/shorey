@@ -17,6 +17,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
   String? brief;
   String? category;
   String? tags;
+  String? pageId;
 
   ///0: finished 1: going 2: deleted
   int status;
@@ -31,6 +32,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       this.brief,
       this.category,
       this.tags,
+      this.pageId,
       required this.status,
       required this.categoryId});
   factory ToDo.fromData(Map<String, dynamic> data, {String? prefix}) {
@@ -54,6 +56,8 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           .mapFromDatabaseResponse(data['${effectivePrefix}category']),
       tags: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}tags']),
+      pageId: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}page_id']),
       status: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}status'])!,
       categoryId: const IntType()
@@ -84,6 +88,9 @@ class ToDo extends DataClass implements Insertable<ToDo> {
     if (!nullToAbsent || tags != null) {
       map['tags'] = Variable<String?>(tags);
     }
+    if (!nullToAbsent || pageId != null) {
+      map['page_id'] = Variable<String?>(pageId);
+    }
     map['status'] = Variable<int>(status);
     map['category_id'] = Variable<int>(categoryId);
     return map;
@@ -109,6 +116,8 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           ? const Value.absent()
           : Value(category),
       tags: tags == null && nullToAbsent ? const Value.absent() : Value(tags),
+      pageId:
+          pageId == null && nullToAbsent ? const Value.absent() : Value(pageId),
       status: Value(status),
       categoryId: Value(categoryId),
     );
@@ -127,6 +136,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       brief: serializer.fromJson<String?>(json['brief']),
       category: serializer.fromJson<String?>(json['category']),
       tags: serializer.fromJson<String?>(json['tags']),
+      pageId: serializer.fromJson<String?>(json['pageId']),
       status: serializer.fromJson<int>(json['status']),
       categoryId: serializer.fromJson<int>(json['categoryId']),
     );
@@ -144,6 +154,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       'brief': serializer.toJson<String?>(brief),
       'category': serializer.toJson<String?>(category),
       'tags': serializer.toJson<String?>(tags),
+      'pageId': serializer.toJson<String?>(pageId),
       'status': serializer.toJson<int>(status),
       'categoryId': serializer.toJson<int>(categoryId),
     };
@@ -159,6 +170,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           String? brief,
           String? category,
           String? tags,
+          String? pageId,
           int? status,
           int? categoryId}) =>
       ToDo(
@@ -171,6 +183,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
         brief: brief ?? this.brief,
         category: category ?? this.category,
         tags: tags ?? this.tags,
+        pageId: pageId ?? this.pageId,
         status: status ?? this.status,
         categoryId: categoryId ?? this.categoryId,
       );
@@ -186,6 +199,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           ..write('brief: $brief, ')
           ..write('category: $category, ')
           ..write('tags: $tags, ')
+          ..write('pageId: $pageId, ')
           ..write('status: $status, ')
           ..write('categoryId: $categoryId')
           ..write(')'))
@@ -194,7 +208,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
 
   @override
   int get hashCode => Object.hash(id, notificationId, createdTime, filedTime,
-      alertTime, content, brief, category, tags, status, categoryId);
+      alertTime, content, brief, category, tags, pageId, status, categoryId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -208,6 +222,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           other.brief == this.brief &&
           other.category == this.category &&
           other.tags == this.tags &&
+          other.pageId == this.pageId &&
           other.status == this.status &&
           other.categoryId == this.categoryId);
 }
@@ -222,6 +237,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
   Value<String?> brief;
   Value<String?> category;
   Value<String?> tags;
+  Value<String?> pageId;
   Value<int> status;
   Value<int> categoryId;
   ToDosCompanion({
@@ -234,6 +250,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     this.brief = const Value.absent(),
     this.category = const Value.absent(),
     this.tags = const Value.absent(),
+    this.pageId = const Value.absent(),
     this.status = const Value.absent(),
     this.categoryId = const Value.absent(),
   });
@@ -247,6 +264,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     this.brief = const Value.absent(),
     this.category = const Value.absent(),
     this.tags = const Value.absent(),
+    this.pageId = const Value.absent(),
     required int status,
     required int categoryId,
   })  : createdTime = Value(createdTime),
@@ -263,6 +281,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     Expression<String?>? brief,
     Expression<String?>? category,
     Expression<String?>? tags,
+    Expression<String?>? pageId,
     Expression<int>? status,
     Expression<int>? categoryId,
   }) {
@@ -276,6 +295,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       if (brief != null) 'brief': brief,
       if (category != null) 'category': category,
       if (tags != null) 'tags': tags,
+      if (pageId != null) 'page_id': pageId,
       if (status != null) 'status': status,
       if (categoryId != null) 'category_id': categoryId,
     });
@@ -291,6 +311,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       Value<String?>? brief,
       Value<String?>? category,
       Value<String?>? tags,
+      Value<String?>? pageId,
       Value<int>? status,
       Value<int>? categoryId}) {
     return ToDosCompanion(
@@ -303,6 +324,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       brief: brief ?? this.brief,
       category: category ?? this.category,
       tags: tags ?? this.tags,
+      pageId: pageId ?? this.pageId,
       status: status ?? this.status,
       categoryId: categoryId ?? this.categoryId,
     );
@@ -338,6 +360,9 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     if (tags.present) {
       map['tags'] = Variable<String?>(tags.value);
     }
+    if (pageId.present) {
+      map['page_id'] = Variable<String?>(pageId.value);
+    }
     if (status.present) {
       map['status'] = Variable<int>(status.value);
     }
@@ -359,6 +384,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
           ..write('brief: $brief, ')
           ..write('category: $category, ')
           ..write('tags: $tags, ')
+          ..write('pageId: $pageId, ')
           ..write('status: $status, ')
           ..write('categoryId: $categoryId')
           ..write(')'))
@@ -420,6 +446,11 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
   late final GeneratedColumn<String?> tags = GeneratedColumn<String?>(
       'tags', aliasedName, true,
       type: const StringType(), requiredDuringInsert: false);
+  final VerificationMeta _pageIdMeta = const VerificationMeta('pageId');
+  @override
+  late final GeneratedColumn<String?> pageId = GeneratedColumn<String?>(
+      'page_id', aliasedName, true,
+      type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _statusMeta = const VerificationMeta('status');
   @override
   late final GeneratedColumn<int?> status = GeneratedColumn<int?>(
@@ -444,6 +475,7 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
         brief,
         category,
         tags,
+        pageId,
         status,
         categoryId
       ];
@@ -498,6 +530,10 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
     if (data.containsKey('tags')) {
       context.handle(
           _tagsMeta, tags.isAcceptableOrUnknown(data['tags']!, _tagsMeta));
+    }
+    if (data.containsKey('page_id')) {
+      context.handle(_pageIdMeta,
+          pageId.isAcceptableOrUnknown(data['page_id']!, _pageIdMeta));
     }
     if (data.containsKey('status')) {
       context.handle(_statusMeta,

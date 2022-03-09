@@ -9,7 +9,6 @@ import 'package:spark_list/config/config.dart';
 import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/main.dart';
-import 'package:spark_list/model/notion_model.dart';
 import 'package:spark_list/resource/data_provider.dart';
 import 'package:timezone/timezone.dart' as tz;
 
@@ -21,7 +20,6 @@ import 'package:timezone/timezone.dart' as tz;
 ///
 
 class HomeViewModel extends ViewStateModel {
-
   HomeViewModel() {
     _initMainFocus();
   }
@@ -125,7 +123,7 @@ class HomeViewModel extends ViewStateModel {
     }
   }
 
-  Future saveCategory(CategoriesCompanion entity) async{
+  Future saveCategory(CategoriesCompanion entity) async {
     return dbProvider.insertCategory(entity);
   }
 
@@ -158,7 +156,9 @@ class HomeViewModel extends ViewStateModel {
   Future updateMainFocusStatus(int status) async {
     if (mainFocusModel != null) {
       mainFocusModel!.status = status;
-      await dbProvider.updateToDoItem(mainFocusModel!.toCompanion(false));
+      await dbProvider.updateToDoItem(ToDosCompanion(
+          id: Value(mainFocusModel!.id),
+          status: Value(mainFocusModel!.status)));
       int difference = 0;
       if (status == 0) {
         difference = 1;
@@ -197,8 +197,7 @@ class HomeViewModel extends ViewStateModel {
   }
 
   Future<List<ToDo?>> queryToDoList(String? category) async {
-    List<ToDo?> toDoListModel =
-        await dbProvider.queryToDosByCategory(category);
+    List<ToDo?> toDoListModel = await dbProvider.queryToDosByCategory(category);
     indexedList[category] = toDoListModel;
     notifyListeners();
     return toDoListModel;
@@ -227,8 +226,9 @@ class HomeViewModel extends ViewStateModel {
         model.status = 0;
         break;
     }
-    await dbProvider.updateToDoItem(model.toCompanion(true),
-        updateContent: false);
+    await dbProvider.updateToDoItem(ToDosCompanion(
+        id: Value(model.id),
+        status: Value(model.status)));
     await dbProvider.updateHeatPoint(difference);
     if (model.status == 0) {
       await dbProvider.insertAction(ActionsHistoryCompanion(
@@ -245,14 +245,14 @@ class HomeViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-  Future updateTodoItem(ToDo oldModel, ToDo updatedModel) async {
-    await dbProvider.updateToDoItem(updatedModel.toCompanion(false),
-        updateContent: true);
-    await dbProvider.insertAction(ActionsHistoryCompanion(
-        earlyContent: Value(oldModel.content),
-        updatedContent: Value(updatedModel.content),
-        updatedTime: Value(DateTime.now()),
-        action: Value(2)));
+  Future updateTodoItem(ToDosCompanion oldModel, ToDosCompanion updatedModel) async {
+    await dbProvider.updateToDoItem(updatedModel);
+    if (oldModel.content != updatedModel.content)
+      await dbProvider.insertAction(ActionsHistoryCompanion(
+          earlyContent: Value(oldModel.content.value),
+          updatedContent: Value(updatedModel.content.value),
+          updatedTime: Value(DateTime.now()),
+          action: Value(2)));
   }
 
   Future queryToDoItem(int id) async {

@@ -311,7 +311,7 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
                     createdTime: dateTime,
                     categoryId: widget.categoryId,
                     status: 1,
-                    category: widget.category,
+                    category: widget.category
                   ));
             }
           }

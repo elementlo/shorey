@@ -72,9 +72,9 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-    - assets/images/
-    - assets/icons/material/
     - assets/anim/
+    - assets/icons/material/
+    - assets/images/
     - assets/json/
 
   generate: true
