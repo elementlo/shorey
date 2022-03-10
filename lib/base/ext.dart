@@ -33,7 +33,7 @@ extension ToDoExt on ToDo {
 
   bool equals(ToDo model) {
     return this.content == model.content &&
-        this.category == model.category &&
+        this.categoryId == model.categoryId &&
         this.alertTime?.millisecondsSinceEpoch ==
             model.alertTime?.millisecondsSinceEpoch;
   }

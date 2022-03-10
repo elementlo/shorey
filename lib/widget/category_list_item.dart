@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/model/model.dart';
+import 'package:spark_list/pages/add_new_item_page.dart';
 import 'package:spark_list/pages/category_info_page.dart';
 import 'package:spark_list/pages/editor_page.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
@@ -166,9 +167,7 @@ class _CategoryListItemState extends State<CategoryListItem>
       child: _shouldOpenList()!
           ? null
           : _ExpandedCategoryDemos(
-              categoryId: widget.category.id,
-              category: widget.category.name,
-              notionDatabaseId: widget.category.notionDatabaseId,
+              category: widget.category,
               demos: widget.demos,
               demoList: widget.demoList),
     );
@@ -178,16 +177,12 @@ class _CategoryListItemState extends State<CategoryListItem>
 class _ExpandedCategoryDemos extends StatefulWidget {
   _ExpandedCategoryDemos({
     Key? key,
-    this.category,
-    required this.categoryId,
+    required this.category,
     this.demos,
     this.demoList,
-    this.notionDatabaseId,
   }) : super(key: key);
 
-  final String? category;
-  final int categoryId;
-  final String? notionDatabaseId;
+  final CategoryItem category;
 
   final List<String>? demos;
 
@@ -215,7 +210,7 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
           for (int i = 0; i < widget.demoList!.length; i++)
             CategoryDemoItem(
               model: widget.demoList![i],
-              notionDatabaseId: widget.notionDatabaseId,
+              category: widget.category,
             ),
         _buildNewTaskField(context),
         const SizedBox(height: 12), // Extra space below.
@@ -256,9 +251,9 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
               child: IconButton(
                   padding: EdgeInsets.all(0),
                   onPressed: () async {
-                    final content = _controller.text.isNotEmpty
-                        ? _controller.text
-                        : S.of(context).addNewTaskTitle;
+                    // final content = _controller.text.isNotEmpty
+                    //     ? _controller.text
+                    //     : S.of(context).addNewTaskTitle;
 
                     /// unsave item now
                     // final index = await viewModel.saveToDo(
@@ -266,22 +261,14 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
                     //     dateTime: dateTime);
                     Navigator.of(context)
                         .push(MaterialPageRoute(
-                            builder: (context) => TextEditorPage(
-                                ToDo(
-                                    id: -1,
-                                    content: content,
-                                    status: 1,
-                                    category: widget.category,
-                                    categoryId: widget.categoryId,
-                                    createdTime: DateTime.now()),
-                                notionDatabaseId: widget.notionDatabaseId)))
+                            builder: (context) => AddNewItemPage(widget.category)))
                         .then((result) {
                       if (result == 0) {
                         _controller.clear();
                       }
                       context
                           .read<HomeViewModel>()
-                          .queryToDoList(widget.category);
+                          .queryToDoList(categoryId: widget.category.id);
                     });
                   },
                   icon: Icon(
@@ -294,25 +281,23 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
           if (input != '' && input != null) {
             final dateTime = DateTime.now();
             final index = await viewModel.saveToDo(ToDosCompanion(
-                categoryId: d.Value(widget.categoryId),
+                categoryId: d.Value(widget.category.id),
                 status: d.Value(1),
                 content: d.Value(input),
-                category: d.Value(widget.category),
                 createdTime: d.Value(dateTime)));
-            await viewModel.queryToDoList(widget.category);
+            await viewModel.queryToDoList(categoryId: widget.category.id);
             _controller.clear();
-            if (widget.notionDatabaseId != null &&
+            if (widget.category.notionDatabaseId != null &&
                 context.read<ConfigViewModel>().linkedNotion) {
               context.read<NotionWorkFlow>().addTaskItem(
-                  widget.notionDatabaseId!,
+                  widget.category.notionDatabaseId!,
                   ToDo(
-                    id: index,
-                    content: input,
-                    createdTime: dateTime,
-                    categoryId: widget.categoryId,
-                    status: 1,
-                    category: widget.category
-                  ));
+                      id: index,
+                      content: input,
+                      createdTime: dateTime,
+                      categoryId: widget.category.id,
+                      status: 1,
+                      tags: widget.category.name));
             }
           }
         },
@@ -419,7 +404,7 @@ class _CategoryHeader extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsetsDirectional.only(start: 8),
                         child: Text(
-                          category.name!,
+                          category.name,
                           // style: Theme.of(context).textTheme.headline5.apply(
                           // 	color: colorScheme.onSurface,
                           // ),
@@ -458,12 +443,12 @@ class _CategoryHeader extends StatelessWidget {
 }
 
 class CategoryDemoItem extends StatelessWidget {
-  CategoryDemoItem({Key? key, this.notionDatabaseId, required this.model})
+  CategoryDemoItem({Key? key, required this.category, required this.model})
       : super(key: key);
 
   final ToDo? model;
-  String? _cachedCategory;
-  String? notionDatabaseId;
+  final CategoryItem category;
+  int? _cachedCategoryId;
 
   @override
   Widget build(BuildContext context) {
@@ -476,13 +461,13 @@ class CategoryDemoItem extends StatelessWidget {
             color: Theme.of(context).colorScheme.surface,
             child: InkWell(
               onTap: () {
-                _cachedCategory = model!.category;
+                _cachedCategoryId = model!.categoryId;
                 Navigator.of(context)
                     .push(MaterialPageRoute(
-                        builder: (context) => TextEditorPage(model!,
-                            notionDatabaseId: notionDatabaseId)))
+                        builder: (context) => TextEditorPage(model!.id,
+                            category)))
                     .then((result) {
-                  context.read<HomeViewModel>().queryToDoList(_cachedCategory);
+                  context.read<HomeViewModel>().queryToDoList(categoryId: _cachedCategoryId);
                 });
               },
               child: Padding(

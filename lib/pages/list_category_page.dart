@@ -12,14 +12,18 @@ import 'package:spark_list/view_model/config_view_model.dart';
 /// Description:
 ///
 class ListCategoryPage extends StatefulWidget {
+  int categoryId;
+
+  ListCategoryPage(this.categoryId);
+
   @override
   _ListCategoryPageState createState() => _ListCategoryPageState();
 }
 
 class _ListCategoryPageState extends State<ListCategoryPage> {
-
   @override
   Widget build(BuildContext context) {
+    final categoryList = context.read<ConfigViewModel>().categoryDemosList;
     return ProviderWidget<CategoryListViewModel>(
       onModelReady: (viewModel) {},
       model: CategoryListViewModel(),
@@ -33,17 +37,19 @@ class _ListCategoryPageState extends State<ListCategoryPage> {
         body: Container(
           child: ListView(
             children: [
-              for (int i = 0; i <= 5; i++)
+              for (int i = 0; i < categoryList.length; i++)
                 _CategoryItem(
-                    title: context
-                        .read<ConfigViewModel>()
-                        .categoryDemosList[i]
-                        .name,
-                    icon: context
-                        .read<ConfigViewModel>()
-                        .categoryDemosList[i]
-                        .icon,
-                    index: i),
+                  title: categoryList[i].name,
+                  icon: categoryList[i].icon,
+                  selected: categoryList[i].id == widget.categoryId,
+                  onTap: () {
+                    widget.categoryId = categoryList[i].id;
+                    setState(() {});
+                    Future.delayed(Duration(milliseconds: 200), () {
+                      Navigator.pop(context, widget.categoryId);
+                    });
+                  },
+                ),
             ],
           ),
         ),
@@ -52,36 +58,35 @@ class _ListCategoryPageState extends State<ListCategoryPage> {
   }
 }
 
-class _CategoryItem extends StatelessWidget {
+class _CategoryItem extends StatefulWidget {
   final String? title;
-  final int? index;
   final Icon? icon;
+  final bool selected;
+  final VoidCallback? onTap;
 
-  _CategoryItem({this.title, this.index, this.icon});
+  _CategoryItem({this.title, this.icon, required this.selected, this.onTap});
 
+  @override
+  State<_CategoryItem> createState() => _CategoryItemState();
+}
+
+class _CategoryItemState extends State<_CategoryItem> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        context.read<CategoryListViewModel>().selectedCategoryIndex = index;
-        Future.delayed(Duration(milliseconds: 200),(){
-          Navigator.pop(context, title);
-        });
-      },
+      onTap: widget.onTap,
       child: Column(
         children: [
           ListTile(
-            leading: icon,
-            trailing:
-                context.watch<CategoryListViewModel>().selectedCategoryIndex ==
-                        index
-                    ? Icon(
-                        Icons.check,
-                        size: 30,
-                        color: Theme.of(context).colorScheme.onSecondary,
-                      )
-                    : null,
-            title: Text('${title}'),
+            leading: widget.icon,
+            trailing: widget.selected
+                ? Icon(
+                    Icons.check,
+                    size: 30,
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  )
+                : null,
+            title: Text('${widget.title}'),
           ),
           Divider(
             height: 1,

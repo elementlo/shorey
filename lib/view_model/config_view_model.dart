@@ -109,6 +109,7 @@ class ConfigViewModel extends ViewStateModel {
               SIcons.iconMap[element.iconId],
               color: Color(SColor.colorMap[element.colorId]!),
             ),
+            color: Color(SColor.colorMap[element.colorId]??1),
           ));
         }
       });

@@ -24,8 +24,7 @@ class HomeViewModel extends ViewStateModel {
     _initMainFocus();
   }
 
-  ToDo? selectedModel;
-  Map<String?, List<ToDo?>> indexedList = Map();
+  Map<int, List<ToDo?>> indexedList = Map();
   Map<String, int?> heatPointsMap = Map();
 
   String? _mainFocus = '';
@@ -179,7 +178,6 @@ class HomeViewModel extends ViewStateModel {
     await saveToDo(ToDosCompanion(
       categoryId: Value(1),
       content: Value(content),
-      category: Value('mainfocus'),
       status: Value(status),
     ));
     await _updateMainFocus();
@@ -196,9 +194,11 @@ class HomeViewModel extends ViewStateModel {
     return index;
   }
 
-  Future<List<ToDo?>> queryToDoList(String? category) async {
-    List<ToDo?> toDoListModel = await dbProvider.queryToDosByCategory(category);
-    indexedList[category] = toDoListModel;
+  Future<List<ToDo?>> queryToDoList({int? categoryId}) async {
+    List<ToDo?> toDoListModel =
+        await dbProvider.queryToDosByCategory(categoryId: categoryId);
+    if (categoryId != null)
+    indexedList[categoryId] = toDoListModel;
     notifyListeners();
     return toDoListModel;
   }
@@ -209,7 +209,7 @@ class HomeViewModel extends ViewStateModel {
   }
 
   Future<List<ToDo?>?> queryFiledList() async {
-    filedListModel = await dbProvider.queryToDosByCategory(null, status: 0);
+    filedListModel = await dbProvider.queryToDosByCategory(status: 0);
     notifyListeners();
     return filedListModel;
   }
@@ -226,9 +226,8 @@ class HomeViewModel extends ViewStateModel {
         model.status = 0;
         break;
     }
-    await dbProvider.updateToDoItem(ToDosCompanion(
-        id: Value(model.id),
-        status: Value(model.status)));
+    await dbProvider.updateToDoItem(
+        ToDosCompanion(id: Value(model.id), status: Value(model.status)));
     await dbProvider.updateHeatPoint(difference);
     if (model.status == 0) {
       await dbProvider.insertAction(ActionsHistoryCompanion(
@@ -245,7 +244,8 @@ class HomeViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-  Future updateTodoItem(ToDosCompanion oldModel, ToDosCompanion updatedModel) async {
+  Future updateTodoItem(
+      ToDosCompanion oldModel, ToDosCompanion updatedModel) async {
     await dbProvider.updateToDoItem(updatedModel);
     if (oldModel.content != updatedModel.content)
       await dbProvider.insertAction(ActionsHistoryCompanion(
@@ -255,15 +255,15 @@ class HomeViewModel extends ViewStateModel {
           action: Value(2)));
   }
 
-  Future queryToDoItem(int id) async {
-    selectedModel = (await dbProvider.queryToDoItem(id)).first;
+  Future<ToDo?> queryToDoItem(int id) {
+    return dbProvider.queryToDoItem(id);
   }
 
   Future<void> assembleRetrospectNotification(
     TimeOfDay alertTime,
     int weekday,
   ) async {
-    final todoList = await queryToDoList(null);
+    final todoList = await queryToDoList();
     var brief = '';
     if (todoList != null && todoList.length > 0) {
       for (var i = 0; i < todoList.length; i++) {

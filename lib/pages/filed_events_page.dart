@@ -156,14 +156,14 @@ class FiledItem extends StatelessWidget {
                       const SizedBox(
                         height: 6,
                       ),
-                      Text('${model?.category ?? ''}',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontSize: 12, color: Colors.grey.withOpacity(0.8))),
-                      const SizedBox(
-                        height: 5,
-                      ),
+                      // Text('${model?.category ?? ''}',
+                      //     maxLines: 2,
+                      //     overflow: TextOverflow.ellipsis,
+                      //     style: TextStyle(
+                      //         fontSize: 12, color: Colors.grey.withOpacity(0.8))),
+                      // const SizedBox(
+                      //   height: 5,
+                      // ),
                       Divider(
                         thickness: 1,
                         height: 1,

@@ -83,13 +83,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       restorationId: 'home_material_category_list',
                       imageString: 'assets/icons/material/material.png',
                       demoList: (viewModel
-                          .indexedList['${categoryDemosList[i].name}']),
+                          .indexedList[categoryDemosList[i].id]),
                       initiallyExpanded: false,
                       icon: categoryDemosList[i].icon,
                       onTap: (shouldOpenList) {
                         if (shouldOpenList) {
-                          viewModel.queryToDoList(
-                              '${context.read<ConfigViewModel>().categoryDemosList[i].name}');
+                          viewModel.queryToDoList(categoryId: context.read<ConfigViewModel>().categoryDemosList[i].id);
                         }
                       }),
                 ),

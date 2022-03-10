@@ -118,7 +118,6 @@ class MyApp extends StatelessWidget {
       // ),
       routes: {
         Routes.homePage: (context) => RootPage(),
-        Routes.listCategoryPage: (context) => ListCategoryPage(),
         Routes.settingsCategoryPage: (context) => SettingsCategoryPage(),
         Routes.mantraEditPage: (context) => MantraEditPage(),
       },

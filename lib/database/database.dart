@@ -30,18 +30,9 @@ class ToDos extends Table {
 
   TextColumn get brief => text().nullable()();
 
-  TextColumn get category => text().nullable()();
-
   TextColumn get tags => text().nullable()();
 
   TextColumn get pageId => text().nullable()();
-
-  //
-  // String get formatFiledTime {
-  //   var formatter = new DateFormat('yyyy-MM-dd');
-  //   return formatter
-  //       .format(DateTime.fromMillisecondsSinceEpoch(filedTime ?? 0));
-  // }
 
   ///0: finished 1: going 2: deleted
   IntColumn get status => integer()();
@@ -195,7 +186,7 @@ class DatabaseProvider extends _$DatabaseProvider {
 
   Future<ToDo?> queryTopMainFocus() async {
     ToDo? todo = await (select(toDos)
-          ..where((tbl) => tbl.category.equals('mainfocus'))
+          ..where((tbl) => tbl.categoryId.equals(1))
           ..orderBy(
               [(t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc)])
           ..limit(1))
@@ -217,7 +208,9 @@ class DatabaseProvider extends _$DatabaseProvider {
   }
 
   Future updateToDoItem(ToDosCompanion entity) {
-    entity.status == 0? entity.filedTime = Value(DateTime.now()):entity.filedTime = Value.absent();
+    entity.status == 0
+        ? entity.filedTime = Value(DateTime.now())
+        : entity.filedTime = Value.absent();
     return (update(toDos)..where((tbl) => tbl.id.equals(entity.id.value)))
         .write(entity);
   }
@@ -227,17 +220,16 @@ class DatabaseProvider extends _$DatabaseProvider {
         .write(ToDosCompanion(status: Value(updatedStatus)));
   }
 
-  Future<List<ToDo>> queryToDosByCategory(String? category,
-      {int status = 1}) async {
+  Future<List<ToDo>> queryToDosByCategory({int? categoryId, int status = 1}) async {
     return (select(toDos)
-          ..where((tbl) => category == null
+          ..where((tbl) => categoryId == null
               ? tbl.status.equals(status)
-              : tbl.category.equals(category) & tbl.status.equals(status)))
+              : tbl.categoryId.equals(categoryId) & tbl.status.equals(status)))
         .get();
   }
 
-  Future<List<ToDo>> queryToDoItem(int id) {
-    return (select(toDos)..where((tbl) => tbl.id.equals(id))).get();
+  Future<ToDo?> queryToDoItem(int id) {
+    return (select(toDos)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
   }
 
   ///0:新增 1:归档 2:更新

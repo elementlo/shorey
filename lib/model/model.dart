@@ -20,28 +20,22 @@ abstract class ModelMixin {
 }
 
 class CategoryItem {
-  String? name;
+  String name;
   String? notionDatabaseId;
   int? notionDatabaseType;
   Icon? icon;
-  Color? color;
+  Color color;
   int id;
   int colorId;
   int iconId;
 
   CategoryItem(this.id,
-      {this.name,
+      {required this.name,
       this.icon,
-      this.color,
+      required this.color,
       this.notionDatabaseId,
       this.notionDatabaseType,
       required this.colorId,
       required this.iconId});
 }
 
-class CategoryDemo {
-  int? id;
-  String? name;
-
-  CategoryDemo({this.id, this.name});
-}

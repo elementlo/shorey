@@ -126,7 +126,7 @@ class _NotionActions {
     final param = await NotionDatabaseTemplate.taskItem(databaseId,
         title: todo.content,
         brief: todo.brief ?? '',
-        tags: ['${todo.category}'],
+        tags: ['${todo.tags}'],
         statusTitle: todo.statusTitle,
         createdTime: todo.createdTime.toIso8601String(),
         reminderTime: todo.alertTime?.toIso8601String());
@@ -152,7 +152,7 @@ class _NotionActions {
     if (pageId != null && pageId != '') {
       final param = await NotionDatabaseTemplate.itemProperties(
           title: todo.content,
-          tags: ['${todo.category}'],
+          tags: ['${todo.tags}'],
           reminderTime: todo.alertTime?.toIso8601String());
       final response = await dio.patch('${notionPages}/${pageId}', data: param);
     }

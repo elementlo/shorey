@@ -15,7 +15,6 @@ class ToDo extends DataClass implements Insertable<ToDo> {
   DateTime? alertTime;
   String content;
   String? brief;
-  String? category;
   String? tags;
   String? pageId;
 
@@ -30,7 +29,6 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       this.alertTime,
       required this.content,
       this.brief,
-      this.category,
       this.tags,
       this.pageId,
       required this.status,
@@ -52,8 +50,6 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           .mapFromDatabaseResponse(data['${effectivePrefix}content'])!,
       brief: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}brief']),
-      category: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}category']),
       tags: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}tags']),
       pageId: const StringType()
@@ -82,9 +78,6 @@ class ToDo extends DataClass implements Insertable<ToDo> {
     if (!nullToAbsent || brief != null) {
       map['brief'] = Variable<String?>(brief);
     }
-    if (!nullToAbsent || category != null) {
-      map['category'] = Variable<String?>(category);
-    }
     if (!nullToAbsent || tags != null) {
       map['tags'] = Variable<String?>(tags);
     }
@@ -112,9 +105,6 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       content: Value(content),
       brief:
           brief == null && nullToAbsent ? const Value.absent() : Value(brief),
-      category: category == null && nullToAbsent
-          ? const Value.absent()
-          : Value(category),
       tags: tags == null && nullToAbsent ? const Value.absent() : Value(tags),
       pageId:
           pageId == null && nullToAbsent ? const Value.absent() : Value(pageId),
@@ -134,7 +124,6 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       alertTime: serializer.fromJson<DateTime?>(json['alertTime']),
       content: serializer.fromJson<String>(json['content']),
       brief: serializer.fromJson<String?>(json['brief']),
-      category: serializer.fromJson<String?>(json['category']),
       tags: serializer.fromJson<String?>(json['tags']),
       pageId: serializer.fromJson<String?>(json['pageId']),
       status: serializer.fromJson<int>(json['status']),
@@ -152,7 +141,6 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       'alertTime': serializer.toJson<DateTime?>(alertTime),
       'content': serializer.toJson<String>(content),
       'brief': serializer.toJson<String?>(brief),
-      'category': serializer.toJson<String?>(category),
       'tags': serializer.toJson<String?>(tags),
       'pageId': serializer.toJson<String?>(pageId),
       'status': serializer.toJson<int>(status),
@@ -168,7 +156,6 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           DateTime? alertTime,
           String? content,
           String? brief,
-          String? category,
           String? tags,
           String? pageId,
           int? status,
@@ -181,7 +168,6 @@ class ToDo extends DataClass implements Insertable<ToDo> {
         alertTime: alertTime ?? this.alertTime,
         content: content ?? this.content,
         brief: brief ?? this.brief,
-        category: category ?? this.category,
         tags: tags ?? this.tags,
         pageId: pageId ?? this.pageId,
         status: status ?? this.status,
@@ -197,7 +183,6 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           ..write('alertTime: $alertTime, ')
           ..write('content: $content, ')
           ..write('brief: $brief, ')
-          ..write('category: $category, ')
           ..write('tags: $tags, ')
           ..write('pageId: $pageId, ')
           ..write('status: $status, ')
@@ -208,7 +193,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
 
   @override
   int get hashCode => Object.hash(id, notificationId, createdTime, filedTime,
-      alertTime, content, brief, category, tags, pageId, status, categoryId);
+      alertTime, content, brief, tags, pageId, status, categoryId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -220,7 +205,6 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           other.alertTime == this.alertTime &&
           other.content == this.content &&
           other.brief == this.brief &&
-          other.category == this.category &&
           other.tags == this.tags &&
           other.pageId == this.pageId &&
           other.status == this.status &&
@@ -235,7 +219,6 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
   Value<DateTime?> alertTime;
   Value<String> content;
   Value<String?> brief;
-  Value<String?> category;
   Value<String?> tags;
   Value<String?> pageId;
   Value<int> status;
@@ -248,7 +231,6 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     this.alertTime = const Value.absent(),
     this.content = const Value.absent(),
     this.brief = const Value.absent(),
-    this.category = const Value.absent(),
     this.tags = const Value.absent(),
     this.pageId = const Value.absent(),
     this.status = const Value.absent(),
@@ -262,7 +244,6 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     this.alertTime = const Value.absent(),
     required String content,
     this.brief = const Value.absent(),
-    this.category = const Value.absent(),
     this.tags = const Value.absent(),
     this.pageId = const Value.absent(),
     required int status,
@@ -279,7 +260,6 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     Expression<DateTime?>? alertTime,
     Expression<String>? content,
     Expression<String?>? brief,
-    Expression<String?>? category,
     Expression<String?>? tags,
     Expression<String?>? pageId,
     Expression<int>? status,
@@ -293,7 +273,6 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       if (alertTime != null) 'alert_time': alertTime,
       if (content != null) 'content': content,
       if (brief != null) 'brief': brief,
-      if (category != null) 'category': category,
       if (tags != null) 'tags': tags,
       if (pageId != null) 'page_id': pageId,
       if (status != null) 'status': status,
@@ -309,7 +288,6 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       Value<DateTime?>? alertTime,
       Value<String>? content,
       Value<String?>? brief,
-      Value<String?>? category,
       Value<String?>? tags,
       Value<String?>? pageId,
       Value<int>? status,
@@ -322,7 +300,6 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       alertTime: alertTime ?? this.alertTime,
       content: content ?? this.content,
       brief: brief ?? this.brief,
-      category: category ?? this.category,
       tags: tags ?? this.tags,
       pageId: pageId ?? this.pageId,
       status: status ?? this.status,
@@ -354,9 +331,6 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     if (brief.present) {
       map['brief'] = Variable<String?>(brief.value);
     }
-    if (category.present) {
-      map['category'] = Variable<String?>(category.value);
-    }
     if (tags.present) {
       map['tags'] = Variable<String?>(tags.value);
     }
@@ -382,7 +356,6 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
           ..write('alertTime: $alertTime, ')
           ..write('content: $content, ')
           ..write('brief: $brief, ')
-          ..write('category: $category, ')
           ..write('tags: $tags, ')
           ..write('pageId: $pageId, ')
           ..write('status: $status, ')
@@ -436,11 +409,6 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
   late final GeneratedColumn<String?> brief = GeneratedColumn<String?>(
       'brief', aliasedName, true,
       type: const StringType(), requiredDuringInsert: false);
-  final VerificationMeta _categoryMeta = const VerificationMeta('category');
-  @override
-  late final GeneratedColumn<String?> category = GeneratedColumn<String?>(
-      'category', aliasedName, true,
-      type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _tagsMeta = const VerificationMeta('tags');
   @override
   late final GeneratedColumn<String?> tags = GeneratedColumn<String?>(
@@ -473,7 +441,6 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
         alertTime,
         content,
         brief,
-        category,
         tags,
         pageId,
         status,
@@ -522,10 +489,6 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
     if (data.containsKey('brief')) {
       context.handle(
           _briefMeta, brief.isAcceptableOrUnknown(data['brief']!, _briefMeta));
-    }
-    if (data.containsKey('category')) {
-      context.handle(_categoryMeta,
-          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
     }
     if (data.containsKey('tags')) {
       context.handle(

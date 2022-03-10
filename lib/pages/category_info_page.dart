@@ -54,7 +54,7 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
   void initState() {
     super.initState();
     if (widget.editingItem != null) {
-      _controller.text = widget.editingItem!.name!;
+      _controller.text = widget.editingItem!.name;
     }
     _controller.addListener(() {
       _showConfirm = _controller.text.isNotEmpty;

@@ -7,28 +7,25 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:spark_list/base/ext.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/model/model.dart';
-import 'package:spark_list/pages/root_page.dart';
+import 'package:spark_list/pages/editor_page.dart';
+import 'package:spark_list/pages/list_category_page.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 import 'package:spark_list/widget/category_list_item.dart';
 import 'package:spark_list/widget/customized_date_picker.dart';
 import 'package:spark_list/widget/settings_list_item.dart';
-import 'package:spark_list/workflow/notion_workflow.dart';
 import 'package:timezone/timezone.dart' as tz;
-
-import 'list_category_page.dart';
 
 ///
 /// Author: Elemen
 /// Github: https://github.com/elementlo
-/// Date: 4/12/21
+/// Date: 2022/3/9
 /// Description:
 ///
 
@@ -37,17 +34,16 @@ enum _ExpandableSetting {
   time,
 }
 
-class TextEditorPage extends StatefulWidget {
+class AddNewItemPage extends StatefulWidget {
   final CategoryItem category;
-  final int itemId;
 
-  TextEditorPage(this.itemId, this.category);
+  const AddNewItemPage(this.category, {Key? key}) : super(key: key);
 
   @override
-  _TextEditorPageState createState() => _TextEditorPageState();
+  State<AddNewItemPage> createState() => _AddNewItemPageState();
 }
 
-class _TextEditorPageState extends State<TextEditorPage>
+class _AddNewItemPageState extends State<AddNewItemPage>
     with TickerProviderStateMixin {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _briefController = TextEditingController();
@@ -60,30 +56,15 @@ class _TextEditorPageState extends State<TextEditorPage>
 
   TimeOfDay _time = TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 1);
   String _selectedDate = '';
-  ToDo? _oldModel;
-  ToDo? _updatedModel;
-  String _categoryName = '';
+  late int _categoryId;
   Color _categoryColor = Colors.white;
+  String _categoryName = '';
 
   @override
   void initState() {
     super.initState();
-
-    context.read<HomeViewModel>().queryToDoItem(widget.itemId).then((value) {
-      _updatedModel = value!;
-      if (_updatedModel!.alertTime != null) {
-        DateTime _alertDateTime = _updatedModel!.alertTime!;
-        _selectedDate =
-            '${_alertDateTime.year}-${_alertDateTime.month.toString().padLeft(2, '0')}'
-            '-${_alertDateTime.day.toString().padLeft(2, '0')}';
-        _time = TimeOfDay.fromDateTime(_alertDateTime);
-      }
-      _titleController.text = _updatedModel!.content;
-      _briefController.text = _updatedModel!.brief ?? '';
-      _mapCategory();
-      setState(() {});
-    });
-
+    _categoryId = widget.category.id;
+    _mapCategory();
     _settingsPanelController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
@@ -169,7 +150,6 @@ class _TextEditorPageState extends State<TextEditorPage>
                 color: colorScheme.onSecondary,
               ),
               onPressed: () async {
-                _syncWithNotion(await _updateItem());
                 Navigator.pop(context, 0);
               }),
         ],
@@ -208,16 +188,15 @@ class _TextEditorPageState extends State<TextEditorPage>
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: EditorTableRow(
-                title: '${_categoryName}',
+                title: _categoryName,
                 indicatorColor: _categoryColor,
                 onTap: () {
                   Navigator.of(context)
                       .push(MaterialPageRoute(
-                          builder: (context) =>
-                              ListCategoryPage(_updatedModel!.categoryId)))
+                          builder: (context) => ListCategoryPage(_categoryId)))
                       .then((result) {
                     if (result != null) {
-                      _updatedModel!.categoryId = result;
+                      _categoryId = result;
                       _mapCategory();
                       setState(() {});
                     }
@@ -241,6 +220,79 @@ class _TextEditorPageState extends State<TextEditorPage>
     );
   }
 
+  Future _saveItem() async {
+    // _updatedModel!.brief = _briefController.text;
+    // _updatedModel!.content = _titleController.text;
+    String? alertTime = null;
+    int? notificationId;
+    if (_selectedDate.isNotEmpty) {
+      notificationId =
+          DateTime.now().millisecond * 1000 + DateTime.now().microsecond;
+      //_updatedModel!.notificationId ??= notificationId;
+      alertTime = '$_selectedDate ${_time.format(context)}';
+      print(
+          'alerttime: $alertTime notificationId: ${notificationId}');
+      await _setNotification(DateTime.parse(alertTime), notificationId)
+          .catchError((onError) {
+        debugPrint('${onError}');
+      });
+    }
+
+    // _updatedModel!.alertTime =
+    //     alertTime == null ? null : DateTime.parse(alertTime);
+    var index = -1;
+    index = await context.read<HomeViewModel>().saveToDo(ToDosCompanion(
+          categoryId: d.Value(_categoryId),
+          content: d.Value(_titleController.text),
+          createdTime: d.Value(DateTime.now()),
+          status: d.Value(1),
+          brief: d.Value(_briefController.text),
+          alertTime: d.Value(alertTime == null ? null : DateTime.parse(alertTime)),
+        ));
+
+    return index;
+  }
+
+  // Future<void> _syncWithNotion(int index) async {
+  //   if (widget.category.notionDatabaseId != null &&
+  //       context.read<ConfigViewModel>().linkedNotion) {
+  //     if (_updatedModel!.id == -1) {
+  //       final pageId = await context.read<NotionWorkFlow>().addTaskItem(
+  //           widget.category.notionDatabaseId!,
+  //           ToDo(
+  //             id: 0,
+  //             content: _updatedModel!.content,
+  //             createdTime: _updatedModel!.createdTime,
+  //             categoryId: _updatedModel!.categoryId,
+  //             status: 1,
+  //             tags: widget.category.name,
+  //             brief: _updatedModel!.brief,
+  //             alertTime: _updatedModel!.alertTime,
+  //           ));
+  //       if (index != -1) {
+  //         _updatePageId(index, pageId);
+  //       }
+  //     } else {
+  //       if (!_updatedModel!.equals(_oldModel!)) {
+  //         _updatedModel!.tags = widget.category.name;
+  //         context
+  //             .read<NotionWorkFlow>()
+  //             .updateTaskProperties(_updatedModel!.pageId, _updatedModel!);
+  //       }
+  //     }
+  //   }
+  // }
+
+  // Future _updatePageId(int index, String? pageId) async {
+  //   if (pageId != null) {
+  //     final companion =
+  //     ToDosCompanion(id: d.Value(index), pageId: d.Value(pageId));
+  //     await appContext
+  //         .read<HomeViewModel>()
+  //         .updateTodoItem(companion, companion);
+  //   }
+  // }
+
   Future<void> _setNotification(DateTime alertTime, int notificationId) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
         notificationId,
@@ -261,60 +313,6 @@ class _TextEditorPageState extends State<TextEditorPage>
 
   Future<void> _cancelNotification(int notificationId) async {
     await flutterLocalNotificationsPlugin.cancel(notificationId);
-  }
-
-  Future _updateItem() async {
-    _oldModel = _updatedModel!.copyWith();
-    _updatedModel!.brief = _briefController.text;
-    _updatedModel!.content = _titleController.text;
-    String? alertTime = null;
-    if (_selectedDate.isNotEmpty) {
-      final notificationId =
-          DateTime.now().millisecond * 1000 + DateTime.now().microsecond;
-      _updatedModel!.notificationId ??= notificationId;
-      alertTime = '$_selectedDate ${_time.format(context)}';
-      print(
-          'alerttime: $alertTime notificationId: ${_updatedModel!.notificationId}');
-      await _setNotification(DateTime.parse(alertTime), notificationId)
-          .catchError((onError) {
-        debugPrint('${onError}');
-      });
-    } else {
-      if (_updatedModel!.notificationId != null) {
-        await _cancelNotification(_updatedModel!.notificationId!);
-      }
-      _updatedModel!.notificationId = null;
-    }
-
-    _updatedModel!.alertTime =
-        alertTime == null ? null : DateTime.parse(alertTime);
-    var index = -1;
-    if (_updatedModel!.id == -1) {
-      index = await context.read<HomeViewModel>().saveToDo(ToDosCompanion(
-          categoryId: d.Value(_updatedModel!.categoryId),
-          content: d.Value(_updatedModel!.content),
-          createdTime: d.Value(DateTime.now()),
-          status: d.Value(1),
-          brief: d.Value(_updatedModel!.brief),
-          alertTime: d.Value(_updatedModel!.alertTime),
-          notificationId: d.Value(_updatedModel!.notificationId)));
-    } else {
-      await context.read<HomeViewModel>().updateTodoItem(
-          _oldModel!.toCompanion(false), _updatedModel!.toCompanion(false));
-    }
-    return index;
-  }
-
-  Future<void> _syncWithNotion(int index) async {
-    if (widget.category.notionDatabaseId != null &&
-        context.read<ConfigViewModel>().linkedNotion) {
-      if (!_updatedModel!.equals(_oldModel!)) {
-        _updatedModel!.tags = widget.category.name;
-        context
-            .read<NotionWorkFlow>()
-            .updateTaskProperties(_updatedModel!.pageId, _updatedModel!);
-      }
-    }
   }
 
   void _onTapSetting(_ExpandableSetting settingId) {
@@ -344,98 +342,10 @@ class _TextEditorPageState extends State<TextEditorPage>
   void _mapCategory() {
     for (CategoryItem item
         in context.read<ConfigViewModel>().categoryDemosList) {
-      if (_updatedModel?.categoryId == item.id) {
+      if (_categoryId == item.id) {
         _categoryName = item.name;
         _categoryColor = item.color;
       }
     }
-  }
-}
-
-class InputField extends StatelessWidget {
-  final String? hintText;
-  final int maxLines;
-  final TextEditingController? textEditingController;
-
-  InputField({this.hintText, this.maxLines = 1, this.textEditingController});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: TextField(
-            controller: textEditingController,
-            keyboardType: TextInputType.multiline,
-            maxLines: maxLines,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: '$hintText',
-                hintStyle: TextStyle(color: Colors.grey)),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class EditorTableRow extends StatefulWidget {
-  const EditorTableRow(
-      {Key? key,
-      this.todoModel,
-      this.onTap,
-      required this.title,
-      required this.indicatorColor})
-      : super(key: key);
-
-  final ToDo? todoModel;
-  final String title;
-  final Color indicatorColor;
-  final VoidCallback? onTap;
-
-  @override
-  EditorTableRowState createState() => EditorTableRowState();
-}
-
-class EditorTableRowState extends State<EditorTableRow> {
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(8),
-      child: InkWell(
-        onTap: widget.onTap,
-        child: Container(
-          height: 55,
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: [
-              Expanded(child: Text(S.of(context).categoryList)),
-              Container(
-                height: 10,
-                width: 10,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle, color: widget.indicatorColor),
-              ),
-              SizedBox(
-                width: 8,
-              ),
-              Text(
-                '${widget.title}',
-                style: TextStyle(color: Colors.grey),
-              ),
-              SizedBox(
-                width: 8,
-              ),
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 14,
-                color: Theme.of(context).colorScheme.onSecondary,
-              )
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }
