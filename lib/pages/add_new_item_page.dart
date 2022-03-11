@@ -14,12 +14,14 @@ import 'package:spark_list/main.dart';
 import 'package:spark_list/model/model.dart';
 import 'package:spark_list/pages/editor_page.dart';
 import 'package:spark_list/pages/list_category_page.dart';
+import 'package:spark_list/pages/root_page.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 import 'package:spark_list/widget/category_list_item.dart';
 import 'package:spark_list/widget/customized_date_picker.dart';
 import 'package:spark_list/widget/settings_list_item.dart';
+import 'package:spark_list/workflow/notion_workflow.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 ///
@@ -36,8 +38,9 @@ enum _ExpandableSetting {
 
 class AddNewItemPage extends StatefulWidget {
   final CategoryItem category;
+  final String? title;
 
-  const AddNewItemPage(this.category, {Key? key}) : super(key: key);
+  const AddNewItemPage(this.category, {Key? key, this.title}) : super(key: key);
 
   @override
   State<AddNewItemPage> createState() => _AddNewItemPageState();
@@ -59,11 +62,15 @@ class _AddNewItemPageState extends State<AddNewItemPage>
   late int _categoryId;
   Color _categoryColor = Colors.white;
   String _categoryName = '';
+  ToDosCompanion? companion;
 
   @override
   void initState() {
     super.initState();
     _categoryId = widget.category.id;
+    if(widget.title != null){
+      _titleController.text = widget.title!;
+    }
     _mapCategory();
     _settingsPanelController = AnimationController(
       vsync: this,
@@ -150,6 +157,7 @@ class _AddNewItemPageState extends State<AddNewItemPage>
                 color: colorScheme.onSecondary,
               ),
               onPressed: () async {
+                _syncWithNotion(await _saveItem());
                 Navigator.pop(context, 0);
               }),
         ],
@@ -221,77 +229,65 @@ class _AddNewItemPageState extends State<AddNewItemPage>
   }
 
   Future _saveItem() async {
-    // _updatedModel!.brief = _briefController.text;
-    // _updatedModel!.content = _titleController.text;
     String? alertTime = null;
     int? notificationId;
     if (_selectedDate.isNotEmpty) {
       notificationId =
           DateTime.now().millisecond * 1000 + DateTime.now().microsecond;
-      //_updatedModel!.notificationId ??= notificationId;
-      alertTime = '$_selectedDate ${_time.format(context)}';
-      print(
-          'alerttime: $alertTime notificationId: ${notificationId}');
+      final MaterialLocalizations localizations = MaterialLocalizations.of(context);
+      alertTime = '$_selectedDate ${localizations.formatTimeOfDay(_time, alwaysUse24HourFormat: true)}';
+      print('alerttime: $alertTime notificationId: ${notificationId}');
       await _setNotification(DateTime.parse(alertTime), notificationId)
           .catchError((onError) {
         debugPrint('${onError}');
       });
     }
-
-    // _updatedModel!.alertTime =
-    //     alertTime == null ? null : DateTime.parse(alertTime);
     var index = -1;
-    index = await context.read<HomeViewModel>().saveToDo(ToDosCompanion(
-          categoryId: d.Value(_categoryId),
-          content: d.Value(_titleController.text),
-          createdTime: d.Value(DateTime.now()),
-          status: d.Value(1),
-          brief: d.Value(_briefController.text),
-          alertTime: d.Value(alertTime == null ? null : DateTime.parse(alertTime)),
-        ));
-
+    companion = ToDosCompanion(
+      categoryId: d.Value(_categoryId),
+      content: d.Value(_titleController.text),
+      createdTime: d.Value(DateTime.now()),
+      status: d.Value(1),
+      brief: d.Value(_briefController.text),
+      alertTime: d.Value(alertTime == null ? null : DateTime.parse(alertTime)),
+      notificationId: d.Value(notificationId),
+      tags: d.Value(_categoryName),
+    );
+    index = await context.read<HomeViewModel>().saveToDo(companion!);
     return index;
   }
 
-  // Future<void> _syncWithNotion(int index) async {
-  //   if (widget.category.notionDatabaseId != null &&
-  //       context.read<ConfigViewModel>().linkedNotion) {
-  //     if (_updatedModel!.id == -1) {
-  //       final pageId = await context.read<NotionWorkFlow>().addTaskItem(
-  //           widget.category.notionDatabaseId!,
-  //           ToDo(
-  //             id: 0,
-  //             content: _updatedModel!.content,
-  //             createdTime: _updatedModel!.createdTime,
-  //             categoryId: _updatedModel!.categoryId,
-  //             status: 1,
-  //             tags: widget.category.name,
-  //             brief: _updatedModel!.brief,
-  //             alertTime: _updatedModel!.alertTime,
-  //           ));
-  //       if (index != -1) {
-  //         _updatePageId(index, pageId);
-  //       }
-  //     } else {
-  //       if (!_updatedModel!.equals(_oldModel!)) {
-  //         _updatedModel!.tags = widget.category.name;
-  //         context
-  //             .read<NotionWorkFlow>()
-  //             .updateTaskProperties(_updatedModel!.pageId, _updatedModel!);
-  //       }
-  //     }
-  //   }
-  // }
+  Future<void> _syncWithNotion(int index) async {
+    if (widget.category.notionDatabaseId != null &&
+        context.read<ConfigViewModel>().linkedNotion &&
+        companion != null) {
+      final pageId = await context.read<NotionWorkFlow>().addTaskItem(
+          widget.category.notionDatabaseId!,
+          ToDo(
+            id: 0,
+            content: companion!.content.value,
+            createdTime: companion!.createdTime.value,
+            categoryId: companion!.categoryId.value,
+            status: 1,
+            tags: _categoryName,
+            brief: companion!.brief.value,
+            alertTime: companion!.alertTime.value,
+          ));
+      if (index != -1) {
+        _updatePageId(index, pageId);
+      }
+    }
+  }
 
-  // Future _updatePageId(int index, String? pageId) async {
-  //   if (pageId != null) {
-  //     final companion =
-  //     ToDosCompanion(id: d.Value(index), pageId: d.Value(pageId));
-  //     await appContext
-  //         .read<HomeViewModel>()
-  //         .updateTodoItem(companion, companion);
-  //   }
-  // }
+  Future _updatePageId(int index, String? pageId) async {
+    if (pageId != null) {
+      final companion =
+          ToDosCompanion(id: d.Value(index), pageId: d.Value(pageId));
+      await appContext
+          .read<HomeViewModel>()
+          .updateTodoItem(companion, companion);
+    }
+  }
 
   Future<void> _setNotification(DateTime alertTime, int notificationId) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
@@ -309,10 +305,6 @@ class _AddNewItemPageState extends State<AddNewItemPage>
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime);
-  }
-
-  Future<void> _cancelNotification(int notificationId) async {
-    await flutterLocalNotificationsPlugin.cancel(notificationId);
   }
 
   void _onTapSetting(_ExpandableSetting settingId) {

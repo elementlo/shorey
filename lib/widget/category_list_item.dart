@@ -8,6 +8,7 @@ import 'package:spark_list/model/model.dart';
 import 'package:spark_list/pages/add_new_item_page.dart';
 import 'package:spark_list/pages/category_info_page.dart';
 import 'package:spark_list/pages/editor_page.dart';
+import 'package:spark_list/pages/root_page.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/workflow/notion_workflow.dart';
 
@@ -218,6 +219,16 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
     );
   }
 
+  Future _updatePageId(int index, String? pageId) async {
+    if (pageId != null) {
+      final companion =
+      ToDosCompanion(id: d.Value(index), pageId: d.Value(pageId));
+      await appContext
+          .read<HomeViewModel>()
+          .updateTodoItem(companion, companion);
+    }
+  }
+
   Widget _buildNewTaskField(BuildContext context) {
     final viewModel = Provider.of<HomeViewModel>(context, listen: false);
     return Container(
@@ -261,7 +272,7 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
                     //     dateTime: dateTime);
                     Navigator.of(context)
                         .push(MaterialPageRoute(
-                            builder: (context) => AddNewItemPage(widget.category)))
+                            builder: (context) => AddNewItemPage(widget.category, title: _controller.text)))
                         .then((result) {
                       if (result == 0) {
                         _controller.clear();
@@ -289,7 +300,7 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
             _controller.clear();
             if (widget.category.notionDatabaseId != null &&
                 context.read<ConfigViewModel>().linkedNotion) {
-              context.read<NotionWorkFlow>().addTaskItem(
+             final pageId =  await context.read<NotionWorkFlow>().addTaskItem(
                   widget.category.notionDatabaseId!,
                   ToDo(
                       id: index,
@@ -298,6 +309,7 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
                       categoryId: widget.category.id,
                       status: 1,
                       tags: widget.category.name));
+              await _updatePageId(index, pageId);
             }
           }
         },

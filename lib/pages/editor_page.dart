@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:day_night_time_picker/day_night_time_picker.dart';
-import 'package:drift/drift.dart' as d;
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,7 +12,6 @@ import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/model/model.dart';
-import 'package:spark_list/pages/root_page.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
@@ -71,6 +69,7 @@ class _TextEditorPageState extends State<TextEditorPage>
 
     context.read<HomeViewModel>().queryToDoItem(widget.itemId).then((value) {
       _updatedModel = value!;
+      _oldModel = _updatedModel!.copyWith();
       if (_updatedModel!.alertTime != null) {
         DateTime _alertDateTime = _updatedModel!.alertTime!;
         _selectedDate =
@@ -148,94 +147,98 @@ class _TextEditorPageState extends State<TextEditorPage>
               }),
         ),
     ];
-    return Scaffold(
-      appBar: SparkAppBar(
-        context: context,
-        title: '${widget.category.name}',
-        actions: [
-          IconButton(
-              icon: Icon(
-                Icons.alarm_off,
-                color: colorScheme.onSecondary,
-              ),
-              onPressed: () {
-                _selectedDate = '';
-                setState(() {});
-                Fluttertoast.showToast(msg: S.of(context).cancelAlertTime);
-              }),
-          IconButton(
-              icon: Icon(
-                Icons.check,
-                color: colorScheme.onSecondary,
-              ),
-              onPressed: () async {
-                _syncWithNotion(await _updateItem());
-                Navigator.pop(context, 0);
-              }),
-        ],
-      ),
-      body: Container(
-        padding: EdgeInsets.symmetric(vertical: 16),
-        child: ListView(
-          controller: _controller,
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              margin: EdgeInsets.symmetric(horizontal: 16),
-              height: 300,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8), color: Colors.white),
-              child: Column(
-                children: [
-                  InputField(
-                    hintText: S.of(context).itemAlert,
-                    textEditingController: _titleController,
-                  ),
-                  Divider(
-                    color: colorScheme.background,
-                  ),
-                  InputField(
-                    hintText: S.of(context).itemRemark,
-                    maxLines: 8,
-                    textEditingController: _briefController,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: EditorTableRow(
-                title: '${_categoryName}',
-                indicatorColor: _categoryColor,
-                onTap: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(
-                          builder: (context) =>
-                              ListCategoryPage(_updatedModel!.categoryId)))
-                      .then((result) {
-                    if (result != null) {
-                      _updatedModel!.categoryId = result;
-                      _mapCategory();
-                      setState(() {});
-                    }
-                  });
-                },
-              ),
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            ...[
-              AnimateSettingsListItems(
-                animation: _staggerSettingsItemsAnimation,
-                children: settingsListItems,
-              ),
-              const SizedBox(height: 16),
-            ],
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+      child: Scaffold(
+        appBar: SparkAppBar(
+          context: context,
+          title: '${widget.category.name}',
+          actions: [
+            IconButton(
+                icon: Icon(
+                  Icons.alarm_off,
+                  color: colorScheme.onSecondary,
+                ),
+                onPressed: () {
+                  _selectedDate = '';
+                  setState(() {});
+                  Fluttertoast.showToast(msg: S.of(context).cancelAlertTime);
+                }),
+            IconButton(
+                icon: Icon(
+                  Icons.check,
+                  color: colorScheme.onSecondary,
+                ),
+                onPressed: () async {
+                  await _updateItem();
+                  _syncWithNotion();
+                  Navigator.pop(context, 0);
+                }),
           ],
+        ),
+        body: Container(
+          padding: EdgeInsets.symmetric(vertical: 16),
+          child: ListView(
+            controller: _controller,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                margin: EdgeInsets.symmetric(horizontal: 16),
+                height: 300,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8), color: Colors.white),
+                child: Column(
+                  children: [
+                    InputField(
+                      hintText: S.of(context).itemAlert,
+                      textEditingController: _titleController,
+                    ),
+                    Divider(
+                      color: colorScheme.background,
+                    ),
+                    InputField(
+                      hintText: S.of(context).itemRemark,
+                      maxLines: 8,
+                      textEditingController: _briefController,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: EditorTableRow(
+                  title: '${_categoryName}',
+                  indicatorColor: _categoryColor,
+                  onTap: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(
+                            builder: (context) =>
+                                ListCategoryPage(_updatedModel!.categoryId)))
+                        .then((result) {
+                      if (result != null) {
+                        _updatedModel!.categoryId = result;
+                        _mapCategory();
+                        setState(() {});
+                      }
+                    });
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              ...[
+                AnimateSettingsListItems(
+                  animation: _staggerSettingsItemsAnimation,
+                  children: settingsListItems,
+                ),
+                const SizedBox(height: 16),
+              ],
+            ],
+          ),
         ),
       ),
     );
@@ -264,7 +267,7 @@ class _TextEditorPageState extends State<TextEditorPage>
   }
 
   Future _updateItem() async {
-    _oldModel = _updatedModel!.copyWith();
+    //_oldModel = _updatedModel!.copyWith();
     _updatedModel!.brief = _briefController.text;
     _updatedModel!.content = _titleController.text;
     String? alertTime = null;
@@ -272,7 +275,8 @@ class _TextEditorPageState extends State<TextEditorPage>
       final notificationId =
           DateTime.now().millisecond * 1000 + DateTime.now().microsecond;
       _updatedModel!.notificationId ??= notificationId;
-      alertTime = '$_selectedDate ${_time.format(context)}';
+      final MaterialLocalizations localizations = MaterialLocalizations.of(context);
+      alertTime = '$_selectedDate ${localizations.formatTimeOfDay(_time, alwaysUse24HourFormat: true)}';
       print(
           'alerttime: $alertTime notificationId: ${_updatedModel!.notificationId}');
       await _setNotification(DateTime.parse(alertTime), notificationId)
@@ -288,28 +292,16 @@ class _TextEditorPageState extends State<TextEditorPage>
 
     _updatedModel!.alertTime =
         alertTime == null ? null : DateTime.parse(alertTime);
-    var index = -1;
-    if (_updatedModel!.id == -1) {
-      index = await context.read<HomeViewModel>().saveToDo(ToDosCompanion(
-          categoryId: d.Value(_updatedModel!.categoryId),
-          content: d.Value(_updatedModel!.content),
-          createdTime: d.Value(DateTime.now()),
-          status: d.Value(1),
-          brief: d.Value(_updatedModel!.brief),
-          alertTime: d.Value(_updatedModel!.alertTime),
-          notificationId: d.Value(_updatedModel!.notificationId)));
-    } else {
-      await context.read<HomeViewModel>().updateTodoItem(
-          _oldModel!.toCompanion(false), _updatedModel!.toCompanion(false));
-    }
-    return index;
+
+     await context.read<HomeViewModel>().updateTodoItem(
+        _oldModel!.toCompanion(false), _updatedModel!.toCompanion(false));
   }
 
-  Future<void> _syncWithNotion(int index) async {
+  Future<void> _syncWithNotion() async {
     if (widget.category.notionDatabaseId != null &&
         context.read<ConfigViewModel>().linkedNotion) {
       if (!_updatedModel!.equals(_oldModel!)) {
-        _updatedModel!.tags = widget.category.name;
+        _updatedModel!.tags = _categoryName;
         context
             .read<NotionWorkFlow>()
             .updateTaskProperties(_updatedModel!.pageId, _updatedModel!);

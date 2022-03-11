@@ -84,22 +84,25 @@ class NotionDatabaseTemplate {
     String? reminderTime,
   }) {
     final map = Map<String, dynamic>();
+    map[jProperties] = {};
     if (title != null && title.isNotEmpty) {
-      map[jTitle] = {
+      map[jProperties][jTitle] = {
         'title': [
-          {'text': '${title}'}
+          {
+            'text': {'content': '${title}'}
+          }
         ]
       };
     }
     if (tags != null && tags.length > 0) {
-      map[jTags] = {
+      map[jProperties][jTags] = {
         'multi_select': [
           {'name': '${tags[0]}'}
         ]
       };
     }
     if (reminderTime != null && reminderTime.isNotEmpty) {
-      map[jReminderTime] = {
+      map[jProperties][jReminderTime] = {
         "date": {
           "start": "${reminderTime}",
         }
