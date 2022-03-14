@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' as d;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:linkwell/linkwell.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
@@ -222,7 +223,7 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
   Future _updatePageId(int index, String? pageId) async {
     if (pageId != null) {
       final companion =
-      ToDosCompanion(id: d.Value(index), pageId: d.Value(pageId));
+          ToDosCompanion(id: d.Value(index), pageId: d.Value(pageId));
       await appContext
           .read<HomeViewModel>()
           .updateTodoItem(companion, companion);
@@ -262,17 +263,12 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
               child: IconButton(
                   padding: EdgeInsets.all(0),
                   onPressed: () async {
-                    // final content = _controller.text.isNotEmpty
-                    //     ? _controller.text
-                    //     : S.of(context).addNewTaskTitle;
-
                     /// unsave item now
-                    // final index = await viewModel.saveToDo(
-                    //     widget.categoryId, content, widget.category,
-                    //     dateTime: dateTime);
                     Navigator.of(context)
                         .push(MaterialPageRoute(
-                            builder: (context) => AddNewItemPage(widget.category, title: _controller.text)))
+                            builder: (context) => AddNewItemPage(
+                                widget.category,
+                                title: _controller.text)))
                         .then((result) {
                       if (result == 0) {
                         _controller.clear();
@@ -300,7 +296,7 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
             _controller.clear();
             if (widget.category.notionDatabaseId != null &&
                 context.read<ConfigViewModel>().linkedNotion) {
-             final pageId =  await context.read<NotionWorkFlow>().addTaskItem(
+              final pageId = await context.read<NotionWorkFlow>().addTaskItem(
                   widget.category.notionDatabaseId!,
                   ToDo(
                       id: index,
@@ -476,10 +472,12 @@ class CategoryDemoItem extends StatelessWidget {
                 _cachedCategoryId = model!.categoryId;
                 Navigator.of(context)
                     .push(MaterialPageRoute(
-                        builder: (context) => TextEditorPage(model!.id,
-                            category)))
+                        builder: (context) =>
+                            TextEditorPage(model!.id, category)))
                     .then((result) {
-                  context.read<HomeViewModel>().queryToDoList(categoryId: _cachedCategoryId);
+                  context
+                      .read<HomeViewModel>()
+                      .queryToDoList(categoryId: _cachedCategoryId);
                 });
               },
               child: Padding(
@@ -509,7 +507,7 @@ class CategoryDemoItem extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          LinkWell(
                             model!.content,
                             style: TextStyle(
                                 decoration: model!.status == 0
@@ -520,12 +518,15 @@ class CategoryDemoItem extends StatelessWidget {
                                     : Colors.black),
                           ),
                           if (model!.brief != null && model!.brief != '')
-                            Text(
+                            LinkWell(
                               model!.brief ?? '',
                               maxLines: 3,
-                              style: textTheme.overline!.apply(
-                                color: colorScheme.onSurface.withOpacity(0.5),
-                              ),
+                              linkStyle:
+                                  TextStyle(fontSize: 14, color: Colors.blue),
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  color:
+                                      colorScheme.onSurface.withOpacity(0.5)),
                             ),
                           const SizedBox(height: 10),
                           Divider(

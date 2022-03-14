@@ -31,10 +31,14 @@ extension ToDoExt on ToDo {
     return title;
   }
 
-  bool equals(ToDo model) {
+  bool properTiesEquals(ToDo model) {
     return this.content == model.content &&
         this.categoryId == model.categoryId &&
         this.alertTime?.millisecondsSinceEpoch ==
             model.alertTime?.millisecondsSinceEpoch;
+  }
+
+  bool briefEquals(ToDo model){
+    return this.brief == model.brief;
   }
 }

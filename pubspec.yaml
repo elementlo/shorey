@@ -49,6 +49,7 @@ dependencies:
   path: ^1.8.0
   ionicons: ^0.1.2
   dio: ^4.0.4
+  linkwell: ^2.0.6
 
 dev_dependencies:
   flutter_test:
@@ -76,6 +77,7 @@ flutter:
     - assets/icons/material/
     - assets/images/
     - assets/json/
+    - assets/json/notion_block_children.json
 
   generate: true
   # An image asset can refer to one or more resolution-specific "variants", see

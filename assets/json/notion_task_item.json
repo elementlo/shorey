@@ -40,10 +40,7 @@
           {
             "type": "text",
             "text": {
-              "content": "?",
-              "link": {
-                "url": "https://en.wikipedia.org/wiki/Lacinato_kale"
-              }
+              "content": "?"
             }
           }
         ]

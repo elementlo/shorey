@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 class NotionDatabaseTemplate {
   static const String jsonTaskList = 'assets/json/notion_task_list.json';
   static const String jsonTaskItem = 'assets/json/notion_task_item.json';
+  static const String jsonBlockChildren = 'assets/json/notion_block_children.json';
 
   static const String jPageId = 'page_id';
   static const String jParent = 'parent';
@@ -109,5 +110,18 @@ class NotionDatabaseTemplate {
       };
     }
     return map;
+  }
+
+  static dynamic blockChildren({required String text}) async {
+    final json = await rootBundle.loadString(jsonBlockChildren);
+    if (json != null) {
+      final map = jsonDecode(json);
+      map[jTypeChildren][0][jTypeParagraph][jTypeRichText][1][jTypeText][jTypeContent] = '''
+${DateTime.now().toIso8601String()}
+${text}
+      ''';
+      return map;
+    }
+    return null;
   }
 }

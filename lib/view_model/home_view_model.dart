@@ -174,14 +174,17 @@ class HomeViewModel extends ViewStateModel {
     }
   }
 
-  Future saveMainFocus(String content, {int status = 1}) async {
-    await saveToDo(ToDosCompanion(
+  Future<int?> saveMainFocus(String content, {int status = 1}) async {
+    final index = await saveToDo(ToDosCompanion(
       categoryId: Value(1),
       content: Value(content),
       status: Value(status),
+      createdTime: Value(DateTime.now()),
+      tags:Value('mainfocus'),
     ));
     await _updateMainFocus();
     notifyListeners();
+    return index;
   }
 
   Future<int> saveToDo(ToDosCompanion todo) async {

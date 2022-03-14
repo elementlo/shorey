@@ -30,10 +30,10 @@ class _PanelTextFieldState extends State<PanelTextField> {
       child: viewModel.hasMainFocus
           ? _buildMainFocusRow(context)
           : TextField(
-              onSubmitted: (String finalInput) async {
+              onSubmitted: (String finalInput) {
                 print('onsubmit: ${finalInput}');
                 if (finalInput.isNotEmpty) {
-                  await viewModel.saveMainFocus(finalInput);
+                  viewModel.saveMainFocus(finalInput);
                 }
               },
               decoration: InputDecoration(
@@ -43,8 +43,7 @@ class _PanelTextFieldState extends State<PanelTextField> {
                       borderSide: BorderSide(color: Colors.grey)),
                   border: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey)),
-                  contentPadding: EdgeInsets.only(bottom: 0, top: 6)
-              ),
+                  contentPadding: EdgeInsets.only(bottom: 0, top: 6)),
             ),
     );
   }
@@ -109,9 +108,12 @@ class _PanelTextFieldState extends State<PanelTextField> {
                     });
                   },
                   child: Container(
-                    child: Icon(Ionicons.create_outline, color: Colors.grey, size: 20,),
-                  )
-              )
+                    child: Icon(
+                      Ionicons.create_outline,
+                      color: Colors.grey,
+                      size: 20,
+                    ),
+                  ))
             ],
           )
         ],

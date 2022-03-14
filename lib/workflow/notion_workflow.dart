@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:linkwell/linkwell.dart';
 import 'package:spark_list/base/ext.dart';
 import 'package:spark_list/config/api.dart';
 import 'package:spark_list/database/database.dart';
@@ -65,6 +66,10 @@ class NotionWorkFlow with ChangeNotifier {
 
   Future updateTaskProperties(String? pageId, ToDo todo) {
     return _actions.updateTaskProperties(pageId, todo);
+  }
+
+  Future appendBlockChildren(String? pageId, {required String text}){
+    return _actions.appendBlockChildren(pageId, text: text);
   }
 }
 
@@ -155,6 +160,13 @@ class _NotionActions {
           tags: ['${todo.tags}'],
           reminderTime: todo.alertTime?.toIso8601String());
       final response = await dio.patch('${notionPages}/${pageId}', data: param);
+    }
+  }
+
+  Future appendBlockChildren(String? pageId, {required String text})  async {
+    if (pageId != null && pageId != ''){
+      final param = await NotionDatabaseTemplate.blockChildren(text: text);
+      final response = await dio.patch('${notionBlocks}/${pageId}/children', data: param);
     }
   }
 }

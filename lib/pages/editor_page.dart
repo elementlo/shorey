@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:linkwell/linkwell.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/base/ext.dart';
 import 'package:spark_list/config/config.dart';
@@ -300,11 +301,14 @@ class _TextEditorPageState extends State<TextEditorPage>
   Future<void> _syncWithNotion() async {
     if (widget.category.notionDatabaseId != null &&
         context.read<ConfigViewModel>().linkedNotion) {
-      if (!_updatedModel!.equals(_oldModel!)) {
+      if (!_updatedModel!.properTiesEquals(_oldModel!)) {
         _updatedModel!.tags = _categoryName;
         context
             .read<NotionWorkFlow>()
             .updateTaskProperties(_updatedModel!.pageId, _updatedModel!);
+      }
+      if(_updatedModel!.brief!=null && !_updatedModel!.briefEquals(_oldModel!)){
+        context.read<NotionWorkFlow>().appendBlockChildren(_updatedModel!.pageId, text: _updatedModel!.brief!);
       }
     }
   }
@@ -359,6 +363,7 @@ class InputField extends StatelessWidget {
           child: TextField(
             controller: textEditingController,
             keyboardType: TextInputType.multiline,
+            style: TextStyle(fontWeight: FontWeight.normal, color: Color(0xff4F4F4F)),
             maxLines: maxLines,
             decoration: InputDecoration(
                 border: InputBorder.none,
