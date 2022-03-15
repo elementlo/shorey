@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:linkwell/linkwell.dart';
 import 'package:spark_list/base/ext.dart';
+import 'package:spark_list/base/regexp.dart';
 import 'package:spark_list/config/api.dart';
 import 'package:spark_list/database/database.dart';
 import 'package:spark_list/main.dart';
@@ -57,7 +57,15 @@ class NotionWorkFlow with ChangeNotifier {
   }
 
   Future<String?> addTaskItem(String databaseId, ToDo todo) async {
-    return _actions.addTaskItem(databaseId, todo);
+    final links = <String>[];
+    if (todo.brief != null && todo.brief!.isNotEmpty) {
+      Iterable<RegExpMatch> matches =
+          RegexFormater.regex.allMatches(todo.brief!);
+      matches.forEach((match) {
+        links.add(todo.brief!.substring(match.start, match.end));
+      });
+    }
+    return _actions.addTaskItem(databaseId, todo, links: links);
   }
 
   Future<NotionDatabase?> createDatabase(String pageId) {
@@ -68,8 +76,13 @@ class NotionWorkFlow with ChangeNotifier {
     return _actions.updateTaskProperties(pageId, todo);
   }
 
-  Future appendBlockChildren(String? pageId, {required String text}){
-    return _actions.appendBlockChildren(pageId, text: text);
+  Future appendBlockChildren(String? pageId, {required String text}) {
+    Iterable<RegExpMatch> matches = RegexFormater.regex.allMatches(text);
+    final links = <String>[];
+    matches.forEach((match) {
+      links.add(text.substring(match.start, match.end));
+    });
+    return _actions.appendBlockChildren(pageId, text: text, links: links);
   }
 }
 
@@ -127,10 +140,12 @@ class _NotionActions {
     return null;
   }
 
-  Future<String?> addTaskItem(String databaseId, ToDo todo) async {
+  Future<String?> addTaskItem(String databaseId, ToDo todo,
+      {List<String>? links}) async {
     final param = await NotionDatabaseTemplate.taskItem(databaseId,
         title: todo.content,
         brief: todo.brief ?? '',
+        links: links,
         tags: ['${todo.tags}'],
         statusTitle: todo.statusTitle,
         createdTime: todo.createdTime.toIso8601String(),
@@ -163,10 +178,14 @@ class _NotionActions {
     }
   }
 
-  Future appendBlockChildren(String? pageId, {required String text})  async {
-    if (pageId != null && pageId != ''){
-      final param = await NotionDatabaseTemplate.blockChildren(text: text);
-      final response = await dio.patch('${notionBlocks}/${pageId}/children', data: param);
+  Future appendBlockChildren(String? pageId,
+      {required String text, List<String>? links}) async {
+    if (pageId != null && pageId != '') {
+      final param =
+          await NotionDatabaseTemplate.blockChildren(text: text, links: links);
+      final response =
+          await dio.patch('${notionBlocks}/${pageId}/children', data: param);
+      if (response.success) {}
     }
   }
 }

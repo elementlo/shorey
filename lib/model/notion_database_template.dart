@@ -12,7 +12,8 @@ import 'package:flutter/services.dart';
 class NotionDatabaseTemplate {
   static const String jsonTaskList = 'assets/json/notion_task_list.json';
   static const String jsonTaskItem = 'assets/json/notion_task_item.json';
-  static const String jsonBlockChildren = 'assets/json/notion_block_children.json';
+  static const String jsonBlockChildren =
+      'assets/json/notion_block_children.json';
 
   static const String jPageId = 'page_id';
   static const String jParent = 'parent';
@@ -52,6 +53,7 @@ class NotionDatabaseTemplate {
       {required String title,
       required String statusTitle,
       required String createdTime,
+      List<String>? links,
       String? brief,
       String? endTime,
       List<String>? tags,
@@ -74,6 +76,17 @@ class NotionDatabaseTemplate {
       }
       map[jTypeChildren][0][jTypeParagraph][jTypeRichText][0][jTypeText]
           [jTypeContent] = brief;
+      if (links != null && links.isNotEmpty) {
+        links.forEach((element) {
+          if (!element.startsWith('http')) {
+            element = 'https://${element}';
+          }
+          (map[jTypeChildren] as List).insert(0, {
+            "object": "block",
+            "bookmark": {"url": element}
+          });
+        });
+      }
       return map;
     }
     return null;
@@ -112,14 +125,27 @@ class NotionDatabaseTemplate {
     return map;
   }
 
-  static dynamic blockChildren({required String text}) async {
+  static dynamic blockChildren(
+      {required String text, List<String>? links}) async {
     final json = await rootBundle.loadString(jsonBlockChildren);
     if (json != null) {
       final map = jsonDecode(json);
-      map[jTypeChildren][0][jTypeParagraph][jTypeRichText][1][jTypeText][jTypeContent] = '''
+      map[jTypeChildren][0][jTypeParagraph][jTypeRichText][0][jTypeText]
+              [jTypeContent] = '''
 ${DateTime.now().toIso8601String()}
 ${text}
       ''';
+      if (links != null && links.isNotEmpty) {
+        links.forEach((element) {
+          if (!element.startsWith('http')) {
+            element = 'https://${element}';
+          }
+          (map[jTypeChildren] as List).insert(0, {
+            "object": "block",
+            "bookmark": {"url": element}
+          });
+        });
+      }
       return map;
     }
     return null;
