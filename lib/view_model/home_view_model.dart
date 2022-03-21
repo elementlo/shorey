@@ -180,7 +180,7 @@ class HomeViewModel extends ViewStateModel {
       content: Value(content),
       status: Value(status),
       createdTime: Value(DateTime.now()),
-      tags:Value('mainfocus'),
+      tags: Value('mainfocus'),
     ));
     await _updateMainFocus();
     notifyListeners();
@@ -200,8 +200,7 @@ class HomeViewModel extends ViewStateModel {
   Future<List<ToDo?>> queryToDoList({int? categoryId}) async {
     List<ToDo?> toDoListModel =
         await dbProvider.queryToDosByCategory(categoryId: categoryId);
-    if (categoryId != null)
-    indexedList[categoryId] = toDoListModel;
+    if (categoryId != null) indexedList[categoryId] = toDoListModel;
     notifyListeners();
     return toDoListModel;
   }

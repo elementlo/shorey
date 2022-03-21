@@ -139,8 +139,8 @@ class ConfigViewModel extends ViewStateModel {
     }
 
     final overlayStyle = brightness == Brightness.dark
-        ? SystemUiOverlayStyle.light
-        : SystemUiOverlayStyle.dark;
+        ? SystemUiOverlayStyle.dark
+        : SystemUiOverlayStyle.light;
 
     return overlayStyle;
   }

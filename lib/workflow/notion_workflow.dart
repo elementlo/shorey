@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:spark_list/base/ext.dart';
 import 'package:spark_list/base/regexp.dart';
@@ -72,7 +73,7 @@ class NotionWorkFlow with ChangeNotifier {
     return _actions.createDatabase(pageId);
   }
 
-  Future updateTaskProperties(String? pageId, ToDo todo) {
+  Future updateTaskProperties(String? pageId, ToDosCompanion todo) {
     return _actions.updateTaskProperties(pageId, todo);
   }
 
@@ -168,12 +169,19 @@ class _NotionActions {
     return null;
   }
 
-  Future updateTaskProperties(String? pageId, ToDo todo) async {
+  Future updateTaskProperties(String? pageId, ToDosCompanion todo) async {
     if (pageId != null && pageId != '') {
       final param = await NotionDatabaseTemplate.itemProperties(
-          title: todo.content,
-          tags: ['${todo.tags}'],
-          reminderTime: todo.alertTime?.toIso8601String());
+          title: todo.content == Value.absent() ? null : todo.content.value,
+          tags: todo.tags == Value.absent() ? null : [todo.tags.value??''],
+          statusTitle: todo.statusTitle,
+          createdTime: todo.createdTime.value.toIso8601String(),
+          endTime: todo.filedTime == Value.absent()
+              ? null
+              : todo.filedTime.value?.toIso8601String(),
+          reminderTime: todo.alertTime == Value.absent()
+              ? null
+              : todo.alertTime.value?.toIso8601String());
       final response = await dio.patch('${notionPages}/${pageId}', data: param);
     }
   }

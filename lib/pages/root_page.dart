@@ -154,24 +154,21 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
   }
 
   Widget _buildStack(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: ConfigViewModel.resolvedSystemUiOverlayStyle(),
-      child: Stack(
-        children: [
-          PositionedTransition(
-              rect: _slideDownSettingsPageAnimation(context),
-              child: CurtainPage()),
-          PositionedTransition(
-              rect: _slideDownHomePageAnimation(context),
-              child: HomePage(
-                animationController: homePageFadeController,
-              )),
-          _SettingsIcon(
-            toggleSettings: _toggleSettings,
-            animationController: _iconController!,
-          )
-        ],
-      ),
+    return Stack(
+      children: [
+        PositionedTransition(
+            rect: _slideDownSettingsPageAnimation(context),
+            child: CurtainPage()),
+        PositionedTransition(
+            rect: _slideDownHomePageAnimation(context),
+            child: HomePage(
+              animationController: homePageFadeController,
+            )),
+        _SettingsIcon(
+          toggleSettings: _toggleSettings,
+          animationController: _iconController!,
+        )
+      ],
     );
   }
 }

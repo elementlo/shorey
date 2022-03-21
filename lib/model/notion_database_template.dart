@@ -95,7 +95,10 @@ class NotionDatabaseTemplate {
   static dynamic itemProperties({
     String? title,
     List<String>? tags,
+    String? createdTime,
     String? reminderTime,
+    String? endTime,
+    String? statusTitle,
   }) {
     final map = Map<String, dynamic>();
     map[jProperties] = {};
@@ -120,6 +123,19 @@ class NotionDatabaseTemplate {
         "date": {
           "start": "${reminderTime}",
         }
+      };
+    }
+    if (endTime != null && endTime.isNotEmpty) {
+      map[jProperties][jDuration] = {
+        "date": {
+          "start": "$createdTime",
+          "end": "$endTime",
+        }
+      };
+    }
+    if (statusTitle != null && statusTitle.isNotEmpty) {
+      map[jProperties][jStatus] = {
+        'select': {'name': '$statusTitle'}
       };
     }
     return map;

@@ -305,7 +305,7 @@ class _TextEditorPageState extends State<TextEditorPage>
         _updatedModel!.tags = _categoryName;
         context
             .read<NotionWorkFlow>()
-            .updateTaskProperties(_updatedModel!.pageId, _updatedModel!);
+            .updateTaskProperties(_updatedModel!.pageId, _updatedModel!.toCompanion(false));
       }
       if(_updatedModel!.brief!=null && !_updatedModel!.briefEquals(_oldModel!)){
         context.read<NotionWorkFlow>().appendBlockChildren(_updatedModel!.pageId, text: _updatedModel!.brief!);

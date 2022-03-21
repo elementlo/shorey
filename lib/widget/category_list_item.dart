@@ -460,7 +460,6 @@ class CategoryDemoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
     return model == null
         ? Container()
@@ -483,7 +482,7 @@ class CategoryDemoItem extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsetsDirectional.only(
                   start: 16,
-                  top: 10,
+                  top: 18,
                   end: 8,
                 ),
                 child: Row(
@@ -494,15 +493,26 @@ class CategoryDemoItem extends StatelessWidget {
                         await context
                             .read<HomeViewModel>()
                             .updateTodoStatus(model!);
+                        if (model?.pageId != null &&
+                            context.read<ConfigViewModel>().linkedNotion) {
+                          context.read<NotionWorkFlow>().updateTaskProperties(
+                              model!.pageId,
+                              ToDosCompanion(
+                                  status: d.Value(model!.status),
+                                  createdTime: d.Value(model!.createdTime),
+                                  filedTime: d.Value(DateTime.now())));
+                        }
                       },
-                      child: Icon(
-                        model!.status == 0
-                            ? Icons.check_circle_outline
-                            : Icons.brightness_1_outlined,
-                        color: colorScheme.onSecondary,
+                      child: Container(
+                        padding: EdgeInsets.only(left: 5, bottom: 5, right: 10),
+                        child: Icon(
+                          model!.status == 0
+                              ? Icons.check_circle_outline
+                              : Icons.brightness_1_outlined,
+                          color: colorScheme.onSecondary,
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 16),
                     Flexible(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

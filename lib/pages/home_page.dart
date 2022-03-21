@@ -46,58 +46,51 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final viewModel = Provider.of<HomeViewModel>(context);
     final configViewModel = Provider.of<ConfigViewModel>(context);
     final categoryDemosList = configViewModel.categoryDemosList;
-    return Scaffold(
-      body: Stack(
-        children: [
-          ListView(
-            restorationId: 'home_list_view',
-            children: [
-              const SizedBox(
-                height: 8,
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                child: HomeHeader(),
-              ),
-              DailyFocusPanel(
-                animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-                    CurvedAnimation(
-                        parent: widget.animationController!,
-                        curve: Interval((1 / 9) * 1, 1.0,
-                            curve: Curves.fastOutSlowIn))),
-                animationController: widget.animationController,
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                child: _CategoriesHeader(),
-              ),
-              for (int i = 0; i < (categoryDemosList.length); i++)
-                _AnimatedCategoryItem(
-                  startDelayFraction: 0.00,
-                  controller: _animationController,
-                  child: CategoryListItem(
-                  categoryDemosList[i],
-                      key: PageStorageKey<String>(
-                        'CategoryListItem${i}',
-                      ),
-                      restorationId: 'home_material_category_list',
-                      imageString: 'assets/icons/material/material.png',
-                      demoList: (viewModel
-                          .indexedList[categoryDemosList[i].id]),
-                      initiallyExpanded: false,
-                      icon: categoryDemosList[i].icon,
-                      onTap: (shouldOpenList) {
-                        if (shouldOpenList) {
-                          viewModel.queryToDoList(categoryId: context.read<ConfigViewModel>().categoryDemosList[i].id);
-                        }
-                      }),
+    return ListView(
+      restorationId: 'home_list_view',
+      children: [
+        const SizedBox(
+          height: 8,
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          child: HomeHeader(),
+        ),
+        DailyFocusPanel(
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController!,
+                  curve: Interval((1 / 9) * 1, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          child: _CategoriesHeader(),
+        ),
+        for (int i = 0; i < (categoryDemosList.length); i++)
+          _AnimatedCategoryItem(
+            startDelayFraction: 0.00,
+            controller: _animationController,
+            child: CategoryListItem(
+                categoryDemosList[i],
+                key: PageStorageKey<String>(
+                  'CategoryListItem${i}',
                 ),
-            ],
-          )
-        ],
-      ),
+                restorationId: 'home_material_category_list',
+                imageString: 'assets/icons/material/material.png',
+                demoList: (viewModel
+                    .indexedList[categoryDemosList[i].id]),
+                initiallyExpanded: false,
+                icon: categoryDemosList[i].icon,
+                onTap: (shouldOpenList) {
+                  if (shouldOpenList) {
+                    viewModel.queryToDoList(categoryId: context.read<ConfigViewModel>().categoryDemosList[i].id);
+                  }
+                }),
+          ),
+      ],
     );
-    ;
   }
 }
 

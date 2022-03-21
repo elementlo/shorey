@@ -42,3 +42,21 @@ extension ToDoExt on ToDo {
     return this.brief == model.brief;
   }
 }
+
+extension CompanionExt on ToDosCompanion{
+  String get statusTitle {
+    String title = '';
+    switch (this.status.value) {
+      case 0:
+        title = 'Archived';
+        break;
+      case 1:
+        title = 'On Going';
+        break;
+      case 2:
+        title = 'Deleted';
+        break;
+    }
+    return title;
+  }
+}
