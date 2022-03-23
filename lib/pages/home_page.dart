@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/pages/category_info_page.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
@@ -29,16 +30,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  late AnimationController _animationController;
+  int? _expandedSettingId = -1;
 
   @override
   void initState() {
     widget.animationController?.forward();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 800),
-    );
-    _animationController.value = 1.0;
   }
 
   @override
@@ -60,8 +56,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           animation: Tween<double>(begin: 0.0, end: 1.0).animate(
               CurvedAnimation(
                   parent: widget.animationController!,
-                  curve: Interval((1 / 9) * 1, 1.0,
-                      curve: Curves.fastOutSlowIn))),
+                  curve:
+                      Interval((1 / 9) * 1, 1.0, curve: Curves.fastOutSlowIn))),
           animationController: widget.animationController,
         ),
         Container(
@@ -69,26 +65,26 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           child: _CategoriesHeader(),
         ),
         for (int i = 0; i < (categoryDemosList.length); i++)
-          _AnimatedCategoryItem(
-            startDelayFraction: 0.00,
-            controller: _animationController,
-            child: CategoryListItem(
-                categoryDemosList[i],
-                key: PageStorageKey<String>(
-                  'CategoryListItem${i}',
-                ),
-                restorationId: 'home_material_category_list',
-                imageString: 'assets/icons/material/material.png',
-                demoList: (viewModel
-                    .indexedList[categoryDemosList[i].id]),
-                initiallyExpanded: false,
-                icon: categoryDemosList[i].icon,
-                onTap: (shouldOpenList) {
-                  if (shouldOpenList) {
-                    viewModel.queryToDoList(categoryId: context.read<ConfigViewModel>().categoryDemosList[i].id);
-                  }
-                }),
-          ),
+          CategoryListItem(categoryDemosList[i],
+              key: PageStorageKey<String>(
+                'CategoryListItem${i}',
+              ),
+              restorationId: 'home_material_category_list',
+              imageString: 'assets/icons/material/material.png',
+              demoList: (viewModel.allItemsList
+                  ?.where((item) => item?.categoryId == categoryDemosList[i].id)
+                  .toList() ??
+                  []),
+              initiallyExpanded: false,
+              isExpanded: _expandedSettingId == categoryDemosList[i].id,
+              icon: categoryDemosList[i].icon, onTap: (shouldOpenList) {
+            if (shouldOpenList) {
+              _expandedSettingId = categoryDemosList[i].id;
+            } else {
+              _expandedSettingId = -1;
+            }
+            setState(() {});
+          }),
       ],
     );
   }
@@ -106,8 +102,8 @@ class _CategoriesHeader extends StatelessWidget {
           Icons.more_horiz,
           color: colorScheme.primaryVariant,
         ),
-        onSelected: (value){
-          switch(value){
+        onSelected: (value) {
+          switch (value) {
             case 'add':
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => CategoryInfoPage()));
@@ -159,46 +155,6 @@ class Header extends StatelessWidget {
           if (tailing != null) tailing!
         ],
       ),
-    );
-  }
-}
-
-class _AnimatedCategoryItem extends StatelessWidget {
-  _AnimatedCategoryItem({
-    Key? key,
-    required double startDelayFraction,
-    required this.controller,
-    required this.child,
-  })  : topPaddingAnimation = Tween(
-          begin: 60.0,
-          end: 0.0,
-        ).animate(
-          CurvedAnimation(
-            parent: controller,
-            curve: Interval(
-              0.000 + startDelayFraction,
-              0.400 + startDelayFraction,
-              curve: Curves.ease,
-            ),
-          ),
-        ),
-        super(key: key);
-
-  final Widget child;
-  final AnimationController controller;
-  final Animation<double> topPaddingAnimation;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        return Padding(
-          padding: EdgeInsets.only(top: topPaddingAnimation.value),
-          child: child,
-        );
-      },
-      child: child,
     );
   }
 }

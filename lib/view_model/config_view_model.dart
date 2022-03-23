@@ -92,7 +92,7 @@ class ConfigViewModel extends ViewStateModel {
     await dsProvider.saveValue<String>(StoreKey.retrospectTime, time);
   }
 
-  Future getCategoryList() async {
+  void getCategoryList() {
     categoryStream = dbProvider.categoryList;
     categoryStream?.listen((event) {
       categoryDemosList.clear();

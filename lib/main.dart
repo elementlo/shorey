@@ -45,7 +45,7 @@ void main() async {
       ConfigViewModel(), HomeViewModel(),
       onModelReady: (cViewModel, hViewModel) async {
     await cViewModel?.initCategoryDemosList();
-    await cViewModel?.getCategoryList();
+    cViewModel?.getCategoryList();
     hViewModel?.initDefaultSettings();
   },
       child: ChangeNotifierProvider(

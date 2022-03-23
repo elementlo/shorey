@@ -31,6 +31,7 @@ class CategoryListItem extends StatefulWidget {
       this.imageString,
       this.demos = const [''],
       this.initiallyExpanded = false,
+      this.isExpanded = false,
       this.onTap,
       this.icon,
       this.demoList})
@@ -44,6 +45,7 @@ class CategoryListItem extends StatefulWidget {
   final List<String> demos;
   final List<ToDo?>? demoList;
   final bool initiallyExpanded;
+  final bool isExpanded;
   final CategoryHeaderTapCallback? onTap;
   final Icon? icon;
 
@@ -119,6 +121,18 @@ class _CategoryListItemState extends State<CategoryListItem>
     }
   }
 
+  void _handleExpansion() {
+    if (widget.isExpanded) {
+      _controller.forward();
+    } else {
+      _controller.reverse().then<void>((value) {
+        if (!mounted) {
+          return;
+        }
+      });
+    }
+  }
+
   void _handleTap() {
     if (_shouldOpenList()!) {
       _controller.forward();
@@ -163,6 +177,7 @@ class _CategoryListItemState extends State<CategoryListItem>
 
   @override
   Widget build(BuildContext context) {
+    _handleExpansion();
     return AnimatedBuilder(
       animation: _controller.view,
       builder: _buildHeaderWithChildren,
@@ -273,9 +288,9 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
                       if (result == 0) {
                         _controller.clear();
                       }
-                      context
-                          .read<HomeViewModel>()
-                          .queryToDoList(categoryId: widget.category.id);
+                      // context
+                      //     .read<HomeViewModel>()
+                      //     .queryToDoList(categoryId: widget.category.id);
                     });
                   },
                   icon: Icon(
@@ -292,7 +307,7 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
                 status: d.Value(1),
                 content: d.Value(input),
                 createdTime: d.Value(dateTime)));
-            await viewModel.queryToDoList(categoryId: widget.category.id);
+            //await viewModel.queryToDoList(categoryId: widget.category.id);
             _controller.clear();
             if (widget.category.notionDatabaseId != null &&
                 context.read<ConfigViewModel>().linkedNotion) {
@@ -305,6 +320,7 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
                       categoryId: widget.category.id,
                       status: 1,
                       tags: widget.category.name));
+
               await _updatePageId(index, pageId);
             }
           }
@@ -474,9 +490,9 @@ class CategoryDemoItem extends StatelessWidget {
                         builder: (context) =>
                             TextEditorPage(model!.id, category)))
                     .then((result) {
-                  context
-                      .read<HomeViewModel>()
-                      .queryToDoList(categoryId: _cachedCategoryId);
+                  // context
+                  //     .read<HomeViewModel>()
+                  //     .queryToDoList(categoryId: _cachedCategoryId);
                 });
               },
               child: Padding(

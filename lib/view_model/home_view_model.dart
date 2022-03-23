@@ -20,12 +20,8 @@ import 'package:timezone/timezone.dart' as tz;
 ///
 
 class HomeViewModel extends ViewStateModel {
-  HomeViewModel() {
-    _initMainFocus();
-  }
-
-  Map<int, List<ToDo?>> indexedList = Map();
   Map<String, int?> heatPointsMap = Map();
+  List<ToDo?>? allItemsList;
 
   String? _mainFocus = '';
   bool _hasMainFocus = true;
@@ -42,6 +38,11 @@ class HomeViewModel extends ViewStateModel {
   set hasMainFocus(bool hasMainFocus) {
     this._hasMainFocus = hasMainFocus;
     notifyListeners();
+  }
+
+  HomeViewModel() {
+    _initMainFocus();
+    watchToDoList();
   }
 
   Future initDefaultSettings() async {
@@ -197,12 +198,22 @@ class HomeViewModel extends ViewStateModel {
     return index;
   }
 
-  Future<List<ToDo?>> queryToDoList({int? categoryId}) async {
-    List<ToDo?> toDoListModel =
-        await dbProvider.queryToDosByCategory(categoryId: categoryId);
-    if (categoryId != null) indexedList[categoryId] = toDoListModel;
-    notifyListeners();
-    return toDoListModel;
+  // Future<List<ToDo?>> queryToDoList({int? categoryId}) async {
+  //   List<ToDo?> toDoListModel =
+  //       await dbProvider.queryToDosByCategory(categoryId: categoryId);
+  //   if (categoryId != null) indexedList[categoryId] = toDoListModel;
+  //   notifyListeners();
+  //   return toDoListModel;
+  // }
+
+  void watchToDoList() {
+    dbProvider.watchToDosByCategory().listen((list) {
+      //indexedList[categoryId] = list;
+      allItemsList = list;
+      notifyListeners();
+    }).onDone(() {
+      debugPrint('todo list stream disposed.');
+    });
   }
 
   Future queryActions() async {
@@ -265,7 +276,7 @@ class HomeViewModel extends ViewStateModel {
     TimeOfDay alertTime,
     int weekday,
   ) async {
-    final todoList = await queryToDoList();
+    final todoList = allItemsList;
     var brief = '';
     if (todoList != null && todoList.length > 0) {
       for (var i = 0; i < todoList.length; i++) {
@@ -329,5 +340,11 @@ class HomeViewModel extends ViewStateModel {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
     return scheduledDate;
+  }
+
+  @override
+  void dispose() {
+    dbProvider.close();
+    super.dispose();
   }
 }

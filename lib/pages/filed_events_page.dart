@@ -139,6 +139,7 @@ class FiledItem extends StatelessWidget {
                                   color: Colors.black.withOpacity(0.6)),
                             ),
                           ),
+                          if(model!.filedTime!=null)
                           Text(
                             '${DateFormat('yyyy-MM-dd').format(model!.filedTime!)}',
                             style: TextStyle(

@@ -208,7 +208,7 @@ class DatabaseProvider extends _$DatabaseProvider {
   }
 
   Future updateToDoItem(ToDosCompanion entity) {
-    entity.status == 0
+    entity.status == Value(0)
         ? entity.filedTime = Value(DateTime.now())
         : entity.filedTime = Value.absent();
     return (update(toDos)..where((tbl) => tbl.id.equals(entity.id.value)))
@@ -220,12 +220,20 @@ class DatabaseProvider extends _$DatabaseProvider {
         .write(ToDosCompanion(status: Value(updatedStatus)));
   }
 
-  Future<List<ToDo>> queryToDosByCategory({int? categoryId, int status = 1}) async {
+  Future<List<ToDo>> queryToDosByCategory({int? categoryId, int status = 1}) {
     return (select(toDos)
           ..where((tbl) => categoryId == null
               ? tbl.status.equals(status)
               : tbl.categoryId.equals(categoryId) & tbl.status.equals(status)))
         .get();
+  }
+
+  Stream<List<ToDo>> watchToDosByCategory({int? categoryId, int status = 1}){
+    return (select(toDos)
+      ..where((tbl) => categoryId == null
+          ? tbl.status.equals(status)
+          : tbl.categoryId.equals(categoryId) & tbl.status.equals(status)))
+        .watch();
   }
 
   Future<ToDo?> queryToDoItem(int id) {
