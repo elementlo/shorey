@@ -24,6 +24,8 @@ import '../view_model/config_view_model.dart';
 
 typedef CategoryHeaderTapCallback = Function(bool shouldOpenList);
 
+final List<int> _cachedItems = [];
+
 class CategoryListItem extends StatefulWidget {
   const CategoryListItem(this.category,
       {Key? key,
@@ -135,6 +137,7 @@ class _CategoryListItemState extends State<CategoryListItem>
 
   void _handleTap() {
     if (_shouldOpenList()!) {
+      _cachedItems.clear();
       _controller.forward();
       if (widget.onTap != null) {
         widget.onTap!(true);
@@ -223,16 +226,26 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
     return Column(
       key: ValueKey('${widget.category}DemoList'),
       children: [
-        if (widget.demoList != null && widget.demoList!.length > 0)
-          for (int i = 0; i < widget.demoList!.length; i++)
-            CategoryDemoItem(
-              model: widget.demoList![i],
-              category: widget.category,
-            ),
+        ..._buildDemoItems(widget.demoList),
         _buildNewTaskField(context),
         const SizedBox(height: 12), // Extra space below.
       ],
     );
+  }
+
+  List<Widget> _buildDemoItems(List<ToDo?>? demoList) {
+    List<Widget> demoList = [];
+    if (widget.demoList != null && widget.demoList!.length > 0) {
+      for (int i = 0; i < widget.demoList!.length; i++) {
+        if (widget.demoList![i]!.status == 1||_cachedItems.contains(i))
+          demoList.add(CategoryDemoItem(
+            index: i,
+            model: widget.demoList![i],
+            category: widget.category,
+          ));
+      }
+    }
+    return demoList;
   }
 
   Future _updatePageId(int index, String? pageId) async {
@@ -288,9 +301,6 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
                       if (result == 0) {
                         _controller.clear();
                       }
-                      // context
-                      //     .read<HomeViewModel>()
-                      //     .queryToDoList(categoryId: widget.category.id);
                     });
                   },
                   icon: Icon(
@@ -307,7 +317,6 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
                 status: d.Value(1),
                 content: d.Value(input),
                 createdTime: d.Value(dateTime)));
-            //await viewModel.queryToDoList(categoryId: widget.category.id);
             _controller.clear();
             if (widget.category.notionDatabaseId != null &&
                 context.read<ConfigViewModel>().linkedNotion) {
@@ -466,34 +475,36 @@ class _CategoryHeader extends StatelessWidget {
   }
 }
 
-class CategoryDemoItem extends StatelessWidget {
-  CategoryDemoItem({Key? key, required this.category, required this.model})
+class CategoryDemoItem extends StatefulWidget {
+  CategoryDemoItem(
+      {Key? key,
+      required this.category,
+      required this.model,
+      required this.index})
       : super(key: key);
 
   final ToDo? model;
   final CategoryItem category;
-  int? _cachedCategoryId;
+  final int index;
 
+  @override
+  State<CategoryDemoItem> createState() => _CategoryDemoItemState();
+}
+
+class _CategoryDemoItemState extends State<CategoryDemoItem> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return model == null
+    return widget.model == null
         ? Container()
         : Material(
-            key: ValueKey(model!.id),
+            key: ValueKey(widget.model!.id),
             color: Theme.of(context).colorScheme.surface,
             child: InkWell(
               onTap: () {
-                _cachedCategoryId = model!.categoryId;
-                Navigator.of(context)
-                    .push(MaterialPageRoute(
-                        builder: (context) =>
-                            TextEditorPage(model!.id, category)))
-                    .then((result) {
-                  // context
-                  //     .read<HomeViewModel>()
-                  //     .queryToDoList(categoryId: _cachedCategoryId);
-                });
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        TextEditorPage(widget.model!.id, widget.category)));
               },
               child: Padding(
                 padding: EdgeInsetsDirectional.only(
@@ -506,23 +517,30 @@ class CategoryDemoItem extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () async {
+                        if(widget.model!.status == 1){
+                          _cachedItems.add(widget.index);
+                        }else{
+                          _cachedItems.remove(widget.index);
+                        }
                         await context
                             .read<HomeViewModel>()
-                            .updateTodoStatus(model!);
-                        if (model?.pageId != null &&
+                            .updateTodoStatus(widget.model!);
+                        setState(() {});
+                        if (widget.model?.pageId != null &&
                             context.read<ConfigViewModel>().linkedNotion) {
                           context.read<NotionWorkFlow>().updateTaskProperties(
-                              model!.pageId,
+                              widget.model!.pageId,
                               ToDosCompanion(
-                                  status: d.Value(model!.status),
-                                  createdTime: d.Value(model!.createdTime),
+                                  status: d.Value(widget.model!.status),
+                                  createdTime:
+                                      d.Value(widget.model!.createdTime),
                                   filedTime: d.Value(DateTime.now())));
                         }
                       },
                       child: Container(
                         padding: EdgeInsets.only(left: 5, bottom: 5, right: 10),
                         child: Icon(
-                          model!.status == 0
+                          widget.model!.status == 0
                               ? Icons.check_circle_outline
                               : Icons.brightness_1_outlined,
                           color: colorScheme.onSecondary,
@@ -534,18 +552,19 @@ class CategoryDemoItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           LinkWell(
-                            model!.content,
+                            widget.model!.content,
                             style: TextStyle(
-                                decoration: model!.status == 0
+                                decoration: widget.model!.status == 0
                                     ? TextDecoration.lineThrough
                                     : null,
-                                color: model!.status == 0
+                                color: widget.model!.status == 0
                                     ? Colors.grey
                                     : Colors.black),
                           ),
-                          if (model!.brief != null && model!.brief != '')
+                          if (widget.model!.brief != null &&
+                              widget.model!.brief != '')
                             LinkWell(
-                              model!.brief ?? '',
+                              widget.model!.brief ?? '',
                               maxLines: 3,
                               linkStyle:
                                   TextStyle(fontSize: 14, color: Colors.blue),

@@ -229,11 +229,7 @@ class DatabaseProvider extends _$DatabaseProvider {
   }
 
   Stream<List<ToDo>> watchToDosByCategory({int? categoryId, int status = 1}){
-    return (select(toDos)
-      ..where((tbl) => categoryId == null
-          ? tbl.status.equals(status)
-          : tbl.categoryId.equals(categoryId) & tbl.status.equals(status)))
-        .watch();
+    return select(toDos).watch();
   }
 
   Future<ToDo?> queryToDoItem(int id) {

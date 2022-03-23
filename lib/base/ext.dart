@@ -41,6 +41,7 @@ extension ToDoExt on ToDo {
   bool briefEquals(ToDo model){
     return this.brief == model.brief;
   }
+
 }
 
 extension CompanionExt on ToDosCompanion{

@@ -30,6 +30,7 @@ class HomeViewModel extends ViewStateModel {
   String? get mainFocus => _mainFocus;
 
   bool get hasMainFocus => _hasMainFocus;
+  bool _ignoreUpdate = false;
 
   ToDo? mainFocusModel;
   List<ToDo?>? filedListModel;
@@ -42,7 +43,7 @@ class HomeViewModel extends ViewStateModel {
 
   HomeViewModel() {
     _initMainFocus();
-    watchToDoList();
+    _watchToDoList();
   }
 
   Future initDefaultSettings() async {
@@ -198,17 +199,8 @@ class HomeViewModel extends ViewStateModel {
     return index;
   }
 
-  // Future<List<ToDo?>> queryToDoList({int? categoryId}) async {
-  //   List<ToDo?> toDoListModel =
-  //       await dbProvider.queryToDosByCategory(categoryId: categoryId);
-  //   if (categoryId != null) indexedList[categoryId] = toDoListModel;
-  //   notifyListeners();
-  //   return toDoListModel;
-  // }
-
-  void watchToDoList() {
+  void _watchToDoList() {
     dbProvider.watchToDosByCategory().listen((list) {
-      //indexedList[categoryId] = list;
       allItemsList = list;
       notifyListeners();
     }).onDone(() {
@@ -239,8 +231,10 @@ class HomeViewModel extends ViewStateModel {
         model.status = 0;
         break;
     }
+    _ignoreUpdate = true;
     await dbProvider.updateToDoItem(
         ToDosCompanion(id: Value(model.id), status: Value(model.status)));
+    _ignoreUpdate = false;
     await dbProvider.updateHeatPoint(difference);
     if (model.status == 0) {
       await dbProvider.insertAction(ActionsHistoryCompanion(
@@ -248,7 +242,6 @@ class HomeViewModel extends ViewStateModel {
           updatedTime: Value(DateTime.now()),
           action: Value(1)));
     }
-    notifyListeners();
   }
 
   Future clearFiledItems() async {
