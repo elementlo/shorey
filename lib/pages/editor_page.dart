@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:linkwell/linkwell.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/base/ext.dart';
 import 'package:spark_list/config/config.dart';
@@ -187,7 +186,8 @@ class _TextEditorPageState extends State<TextEditorPage>
                 margin: EdgeInsets.symmetric(horizontal: 16),
                 height: 300,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8), color: Colors.white),
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white),
                 child: Column(
                   children: [
                     InputField(
@@ -276,8 +276,10 @@ class _TextEditorPageState extends State<TextEditorPage>
       final notificationId =
           DateTime.now().millisecond * 1000 + DateTime.now().microsecond;
       _updatedModel!.notificationId ??= notificationId;
-      final MaterialLocalizations localizations = MaterialLocalizations.of(context);
-      alertTime = '$_selectedDate ${localizations.formatTimeOfDay(_time, alwaysUse24HourFormat: true)}';
+      final MaterialLocalizations localizations =
+          MaterialLocalizations.of(context);
+      alertTime =
+          '$_selectedDate ${localizations.formatTimeOfDay(_time, alwaysUse24HourFormat: true)}';
       print(
           'alerttime: $alertTime notificationId: ${_updatedModel!.notificationId}');
       await _setNotification(DateTime.parse(alertTime), notificationId)
@@ -294,8 +296,8 @@ class _TextEditorPageState extends State<TextEditorPage>
     _updatedModel!.alertTime =
         alertTime == null ? null : DateTime.parse(alertTime);
 
-     await context.read<HomeViewModel>().updateTodoItem(
-        _oldModel!.toCompanion(false), _updatedModel!.toCompanion(false));
+    await context.read<HomeViewModel>().updateTodoItem(
+        _oldModel!.toCompanion(true), _updatedModel!.toCompanion(true));
   }
 
   Future<void> _syncWithNotion() async {
@@ -303,12 +305,14 @@ class _TextEditorPageState extends State<TextEditorPage>
         context.read<ConfigViewModel>().linkedNotion) {
       if (!_updatedModel!.properTiesEquals(_oldModel!)) {
         _updatedModel!.tags = _categoryName;
-        context
-            .read<NotionWorkFlow>()
-            .updateTaskProperties(_updatedModel!.pageId, _updatedModel!.toCompanion(false));
+        context.read<NotionWorkFlow>().updateTaskProperties(
+            _updatedModel!.pageId, _updatedModel!.toCompanion(true));
       }
-      if(_updatedModel!.brief!=null && !_updatedModel!.briefEquals(_oldModel!)){
-        context.read<NotionWorkFlow>().appendBlockChildren(_updatedModel!.pageId, text: _updatedModel!.brief!);
+      if (_updatedModel!.brief != null &&
+          !_updatedModel!.briefEquals(_oldModel!)) {
+        context.read<NotionWorkFlow>().appendBlockChildren(
+            _updatedModel!.pageId,
+            text: _updatedModel!.brief!);
       }
     }
   }
@@ -363,7 +367,8 @@ class InputField extends StatelessWidget {
           child: TextField(
             controller: textEditingController,
             keyboardType: TextInputType.multiline,
-            style: TextStyle(fontWeight: FontWeight.normal, color: Color(0xff4F4F4F)),
+            style: TextStyle(
+                fontWeight: FontWeight.normal, color: Color(0xff4F4F4F)),
             maxLines: maxLines,
             decoration: InputDecoration(
                 border: InputBorder.none,

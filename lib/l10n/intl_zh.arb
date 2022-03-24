@@ -70,14 +70,14 @@
   "addCategory": "添加",
   "deleteCategory": "删除",
   "categoryInformation": "类别信息",
-  "addCategoryName": "名字",
+  "addCategoryName": "标题",
   "editCategory": "编辑",
   "bindNotion": "关联Notion",
   "notion": "Notion账户",
   "linkNotionDatabase": "关联Notion数据库",
   "notionToken": "Notion token",
   "notionPageId": "Page ID/Database ID",
-  "notionPrompt": "如使用Page ID会在这个页面新建一个子页面作为数据库; 如使用Database ID, 则会绑定这个数据库",
+  "notionPrompt": "如使用Page类型会在这个页面新建一个子页面作为数据库; 如使用Database类型, 则会绑定这个数据库",
   "notionDatabasePageTitle": "Notion数据库",
   "taskList": "待办清单",
   "categoryType": "Notion模板类型",
@@ -89,5 +89,6 @@
   "tipsNotionId": "可选项, 配置一个全局的Notion根页面, 添加记事时可选择默认都同步在此页面上",
   "sureToDeleteArchived": "确定要删除所有归档条目吗?",
   "linkNotionIfYouWant": "在Shorey的设置中绑定Notion账户, 可以同步你的笔记到Notion数据库中",
-  "addNewTaskTitle": "标题"
+  "addNewTaskTitle": "标题",
+  "typeKeyWordsForSearchDB": "请输入关键词以检索"
 }

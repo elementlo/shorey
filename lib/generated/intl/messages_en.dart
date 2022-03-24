@@ -100,6 +100,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "time": MessageLookupByLibrary.simpleMessage("Time"),
         "tipsNotionId": MessageLookupByLibrary.simpleMessage(
             "Optional, config a global Notion page to store all your tasks"),
-        "today": MessageLookupByLibrary.simpleMessage("Today")
+        "today": MessageLookupByLibrary.simpleMessage("Today"),
+        "typeKeyWordsForSearchDB": MessageLookupByLibrary.simpleMessage(
+            "Please type some keywords for the search")
       };
 }

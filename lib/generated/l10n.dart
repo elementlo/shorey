@@ -659,6 +659,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Please type some keywords for the search`
+  String get typeKeyWordsForSearchDB {
+    return Intl.message(
+      'Please type some keywords for the search',
+      name: 'typeKeyWordsForSearchDB',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

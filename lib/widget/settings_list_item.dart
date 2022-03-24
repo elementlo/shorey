@@ -1,7 +1,3 @@
-// Copyright 2019 The Flutter team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
@@ -54,10 +50,6 @@ class _SettingsListItemState<T> extends State<SettingsListItem<T>>
   late Animation<EdgeInsetsGeometry> _childrenPadding;
   late Animation<BorderRadius?> _headerBorderRadius;
 
-  // For ease of use. Correspond to the keys and values of `widget.optionsMap`.
-  late Iterable<T> _options;
-  late Iterable<DisplayOption> _displayOptions;
-
   @override
   void initState() {
     super.initState();
@@ -88,8 +80,6 @@ class _SettingsListItemState<T> extends State<SettingsListItem<T>>
       _controller.value = 1.0;
     }
 
-    _options = widget.optionsMap.keys;
-    _displayOptions = widget.optionsMap.values;
   }
 
   @override
@@ -225,9 +215,14 @@ class _CategoryHeader extends StatelessWidget {
                   start: 8,
                   end: 24,
                 ),
-                child: RotationTransition(
-                  turns: chevronRotation,
-                  child: const Icon(Icons.arrow_drop_down),
+                child: Row(
+                  children: [
+                    IconButton(onPressed: (){}, icon: Icon(Icons.error_rounded, size: 20, color: colorScheme.onSurface),),
+                    RotationTransition(
+                      turns: chevronRotation,
+                      child: const Icon(Icons.arrow_drop_down),
+                    ),
+                  ],
                 ),
               )
             ],

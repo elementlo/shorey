@@ -1,8 +1,8 @@
 import 'dart:collection';
+import 'dart:ui';
 
 import 'package:drift/drift.dart' as d;
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/config/config.dart';
@@ -473,7 +473,8 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
           .linkDatabase(notionDatabaseId)
           .then((result) {
         if (result != null) {
-          context.read<CategoryInfoViewModel>().setDatabase = result;
+          if (mounted)
+            context.read<CategoryInfoViewModel>().setDatabase = result;
         }
       });
     }
@@ -488,7 +489,7 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
     final showNetImage = database?.cover?.external?.url != null &&
         database?.cover?.external?.url != '';
     return Container(
-      padding: EdgeInsets.only(top: offStageCard ? 50 : 20, bottom: 20),
+      padding: EdgeInsets.symmetric(horizontal: 12),
       width: double.infinity,
       height: 230,
       child: Stack(
@@ -501,52 +502,57 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                   controller: widget.controller,
                   maxLines: 1,
                   decoration: InputDecoration(
-                      labelText: S.of(context).notionPageId,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey)),
-                      border: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey)),
-                      suffix: Container(
-                        width: 25,
-                        height: 25,
-                        child: IconButton(
-                            padding: EdgeInsets.all(0),
-                            onPressed: () async {
-                              if (widget.controller.text.isNotEmpty) {
-                                FocusScope.of(context)
-                                    .requestFocus(FocusNode());
-                                EasyLoading.show();
-                                final result = await context
-                                    .read<NotionWorkFlow>()
-                                    .linkDatabase(widget.controller.text);
-                                if (result != null) {
-                                  offStageCard = false;
-                                  viewModel.setDatabase = result;
-                                  setState(() {});
-                                } else {
-                                  EasyLoading.show();
-                                  final result = await context
-                                      .read<NotionWorkFlow>()
-                                      .createDatabase(widget.controller.text);
-                                  if (result != null) {
-                                    offStageCard = false;
-                                    viewModel.setDatabase = result;
-                                    setState(() {});
-                                  }
-                                }
-                                EasyLoading.dismiss();
-                              }
-                            },
-                            icon: Icon(
-                              Icons.check,
-                              color: colorScheme.onSecondary,
-                            )),
-                      ),
-                      contentPadding: EdgeInsets.only(top: 10)),
+                    //labelText: S.of(context).notionPageId,
+                    prefixIconConstraints: BoxConstraints(maxHeight: 25, maxWidth: 25),
+                    prefixIcon: Icon(
+                      Icons.search_rounded,
+                      color: Colors.grey,
+                    ),
+                    hintText: S.of(context).typeKeyWordsForSearchDB,
+                    hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey)),
+                    border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey)),
+                    // suffix: Container(
+                    //   width: 25,
+                    //   height: 25,
+                    //   child: IconButton(
+                    //       padding: EdgeInsets.all(0),
+                    //       onPressed: () async {
+                    //         if (widget.controller.text.isNotEmpty) {
+                    //           FocusScope.of(context).requestFocus(FocusNode());
+                    //           EasyLoading.show();
+                    //           final result = await context
+                    //               .read<NotionWorkFlow>()
+                    //               .linkDatabase(widget.controller.text);
+                    //           if (result != null) {
+                    //             offStageCard = false;
+                    //             viewModel.setDatabase = result;
+                    //             setState(() {});
+                    //           } else {
+                    //             EasyLoading.show();
+                    //             final result = await context
+                    //                 .read<NotionWorkFlow>()
+                    //                 .createDatabase(widget.controller.text);
+                    //             if (result != null) {
+                    //               offStageCard = false;
+                    //               viewModel.setDatabase = result;
+                    //               setState(() {});
+                    //             }
+                    //           }
+                    //           EasyLoading.dismiss();
+                    //         }
+                    //       },
+                    //       icon: Icon(
+                    //         Icons.check,
+                    //         color: colorScheme.onSecondary,
+                    //       )),
+                    // ),
+                  ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 12,
                 ),
                 TipsTextView(S.of(context).notionPrompt),
               ],
@@ -610,14 +616,8 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                       padding: EdgeInsets.symmetric(
                         horizontal: 16,
                       ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                              '${database?.icon?.type == 'emoji' ? database?.icon?.emoji : ''}'),
-                          Text('${database?.title?[0].plainText}'),
-                        ],
-                      ))
+                      child: Text(
+                          '${database?.icon?.type == 'emoji' ? database?.icon?.emoji : ''}${database?.title?[0].plainText}'))
                 ],
               ),
             ),
@@ -640,7 +640,7 @@ class TipsTextView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            padding: EdgeInsets.symmetric(vertical: 4),
             child: Icon(
               Icons.wb_incandescent,
               size: 15,

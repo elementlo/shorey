@@ -29,7 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "actionHistoryTitle": MessageLookupByLibrary.simpleMessage("行为历史"),
         "actionUpdate": MessageLookupByLibrary.simpleMessage("更新为"),
         "addCategory": MessageLookupByLibrary.simpleMessage("添加"),
-        "addCategoryName": MessageLookupByLibrary.simpleMessage("名字"),
+        "addCategoryName": MessageLookupByLibrary.simpleMessage("标题"),
         "addNewTaskTitle": MessageLookupByLibrary.simpleMessage("标题"),
         "archivedItemsTitle": MessageLookupByLibrary.simpleMessage("已归档"),
         "archivedLess": MessageLookupByLibrary.simpleMessage("归档较少"),
@@ -80,7 +80,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "notionPageId":
             MessageLookupByLibrary.simpleMessage("Page ID/Database ID"),
         "notionPrompt": MessageLookupByLibrary.simpleMessage(
-            "如使用Page ID会在这个页面新建一个子页面作为数据库; 如使用Database ID, 则会绑定这个数据库"),
+            "如使用Page类型会在这个页面新建一个子页面作为数据库; 如使用Database类型, 则会绑定这个数据库"),
         "notionToken": MessageLookupByLibrary.simpleMessage("Notion token"),
         "retrospect": MessageLookupByLibrary.simpleMessage("回顾"),
         "settings": MessageLookupByLibrary.simpleMessage("设置"),
@@ -92,6 +92,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "time": MessageLookupByLibrary.simpleMessage("时间"),
         "tipsNotionId": MessageLookupByLibrary.simpleMessage(
             "可选项, 配置一个全局的Notion根页面, 添加记事时可选择默认都同步在此页面上"),
-        "today": MessageLookupByLibrary.simpleMessage("今天")
+        "today": MessageLookupByLibrary.simpleMessage("今天"),
+        "typeKeyWordsForSearchDB":
+            MessageLookupByLibrary.simpleMessage("请输入关键词以检索")
       };
 }
