@@ -540,10 +540,10 @@ class S {
     );
   }
 
-  /// `Use Page ID if you want to create a subpage in the specified parent page; Use Database ID if you want to link a exist database`
+  /// `Select a Page if you want to create a subpage as your database; Select a Database if you want to link an existed database`
   String get notionPrompt {
     return Intl.message(
-      'Use Page ID if you want to create a subpage in the specified parent page; Use Database ID if you want to link a exist database',
+      'Select a Page if you want to create a subpage as your database; Select a Database if you want to link an existed database',
       name: 'notionPrompt',
       desc: '',
       args: [],
@@ -660,11 +660,21 @@ class S {
     );
   }
 
-  /// `Please type some keywords for the search`
+  /// `Type some keywords for the search`
   String get typeKeyWordsForSearchDB {
     return Intl.message(
-      'Please type some keywords for the search',
+      'Type some keywords for the search',
       name: 'typeKeyWordsForSearchDB',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please input keywords`
+  String get pleaseInputKeywords {
+    return Intl.message(
+      'Please input keywords',
+      name: 'pleaseInputKeywords',
       desc: '',
       args: [],
     );

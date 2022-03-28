@@ -85,6 +85,10 @@ class NotionWorkFlow with ChangeNotifier {
     });
     return _actions.appendBlockChildren(pageId, text: text, links: links);
   }
+
+  Future<List<NotionDatabase>> searchObjects({required String keywords}) {
+    return _actions.searchObjects(keywords: keywords);
+  }
 }
 
 class _NotionActions {
@@ -173,7 +177,7 @@ class _NotionActions {
     if (pageId != null && pageId != '') {
       final param = await NotionDatabaseTemplate.itemProperties(
           title: todo.content == Value.absent() ? null : todo.content.value,
-          tags: todo.tags == Value.absent() ? null : [todo.tags.value??''],
+          tags: todo.tags == Value.absent() ? null : [todo.tags.value ?? ''],
           statusTitle: todo.statusTitle,
           createdTime: todo.createdTime.value.toIso8601String(),
           endTime: todo.filedTime == Value.absent()
@@ -195,5 +199,17 @@ class _NotionActions {
           await dio.patch('${notionBlocks}/${pageId}/children', data: param);
       if (response.success) {}
     }
+  }
+
+  Future<List<NotionDatabase>> searchObjects({required String keywords}) async {
+    final List<NotionDatabase> list = [];
+    final response = await dio
+        .post('${searchNotionObjects}', data: {'query': '${keywords}'});
+    if (response.success) {
+      response.data['results'].forEach((value) {
+        list.add(NotionDatabase.fromJson(value));
+      });
+    }
+    return list;
   }
 }

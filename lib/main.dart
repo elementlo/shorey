@@ -80,7 +80,6 @@ class MyApp extends StatelessWidget {
   AppRouteInformationParser _routeInformationParser =
       AppRouteInformationParser();
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     /// todo: Navigator 2.0
@@ -96,31 +95,36 @@ class MyApp extends StatelessWidget {
     //   ),
     // );
 
-    return MaterialApp(
-      themeMode: ThemeMode.system,
-      theme: AppThemeData.lightThemeData.copyWith(
-        platform: defaultTargetPlatform,
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: MaterialApp(
+        themeMode: ThemeMode.system,
+        theme: AppThemeData.lightThemeData.copyWith(
+          platform: defaultTargetPlatform,
+        ),
+        builder: EasyLoading.init(),
+        localizationsDelegates: [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        localeResolutionCallback: (locale, supportedLocales) {
+          print(locale);
+          return context.read<ConfigViewModel>().initLocale(locale, supportedLocales);
+        },
+        // darkTheme: AppThemeData.darkThemeData.copyWith(
+        //   platform: defaultTargetPlatform,
+        // ),
+        routes: {
+          Routes.homePage: (context) => RootPage(),
+          Routes.settingsCategoryPage: (context) => SettingsCategoryPage(),
+          Routes.mantraEditPage: (context) => MantraEditPage(),
+        },
       ),
-      builder: EasyLoading.init(),
-      localizationsDelegates: [
-        S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: S.delegate.supportedLocales,
-      localeResolutionCallback: (locale, supportedLocales) {
-        print(locale);
-        return context.read<ConfigViewModel>().initLocale(locale, supportedLocales);
-      },
-      // darkTheme: AppThemeData.darkThemeData.copyWith(
-      //   platform: defaultTargetPlatform,
-      // ),
-      routes: {
-        Routes.homePage: (context) => RootPage(),
-        Routes.settingsCategoryPage: (context) => SettingsCategoryPage(),
-        Routes.mantraEditPage: (context) => MantraEditPage(),
-      },
     );
   }
 }

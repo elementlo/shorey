@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:drift/drift.dart' as d;
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/config/config.dart';
@@ -49,6 +50,7 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
   late int _selectedOption;
   var _showConfirm = false;
   var _linked = false;
+  double _topPadding = 0;
 
   @override
   void initState() {
@@ -86,12 +88,12 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
   }
 
   void _onTapSetting(_ExpandableSetting settingId) {
-    Future.delayed(Duration(milliseconds: 300), () {
-      final extent = _scrollController.position.maxScrollExtent;
-      if (extent > 0)
-        _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-            duration: Duration(milliseconds: 200), curve: Curves.ease);
-    });
+    // Future.delayed(Duration(milliseconds: 300), () {
+    //   final extent = _scrollController.position.maxScrollExtent;
+    //   if (extent > 0)
+    //     _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+    //         duration: Duration(milliseconds: 200), curve: Curves.ease);
+    // });
     setState(() {
       if (_expandedSettingId == settingId) {
         _expandedSettingId = null;
@@ -264,12 +266,18 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
                             1.0: DisplayOption(
                                 '${viewModel.database?.title?[0].plainText ?? ''}')
                           }),
+                          showHeaderInfoButton: true,
+                          onToggleInfo: (toggled) {
+                            toggled ? _topPadding = 70 : _topPadding = 0;
+                            setState(() {});
+                          },
                           onOptionChanged: (newTextScale) {},
                           onTapSetting: () => _onTapSetting(
                               _ExpandableSetting.linkNotionDatabase),
                           isExpanded: _expandedSettingId ==
                               _ExpandableSetting.linkNotionDatabase,
                           child: _NotionDatabaseCard(
+                              topPadding: _topPadding,
                               controller: _databaseController,
                               notionDatabaseId:
                                   widget.editingItem?.notionDatabaseId),
@@ -451,9 +459,13 @@ class _IconSelectorState extends State<_IconSelector> {
 class _NotionDatabaseCard extends StatefulWidget {
   final TextEditingController controller;
   final String? notionDatabaseId;
+  final double topPadding;
 
   const _NotionDatabaseCard(
-      {Key? key, required this.controller, this.notionDatabaseId})
+      {Key? key,
+      required this.controller,
+      this.notionDatabaseId,
+      required this.topPadding})
       : super(key: key);
 
   @override
@@ -491,7 +503,6 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12),
       width: double.infinity,
-      height: 230,
       child: Stack(
         children: [
           Offstage(
@@ -501,9 +512,16 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                 TextField(
                   controller: widget.controller,
                   maxLines: 1,
+                  onSubmitted: (input) async{
+                    if(input == null || input.isEmpty){
+                      Fluttertoast.showToast(msg: S.of(context).pleaseInputKeywords);
+                    }else{
+                      viewModel.notionObjectList = await context.read<NotionWorkFlow>().searchObjects(keywords: input);
+                    }
+                  },
                   decoration: InputDecoration(
-                    //labelText: S.of(context).notionPageId,
-                    prefixIconConstraints: BoxConstraints(maxHeight: 25, maxWidth: 25),
+                    prefixIconConstraints:
+                        BoxConstraints(maxHeight: 25, maxWidth: 25),
                     prefixIcon: Icon(
                       Icons.search_rounded,
                       color: Colors.grey,
@@ -554,7 +572,32 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
                 SizedBox(
                   height: 12,
                 ),
-                TipsTextView(S.of(context).notionPrompt),
+                AnimatedSize(
+                    duration: const Duration(milliseconds: 200),
+                    alignment: Alignment.topCenter,
+                    curve: Curves.easeIn,
+                    child: Container(
+                        height: widget.topPadding,
+                        child: TipsTextView(S.of(context).notionPrompt, showIcon: widget.topPadding != 0,))),
+                Expanded(
+                  child: Column(
+                    children: [
+                      for(int i = 0; i <= 120; i++)
+                      Text('1'),
+                      Text('1'),
+                      Text('1'),
+                      Text('1'),
+                      Text('1'),
+                      Text('1'),
+                      Text('1'),
+                      Text('1'),
+                      Text('1'),
+                      Text('1'),
+                      Text('1'),
+                      Text('1'),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
@@ -630,8 +673,9 @@ class _NotionDatabaseCardState extends State<_NotionDatabaseCard> {
 
 class TipsTextView extends StatelessWidget {
   final String tips;
+  final bool showIcon;
 
-  const TipsTextView(this.tips, {Key? key}) : super(key: key);
+  const TipsTextView(this.tips, {Key? key, this.showIcon = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -639,6 +683,7 @@ class TipsTextView extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if(showIcon)
           Padding(
             padding: EdgeInsets.symmetric(vertical: 4),
             child: Icon(

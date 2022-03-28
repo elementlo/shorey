@@ -18,6 +18,8 @@ class CategoryInfoViewModel extends ViewStateModel {
 
   NotionDatabase? database;
 
+  List<NotionDatabase> notionObjectList = [];
+
   set setDatabase(NotionDatabase? database) {
     this.database = database;
     notifyListeners();

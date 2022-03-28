@@ -183,7 +183,6 @@ class _NotionAccountCardState extends State<_NotionAccountCard> {
                         padding: EdgeInsets.all(0),
                         onPressed: () async {
                           if (widget.controller.text.isNotEmpty) {
-                            FocusScope.of(context).requestFocus(FocusNode());
                             EasyLoading.show();
                             final user = await context
                                 .read<NotionWorkFlow>()

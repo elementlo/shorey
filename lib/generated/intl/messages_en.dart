@@ -88,8 +88,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "notionPageId":
             MessageLookupByLibrary.simpleMessage("Page ID/Database ID"),
         "notionPrompt": MessageLookupByLibrary.simpleMessage(
-            "Use Page ID if you want to create a subpage in the specified parent page; Use Database ID if you want to link a exist database"),
+            "Select a Page if you want to create a subpage as your database; Select a Database if you want to link an existed database"),
         "notionToken": MessageLookupByLibrary.simpleMessage("Notion token"),
+        "pleaseInputKeywords":
+            MessageLookupByLibrary.simpleMessage("Please input keywords"),
         "retrospect": MessageLookupByLibrary.simpleMessage("Retrospect"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "shoreyMomment": MessageLookupByLibrary.simpleMessage("Shorey moment"),
@@ -102,6 +104,6 @@ class MessageLookup extends MessageLookupByLibrary {
             "Optional, config a global Notion page to store all your tasks"),
         "today": MessageLookupByLibrary.simpleMessage("Today"),
         "typeKeyWordsForSearchDB": MessageLookupByLibrary.simpleMessage(
-            "Please type some keywords for the search")
+            "Type some keywords for the search")
       };
 }

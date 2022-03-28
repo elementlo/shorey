@@ -82,6 +82,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "notionPrompt": MessageLookupByLibrary.simpleMessage(
             "如使用Page类型会在这个页面新建一个子页面作为数据库; 如使用Database类型, 则会绑定这个数据库"),
         "notionToken": MessageLookupByLibrary.simpleMessage("Notion token"),
+        "pleaseInputKeywords": MessageLookupByLibrary.simpleMessage("请输入关键词"),
         "retrospect": MessageLookupByLibrary.simpleMessage("回顾"),
         "settings": MessageLookupByLibrary.simpleMessage("设置"),
         "shoreyMomment": MessageLookupByLibrary.simpleMessage("Shorey时刻"),

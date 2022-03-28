@@ -590,47 +590,4 @@ class _CategoryDemoItemState extends State<CategoryDemoItem> {
   }
 }
 
-class AnimateSettingsListItems extends StatelessWidget {
-  const AnimateSettingsListItems({
-    Key? key,
-    required this.animation,
-    required this.children,
-  }) : super(key: key);
 
-  final Animation<double> animation;
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    final dividingPadding = 4.0;
-    final topPaddingTween = Tween<double>(
-      begin: 0,
-      end: children.length * dividingPadding,
-    );
-    final dividerTween = Tween<double>(
-      begin: 0,
-      end: dividingPadding,
-    );
-
-    return Padding(
-      padding: EdgeInsets.only(top: topPaddingTween.animate(animation).value),
-      child: Column(
-        children: [
-          for (Widget child in children)
-            AnimatedBuilder(
-              animation: animation,
-              builder: (context, child) {
-                return Padding(
-                  padding: EdgeInsets.only(
-                    top: dividerTween.animate(animation).value,
-                  ),
-                  child: child,
-                );
-              },
-              child: child,
-            ),
-        ],
-      ),
-    );
-  }
-}
