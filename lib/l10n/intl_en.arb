@@ -91,5 +91,6 @@
   "linkNotionIfYouWant": "Link a Notion account in Shorey's setting menu with a token could sync your items with a Notion database.",
   "addNewTaskTitle": "Title",
   "typeKeyWordsForSearchDB": "Type some keywords for the search",
-  "pleaseInputKeywords": "Please input keywords"
+  "pleaseInputKeywords": "Please input keywords",
+  "haveNotFindAnything": "Haven't find anything"
 }

@@ -91,5 +91,6 @@
   "linkNotionIfYouWant": "在Shorey的设置中绑定Notion账户, 可以同步你的笔记到Notion数据库中",
   "addNewTaskTitle": "标题",
   "typeKeyWordsForSearchDB": "请输入关键词以检索",
-  "pleaseInputKeywords": "请输入关键词"
+  "pleaseInputKeywords": "请输入关键词",
+  "haveNotFindAnything": "未检索到内容"
 }

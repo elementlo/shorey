@@ -60,6 +60,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Every Wednesday"),
         "everyday": MessageLookupByLibrary.simpleMessage("Every day"),
         "frequency": MessageLookupByLibrary.simpleMessage("Frequency"),
+        "haveNotFindAnything":
+            MessageLookupByLibrary.simpleMessage("Haven\'t find anything"),
         "itemAlert": MessageLookupByLibrary.simpleMessage("Title"),
         "itemRemark": MessageLookupByLibrary.simpleMessage("Remark"),
         "languages": MessageLookupByLibrary.simpleMessage("Languages"),

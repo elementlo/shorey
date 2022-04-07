@@ -43,7 +43,7 @@ class SettingsListItem<T> extends StatefulWidget {
 class _SettingsListItemState<T> extends State<SettingsListItem<T>>
     with SingleTickerProviderStateMixin {
   static final Animatable<double> _easeInTween =
-      CurveTween(curve: Curves.easeIn);
+  CurveTween(curve: Curves.easeIn);
   static const _expandDuration = Duration(milliseconds: 150);
   late AnimationController _controller;
   late Animation<double> _childrenHeightFactor;
@@ -135,25 +135,25 @@ class _SettingsListItemState<T> extends State<SettingsListItem<T>>
   @override
   Widget build(BuildContext context) {
     _handleExpansion();
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     return AnimatedBuilder(
       animation: _controller.view,
       builder: _buildHeaderWithChildren,
       child: Container(
-          constraints: const BoxConstraints(maxHeight: 460),
           color: colorScheme.secondaryVariant,
           margin: const EdgeInsetsDirectional.only(bottom: 40),
           padding:
-              const EdgeInsetsDirectional.only(start: 24, end: 24, bottom: 0),
+          const EdgeInsetsDirectional.only(start: 24, end: 24, bottom: 0),
           child: widget.child
-          //CustomizedDatePicker([])
-          ),
+      ),
     );
   }
 }
 
 class _CategoryHeader extends StatefulWidget {
-   _CategoryHeader({
+  _CategoryHeader({
     Key? key,
     this.margin,
     required this.padding,
@@ -187,9 +187,19 @@ class _CategoryHeaderState extends State<_CategoryHeader> {
   var _showInfoButton = false;
 
   @override
+  void initState() {
+    super.initState();
+    _showInfoButton = widget.padding.horizontal >= 64;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
+    final textTheme = Theme
+        .of(context)
+        .textTheme;
     return Container(
       margin: widget.margin,
       child: Material(
@@ -197,7 +207,7 @@ class _CategoryHeaderState extends State<_CategoryHeader> {
         color: Colors.white,
         clipBehavior: Clip.antiAlias,
         child: InkWell(
-          onTap: (){
+          onTap: () {
             _showInfoButton = !_showInfoButton;
             setState(() {});
             widget.onTap?.call();
@@ -238,7 +248,7 @@ class _CategoryHeaderState extends State<_CategoryHeader> {
                 ),
                 child: Row(
                   children: [
-                    if (widget.showInfoButton&&_showInfoButton)
+                    if (widget.showInfoButton && _showInfoButton)
                       IconButton(
                         onPressed: () {
                           _toggledState = !_toggledState;
@@ -248,7 +258,7 @@ class _CategoryHeaderState extends State<_CategoryHeader> {
                         icon: Icon(Icons.info_rounded,
                             size: 20,
                             color: !_toggledState
-                                ? colorScheme.onSurface
+                                ? Colors.grey
                                 : colorScheme.onSecondary),
                       ),
                     RotationTransition(
@@ -289,7 +299,9 @@ class AnimateSettingsListItems extends StatelessWidget {
     );
 
     return Padding(
-      padding: EdgeInsets.only(top: topPaddingTween.animate(animation).value),
+      padding: EdgeInsets.only(top: topPaddingTween
+          .animate(animation)
+          .value),
       child: Column(
         children: [
           for (Widget child in children)
@@ -298,7 +310,9 @@ class AnimateSettingsListItems extends StatelessWidget {
               builder: (context, child) {
                 return Padding(
                   padding: EdgeInsets.only(
-                    top: dividerTween.animate(animation).value,
+                    top: dividerTween
+                        .animate(animation)
+                        .value,
                   ),
                   child: child,
                 );

@@ -35,6 +35,7 @@ class NotionDatabaseTemplate {
 
   static const String jStatus = 'Status';
   static const String jBrief = 'Brief';
+  static const String jName = 'Name';
   static const String jTags = 'Tags';
   static const String jDuration = 'Duration';
   static const String jReminderTime = 'Reminder Time';
@@ -62,7 +63,7 @@ class NotionDatabaseTemplate {
     if (json != null) {
       final map = jsonDecode(json);
       map[jParent][jDatabaseId] = databaseId;
-      map[jProperties][jBrief][jTypeTitle][0][jTypeText][jTypeContent] = title;
+      map[jProperties][jName][jTypeTitle][0][jTypeText][jTypeContent] = title;
       map[jProperties][jStatus][jTypeSelect][jTypeName] = statusTitle;
       map[jProperties][jTags][jTypeMultiSelect][0][jTypeName] = tags?[0];
       map[jProperties][jDuration][jTypeDate][jTypeStart] = createdTime;
@@ -103,7 +104,7 @@ class NotionDatabaseTemplate {
     final map = Map<String, dynamic>();
     map[jProperties] = {};
     if (title != null && title.isNotEmpty) {
-      map[jProperties][jBrief] = {
+      map[jProperties][jName] = {
         'title': [
           {
             'text': {'content': '${title}'}

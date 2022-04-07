@@ -9,6 +9,7 @@ import 'package:spark_list/main.dart';
 import 'package:spark_list/model/notion_database_model.dart';
 import 'package:spark_list/model/notion_database_template.dart';
 import 'package:spark_list/model/notion_model.dart';
+import 'package:spark_list/model/notion_page_model.dart';
 import 'package:spark_list/resource/data_provider.dart';
 import 'package:spark_list/resource/http_provider.dart';
 
@@ -86,7 +87,7 @@ class NotionWorkFlow with ChangeNotifier {
     return _actions.appendBlockChildren(pageId, text: text, links: links);
   }
 
-  Future<List<NotionDatabase>> searchObjects({required String keywords}) {
+  Future<List<dynamic>> searchObjects({required String keywords}) {
     return _actions.searchObjects(keywords: keywords);
   }
 }
@@ -201,13 +202,17 @@ class _NotionActions {
     }
   }
 
-  Future<List<NotionDatabase>> searchObjects({required String keywords}) async {
-    final List<NotionDatabase> list = [];
+  Future<List<dynamic>> searchObjects({required String keywords}) async {
+    final List<dynamic> list = [];
     final response = await dio
         .post('${searchNotionObjects}', data: {'query': '${keywords}'});
     if (response.success) {
       response.data['results'].forEach((value) {
-        list.add(NotionDatabase.fromJson(value));
+        if(value['object'] == 'page'){
+          list.add(NotionPage.fromJson(value));
+        }else if(value['object']=='database'){
+          list.add(NotionDatabase.fromJson(value));
+        }
       });
     }
     return list;

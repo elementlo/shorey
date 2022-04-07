@@ -679,6 +679,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Haven't find anything`
+  String get haveNotFindAnything {
+    return Intl.message(
+      'Haven\'t find anything',
+      name: 'haveNotFindAnything',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
