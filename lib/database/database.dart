@@ -76,6 +76,8 @@ class Categories extends Table {
   IntColumn get iconId => integer()();
 
   IntColumn get colorId => integer()();
+
+  BoolColumn get autoSync => boolean().nullable().withDefault(const Constant(true))();
 }
 
 LazyDatabase _openConnection() {

@@ -274,7 +274,7 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
                             1.0: DisplayOption(
                                 '${viewModel.database?.title?[0].plainText ?? ''}')
                           }),
-                          showHeaderInfoButton: true,
+                          showHeaderInfoButton: viewModel.database == null,
                           onToggleInfo: (toggled) {
                             toggled ? _topPadding = 70 : _topPadding = 0;
                             setState(() {});
@@ -513,224 +513,185 @@ class _CollapsedMenuState extends State<_CollapsedMenu>
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12),
       width: double.infinity,
-      child: _offStageCard?
-          Column(
-            children: [
-              TextField(
-                controller: widget.controller,
-                maxLines: 1,
-                onSubmitted: (input) async {
-                  if (input == null || input.isEmpty) {
-                    Fluttertoast.showToast(
-                        msg: S.of(context).pleaseInputKeywords);
-                  } else {
-                    _showLoading = true;
-                    setState(() {});
-                    viewModel.setObjectList = await context
-                        .read<NotionWorkFlow>()
-                        .searchObjects(keywords: input);
-                    _showLoading = false;
-                    setState(() {});
-                  }
-                },
-                decoration: InputDecoration(
-                  prefixIconConstraints:
-                      BoxConstraints(maxHeight: 25, maxWidth: 25),
-                  prefixIcon: Icon(
-                    Icons.search_rounded,
-                    color: Colors.grey,
-                  ),
-                  hintText: S.of(context).typeKeyWordsForSearchDB,
-                  hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey)),
-                  border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey)),
-                  suffixIconConstraints:
-                      BoxConstraints(maxHeight: 25, maxWidth: 25),
-                  suffixIcon: Visibility(
-                    visible: _showLoading,
-                    child: SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          color: Colors.grey,
-                          strokeWidth: 2,
-                        )),
-                  ),
-                  // suffix: Container(
-                  //     height:25,
-                  //     width: 25,
-                  //     child: CircularProgressIndicator(
-                  //       color: Colors.grey,
-                  //     )),
-                  // suffix: Container(
-                  //   width: 25,
-                  //   height: 25,
-                  //   child: IconButton(
-                  //       padding: EdgeInsets.all(0),
-                  //       onPressed: () async {
-                  //         if (widget.controller.text.isNotEmpty) {
-                  //           FocusScope.of(context).requestFocus(FocusNode());
-                  //           EasyLoading.show();
-                  //           final result = await context
-                  //               .read<NotionWorkFlow>()
-                  //               .linkDatabase(widget.controller.text);
-                  //           if (result != null) {
-                  //             offStageCard = false;
-                  //             viewModel.setDatabase = result;
-                  //             setState(() {});
-                  //           } else {
-                  //             EasyLoading.show();
-                  //             final result = await context
-                  //                 .read<NotionWorkFlow>()
-                  //                 .createDatabase(widget.controller.text);
-                  //             if (result != null) {
-                  //               offStageCard = false;
-                  //               viewModel.setDatabase = result;
-                  //               setState(() {});
-                  //             }
-                  //           }
-                  //           EasyLoading.dismiss();
-                  //         }
-                  //       },
-                  //       icon: Icon(
-                  //         Icons.check,
-                  //         color: colorScheme.onSecondary,
-                  //       )),
-                  // ),
-                ),
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              AnimatedSize(
-                  duration: const Duration(milliseconds: 200),
-                  alignment: Alignment.topCenter,
-                  curve: Curves.easeIn,
-                  child: Container(
-                      height: widget.topPadding,
-                      child: TipsTextView(
-                        S.of(context).notionPrompt,
-                        showIcon: widget.topPadding != 0,
-                      ))),
-              if (viewModel.notionObjectList.length == 0)
-                Container(
-                    height: MediaQuery.of(context).size.height - 200,
-                    padding: EdgeInsets.only(top: 40),
-                    child: Text(
-                      S.of(context).haveNotFindAnything,
-                      style: TextStyle(color: Colors.grey),
-                    )),
-              ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: viewModel.notionObjectList.length,
-                  itemExtent: 52,
-                  itemBuilder: (context, index) {
-                    final object = viewModel.notionObjectList[index];
-                    String? leading;
-                    String? title;
-                    String type = '';
-                    if (object is database.NotionDatabase) {
-                      type = 'Database';
-                      leading = object.icon?.emoji ?? '\u{1F4D4}';
-                      title = object.title?[0].text?.content;
-                    } else if (object is page.NotionPage) {
-                      type = 'Page';
-                      leading = object.icon?.emoji ?? '\u{1F4C4}';
-                      title =
-                          object.properties?.brief?.title?[0].text?.content;
+      child: _offStageCard
+          ? Column(
+              children: [
+                TextField(
+                  controller: widget.controller,
+                  maxLines: 1,
+                  onSubmitted: (input) async {
+                    if (input == null || input.isEmpty) {
+                      Fluttertoast.showToast(
+                          msg: S.of(context).pleaseInputKeywords);
+                    } else {
+                      _showLoading = true;
+                      setState(() {});
+                      viewModel.setObjectList = await context
+                          .read<NotionWorkFlow>()
+                          .searchObjects(keywords: input);
+                      _showLoading = false;
+                      setState(() {});
                     }
-                    return NotionObjectsListItem(
-                      title: title,
-                      leading: leading,
-                      type: type,
-                      onTap: () async {
-                        EasyLoading.show();
-                        if (object is database.NotionDatabase) {
-                          viewModel.setDatabase = object;
-                        } else if (object is page.NotionPage) {
-                          final result = await context
-                              .read<NotionWorkFlow>()
-                              .createDatabase(object.id!);
-                          if (result != null) {
-                            viewModel.setDatabase = result;
-                          }
-                        }
-                        EasyLoading.dismiss();
-                        setState(() {});
-                      },
-                    );
-                  }),
-              SizedBox(
-                height: 16,
-              )
-            ],
-          ):
-          Container(
-            height: 200,
-            child: Card(
-              elevation: 1,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  topRight: Radius.circular(8)),
-                              image: showNetImage
-                                  ? DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(
-                                        '${bindDatabase?.cover?.external?.url}',
-                                      ))
-                                  : DecorationImage(
-                                      scale: 5,
-                                      opacity: 0.7,
-                                      image: AssetImage(
-                                          'assets/images/bg_database.jpg'),
-                                    )),
-                        ),
-                        Positioned(
-                            right: 0,
-                            top: 0,
-                            child: IconButton(
-                              iconSize: 25,
-                              padding: EdgeInsets.all(0),
-                              onPressed: () {
-                                context
-                                    .read<CategoryInfoViewModel>()
-                                    .unlinkNotionDatabase();
-                              },
-                              icon: Icon(
-                                Icons.clear,
-                                color: Colors.grey.shade400,
-                              ),
-                            ))
-                      ],
+                  },
+                  decoration: InputDecoration(
+                    prefixIconConstraints:
+                        BoxConstraints(maxHeight: 25, maxWidth: 25),
+                    prefixIcon: Icon(
+                      Icons.search_rounded,
+                      color: Colors.grey,
+                    ),
+                    hintText: S.of(context).typeKeyWordsForSearchDB,
+                    hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey)),
+                    border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey)),
+                    suffixIconConstraints:
+                        BoxConstraints(maxHeight: 25, maxWidth: 25),
+                    suffixIcon: Visibility(
+                      visible: _showLoading,
+                      child: SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.grey,
+                            strokeWidth: 2,
+                          )),
                     ),
                   ),
-                  Divider(
-                    height: 1,
-                  ),
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                AnimatedSize(
+                    duration: const Duration(milliseconds: 200),
+                    alignment: Alignment.topCenter,
+                    curve: Curves.easeIn,
+                    child: Container(
+                        height: widget.topPadding,
+                        child: TipsTextView(
+                          S.of(context).notionPrompt,
+                          showIcon: widget.topPadding != 0,
+                        ))),
+                if (viewModel.notionObjectList.length == 0)
                   Container(
+                      height: MediaQuery.of(context).size.height - 200,
+                      padding: EdgeInsets.only(top: 40),
+                      child: Text(
+                        S.of(context).haveNotFindAnything,
+                        style: TextStyle(color: Colors.grey),
+                      )),
+                ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: viewModel.notionObjectList.length,
+                    itemExtent: 52,
+                    itemBuilder: (context, index) {
+                      final object = viewModel.notionObjectList[index];
+                      String? leading;
+                      String? title;
+                      String type = '';
+                      if (object is database.NotionDatabase) {
+                        type = 'Database';
+                        leading = object.icon?.emoji ?? '\u{1F4D4}';
+                        title = object.title?[0].text?.content;
+                      } else if (object is page.NotionPage) {
+                        type = 'Page';
+                        leading = object.icon?.emoji ?? '\u{1F4C4}';
+                        title =
+                            object.properties?.brief?.title?[0].text?.content;
+                      }
+                      return NotionObjectsListItem(
+                        title: title,
+                        leading: leading,
+                        type: type,
+                        onTap: () async {
+                          EasyLoading.show();
+                          if (object is database.NotionDatabase) {
+                            viewModel.setDatabase = object;
+                          } else if (object is page.NotionPage) {
+                            final result = await context
+                                .read<NotionWorkFlow>()
+                                .createDatabase(object.id!);
+                            if (result != null) {
+                              viewModel.setDatabase = result;
+                            }
+                          }
+                          EasyLoading.dismiss();
+                          setState(() {});
+                        },
+                      );
+                    }),
+                SizedBox(
+                  height: 16,
+                )
+              ],
+            )
+          : Container(
+              height: 200,
+              padding: EdgeInsets.symmetric(vertical: 14),
+              child: Card(
+                elevation: 1,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    topRight: Radius.circular(8)),
+                                image: showNetImage
+                                    ? DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage(
+                                          '${bindDatabase?.cover?.external?.url}',
+                                        ))
+                                    : DecorationImage(
+                                        scale: 5,
+                                        opacity: 0.7,
+                                        image: AssetImage(
+                                            'assets/images/bg_database.jpg'),
+                                      )),
+                          ),
+                          Positioned(
+                              right: 0,
+                              top: 0,
+                              child: IconButton(
+                                iconSize: 25,
+                                padding: EdgeInsets.all(0),
+                                onPressed: () {
+                                  context
+                                      .read<CategoryInfoViewModel>()
+                                      .unlinkNotionDatabase();
+                                },
+                                icon: Icon(
+                                  Icons.clear,
+                                  color: Colors.grey.shade400,
+                                ),
+                              ))
+                        ],
+                      ),
+                    ),
+                    Divider(
+                      height: 1,
+                    ),
+                    Container(
                       height: 40,
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.symmetric(
                         horizontal: 16,
                       ),
                       child: Text(
-                          '${bindDatabase?.icon?.type == 'emoji' ? bindDatabase?.icon?.emoji : ''}${bindDatabase?.title?[0].plainText}'))
-                ],
+                          '${bindDatabase?.icon?.type == 'emoji' ? bindDatabase?.icon?.emoji : ''}${bindDatabase?.title?[0].plainText}'),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
     );
   }
 
@@ -810,6 +771,91 @@ class NotionObjectsListItem extends StatelessWidget {
             ],
           ),
           const Divider(height: 10)
+        ],
+      ),
+    );
+  }
+}
+
+class NotionCardView extends StatelessWidget {
+  final String title;
+  final bool showNetImage;
+  final String? coverUrl;
+  final String? emoji;
+  final VoidCallback? onTap;
+
+  const NotionCardView(
+      {Key? key,
+      required this.title,
+      required this.showNetImage,
+      this.coverUrl,
+      this.onTap,
+      this.emoji})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 1,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: Column(
+        children: [
+          Expanded(
+            child: Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          topRight: Radius.circular(8)),
+                      image: showNetImage
+                          ? DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(
+                                '${coverUrl}',
+                                //'${bindDatabase?.cover?.external?.url}',
+                              ))
+                          : DecorationImage(
+                              scale: 5,
+                              opacity: 0.7,
+                              image:
+                                  AssetImage('assets/images/bg_database.jpg'),
+                            )),
+                ),
+                Positioned(
+                    right: 0,
+                    top: 0,
+                    child: IconButton(
+                      iconSize: 25,
+                      padding: EdgeInsets.all(0),
+                      onPressed: () {
+                        context
+                            .read<CategoryInfoViewModel>()
+                            .unlinkNotionDatabase();
+                      },
+                      icon: Icon(
+                        Icons.clear,
+                        color: Colors.grey.shade400,
+                      ),
+                    ))
+              ],
+            ),
+          ),
+          Divider(
+            height: 1,
+          ),
+          Container(
+            height: 40,
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.symmetric(
+              horizontal: 16,
+            ),
+            child: Text(
+              //'${bindDatabase?.icon?.type == 'emoji' ? bindDatabase?.icon?.emoji : ''}${bindDatabase?.title?[0].plainText}',
+              '${emoji??''}${title}'
+            ),
+          )
         ],
       ),
     );

@@ -536,13 +536,15 @@ class Category extends DataClass implements Insertable<Category> {
   int? notionDatabaseType;
   int iconId;
   int colorId;
+  bool? autoSync;
   Category(
       {required this.id,
       required this.name,
       this.notionDatabaseId,
       this.notionDatabaseType,
       required this.iconId,
-      required this.colorId});
+      required this.colorId,
+      this.autoSync});
   factory Category.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Category(
@@ -558,6 +560,8 @@ class Category extends DataClass implements Insertable<Category> {
           .mapFromDatabaseResponse(data['${effectivePrefix}icon_id'])!,
       colorId: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}color_id'])!,
+      autoSync: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}auto_sync']),
     );
   }
   @override
@@ -573,6 +577,9 @@ class Category extends DataClass implements Insertable<Category> {
     }
     map['icon_id'] = Variable<int>(iconId);
     map['color_id'] = Variable<int>(colorId);
+    if (!nullToAbsent || autoSync != null) {
+      map['auto_sync'] = Variable<bool?>(autoSync);
+    }
     return map;
   }
 
@@ -588,6 +595,9 @@ class Category extends DataClass implements Insertable<Category> {
           : Value(notionDatabaseType),
       iconId: Value(iconId),
       colorId: Value(colorId),
+      autoSync: autoSync == null && nullToAbsent
+          ? const Value.absent()
+          : Value(autoSync),
     );
   }
 
@@ -601,6 +611,7 @@ class Category extends DataClass implements Insertable<Category> {
       notionDatabaseType: serializer.fromJson<int?>(json['notionDatabaseType']),
       iconId: serializer.fromJson<int>(json['iconId']),
       colorId: serializer.fromJson<int>(json['colorId']),
+      autoSync: serializer.fromJson<bool?>(json['autoSync']),
     );
   }
   @override
@@ -613,6 +624,7 @@ class Category extends DataClass implements Insertable<Category> {
       'notionDatabaseType': serializer.toJson<int?>(notionDatabaseType),
       'iconId': serializer.toJson<int>(iconId),
       'colorId': serializer.toJson<int>(colorId),
+      'autoSync': serializer.toJson<bool?>(autoSync),
     };
   }
 
@@ -622,7 +634,8 @@ class Category extends DataClass implements Insertable<Category> {
           String? notionDatabaseId,
           int? notionDatabaseType,
           int? iconId,
-          int? colorId}) =>
+          int? colorId,
+          bool? autoSync}) =>
       Category(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -630,6 +643,7 @@ class Category extends DataClass implements Insertable<Category> {
         notionDatabaseType: notionDatabaseType ?? this.notionDatabaseType,
         iconId: iconId ?? this.iconId,
         colorId: colorId ?? this.colorId,
+        autoSync: autoSync ?? this.autoSync,
       );
   @override
   String toString() {
@@ -639,14 +653,15 @@ class Category extends DataClass implements Insertable<Category> {
           ..write('notionDatabaseId: $notionDatabaseId, ')
           ..write('notionDatabaseType: $notionDatabaseType, ')
           ..write('iconId: $iconId, ')
-          ..write('colorId: $colorId')
+          ..write('colorId: $colorId, ')
+          ..write('autoSync: $autoSync')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, name, notionDatabaseId, notionDatabaseType, iconId, colorId);
+  int get hashCode => Object.hash(id, name, notionDatabaseId,
+      notionDatabaseType, iconId, colorId, autoSync);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -656,7 +671,8 @@ class Category extends DataClass implements Insertable<Category> {
           other.notionDatabaseId == this.notionDatabaseId &&
           other.notionDatabaseType == this.notionDatabaseType &&
           other.iconId == this.iconId &&
-          other.colorId == this.colorId);
+          other.colorId == this.colorId &&
+          other.autoSync == this.autoSync);
 }
 
 class CategoriesCompanion extends UpdateCompanion<Category> {
@@ -666,6 +682,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   Value<int?> notionDatabaseType;
   Value<int> iconId;
   Value<int> colorId;
+  Value<bool?> autoSync;
   CategoriesCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -673,6 +690,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     this.notionDatabaseType = const Value.absent(),
     this.iconId = const Value.absent(),
     this.colorId = const Value.absent(),
+    this.autoSync = const Value.absent(),
   });
   CategoriesCompanion.insert({
     this.id = const Value.absent(),
@@ -681,6 +699,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     this.notionDatabaseType = const Value.absent(),
     required int iconId,
     required int colorId,
+    this.autoSync = const Value.absent(),
   })  : name = Value(name),
         iconId = Value(iconId),
         colorId = Value(colorId);
@@ -691,6 +710,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     Expression<int?>? notionDatabaseType,
     Expression<int>? iconId,
     Expression<int>? colorId,
+    Expression<bool?>? autoSync,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -700,6 +720,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
         'notion_database_type': notionDatabaseType,
       if (iconId != null) 'icon_id': iconId,
       if (colorId != null) 'color_id': colorId,
+      if (autoSync != null) 'auto_sync': autoSync,
     });
   }
 
@@ -709,7 +730,8 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
       Value<String?>? notionDatabaseId,
       Value<int?>? notionDatabaseType,
       Value<int>? iconId,
-      Value<int>? colorId}) {
+      Value<int>? colorId,
+      Value<bool?>? autoSync}) {
     return CategoriesCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -717,6 +739,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
       notionDatabaseType: notionDatabaseType ?? this.notionDatabaseType,
       iconId: iconId ?? this.iconId,
       colorId: colorId ?? this.colorId,
+      autoSync: autoSync ?? this.autoSync,
     );
   }
 
@@ -741,6 +764,9 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     if (colorId.present) {
       map['color_id'] = Variable<int>(colorId.value);
     }
+    if (autoSync.present) {
+      map['auto_sync'] = Variable<bool?>(autoSync.value);
+    }
     return map;
   }
 
@@ -752,7 +778,8 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
           ..write('notionDatabaseId: $notionDatabaseId, ')
           ..write('notionDatabaseType: $notionDatabaseType, ')
           ..write('iconId: $iconId, ')
-          ..write('colorId: $colorId')
+          ..write('colorId: $colorId, ')
+          ..write('autoSync: $autoSync')
           ..write(')'))
         .toString();
   }
@@ -798,9 +825,24 @@ class $CategoriesTable extends Categories
   late final GeneratedColumn<int?> colorId = GeneratedColumn<int?>(
       'color_id', aliasedName, false,
       type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _autoSyncMeta = const VerificationMeta('autoSync');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, name, notionDatabaseId, notionDatabaseType, iconId, colorId];
+  late final GeneratedColumn<bool?> autoSync = GeneratedColumn<bool?>(
+      'auto_sync', aliasedName, true,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (auto_sync IN (0, 1))',
+      defaultValue: const Constant(true));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        name,
+        notionDatabaseId,
+        notionDatabaseType,
+        iconId,
+        colorId,
+        autoSync
+      ];
   @override
   String get aliasedName => _alias ?? 'categories';
   @override
@@ -842,6 +884,10 @@ class $CategoriesTable extends Categories
           colorId.isAcceptableOrUnknown(data['color_id']!, _colorIdMeta));
     } else if (isInserting) {
       context.missing(_colorIdMeta);
+    }
+    if (data.containsKey('auto_sync')) {
+      context.handle(_autoSyncMeta,
+          autoSync.isAcceptableOrUnknown(data['auto_sync']!, _autoSyncMeta));
     }
     return context;
   }
