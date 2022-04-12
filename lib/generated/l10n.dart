@@ -520,10 +520,10 @@ class S {
     );
   }
 
-  /// `Fill in the blanks to link Notion`
+  /// `Input your user token to link Notion`
   String get linkNotionInfo {
     return Intl.message(
-      'Fill in the blanks to link Notion',
+      'Input your user token to link Notion',
       name: 'linkNotionInfo',
       desc: '',
       args: [],
@@ -685,6 +685,16 @@ class S {
     return Intl.message(
       'Haven\'t find anything',
       name: 'haveNotFindAnything',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Automatically syncs to Notion`
+  String get autoSyncNotion {
+    return Intl.message(
+      'Automatically syncs to Notion',
+      name: 'autoSyncNotion',
       desc: '',
       args: [],
     );

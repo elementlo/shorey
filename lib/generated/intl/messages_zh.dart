@@ -35,6 +35,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "archivedLess": MessageLookupByLibrary.simpleMessage("归档较少"),
         "archivedList": MessageLookupByLibrary.simpleMessage("已归档"),
         "archivedMore": MessageLookupByLibrary.simpleMessage("较多"),
+        "autoSyncNotion": MessageLookupByLibrary.simpleMessage("自动同步到Notion"),
         "bindNotion": MessageLookupByLibrary.simpleMessage("关联Notion"),
         "cancelAlertTime": MessageLookupByLibrary.simpleMessage("已取消提醒时间"),
         "categoryInformation": MessageLookupByLibrary.simpleMessage("类别信息"),
@@ -64,7 +65,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "linkNotionIfYouWant": MessageLookupByLibrary.simpleMessage(
             "在Shorey的设置中绑定Notion账户, 可以同步你的笔记到Notion数据库中"),
         "linkNotionInfo":
-            MessageLookupByLibrary.simpleMessage("填写下面两项信息使Shorey与Notion连接"),
+            MessageLookupByLibrary.simpleMessage("输入你的用户令牌使Shorey与Notion连接"),
         "mainCategory": MessageLookupByLibrary.simpleMessage("类别"),
         "mainFocusToday": MessageLookupByLibrary.simpleMessage("今日聚焦"),
         "mantra": MessageLookupByLibrary.simpleMessage("格言"),

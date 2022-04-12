@@ -36,6 +36,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "archivedLess": MessageLookupByLibrary.simpleMessage("Archived less"),
         "archivedList": MessageLookupByLibrary.simpleMessage("Archived"),
         "archivedMore": MessageLookupByLibrary.simpleMessage("More"),
+        "autoSyncNotion": MessageLookupByLibrary.simpleMessage(
+            "Automatically syncs to Notion"),
         "bindNotion": MessageLookupByLibrary.simpleMessage("Link Notion"),
         "cancelAlertTime":
             MessageLookupByLibrary.simpleMessage("Cleared alert time"),
@@ -70,7 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "linkNotionIfYouWant": MessageLookupByLibrary.simpleMessage(
             "Link a Notion account in Shorey\'s setting menu with a token could sync your items with a Notion database."),
         "linkNotionInfo": MessageLookupByLibrary.simpleMessage(
-            "Fill in the blanks to link Notion"),
+            "Input your user token to link Notion"),
         "mainCategory": MessageLookupByLibrary.simpleMessage("Category"),
         "mainFocusToday":
             MessageLookupByLibrary.simpleMessage("Main Focus Today"),

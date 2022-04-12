@@ -28,9 +28,11 @@ class CategoryItem {
   int id;
   int colorId;
   int iconId;
+  bool autoSync;
 
   CategoryItem(this.id,
       {required this.name,
+      required this.autoSync,
       this.icon,
       required this.color,
       this.notionDatabaseId,
@@ -38,4 +40,3 @@ class CategoryItem {
       required this.colorId,
       required this.iconId});
 }
-

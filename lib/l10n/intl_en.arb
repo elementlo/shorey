@@ -76,7 +76,7 @@
   "notion": "Notion account",
   "linkNotionDatabase": "Link Notion database",
   "notionToken": "Notion token",
-  "linkNotionInfo": "Fill in the blanks to link Notion",
+  "linkNotionInfo": "Input your user token to link Notion",
   "notionPageId": "Page ID/Database ID",
   "notionPrompt": "Select a Page if you want to create a subpage as your database; Select a Database if you want to link an existed database",
   "notionDatabasePageTitle": "Notion Database",
@@ -92,5 +92,6 @@
   "addNewTaskTitle": "Title",
   "typeKeyWordsForSearchDB": "Type some keywords for the search",
   "pleaseInputKeywords": "Please input keywords",
-  "haveNotFindAnything": "Haven't find anything"
+  "haveNotFindAnything": "Haven't find anything",
+  "autoSyncNotion": "Automatically syncs to Notion"
 }

@@ -34,7 +34,7 @@ class ConfigViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-  void updateLinkedStatus(bool linked){
+  void updateLinkedStatus(bool linked) {
     _linkedNotion = linked;
   }
 
@@ -100,6 +100,7 @@ class ConfigViewModel extends ViewStateModel {
         if (element.name != 'mainfocus') {
           categoryDemosList.add(CategoryItem(
             element.id,
+            autoSync: element.autoSync ?? true,
             colorId: element.colorId,
             iconId: element.iconId,
             name: '${element.name}',
@@ -109,7 +110,7 @@ class ConfigViewModel extends ViewStateModel {
               SIcons.iconMap[element.iconId],
               color: Color(SColor.colorMap[element.colorId]!),
             ),
-            color: Color(SColor.colorMap[element.colorId]??1),
+            color: Color(SColor.colorMap[element.colorId] ?? 1),
           ));
         }
       });

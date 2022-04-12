@@ -15,6 +15,7 @@ import 'package:spark_list/resource/data_provider.dart';
 class CategoryInfoViewModel extends ViewStateModel {
   int _selectedColor = 1;
   int _selectedIcon = 1;
+  bool autoSyncToggle = true;
 
   NotionDatabase? database;
 
@@ -30,14 +31,12 @@ class CategoryInfoViewModel extends ViewStateModel {
     notifyListeners();
   }
 
-  int get selectedColor => _selectedColor;
-
-  CategoryInfoViewModel({CategoryItem? category}) {
-    if (category != null) {
-      selectedColor = category.colorId;
-      selectedIcon = category.iconId;
-    }
+  set setAutoSyncToggle(bool toggle){
+    this.autoSyncToggle = toggle;
+    notifyListeners();
   }
+
+  int get selectedColor => _selectedColor;
 
   set selectedColor(int index) {
     this._selectedColor = index;
