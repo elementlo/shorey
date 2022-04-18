@@ -3,6 +3,13 @@
     "type": "page_id",
     "page_id": "?"
   },
+  "cover": {
+    "type": "external",
+    "external": {
+      "url": "https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb"
+    }
+  },
+  "icon":{"type":"emoji","emoji":"🍒"},
   "title": [
     {
       "type": "text",

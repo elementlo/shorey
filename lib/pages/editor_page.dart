@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -15,13 +16,10 @@ import 'package:spark_list/model/model.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
-import 'package:spark_list/widget/category_list_item.dart';
 import 'package:spark_list/widget/customized_date_picker.dart';
 import 'package:spark_list/widget/settings_list_item.dart';
 import 'package:spark_list/workflow/notion_workflow.dart';
 import 'package:timezone/timezone.dart' as tz;
-
-import 'list_category_page.dart';
 
 ///
 /// Author: Elemen
@@ -154,26 +152,73 @@ class _TextEditorPageState extends State<TextEditorPage>
           context: context,
           title: '${widget.category.name}',
           actions: [
-            IconButton(
-                icon: Icon(
-                  Icons.alarm_off,
-                  color: colorScheme.onSecondary,
+            if (widget.category.notionDatabaseId != null &&
+                context.read<ConfigViewModel>().linkedNotion)
+              UnconstrainedBox(
+                child: InkWell(
+                  onTap: () async {
+                    EasyLoading.show();
+                    await _prepareData();
+                    await _syncWithNotion();
+                    EasyLoading.dismiss();
+                  },
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(8),
+                        image: DecorationImage(
+                          image:
+                              AssetImage('assets/images/ic_notion_logo.webp'),
+                        )),
+                  ),
                 ),
-                onPressed: () {
-                  _selectedDate = '';
-                  setState(() {});
-                  Fluttertoast.showToast(msg: S.of(context).cancelAlertTime);
-                }),
-            IconButton(
-                icon: Icon(
-                  Icons.check,
-                  color: colorScheme.onSecondary,
-                ),
-                onPressed: () async {
-                  await _updateItem();
-                  _syncWithNotion();
-                  Navigator.pop(context, 0);
-                }),
+              ),
+            SizedBox(
+              width: 10,
+            ),
+            SizedBox(
+              width: 30,
+              height: 30,
+              child: IconButton(
+                  padding: EdgeInsets.all(0),
+                  icon: Icon(
+                    Icons.alarm_off,
+                    color: colorScheme.onSecondary,
+                  ),
+                  onPressed: () {
+                    _selectedDate = '';
+                    setState(() {});
+                    Fluttertoast.showToast(msg: S.of(context).cancelAlertTime);
+                  }),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            SizedBox(
+              width: 30,
+              height: 30,
+              child: IconButton(
+                  padding: EdgeInsets.all(0),
+                  icon: Icon(
+                    Icons.check,
+                    color: colorScheme.onSecondary,
+                  ),
+                  onPressed: () async {
+                    await _prepareData();
+                    await _updateItem();
+                    if (widget.category.notionDatabaseId != null &&
+                        context.read<ConfigViewModel>().linkedNotion &&
+                        widget.category.autoSync) {
+                      _syncWithNotion();
+                    }
+                    Navigator.pop(context, 0);
+                  }),
+            ),
+            SizedBox(
+              width: 14,
+            )
           ],
         ),
         body: Container(
@@ -205,29 +250,29 @@ class _TextEditorPageState extends State<TextEditorPage>
                   ],
                 ),
               ),
-              SizedBox(
-                height: 16,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: EditorTableRow(
-                  title: '${_categoryName}',
-                  indicatorColor: _categoryColor,
-                  onTap: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(
-                            builder: (context) =>
-                                ListCategoryPage(_updatedModel!.categoryId)))
-                        .then((result) {
-                      if (result != null) {
-                        _updatedModel!.categoryId = result;
-                        _mapCategory();
-                        setState(() {});
-                      }
-                    });
-                  },
-                ),
-              ),
+              // SizedBox(
+              //   height: 16,
+              // ),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 16),
+              //   child: EditorTableRow(
+              //     title: '${_categoryName}',
+              //     indicatorColor: _categoryColor,
+              //     onTap: () {
+              //       Navigator.of(context)
+              //           .push(MaterialPageRoute(
+              //               builder: (context) =>
+              //                   ListCategoryPage(_updatedModel!.categoryId)))
+              //           .then((result) {
+              //         if (result != null) {
+              //           _updatedModel!.categoryId = result;
+              //           _mapCategory();
+              //           setState(() {});
+              //         }
+              //       });
+              //     },
+              //   ),
+              // ),
               SizedBox(
                 height: 16,
               ),
@@ -267,7 +312,7 @@ class _TextEditorPageState extends State<TextEditorPage>
     await flutterLocalNotificationsPlugin.cancel(notificationId);
   }
 
-  Future _updateItem() async {
+  Future _prepareData() async{
     //_oldModel = _updatedModel!.copyWith();
     _updatedModel!.brief = _briefController.text;
     _updatedModel!.content = _titleController.text;
@@ -277,9 +322,9 @@ class _TextEditorPageState extends State<TextEditorPage>
           DateTime.now().millisecond * 1000 + DateTime.now().microsecond;
       _updatedModel!.notificationId ??= notificationId;
       final MaterialLocalizations localizations =
-          MaterialLocalizations.of(context);
+      MaterialLocalizations.of(context);
       alertTime =
-          '$_selectedDate ${localizations.formatTimeOfDay(_time, alwaysUse24HourFormat: true)}';
+      '$_selectedDate ${localizations.formatTimeOfDay(_time, alwaysUse24HourFormat: true)}';
       print(
           'alerttime: $alertTime notificationId: ${_updatedModel!.notificationId}');
       await _setNotification(DateTime.parse(alertTime), notificationId)
@@ -294,26 +339,24 @@ class _TextEditorPageState extends State<TextEditorPage>
     }
 
     _updatedModel!.alertTime =
-        alertTime == null ? null : DateTime.parse(alertTime);
+    alertTime == null ? null : DateTime.parse(alertTime);
+  }
 
+  Future _updateItem() async {
     await context.read<HomeViewModel>().updateTodoItem(
         _oldModel!.toCompanion(true), _updatedModel!.toCompanion(true));
   }
 
   Future<void> _syncWithNotion() async {
-    if (widget.category.notionDatabaseId != null &&
-        context.read<ConfigViewModel>().linkedNotion) {
-      if (!_updatedModel!.properTiesEquals(_oldModel!)) {
-        _updatedModel!.tags = _categoryName;
-        context.read<NotionWorkFlow>().updateTaskProperties(
-            _updatedModel!.pageId, _updatedModel!.toCompanion(true));
-      }
-      if (_updatedModel!.brief != null &&
-          !_updatedModel!.briefEquals(_oldModel!)) {
-        context.read<NotionWorkFlow>().appendBlockChildren(
-            _updatedModel!.pageId,
-            text: _updatedModel!.brief!);
-      }
+    if (!_updatedModel!.properTiesEquals(_oldModel!)) {
+      _updatedModel!.tags = _categoryName;
+      await context.read<NotionWorkFlow>().updateTaskProperties(
+          _updatedModel!.pageId, _updatedModel!.toCompanion(true));
+    }
+    if (_updatedModel!.brief != null &&
+        !_updatedModel!.briefEquals(_oldModel!)) {
+      await context.read<NotionWorkFlow>().appendBlockChildren(_updatedModel!.pageId,
+          text: _updatedModel!.brief!);
     }
   }
 

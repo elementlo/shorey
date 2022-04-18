@@ -93,5 +93,6 @@
   "typeKeyWordsForSearchDB": "Type some keywords for the search",
   "pleaseInputKeywords": "Please input keywords",
   "haveNotFindAnything": "Haven't find anything",
-  "autoSyncNotion": "Automatically syncs to Notion"
+  "autoSyncNotion": "Automatically syncs to Notion",
+  "simpleList": "Simple list"
 }

@@ -88,6 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "retrospect": MessageLookupByLibrary.simpleMessage("回顾"),
         "settings": MessageLookupByLibrary.simpleMessage("设置"),
         "shoreyMomment": MessageLookupByLibrary.simpleMessage("Shorey时刻"),
+        "simpleList": MessageLookupByLibrary.simpleMessage("简单列表"),
         "sureToDeleteArchived":
             MessageLookupByLibrary.simpleMessage("确定要删除所有归档条目吗?"),
         "taskList": MessageLookupByLibrary.simpleMessage("待办清单"),

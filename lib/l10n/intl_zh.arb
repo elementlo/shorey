@@ -93,5 +93,6 @@
   "typeKeyWordsForSearchDB": "请输入关键词以检索",
   "pleaseInputKeywords": "请输入关键词",
   "haveNotFindAnything": "未检索到内容",
-  "autoSyncNotion": "自动同步到Notion"
+  "autoSyncNotion": "自动同步到Notion",
+  "simpleList": "简单列表"
 }

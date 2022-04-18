@@ -50,7 +50,7 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
   _ExpandableSetting? _expandedSettingId;
   late AnimationController _settingsPanelController;
 
-  late List<String> _categoryTypes;
+  late List<String> _templateTypes;
   late int _selectedOption;
   var _showConfirm = false;
   var _linked = false;
@@ -163,7 +163,7 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
       return Container(
         padding: EdgeInsets.symmetric(vertical: 16),
         child: ListView.builder(
-          itemCount: _categoryTypes.length + 1,
+          itemCount: _templateTypes.length + 1,
           itemExtent: 45,
           shrinkWrap: true,
           itemBuilder: (context, index) {
@@ -171,12 +171,12 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
               return TipsTextView(S.of(context).categoryTypeTips);
             } else {
               return RadioListTile<String>(
-                value: _categoryTypes[index - 1],
-                title: Text(_categoryTypes[index - 1],
+                value: _templateTypes[index - 1],
+                title: Text(_templateTypes[index - 1],
                     style: TextStyle(color: Colors.black, fontSize: 14)),
-                groupValue: _categoryTypes[_selectedOption],
+                groupValue: _templateTypes[_selectedOption],
                 onChanged: (option) {
-                  _selectedOption = _categoryTypes.indexOf(option!);
+                  _selectedOption = _templateTypes.indexOf(option!);
                   setState(() {});
                 },
                 activeColor: colorScheme.onSecondary,
@@ -192,7 +192,8 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    _categoryTypes = [
+    _templateTypes = [
+      S.of(context).simpleList,
       S.of(context).taskList,
       S.of(context).templateDiaryTitle,
     ];
@@ -201,10 +202,9 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
       onModelReady: (viewModel) async {
         _linked = await viewModel.checkLinkingStatus();
         _selectedOption = widget.editingItem?.notionDatabaseType ?? 0;
-        viewModel.selectedColor = widget.editingItem?.colorId ?? 0;
-        viewModel.selectedIcon = widget.editingItem?.iconId ?? 0;
+        viewModel.selectedColor = widget.editingItem?.colorId ?? 1;
+        viewModel.selectedIcon = widget.editingItem?.iconId ?? 1;
         viewModel.autoSyncToggle = widget.editingItem?.autoSync ?? true;
-        setState(() {});
       },
       child: Scaffold(
         appBar: SparkAppBar(
@@ -257,7 +257,7 @@ class _CategoryInfoPageState extends State<CategoryInfoPage>
                       title: S.of(context).categoryType,
                       optionsMap: LinkedHashMap.of({
                         1.0:
-                            DisplayOption('${_categoryTypes[_selectedOption]}'),
+                            DisplayOption('${_templateTypes[_selectedOption]}'),
                       }),
                       selectedOption: 1.0,
                       onOptionChanged: (newTextScale) {

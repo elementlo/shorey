@@ -14,17 +14,17 @@ class NotionPage {
 
   NotionPage(
       {this.object,
-        this.id,
-        this.createdTime,
-        this.lastEditedTime,
-        this.createdBy,
-        this.lastEditedBy,
-        this.cover,
-        this.icon,
-        this.parent,
-        this.archived,
-        this.properties,
-        this.url});
+      this.id,
+      this.createdTime,
+      this.lastEditedTime,
+      this.createdBy,
+      this.lastEditedBy,
+      this.cover,
+      this.icon,
+      this.parent,
+      this.archived,
+      this.properties,
+      this.url});
 
   NotionPage.fromJson(Map<String, dynamic> json) {
     object = json['object'];
@@ -40,7 +40,7 @@ class NotionPage {
     cover = json['cover'] != null ? new Cover.fromJson(json['cover']) : null;
     icon = json['icon'] != null ? new Icon.fromJson(json['icon']) : null;
     parent =
-    json['parent'] != null ? new Parent.fromJson(json['parent']) : null;
+        json['parent'] != null ? new Parent.fromJson(json['parent']) : null;
     archived = json['archived'];
     properties = json['properties'] != null
         ? new Properties.fromJson(json['properties'])
@@ -184,16 +184,16 @@ class Properties {
 
   Properties(
       {this.links,
-        this.status,
-        this.tags,
-        this.duration,
-        this.reminderTime,
-        this.brief});
+      this.status,
+      this.tags,
+      this.duration,
+      this.reminderTime,
+      this.brief});
 
   Properties.fromJson(Map<String, dynamic> json) {
     links = json['Links'] != null ? new Links.fromJson(json['Links']) : null;
     status =
-    json['Status'] != null ? new Status.fromJson(json['Status']) : null;
+        json['Status'] != null ? new Status.fromJson(json['Status']) : null;
     tags = json['Tags'] != null ? new Tags.fromJson(json['Tags']) : null;
     duration = json['Duration'] != null
         ? new Duration.fromJson(json['Duration'])
@@ -201,7 +201,11 @@ class Properties {
     reminderTime = json['Reminder Time'] != null
         ? new ReminderTime.fromJson(json['Reminder Time'])
         : null;
-    brief = json['Name'] != null ? new Brief.fromJson(json['Name']) : null;
+    brief = json['Name'] != null
+        ? new Brief.fromJson(json['Name'])
+        : json['title'] != null
+            ? Brief.fromJson(json['title'])
+            : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -261,7 +265,7 @@ class Status {
     id = json['id'];
     type = json['type'];
     select =
-    json['select'] != null ? new Select.fromJson(json['select']) : null;
+        json['select'] != null ? new Select.fromJson(json['select']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -488,11 +492,11 @@ class Annotations {
 
   Annotations(
       {this.bold,
-        this.italic,
-        this.strikethrough,
-        this.underline,
-        this.code,
-        this.color});
+      this.italic,
+      this.strikethrough,
+      this.underline,
+      this.code,
+      this.color});
 
   Annotations.fromJson(Map<String, dynamic> json) {
     bold = json['bold'];

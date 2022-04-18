@@ -309,7 +309,6 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
                   )),
             )),
         onSubmitted: (input) async {
-          print(input);
           if (input != '' && input != null) {
             final dateTime = DateTime.now();
             final index = await viewModel.saveToDo(ToDosCompanion(
@@ -319,7 +318,7 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
                 createdTime: d.Value(dateTime)));
             _controller.clear();
             if (widget.category.notionDatabaseId != null &&
-                context.read<ConfigViewModel>().linkedNotion) {
+                context.read<ConfigViewModel>().linkedNotion && widget.category.autoSync) {
               final pageId = await context.read<NotionWorkFlow>().addTaskItem(
                   widget.category.notionDatabaseId!,
                   ToDo(

@@ -99,6 +99,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "retrospect": MessageLookupByLibrary.simpleMessage("Retrospect"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "shoreyMomment": MessageLookupByLibrary.simpleMessage("Shorey moment"),
+        "simpleList": MessageLookupByLibrary.simpleMessage("Simple list"),
         "sureToDeleteArchived": MessageLookupByLibrary.simpleMessage(
             "Are you sure to delete all the archived items?"),
         "taskList": MessageLookupByLibrary.simpleMessage("Task List"),

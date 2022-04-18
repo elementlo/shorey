@@ -699,6 +699,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Simple list`
+  String get simpleList {
+    return Intl.message(
+      'Simple list',
+      name: 'simpleList',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
