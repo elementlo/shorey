@@ -13,6 +13,8 @@ import 'package:spark_list/model/notion_page_model.dart';
 import 'package:spark_list/resource/data_provider.dart';
 import 'package:spark_list/resource/http_provider.dart';
 
+import 'actions.dart';
+
 ///
 /// Author: Elemen
 /// Github: https://github.com/elementlo
@@ -21,9 +23,9 @@ import 'package:spark_list/resource/http_provider.dart';
 ///
 
 class NotionWorkFlow with ChangeNotifier {
-  NotionWorkFlow._() : _actions = _NotionActions();
+  NotionWorkFlow._() : _actions = _TaskListActions();
   static final NotionWorkFlow _instance = NotionWorkFlow._();
-  _NotionActions _actions;
+  _TaskListActions _actions;
   Results? user;
 
   factory NotionWorkFlow() {
@@ -92,30 +94,16 @@ class NotionWorkFlow with ChangeNotifier {
   }
 }
 
-class _NotionActions {
-  _NotionActions._();
+class _TaskListActions extends NotionActions{
+  _TaskListActions._();
 
-  static final _NotionActions _instance = _NotionActions._();
+  static final _TaskListActions _instance = _TaskListActions._();
 
-  factory _NotionActions() {
+  factory _TaskListActions() {
     return _instance;
   }
 
-  Future<Results?> retrieveUser(String token) async {
-    dio.options.headers.addAll({'Authorization': 'Bearer $token'});
-    final response = await dio.get(notionUsers);
-    if (response.success) {
-      final users = NotionUsersInfo.fromJson(response.data);
-      for (int i = 0; i < (users.results?.length ?? 0); i++) {
-        final user = users.results![i];
-        if (user.type == 'person') {
-          return user;
-        }
-      }
-    }
-    return null;
-  }
-
+  @override
   Future<NotionDatabase?> retrieveDatabase(String databaseId) async {
     try {
       final response = await dio.get('${notionDatabase}/${databaseId}');
@@ -128,24 +116,7 @@ class _NotionActions {
     return null;
   }
 
-  Future persistUser(Results user) {
-    return dsProvider.saveValue<Map<String, dynamic>>(
-        StoreKey.notionUser, user.toJson());
-  }
-
-  Future deleteUser() {
-    return dsProvider.deleteValue(StoreKey.notionUser);
-  }
-
-  Future<Results?> getUser() async {
-    final value =
-        await dsProvider.getValue<Map<String, dynamic>>(StoreKey.notionUser);
-    if (value != null) {
-      return Results.fromJson(value);
-    }
-    return null;
-  }
-
+  @override
   Future<String?> addTaskItem(String databaseId, ToDo todo,
       {List<String>? links}) async {
     final param = await NotionDatabaseTemplate.taskItem(databaseId,
@@ -163,6 +134,7 @@ class _NotionActions {
     return null;
   }
 
+  @override
   Future<NotionDatabase?> createDatabase(String pageId) async {
     final param = await NotionDatabaseTemplate.taskList(pageId);
     if (param != null) {
@@ -174,6 +146,7 @@ class _NotionActions {
     return null;
   }
 
+  @override
   Future updateTaskProperties(String? pageId, ToDosCompanion todo) async {
     if (pageId != null && pageId != '') {
       final param = await NotionDatabaseTemplate.itemProperties(
@@ -191,6 +164,7 @@ class _NotionActions {
     }
   }
 
+  @override
   Future appendBlockChildren(String? pageId,
       {required String text, List<String>? links}) async {
     if (pageId != null && pageId != '') {
@@ -200,21 +174,5 @@ class _NotionActions {
           await dio.patch('${notionBlocks}/${pageId}/children', data: param);
       if (response.success) {}
     }
-  }
-
-  Future<List<dynamic>> searchObjects({required String keywords}) async {
-    final List<dynamic> list = [];
-    final response = await dio
-        .post('${searchNotionObjects}', data: {'query': '${keywords}'});
-    if (response.success) {
-      response.data['results'].forEach((value) {
-        if(value['object'] == 'page'){
-          list.add(NotionPage.fromJson(value));
-        }else if(value['object']=='database'){
-          list.add(NotionDatabase.fromJson(value));
-        }
-      });
-    }
-    return list;
   }
 }

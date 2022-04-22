@@ -15,6 +15,9 @@ class NotionDatabaseTemplate {
   static const String jsonBlockChildren =
       'assets/json/notion_block_children.json';
 
+  static const String jsonSimpleList = 'assets/json/notion_simple_list.json';
+  static const String jsonSimpleItem = '';
+
   static const String jPageId = 'page_id';
   static const String jParent = 'parent';
   static const String jDatabaseId = 'database_id';
