@@ -42,7 +42,7 @@ Now I focus on linking Notion, in order to make Notion your backend knowledge da
 2. Flutter SDK 2.8.1
 
 ## 应用展示
-UI部分大量参考了Flutter官方的Gallery应用. 另外还在关于页埋了个小彩蛋, 希望喜欢.
+UI部分大量参考了Flutter官方的Gallery应用. 此外还在关于页埋了个小彩蛋, 希望喜欢.
 
 ![1636005007174126](https://user-images.githubusercontent.com/10020581/140265074-430bc04c-0157-4c8c-931c-abcc6e92e922.gif) ![1636005007174127](https://user-images.githubusercontent.com/10020581/140265167-a41c6e05-cde1-4fe1-bb01-68688e036b8a.gif) ![1636005007174128](https://user-images.githubusercontent.com/10020581/140265292-11729260-45a8-4b98-b62f-a93f8f1f29b8.gif) ![1636005007174129](https://user-images.githubusercontent.com/10020581/140265890-d16730ee-8230-4215-b0db-b63cb074bce4.gif)
 
