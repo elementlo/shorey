@@ -67,7 +67,6 @@ class _LinkNotionPageState extends State<LinkNotionPage>
         curve: Curves.easeIn,
       ),
     );
-    context.read<NotionWorkFlow>().getUser();
   }
 
   List<Widget> _buildListItem(BuildContext context) {
@@ -93,13 +92,17 @@ class _LinkNotionPageState extends State<LinkNotionPage>
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProxyProvider<NotionWorkFlow, LinkNotionViewModel>(
-      create: (context) => LinkNotionViewModel(),
-      update: (context, workflow, viewModel) {
-        viewModel!.setUser = workflow.user;
-        context.read<ConfigViewModel>().updateLinkedStatus(workflow.user != null);
-        return viewModel;
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProxyProvider<NotionWorkFlow, LinkNotionViewModel>(
+          create: (context) => LinkNotionViewModel(),
+          update: (context, workflow, viewModel) {
+            viewModel!.setUser = workflow.user;
+            context.read<ConfigViewModel>().updateLinkedStatus(workflow.user != null);
+            return viewModel;
+          },
+        )
+      ],
       child: Scaffold(
         appBar: SparkAppBar(
           context: context,
@@ -154,6 +157,12 @@ class _NotionAccountCard extends StatefulWidget {
 
 class _NotionAccountCardState extends State<_NotionAccountCard> {
   var offStageCard = true;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<NotionWorkFlow>().getUser();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -71,13 +71,15 @@ class Categories extends Table {
 
   TextColumn get notionDatabaseId => text().nullable()();
 
-  IntColumn get notionDatabaseType => integer().nullable()();
+  ///0: simple list 1: task list 2: diary
+  IntColumn get notionDatabaseType => integer()();
 
   IntColumn get iconId => integer()();
 
   IntColumn get colorId => integer()();
 
-  BoolColumn get autoSync => boolean().nullable().withDefault(const Constant(true))();
+  BoolColumn get autoSync =>
+      boolean().nullable().withDefault(const Constant(true))();
 }
 
 LazyDatabase _openConnection() {
@@ -125,29 +127,40 @@ class DatabaseProvider extends _$DatabaseProvider {
     await batch((batch) {
       batch.insertAll(categories, [
         CategoriesCompanion.insert(
-            name: 'mainfocus', colorId: SColor.red, iconId: 0),
+            name: 'mainfocus',
+            colorId: SColor.red,
+            iconId: 0,
+            notionDatabaseType: 0),
         CategoriesCompanion.insert(
             name: 'To Do',
             colorId: SColor.blue,
-            iconId: SIcons.article_outlined),
+            iconId: SIcons.article_outlined,
+            notionDatabaseType: 0),
         CategoriesCompanion.insert(
             name: 'To Watch',
             colorId: SColor.yellow,
-            iconId: SIcons.movie_outlined),
+            iconId: SIcons.movie_outlined,
+            notionDatabaseType: 0),
         CategoriesCompanion.insert(
             name: 'To Read',
             colorId: SColor.orangeAccent,
-            iconId: SIcons.menu_book_outlined),
+            iconId: SIcons.menu_book_outlined,
+            notionDatabaseType: 0),
         CategoriesCompanion.insert(
-            name: 'Alert', colorId: SColor.red, iconId: SIcons.add_alert),
+            name: 'Alert',
+            colorId: SColor.red,
+            iconId: SIcons.add_alert,
+            notionDatabaseType: 0),
         CategoriesCompanion.insert(
             name: 'Work',
             colorId: SColor.greenAccent,
-            iconId: SIcons.work_outline),
+            iconId: SIcons.work_outline,
+            notionDatabaseType: 0),
         CategoriesCompanion.insert(
             name: 'To Learn',
             colorId: SColor.black,
-            iconId: SIcons.school_outlined),
+            iconId: SIcons.school_outlined,
+            notionDatabaseType: 0),
       ]);
     });
   }
@@ -230,7 +243,7 @@ class DatabaseProvider extends _$DatabaseProvider {
         .get();
   }
 
-  Stream<List<ToDo>> watchToDosByCategory({int? categoryId, int status = 1}){
+  Stream<List<ToDo>> watchToDosByCategory({int? categoryId, int status = 1}) {
     return select(toDos).watch();
   }
 

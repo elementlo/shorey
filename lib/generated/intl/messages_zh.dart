@@ -45,7 +45,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("不同模板对应Notion中不同样式的数据库"),
         "date": MessageLookupByLibrary.simpleMessage("日期"),
         "deleteCategory": MessageLookupByLibrary.simpleMessage("删除"),
-        "editCategory": MessageLookupByLibrary.simpleMessage("编辑"),
+        "editCategory": MessageLookupByLibrary.simpleMessage("信息"),
         "editMantra": MessageLookupByLibrary.simpleMessage("编辑格言"),
         "everyFriday": MessageLookupByLibrary.simpleMessage("每周五"),
         "everyMonday": MessageLookupByLibrary.simpleMessage("每周一"),
@@ -63,7 +63,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "linkNotionDatabase":
             MessageLookupByLibrary.simpleMessage("关联Notion数据库"),
         "linkNotionIfYouWant": MessageLookupByLibrary.simpleMessage(
-            "在Shorey的设置中绑定Notion账户, 可以同步你的笔记到Notion数据库中"),
+            "在设置中绑定Notion账户, 可以同步你的笔记到Notion数据库中"),
         "linkNotionInfo":
             MessageLookupByLibrary.simpleMessage("输入你的用户令牌使Shorey与Notion连接"),
         "mainCategory": MessageLookupByLibrary.simpleMessage("类别"),
@@ -98,6 +98,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "可选项, 配置一个全局的Notion根页面, 添加记事时可选择默认都同步在此页面上"),
         "today": MessageLookupByLibrary.simpleMessage("今天"),
         "typeKeyWordsForSearchDB":
-            MessageLookupByLibrary.simpleMessage("请输入关键词以检索")
+            MessageLookupByLibrary.simpleMessage("请输入关键词以检索"),
+        "workFlow": MessageLookupByLibrary.simpleMessage("工作流")
       };
 }

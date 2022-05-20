@@ -18,7 +18,6 @@ import 'package:spark_list/pages/root_page.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
-import 'package:spark_list/widget/category_list_item.dart';
 import 'package:spark_list/widget/customized_date_picker.dart';
 import 'package:spark_list/widget/settings_list_item.dart';
 import 'package:spark_list/workflow/notion_workflow.dart';
@@ -62,13 +61,14 @@ class _AddNewItemPageState extends State<AddNewItemPage>
   late int _categoryId;
   Color _categoryColor = Colors.white;
   String _categoryName = '';
+  int? _notionDatabaseType;
   ToDosCompanion? companion;
 
   @override
   void initState() {
     super.initState();
     _categoryId = widget.category.id;
-    if(widget.title != null){
+    if (widget.title != null) {
       _titleController.text = widget.title!;
     }
     _mapCategory();
@@ -234,8 +234,10 @@ class _AddNewItemPageState extends State<AddNewItemPage>
     if (_selectedDate.isNotEmpty) {
       notificationId =
           DateTime.now().millisecond * 1000 + DateTime.now().microsecond;
-      final MaterialLocalizations localizations = MaterialLocalizations.of(context);
-      alertTime = '$_selectedDate ${localizations.formatTimeOfDay(_time, alwaysUse24HourFormat: true)}';
+      final MaterialLocalizations localizations =
+          MaterialLocalizations.of(context);
+      alertTime =
+          '$_selectedDate ${localizations.formatTimeOfDay(_time, alwaysUse24HourFormat: true)}';
       print('alerttime: $alertTime notificationId: ${notificationId}');
       await _setNotification(DateTime.parse(alertTime), notificationId)
           .catchError((onError) {
@@ -272,7 +274,8 @@ class _AddNewItemPageState extends State<AddNewItemPage>
             tags: _categoryName,
             brief: companion!.brief.value,
             alertTime: companion!.alertTime.value,
-          ));
+          ),
+          actionType: _notionDatabaseType!);
       if (index != -1) {
         _updatePageId(index, pageId);
       }
@@ -337,6 +340,7 @@ class _AddNewItemPageState extends State<AddNewItemPage>
       if (_categoryId == item.id) {
         _categoryName = item.name;
         _categoryColor = item.color;
+        _notionDatabaseType = item.notionDatabaseType;
       }
     }
   }

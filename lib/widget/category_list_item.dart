@@ -13,6 +13,7 @@ import 'package:spark_list/pages/root_page.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/workflow/notion_workflow.dart';
 
+import '../pages/sync_workflow_page.dart';
 import '../view_model/config_view_model.dart';
 
 ///
@@ -237,7 +238,7 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
     List<Widget> demoList = [];
     if (widget.demoList != null && widget.demoList!.length > 0) {
       for (int i = 0; i < widget.demoList!.length; i++) {
-        if (widget.demoList![i]!.status == 1||_cachedItems.contains(i))
+        if (widget.demoList![i]!.status == 1 || _cachedItems.contains(i))
           demoList.add(CategoryDemoItem(
             index: i,
             model: widget.demoList![i],
@@ -318,7 +319,8 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
                 createdTime: d.Value(dateTime)));
             _controller.clear();
             if (widget.category.notionDatabaseId != null &&
-                context.read<ConfigViewModel>().linkedNotion && widget.category.autoSync) {
+                context.read<ConfigViewModel>().linkedNotion &&
+                widget.category.autoSync) {
               final pageId = await context.read<NotionWorkFlow>().addTaskItem(
                   widget.category.notionDatabaseId!,
                   ToDo(
@@ -327,7 +329,7 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
                       createdTime: dateTime,
                       categoryId: widget.category.id,
                       status: 1,
-                      tags: widget.category.name));
+                      tags: widget.category.name), actionType: widget.category.notionDatabaseType);
 
               await _updatePageId(index, pageId);
             }
@@ -386,7 +388,7 @@ class _CategoryHeader extends StatelessWidget {
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       itemBuilder: (context) {
-        return [
+        return <PopupMenuEntry<String>>[
           PopupMenuItem(
               height: 28,
               value: 'edit',
@@ -394,7 +396,7 @@ class _CategoryHeader extends StatelessWidget {
                 S.of(context).editCategory,
                 style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
               )),
-          PopupMenuItem(height: 1, child: Divider()),
+          PopupMenuDivider(),
           PopupMenuItem(
               height: 28,
               value: 'delete',
@@ -516,9 +518,9 @@ class _CategoryDemoItemState extends State<CategoryDemoItem> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        if(widget.model!.status == 1){
+                        if (widget.model!.status == 1) {
                           _cachedItems.add(widget.index);
-                        }else{
+                        } else {
                           _cachedItems.remove(widget.index);
                         }
                         await context
@@ -533,7 +535,7 @@ class _CategoryDemoItemState extends State<CategoryDemoItem> {
                                   status: d.Value(widget.model!.status),
                                   createdTime:
                                       d.Value(widget.model!.createdTime),
-                                  filedTime: d.Value(DateTime.now())));
+                                  filedTime: d.Value(DateTime.now())), actionType: widget.category.notionDatabaseType);
                         }
                       },
                       child: Container(
@@ -588,5 +590,3 @@ class _CategoryDemoItemState extends State<CategoryDemoItem> {
           );
   }
 }
-
-

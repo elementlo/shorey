@@ -470,10 +470,10 @@ class S {
     );
   }
 
-  /// `Edit`
+  /// `Information`
   String get editCategory {
     return Intl.message(
-      'Edit',
+      'Information',
       name: 'editCategory',
       desc: '',
       args: [],
@@ -640,10 +640,10 @@ class S {
     );
   }
 
-  /// `Link a Notion account in Shorey's setting menu with a token could sync your items with a Notion database.`
+  /// `Link a Notion account in setting menu with a token could sync your items with a Notion database.`
   String get linkNotionIfYouWant {
     return Intl.message(
-      'Link a Notion account in Shorey\'s setting menu with a token could sync your items with a Notion database.',
+      'Link a Notion account in setting menu with a token could sync your items with a Notion database.',
       name: 'linkNotionIfYouWant',
       desc: '',
       args: [],
@@ -705,6 +705,16 @@ class S {
     return Intl.message(
       'Simple list',
       name: 'simpleList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Work Flow`
+  String get workFlow {
+    return Intl.message(
+      'Work Flow',
+      name: 'workFlow',
       desc: '',
       args: [],
     );

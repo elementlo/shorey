@@ -50,7 +50,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Different template reflects different database pattern in Notion"),
         "date": MessageLookupByLibrary.simpleMessage("Date"),
         "deleteCategory": MessageLookupByLibrary.simpleMessage("Delete"),
-        "editCategory": MessageLookupByLibrary.simpleMessage("Edit"),
+        "editCategory": MessageLookupByLibrary.simpleMessage("Information"),
         "editMantra": MessageLookupByLibrary.simpleMessage("Edit Mantra"),
         "everyFriday": MessageLookupByLibrary.simpleMessage("Every Friday"),
         "everyMonday": MessageLookupByLibrary.simpleMessage("Every Monday"),
@@ -70,7 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "linkNotionDatabase":
             MessageLookupByLibrary.simpleMessage("Link Notion database"),
         "linkNotionIfYouWant": MessageLookupByLibrary.simpleMessage(
-            "Link a Notion account in Shorey\'s setting menu with a token could sync your items with a Notion database."),
+            "Link a Notion account in setting menu with a token could sync your items with a Notion database."),
         "linkNotionInfo": MessageLookupByLibrary.simpleMessage(
             "Input your user token to link Notion"),
         "mainCategory": MessageLookupByLibrary.simpleMessage("Category"),
@@ -109,6 +109,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Optional, config a global Notion page to store all your tasks"),
         "today": MessageLookupByLibrary.simpleMessage("Today"),
         "typeKeyWordsForSearchDB": MessageLookupByLibrary.simpleMessage(
-            "Type some keywords for the search")
+            "Type some keywords for the search"),
+        "workFlow": MessageLookupByLibrary.simpleMessage("Work Flow")
       };
 }

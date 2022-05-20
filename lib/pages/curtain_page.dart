@@ -250,9 +250,10 @@ class _MomentGrid extends StatelessWidget {
 
 class SettingsRow extends StatelessWidget {
   final String? title;
+  final String? hint;
   final VoidCallback? onTap;
 
-  SettingsRow({this.title, this.onTap});
+  SettingsRow({this.title, this.hint, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -273,6 +274,7 @@ class SettingsRow extends StatelessWidget {
                 SizedBox(
                   width: 8,
                 ),
+                Text('${hint??'222'}', style: TextStyle(color: Colors.grey, fontSize: 14),),
                 Icon(
                   Icons.arrow_forward_ios,
                   size: 14,

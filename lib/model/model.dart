@@ -22,7 +22,7 @@ abstract class ModelMixin {
 class CategoryItem {
   String name;
   String? notionDatabaseId;
-  int? notionDatabaseType;
+  int notionDatabaseType;
   Icon? icon;
   Color color;
   int id;
@@ -36,7 +36,7 @@ class CategoryItem {
       this.icon,
       required this.color,
       this.notionDatabaseId,
-      this.notionDatabaseType,
+      required this.notionDatabaseType,
       required this.colorId,
       required this.iconId});
 }

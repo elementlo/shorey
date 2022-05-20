@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:spark_list/base/ext.dart';
 import 'package:spark_list/database/database.dart';
 import 'package:spark_list/model/notion_database_model.dart';
@@ -66,7 +68,18 @@ abstract class NotionActions {
     return list;
   }
 
-  Future<NotionDatabase?> retrieveDatabase(String databaseId);
+  Future<NotionDatabase?> retrieveDatabase(String databaseId) async {
+    try {
+      final response = await dio.get('${notionDatabase}/${databaseId}');
+      if (response.success) {
+        return NotionDatabase.fromJson(response.data);
+      }
+    } on DioError catch (e) {
+      debugPrint(e.message);
+    }
+    return null;
+  }
+
 
   Future<String?> addTaskItem(String databaseId, ToDo todo,
       {List<String>? links});

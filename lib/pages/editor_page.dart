@@ -312,7 +312,7 @@ class _TextEditorPageState extends State<TextEditorPage>
     await flutterLocalNotificationsPlugin.cancel(notificationId);
   }
 
-  Future _prepareData() async{
+  Future _prepareData() async {
     //_oldModel = _updatedModel!.copyWith();
     _updatedModel!.brief = _briefController.text;
     _updatedModel!.content = _titleController.text;
@@ -322,9 +322,9 @@ class _TextEditorPageState extends State<TextEditorPage>
           DateTime.now().millisecond * 1000 + DateTime.now().microsecond;
       _updatedModel!.notificationId ??= notificationId;
       final MaterialLocalizations localizations =
-      MaterialLocalizations.of(context);
+          MaterialLocalizations.of(context);
       alertTime =
-      '$_selectedDate ${localizations.formatTimeOfDay(_time, alwaysUse24HourFormat: true)}';
+          '$_selectedDate ${localizations.formatTimeOfDay(_time, alwaysUse24HourFormat: true)}';
       print(
           'alerttime: $alertTime notificationId: ${_updatedModel!.notificationId}');
       await _setNotification(DateTime.parse(alertTime), notificationId)
@@ -339,7 +339,7 @@ class _TextEditorPageState extends State<TextEditorPage>
     }
 
     _updatedModel!.alertTime =
-    alertTime == null ? null : DateTime.parse(alertTime);
+        alertTime == null ? null : DateTime.parse(alertTime);
   }
 
   Future _updateItem() async {
@@ -351,12 +351,15 @@ class _TextEditorPageState extends State<TextEditorPage>
     if (!_updatedModel!.properTiesEquals(_oldModel!)) {
       _updatedModel!.tags = _categoryName;
       await context.read<NotionWorkFlow>().updateTaskProperties(
-          _updatedModel!.pageId, _updatedModel!.toCompanion(true));
+          _updatedModel!.pageId, _updatedModel!.toCompanion(true),
+          actionType: widget.category.notionDatabaseType);
     }
     if (_updatedModel!.brief != null &&
         !_updatedModel!.briefEquals(_oldModel!)) {
-      await context.read<NotionWorkFlow>().appendBlockChildren(_updatedModel!.pageId,
-          text: _updatedModel!.brief!);
+      await context.read<NotionWorkFlow>().appendBlockChildren(
+          _updatedModel!.pageId,
+          text: _updatedModel!.brief!,
+          actionType: widget.category.notionDatabaseType);
     }
   }
 

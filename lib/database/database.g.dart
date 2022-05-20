@@ -533,7 +533,9 @@ class Category extends DataClass implements Insertable<Category> {
   int id;
   String name;
   String? notionDatabaseId;
-  int? notionDatabaseType;
+
+  ///0: simple list 1: task list 2: diary
+  int notionDatabaseType;
   int iconId;
   int colorId;
   bool? autoSync;
@@ -541,7 +543,7 @@ class Category extends DataClass implements Insertable<Category> {
       {required this.id,
       required this.name,
       this.notionDatabaseId,
-      this.notionDatabaseType,
+      required this.notionDatabaseType,
       required this.iconId,
       required this.colorId,
       this.autoSync});
@@ -555,7 +557,7 @@ class Category extends DataClass implements Insertable<Category> {
       notionDatabaseId: const StringType().mapFromDatabaseResponse(
           data['${effectivePrefix}notion_database_id']),
       notionDatabaseType: const IntType().mapFromDatabaseResponse(
-          data['${effectivePrefix}notion_database_type']),
+          data['${effectivePrefix}notion_database_type'])!,
       iconId: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}icon_id'])!,
       colorId: const IntType()
@@ -572,9 +574,7 @@ class Category extends DataClass implements Insertable<Category> {
     if (!nullToAbsent || notionDatabaseId != null) {
       map['notion_database_id'] = Variable<String?>(notionDatabaseId);
     }
-    if (!nullToAbsent || notionDatabaseType != null) {
-      map['notion_database_type'] = Variable<int?>(notionDatabaseType);
-    }
+    map['notion_database_type'] = Variable<int>(notionDatabaseType);
     map['icon_id'] = Variable<int>(iconId);
     map['color_id'] = Variable<int>(colorId);
     if (!nullToAbsent || autoSync != null) {
@@ -590,9 +590,7 @@ class Category extends DataClass implements Insertable<Category> {
       notionDatabaseId: notionDatabaseId == null && nullToAbsent
           ? const Value.absent()
           : Value(notionDatabaseId),
-      notionDatabaseType: notionDatabaseType == null && nullToAbsent
-          ? const Value.absent()
-          : Value(notionDatabaseType),
+      notionDatabaseType: Value(notionDatabaseType),
       iconId: Value(iconId),
       colorId: Value(colorId),
       autoSync: autoSync == null && nullToAbsent
@@ -608,7 +606,7 @@ class Category extends DataClass implements Insertable<Category> {
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       notionDatabaseId: serializer.fromJson<String?>(json['notionDatabaseId']),
-      notionDatabaseType: serializer.fromJson<int?>(json['notionDatabaseType']),
+      notionDatabaseType: serializer.fromJson<int>(json['notionDatabaseType']),
       iconId: serializer.fromJson<int>(json['iconId']),
       colorId: serializer.fromJson<int>(json['colorId']),
       autoSync: serializer.fromJson<bool?>(json['autoSync']),
@@ -621,7 +619,7 @@ class Category extends DataClass implements Insertable<Category> {
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'notionDatabaseId': serializer.toJson<String?>(notionDatabaseId),
-      'notionDatabaseType': serializer.toJson<int?>(notionDatabaseType),
+      'notionDatabaseType': serializer.toJson<int>(notionDatabaseType),
       'iconId': serializer.toJson<int>(iconId),
       'colorId': serializer.toJson<int>(colorId),
       'autoSync': serializer.toJson<bool?>(autoSync),
@@ -679,7 +677,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   Value<int> id;
   Value<String> name;
   Value<String?> notionDatabaseId;
-  Value<int?> notionDatabaseType;
+  Value<int> notionDatabaseType;
   Value<int> iconId;
   Value<int> colorId;
   Value<bool?> autoSync;
@@ -696,18 +694,19 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     this.id = const Value.absent(),
     required String name,
     this.notionDatabaseId = const Value.absent(),
-    this.notionDatabaseType = const Value.absent(),
+    required int notionDatabaseType,
     required int iconId,
     required int colorId,
     this.autoSync = const Value.absent(),
   })  : name = Value(name),
+        notionDatabaseType = Value(notionDatabaseType),
         iconId = Value(iconId),
         colorId = Value(colorId);
   static Insertable<Category> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<String?>? notionDatabaseId,
-    Expression<int?>? notionDatabaseType,
+    Expression<int>? notionDatabaseType,
     Expression<int>? iconId,
     Expression<int>? colorId,
     Expression<bool?>? autoSync,
@@ -728,7 +727,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
       {Value<int>? id,
       Value<String>? name,
       Value<String?>? notionDatabaseId,
-      Value<int?>? notionDatabaseType,
+      Value<int>? notionDatabaseType,
       Value<int>? iconId,
       Value<int>? colorId,
       Value<bool?>? autoSync}) {
@@ -756,7 +755,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
       map['notion_database_id'] = Variable<String?>(notionDatabaseId.value);
     }
     if (notionDatabaseType.present) {
-      map['notion_database_type'] = Variable<int?>(notionDatabaseType.value);
+      map['notion_database_type'] = Variable<int>(notionDatabaseType.value);
     }
     if (iconId.present) {
       map['icon_id'] = Variable<int>(iconId.value);
@@ -813,8 +812,8 @@ class $CategoriesTable extends Categories
       const VerificationMeta('notionDatabaseType');
   @override
   late final GeneratedColumn<int?> notionDatabaseType = GeneratedColumn<int?>(
-      'notion_database_type', aliasedName, true,
-      type: const IntType(), requiredDuringInsert: false);
+      'notion_database_type', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _iconIdMeta = const VerificationMeta('iconId');
   @override
   late final GeneratedColumn<int?> iconId = GeneratedColumn<int?>(
@@ -872,6 +871,8 @@ class $CategoriesTable extends Categories
           _notionDatabaseTypeMeta,
           notionDatabaseType.isAcceptableOrUnknown(
               data['notion_database_type']!, _notionDatabaseTypeMeta));
+    } else if (isInserting) {
+      context.missing(_notionDatabaseTypeMeta);
     }
     if (data.containsKey('icon_id')) {
       context.handle(_iconIdMeta,
