@@ -40,6 +40,8 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> {
   String? _notionDatabaseId;
   int _notionDatabaseType = 0;
   bool _autoSync = true;
+  String? _typeName;
+  String? _databaseName;
 
   @override
   void initState() {
@@ -150,6 +152,9 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> {
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: SettingsRow(
                   title: S.of(context).workFlow,
+                  hint: _databaseName == null
+                      ? ''
+                      : '${_databaseName}(${_typeName})',
                   onTap: () {
                     Navigator.of(context)
                         .push(MaterialPageRoute(
@@ -163,6 +168,8 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> {
                         _notionDatabaseType = result['notionDatabaseType'];
                         _notionDatabaseId = result['notionDatabaseId'];
                         _autoSync = result['autoSync'];
+                        _typeName = result['typeName'];
+                        _databaseName = result['databaseName'];
                         setState(() {});
                       }
                     });

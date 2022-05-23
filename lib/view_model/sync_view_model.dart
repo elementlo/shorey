@@ -16,6 +16,8 @@ class SyncWorkflowViewModel extends ViewStateModel{
 
   List<dynamic> notionObjectList = [];
 
+  String title = '';
+
   set setObjectList(List<dynamic> objectList) {
     this.notionObjectList = objectList;
     notifyListeners();

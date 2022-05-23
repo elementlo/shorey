@@ -80,12 +80,12 @@ class _SyncWorkflowPageState extends State<SyncWorkflowPage>
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     _templateTypes = [
       S.of(context).simpleList,
       S.of(context).taskList,
       S.of(context).templateDiaryTitle,
     ];
+    final colorScheme = Theme.of(context).colorScheme;
     return ProviderWidget<SyncWorkflowViewModel>(
       model: SyncWorkflowViewModel(),
       onModelReady: (viewModel) {
@@ -97,7 +97,6 @@ class _SyncWorkflowPageState extends State<SyncWorkflowPage>
             title: S.of(context).workFlow,
             actions: [
               Consumer(builder: (BuildContext context, value, Widget? child) {
-
                 return IconButton(
                     icon: Icon(
                       Icons.check,
@@ -108,10 +107,14 @@ class _SyncWorkflowPageState extends State<SyncWorkflowPage>
                           context.read<SyncWorkflowViewModel>().database?.id;
                       final autoSync =
                           context.read<SyncWorkflowViewModel>().autoSyncToggle;
+                      final database =
+                          context.read<SyncWorkflowViewModel>().database;
                       Navigator.pop(context, {
                         'notionDatabaseType': widget.notionDatabaseType,
                         'notionDatabaseId': notionDatabaseId,
-                        'autoSync': autoSync
+                        'autoSync': autoSync,
+                        'typeName': _templateTypes[widget.notionDatabaseType],
+                        'databaseName': database?.title?[0].plainText
                       });
                     });
               })
@@ -253,7 +256,7 @@ class _CollapsedMenu extends StatefulWidget {
   State<_CollapsedMenu> createState() => _CollapsedMenuState();
 }
 
-class _CollapsedMenuState extends State<_CollapsedMenu>{
+class _CollapsedMenuState extends State<_CollapsedMenu> {
   var _offStageCard = true;
   var _showLoading = false;
 
@@ -284,125 +287,135 @@ class _CollapsedMenuState extends State<_CollapsedMenu>{
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 12),
         width: double.infinity,
-        child: _offStageCard
-            ? Column(
-                children: [
-                  TextField(
-                    controller: widget.controller,
-                    maxLines: 1,
-                    onSubmitted: (input) async {
-                      if (input == null || input.isEmpty) {
-                        Fluttertoast.showToast(
-                            msg: S.of(context).pleaseInputKeywords);
-                      } else {
-                        _showLoading = true;
-                        setState(() {});
-                        viewModel.setObjectList = await context
-                            .read<NotionWorkFlow>()
-                            .searchObjects(keywords: input);
-                        _showLoading = false;
-                        setState(() {});
-                      }
-                    },
-                    decoration: InputDecoration(
-                      prefixIconConstraints:
-                          BoxConstraints(maxHeight: 25, maxWidth: 25),
-                      prefixIcon: Icon(
-                        Icons.search_rounded,
-                        color: Colors.grey,
-                      ),
-                      hintText: S.of(context).typeKeyWordsForSearchDB,
-                      hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey)),
-                      border: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey)),
-                      suffixIconConstraints:
-                          BoxConstraints(maxHeight: 25, maxWidth: 25),
-                      suffixIcon: Visibility(
-                        visible: _showLoading,
-                        child: SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              color: Colors.grey,
-                              strokeWidth: 2,
-                            )),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  AnimatedSize(
-                      duration: const Duration(milliseconds: 200),
-                      alignment: Alignment.topCenter,
-                      curve: Curves.easeIn,
-                      child: Container(
-                          height: widget.topPadding,
-                          child: TipsTextView(
-                            S.of(context).notionPrompt,
-                            showIcon: widget.topPadding != 0,
-                          ))),
-                  if (viewModel.notionObjectList.length == 0)
-                    Container(
-                        padding: EdgeInsets.only(top: 40),
-                        child: Text(
-                          S.of(context).haveNotFindAnything,
-                          style: TextStyle(color: Colors.grey),
-                        )),
-                  ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: viewModel.notionObjectList.length,
-                      itemExtent: 52,
-                      itemBuilder: (context, index) {
-                        final object = viewModel.notionObjectList[index];
-                        String? leading;
-                        String? title;
-                        String type = '';
-                        if (object is database.NotionDatabase) {
-                          type = 'Database';
-                          leading = object.icon?.emoji ?? '\u{1F4D4}';
-                          title = object.title?[0].text?.content;
-                        } else if (object is page.NotionPage) {
-                          type = 'Page';
-                          leading = object.icon?.emoji ?? '\u{1F4C4}';
-                          title =
-                              object.properties?.brief?.title?[0].text?.content;
-                        }
-                        return NotionObjectsListItem(
-                          title: title,
-                          leading: leading,
-                          type: type,
-                          onTap: () async {
-                            EasyLoading.show();
-                            if (object is database.NotionDatabase) {
-                              viewModel.setDatabase = object;
-                            } else if (object is page.NotionPage) {
-                              final result = await context
-                                  .read<NotionWorkFlow>()
-                                  .createDatabase(object.id!,
-                                      actionType: widget.notionDatabaseType);
-                              if (result != null) {
-                                viewModel.setDatabase = result;
-                              }
-                            }
-                            EasyLoading.dismiss();
+        child: Column(
+          children: [
+            _buildToggleRow(context),
+            Divider(
+              height: 1,
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            _offStageCard
+                ? Column(
+                    children: [
+                      TextField(
+                        controller: widget.controller,
+                        maxLines: 1,
+                        onSubmitted: (input) async {
+                          if (input == null || input.isEmpty) {
+                            Fluttertoast.showToast(
+                                msg: S.of(context).pleaseInputKeywords);
+                          } else {
+                            _showLoading = true;
                             setState(() {});
-                          },
-                        );
-                      }),
-                  SizedBox(
-                    height: 40,
+                            viewModel.setObjectList = await context
+                                .read<NotionWorkFlow>()
+                                .searchObjects(keywords: input);
+                            _showLoading = false;
+                            setState(() {});
+                          }
+                        },
+                        decoration: InputDecoration(
+                          prefixIconConstraints:
+                              BoxConstraints(maxHeight: 25, maxWidth: 25),
+                          prefixIcon: Icon(
+                            Icons.search_rounded,
+                            color: Colors.grey,
+                          ),
+                          hintText: S.of(context).typeKeyWordsForSearchDB,
+                          hintStyle:
+                              TextStyle(color: Colors.grey, fontSize: 14),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey)),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey)),
+                          suffixIconConstraints:
+                              BoxConstraints(maxHeight: 25, maxWidth: 25),
+                          suffixIcon: Visibility(
+                            visible: _showLoading,
+                            child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.grey,
+                                  strokeWidth: 2,
+                                )),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      AnimatedSize(
+                          duration: const Duration(milliseconds: 200),
+                          alignment: Alignment.topCenter,
+                          curve: Curves.easeIn,
+                          child: Container(
+                              height: widget.topPadding,
+                              child: TipsTextView(
+                                S.of(context).notionPrompt,
+                                showIcon: widget.topPadding != 0,
+                              ))),
+                      if (viewModel.notionObjectList.length == 0)
+                        Container(
+                            padding: EdgeInsets.only(top: 40),
+                            child: Text(
+                              S.of(context).haveNotFindAnything,
+                              style: TextStyle(color: Colors.grey),
+                            )),
+                      ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: viewModel.notionObjectList.length,
+                          itemExtent: 52,
+                          itemBuilder: (context, index) {
+                            final object = viewModel.notionObjectList[index];
+                            String? leading;
+                            String? title;
+                            String type = '';
+                            if (object is database.NotionDatabase) {
+                              type = 'Database';
+                              leading = object.icon?.emoji ?? '\u{1F4D4}';
+                              title = object.title?[0].text?.content;
+                            } else if (object is page.NotionPage) {
+                              type = 'Page';
+                              leading = object.icon?.emoji ?? '\u{1F4C4}';
+                              title = object
+                                  .properties?.brief?.title?[0].text?.content;
+                            }
+                            viewModel.title = title ?? '';
+                            return NotionObjectsListItem(
+                              title: title,
+                              leading: leading,
+                              type: type,
+                              onTap: () async {
+                                EasyLoading.show();
+                                if (object is database.NotionDatabase) {
+                                  viewModel.setDatabase = object;
+                                } else if (object is page.NotionPage) {
+                                  final result = await context
+                                      .read<NotionWorkFlow>()
+                                      .createDatabase(object.id!,
+                                          actionType:
+                                              widget.notionDatabaseType);
+                                  if (result != null) {
+                                    viewModel.setDatabase = result;
+                                  }
+                                }
+                                EasyLoading.dismiss();
+                                setState(() {});
+                              },
+                            );
+                          }),
+                      SizedBox(
+                        height: 40,
+                      )
+                    ],
                   )
-                ],
-              )
-            : Container(
-                height: 250,
-                padding: EdgeInsets.symmetric(vertical: 14),
-                child: Column(
-                  children: [
-                    NotionCardView(
+                : Container(
+                    height: 210,
+                    padding: EdgeInsets.only(bottom: 16),
+                    child: NotionCardView(
                       title: '${bindDatabase?.title?[0].plainText}',
                       showNetImage: showNetImage,
                       coverUrl: '${bindDatabase?.cover?.external?.url}',
@@ -414,10 +427,9 @@ class _CollapsedMenuState extends State<_CollapsedMenu>{
                             .unlinkNotionDatabase();
                       },
                     ),
-                    _buildToggleRow(context),
-                  ],
-                ),
-              ));
+                  )
+          ],
+        ));
   }
 
   Widget _buildToggleRow(BuildContext context) {
