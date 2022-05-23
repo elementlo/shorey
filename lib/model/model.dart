@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:spark_list/database/database.dart';
 
+import '../generated/l10n.dart';
+
 ///
 /// Author: Elemen
 /// Github: https://github.com/elementlo
@@ -22,7 +24,9 @@ abstract class ModelMixin {
 class CategoryItem {
   String name;
   String? notionDatabaseId;
+  String? notionDatabaseName;
   int notionDatabaseType;
+
   Icon? icon;
   Color color;
   int id;
@@ -36,7 +40,21 @@ class CategoryItem {
       this.icon,
       required this.color,
       this.notionDatabaseId,
+      this.notionDatabaseName,
       required this.notionDatabaseType,
       required this.colorId,
       required this.iconId});
+
+  String mapTypeCode(int code) {
+    switch (code) {
+      case 0:
+        return S.current.simpleList;
+      case 1:
+        return S.current.taskList;
+      case 2:
+        return S.current.templateDiaryTitle;
+      default:
+        return '';
+    }
+  }
 }

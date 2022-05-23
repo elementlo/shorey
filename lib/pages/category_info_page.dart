@@ -51,6 +51,8 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> {
       _notionDatabaseId = widget.editingItem!.notionDatabaseId;
       _notionDatabaseType = widget.editingItem!.notionDatabaseType;
       _autoSync = widget.editingItem!.autoSync;
+      _databaseName = widget.editingItem!.notionDatabaseName;
+      _typeName = widget.editingItem!.mapTypeCode(_notionDatabaseType);
     }
     _controller.addListener(() {
       _showConfirm = _controller.text.isNotEmpty;
@@ -76,7 +78,8 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> {
         iconId: d.Value(iconId),
         autoSync: d.Value(_autoSync),
         notionDatabaseId: d.Value(_notionDatabaseId),
-        notionDatabaseType: d.Value(_notionDatabaseType)));
+        notionDatabaseType: d.Value(_notionDatabaseType),
+        notionDatabaseName: d.Value(_databaseName)));
   }
 
   Future _updateCategory(BuildContext context, CategoryItem item) async {
@@ -86,14 +89,14 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> {
     int iconId = viewModel.selectedIcon;
 
     return context.read<HomeViewModel>().updateCategory(CategoriesCompanion(
-          id: d.Value(item.id),
-          name: d.Value(_controller.text),
-          iconId: d.Value(iconId),
-          colorId: d.Value(colorId),
-          autoSync: d.Value(_autoSync),
-          notionDatabaseId: d.Value(_notionDatabaseId),
-          notionDatabaseType: d.Value(_notionDatabaseType),
-        ));
+        id: d.Value(item.id),
+        name: d.Value(_controller.text),
+        iconId: d.Value(iconId),
+        colorId: d.Value(colorId),
+        autoSync: d.Value(_autoSync),
+        notionDatabaseId: d.Value(_notionDatabaseId),
+        notionDatabaseType: d.Value(_notionDatabaseType),
+        notionDatabaseName: d.Value(_databaseName)));
   }
 
   @override

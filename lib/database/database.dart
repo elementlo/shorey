@@ -71,6 +71,8 @@ class Categories extends Table {
 
   TextColumn get notionDatabaseId => text().nullable()();
 
+  TextColumn get notionDatabaseName => text().nullable()();
+
   ///0: simple list 1: task list 2: diary
   IntColumn get notionDatabaseType => integer()();
 

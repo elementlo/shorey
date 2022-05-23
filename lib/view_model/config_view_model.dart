@@ -106,6 +106,7 @@ class ConfigViewModel extends ViewStateModel {
             name: '${element.name}',
             notionDatabaseId: element.notionDatabaseId,
             notionDatabaseType: element.notionDatabaseType,
+            notionDatabaseName: element.notionDatabaseName,
             icon: Icon(
               SIcons.iconMap[element.iconId],
               color: Color(SColor.colorMap[element.colorId]!),
