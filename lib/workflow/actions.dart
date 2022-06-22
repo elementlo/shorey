@@ -9,6 +9,7 @@ import 'package:spark_list/resource/http_provider.dart';
 
 import '../config/api.dart';
 import '../main.dart';
+import '../model/notion_database_template.dart';
 import '../model/notion_model.dart';
 
 ///
@@ -80,11 +81,21 @@ abstract class NotionActions {
     return null;
   }
 
+  @override
+  Future<NotionDatabase?> createDatabase(String pageId, int actionType) async {
+    final param = await NotionDatabaseTemplate.loadTemplate(pageId, actionType);
+    if (param != null) {
+      final response = await dio.post('${notionDatabase}', data: param);
+      if (response.success) {
+        return NotionDatabase.fromJson(response.data);
+      }
+    }
+    return null;
+  }
 
-  Future<String?> addTaskItem(String databaseId, ToDo todo,
+
+  Future<String?> addItem(String databaseId, ToDo todo,
       {List<String>? links});
-
-  Future<NotionDatabase?> createDatabase(String pageId);
 
   Future updateTaskProperties(String? pageId, ToDosCompanion todo);
 

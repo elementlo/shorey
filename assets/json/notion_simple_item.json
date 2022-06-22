@@ -1,0 +1,32 @@
+{
+  "parent": {
+    "database_id": "?"
+  },
+  "properties": {
+    "title": {
+      "title": [
+        {
+          "text": {
+            "content": "?"
+          }
+        }
+      ]
+    }
+  },
+  "children": [
+    {
+      "object": "block",
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "?"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

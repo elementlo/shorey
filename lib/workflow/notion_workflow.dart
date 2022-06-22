@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:spark_list/base/ext.dart';
@@ -11,7 +10,6 @@ import 'package:spark_list/model/notion_model.dart';
 import 'package:spark_list/resource/http_provider.dart';
 
 import '../main.dart';
-import '../model/notion_page_model.dart';
 import '../resource/data_provider.dart';
 import 'actions.dart';
 
@@ -34,16 +32,21 @@ class ActionType {
 class NotionWorkFlow with ChangeNotifier {
   NotionWorkFlow()
       : _defaultActions = _DefaultActions(),
+        _simpleActions = _SampleListActions(),
         _taskActions = _TaskListActions();
 
   late _DefaultActions _defaultActions;
   late _TaskListActions _taskActions;
+  late _SampleListActions _simpleActions;
+
   Results? user;
 
   NotionActions _adaptAction(int type) {
     switch (type) {
       case ActionType.DEFAULT:
         return _defaultActions;
+      case ActionType.SIMPLE:
+        return _simpleActions;
       case ActionType.TASK:
         return _taskActions;
       default:
@@ -79,7 +82,8 @@ class NotionWorkFlow with ChangeNotifier {
     return _defaultActions.retrieveDatabase(databaseId);
   }
 
-  Future<String?> addTaskItem(String databaseId, ToDo todo, {required int actionType}) async {
+  Future<String?> addTaskItem(String databaseId, ToDo todo,
+      {required int actionType}) async {
     final action = _adaptAction(actionType);
     final links = <String>[];
     if (todo.brief != null && todo.brief!.isNotEmpty) {
@@ -89,20 +93,22 @@ class NotionWorkFlow with ChangeNotifier {
         links.add(todo.brief!.substring(match.start, match.end));
       });
     }
-    return action.addTaskItem(databaseId, todo, links: links);
+    return action.addItem(databaseId, todo, links: links);
   }
 
-  Future<NotionDatabase?> createDatabase(String pageId, {required int actionType}) {
-    final action = _adaptAction(actionType);
-    return action.createDatabase(pageId);
+  Future<NotionDatabase?> createDatabase(String pageId,
+      {required int actionType}) {
+    return _defaultActions.createDatabase(pageId, actionType);
   }
 
-  Future updateTaskProperties(String? pageId, ToDosCompanion todo, {required int actionType}) {
+  Future updateTaskProperties(String? pageId, ToDosCompanion todo,
+      {required int actionType}) {
     final action = _adaptAction(actionType);
     return action.updateTaskProperties(pageId, todo);
   }
 
-  Future appendBlockChildren(String? pageId, {required String text, required int actionType}) {
+  Future appendBlockChildren(String? pageId,
+      {required String text, required int actionType}) {
     final action = _adaptAction(actionType);
     Iterable<RegExpMatch> matches = RegexFormater.regex.allMatches(text);
     final links = <String>[];
@@ -117,53 +123,17 @@ class NotionWorkFlow with ChangeNotifier {
   }
 }
 
-class _DefaultActions extends NotionActions{
-
-  Future<Results?> retrieveUser(String token) async {
-    dio.options.headers.addAll({'Authorization': 'Bearer $token'});
-    final response = await dio.get(notionUsers);
-    if (response.success) {
-      final users = NotionUsersInfo.fromJson(response.data);
-      for (int i = 0; i < (users.results?.length ?? 0); i++) {
-        final user = users.results![i];
-        if (user.type == 'person') {
-          return user;
-        }
-      }
-    }
-    return null;
-  }
-
-  Future persistUser(Results user) {
-    return dsProvider.saveValue<Map<String, dynamic>>(
-        StoreKey.notionUser, user.toJson());
-  }
-
-  Future deleteUser() {
-    return dsProvider.deleteValue(StoreKey.notionUser);
-  }
-
-  Future<Results?> getUser() async {
-    final value =
-        await dsProvider.getValue<Map<String, dynamic>>(StoreKey.notionUser);
-    if (value != null) {
-      return Results.fromJson(value);
-    }
-    return null;
-  }
+class _DefaultActions extends NotionActions {
 
   @override
-  Future<String?> addTaskItem(String databaseId, ToDo todo, {List<String>? links}) {
+  Future<String?> addItem(String databaseId, ToDo todo,
+      {List<String>? links}) {
     throw UnimplementedError();
   }
 
   @override
-  Future appendBlockChildren(String? pageId, {required String text, List<String>? links}) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<NotionDatabase?> createDatabase(String pageId) {
+  Future appendBlockChildren(String? pageId,
+      {required String text, List<String>? links}) {
     throw UnimplementedError();
   }
 
@@ -182,21 +152,8 @@ class _TaskListActions extends NotionActions {
     return _instance;
   }
 
-  // @override
-  // Future<NotionDatabase?> retrieveDatabase(String databaseId) async {
-  //   try {
-  //     final response = await dio.get('${notionDatabase}/${databaseId}');
-  //     if (response.success) {
-  //       return NotionDatabase.fromJson(response.data);
-  //     }
-  //   } on DioError catch (e) {
-  //     debugPrint(e.message);
-  //   }
-  //   return null;
-  // }
-
   @override
-  Future<String?> addTaskItem(String databaseId, ToDo todo,
+  Future<String?> addItem(String databaseId, ToDo todo,
       {List<String>? links}) async {
     final param = await NotionDatabaseTemplate.taskItem(databaseId,
         title: todo.content,
@@ -209,18 +166,6 @@ class _TaskListActions extends NotionActions {
     final response = await dio.post('${notionPages}', data: param);
     if (response.success) {
       return response.data['id'];
-    }
-    return null;
-  }
-
-  @override
-  Future<NotionDatabase?> createDatabase(String pageId) async {
-    final param = await NotionDatabaseTemplate.taskList(pageId);
-    if (param != null) {
-      final response = await dio.post('${notionDatabase}', data: param);
-      if (response.success) {
-        return NotionDatabase.fromJson(response.data);
-      }
     }
     return null;
   }
@@ -253,5 +198,32 @@ class _TaskListActions extends NotionActions {
           await dio.patch('${notionBlocks}/${pageId}/children', data: param);
       if (response.success) {}
     }
+  }
+}
+
+class _SampleListActions extends NotionActions {
+
+  @override
+  Future<String?> addItem(String databaseId, ToDo todo,
+      {List<String>? links}) async {
+    final param = await NotionDatabaseTemplate.simpleItem(databaseId,
+        title: todo.content,
+        brief: todo.brief ?? '',);
+    final response = await dio.post('${notionPages}', data: param);
+    if (response.success) {
+      return response.data['id'];
+    }
+    return null;
+  }
+
+  @override
+  Future appendBlockChildren(String? pageId,
+      {required String text, List<String>? links}) {
+    return Future.value('');
+  }
+
+  @override
+  Future updateTaskProperties(String? pageId, ToDosCompanion todo) {
+    return Future.value('');
   }
 }

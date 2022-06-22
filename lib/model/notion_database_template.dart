@@ -16,7 +16,7 @@ class NotionDatabaseTemplate {
       'assets/json/notion_block_children.json';
 
   static const String jsonSimpleList = 'assets/json/notion_simple_list.json';
-  static const String jsonSimpleItem = '';
+  static const String jsonSimpleItem = 'assets/json/notion_simple_item.json';
 
   static const String jPageId = 'page_id';
   static const String jParent = 'parent';
@@ -43,11 +43,37 @@ class NotionDatabaseTemplate {
   static const String jDuration = 'Duration';
   static const String jReminderTime = 'Reminder Time';
 
-  static Future<dynamic?> taskList(String pageId) async {
-    final json = await rootBundle.loadString(jsonTaskList);
+  static Future<dynamic?> loadTemplate(String pageId, int actionType) async {
+    String path;
+    switch(actionType){
+      case 0:
+        path = jsonSimpleList;
+        break;
+      case 1:
+        path = jsonTaskList;
+        break;
+      case 2:
+        path = jsonSimpleList;
+        break;
+      default:
+        path = jsonSimpleList;
+    }
+    final json = await rootBundle.loadString(path);
     if (json != null) {
       final map = jsonDecode(json);
       map[jParent][jPageId] = pageId;
+      return map;
+    }
+    return null;
+  }
+
+  static dynamic simpleItem(String databaseId,{required String title, String? brief}) async{
+    final json = await rootBundle.loadString(jsonSimpleItem);
+    if(json != null){
+      final map = jsonDecode(json);
+      map[jParent][jDatabaseId] = databaseId;
+      map[jProperties][jTypeTitle][jTypeTitle][0][jTypeText][jTypeContent] = title;
+      map[jTypeChildren][0][jTypeParagraph][jTypeRichText][0][jTypeText][jTypeContent] = brief;
       return map;
     }
     return null;
