@@ -13,6 +13,7 @@ import 'package:spark_list/database/database.dart';
 import 'package:spark_list/generated/l10n.dart';
 import 'package:spark_list/main.dart';
 import 'package:spark_list/model/model.dart';
+import 'package:spark_list/pages/root_page.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
@@ -350,13 +351,13 @@ class _TextEditorPageState extends State<TextEditorPage>
   Future<void> _syncWithNotion() async {
     if (!_updatedModel!.properTiesEquals(_oldModel!)) {
       _updatedModel!.tags = _categoryName;
-      await context.read<NotionWorkFlow>().updateTaskProperties(
+      await appContext.read<NotionWorkFlow>().updateTaskProperties(
           _updatedModel!.pageId, _updatedModel!.toCompanion(true),
           actionType: widget.category.notionDatabaseType);
     }
     if (_updatedModel!.brief != null &&
         !_updatedModel!.briefEquals(_oldModel!)) {
-      await context.read<NotionWorkFlow>().appendBlockChildren(
+      await appContext.read<NotionWorkFlow>().appendBlockChildren(
           _updatedModel!.pageId,
           text: _updatedModel!.brief!,
           actionType: widget.category.notionDatabaseType);

@@ -72,7 +72,7 @@ class NotionDatabaseTemplate {
     if(json != null){
       final map = jsonDecode(json);
       map[jParent][jDatabaseId] = databaseId;
-      map[jProperties][jTypeTitle][jTypeTitle][0][jTypeText][jTypeContent] = title;
+      map[jProperties][jName][jTypeTitle][0][jTypeText][jTypeContent] = title;
       map[jTypeChildren][0][jTypeParagraph][jTypeRichText][0][jTypeText][jTypeContent] = brief;
       return map;
     }
@@ -171,7 +171,7 @@ class NotionDatabaseTemplate {
     return map;
   }
 
-  static dynamic blockChildren(
+  static dynamic toDoBlockChildren(
       {required String text, List<String>? links}) async {
     final json = await rootBundle.loadString(jsonBlockChildren);
     if (json != null) {
@@ -192,6 +192,20 @@ ${text}
           });
         });
       }
+      return map;
+    }
+    return null;
+  }
+
+  static dynamic simpleBlockChildren(String text) async {
+    final json = await rootBundle.loadString(jsonBlockChildren);
+    if (json != null) {
+      final map = jsonDecode(json);
+      map[jTypeChildren][0][jTypeParagraph][jTypeRichText][0][jTypeText]
+      [jTypeContent] = '''
+${DateTime.now().toIso8601String()}
+${text}
+      ''';
       return map;
     }
     return null;

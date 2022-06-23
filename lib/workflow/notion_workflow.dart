@@ -9,8 +9,6 @@ import 'package:spark_list/model/notion_database_template.dart';
 import 'package:spark_list/model/notion_model.dart';
 import 'package:spark_list/resource/http_provider.dart';
 
-import '../main.dart';
-import '../resource/data_provider.dart';
 import 'actions.dart';
 
 ///
@@ -124,10 +122,8 @@ class NotionWorkFlow with ChangeNotifier {
 }
 
 class _DefaultActions extends NotionActions {
-
   @override
-  Future<String?> addItem(String databaseId, ToDo todo,
-      {List<String>? links}) {
+  Future<String?> addItem(String databaseId, ToDo todo, {List<String>? links}) {
     throw UnimplementedError();
   }
 
@@ -193,7 +189,7 @@ class _TaskListActions extends NotionActions {
       {required String text, List<String>? links}) async {
     if (pageId != null && pageId != '') {
       final param =
-          await NotionDatabaseTemplate.blockChildren(text: text, links: links);
+          await NotionDatabaseTemplate.toDoBlockChildren(text: text, links: links);
       final response =
           await dio.patch('${notionBlocks}/${pageId}/children', data: param);
       if (response.success) {}
@@ -202,13 +198,14 @@ class _TaskListActions extends NotionActions {
 }
 
 class _SampleListActions extends NotionActions {
-
   @override
   Future<String?> addItem(String databaseId, ToDo todo,
       {List<String>? links}) async {
-    final param = await NotionDatabaseTemplate.simpleItem(databaseId,
-        title: todo.content,
-        brief: todo.brief ?? '',);
+    final param = await NotionDatabaseTemplate.simpleItem(
+      databaseId,
+      title: todo.content,
+      brief: todo.brief ?? '',
+    );
     final response = await dio.post('${notionPages}', data: param);
     if (response.success) {
       return response.data['id'];
@@ -218,12 +215,25 @@ class _SampleListActions extends NotionActions {
 
   @override
   Future appendBlockChildren(String? pageId,
-      {required String text, List<String>? links}) {
-    return Future.value('');
+      {required String text, List<String>? links}) async {
+    if (pageId != null && pageId != '') {
+      final param =
+          await NotionDatabaseTemplate.simpleBlockChildren(text);
+      final response =
+          await dio.patch('${notionBlocks}/${pageId}/children', data: param);
+      if (response.success) {}
+    }
   }
 
   @override
-  Future updateTaskProperties(String? pageId, ToDosCompanion todo) {
-    return Future.value('');
+  Future updateTaskProperties(String? pageId, ToDosCompanion todo) async {
+    if (pageId != null && pageId != '') {
+      final param = await NotionDatabaseTemplate.itemProperties(
+        title: todo.content == Value.absent() ? null : todo.content.value,
+        createdTime: todo.createdTime.value.toIso8601String(),
+      );
+      final response = await dio.patch('${notionPages}/${pageId}', data: param);
+      if (response.success) {}
+    }
   }
 }
