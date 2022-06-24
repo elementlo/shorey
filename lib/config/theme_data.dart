@@ -19,6 +19,7 @@ class AppThemeData {
 	
 	static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
 		return ThemeData(
+			useMaterial3: true,
 			colorScheme: colorScheme,
 			// Matches manifest.json colors and background color.
 			primaryColor: const Color(0xFFF7F8FA),

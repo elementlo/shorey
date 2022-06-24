@@ -128,7 +128,6 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                           ),
                           Center(
                             child: Stack(
-                              overflow: Overflow.visible,
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),

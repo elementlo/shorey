@@ -98,6 +98,10 @@ class NotionWorkFlow with ChangeNotifier {
       {required int actionType}) {
     return _defaultActions.createDatabase(pageId, actionType);
   }
+  
+  Future updateDatabaseProperties(String databaseId, NotionDatabase database){
+    return _defaultActions.updateDatabase(databaseId, database);
+  }
 
   Future updateTaskProperties(String? pageId, ToDosCompanion todo,
       {required int actionType}) {

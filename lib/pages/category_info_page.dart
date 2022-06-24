@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:drift/drift.dart' as d;
@@ -13,6 +14,8 @@ import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/widget/app_bar.dart';
 import 'package:spark_list/widget/round_corner_rectangle.dart';
 
+import '../model/notion_database_model.dart' as model;
+import '../workflow/notion_workflow.dart';
 import 'curtain_page.dart';
 import 'sync_workflow_page.dart';
 
@@ -65,6 +68,17 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> {
     _controller.dispose();
     _scrollController.dispose();
     super.dispose();
+  }
+
+  FutureOr<void> _updateDatabase() {
+    if (_notionDatabaseId != null && _notionDatabaseId!.isNotEmpty) {
+      return context.read<NotionWorkFlow>().updateDatabaseProperties(
+          _notionDatabaseId!,
+          model.NotionDatabase(title: [
+            model.Title(text: model.Text(content: _controller.text))
+          ]));
+    }
+    return null;
   }
 
   Future _saveCategory(BuildContext context) async {
@@ -128,6 +142,7 @@ class _CategoryInfoPageState extends State<CategoryInfoPage> {
                         } else {
                           await _saveCategory(context);
                         }
+                        _updateDatabase();
                         Navigator.pop(context);
                       }
                     });

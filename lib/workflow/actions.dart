@@ -81,7 +81,6 @@ abstract class NotionActions {
     return null;
   }
 
-  @override
   Future<NotionDatabase?> createDatabase(String pageId, int actionType) async {
     final param = await NotionDatabaseTemplate.loadTemplate(pageId, actionType);
     if (param != null) {
@@ -91,6 +90,17 @@ abstract class NotionActions {
       }
     }
     return null;
+  }
+
+  Future updateDatabase(String databaseId, NotionDatabase database)async{
+    if(database.title!=null && database.title!.length >0){
+      final param = await NotionDatabaseTemplate.databaseProperties(title: database.title![0].text?.content??'');
+      if(param != null){
+        final response = await dio.patch('${notionDatabase}/${databaseId}', data: param);
+        if(response.success){}
+      }
+
+    }
   }
 
 

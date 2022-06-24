@@ -45,7 +45,7 @@ class NotionDatabaseTemplate {
 
   static Future<dynamic?> loadTemplate(String pageId, int actionType) async {
     String path;
-    switch(actionType){
+    switch (actionType) {
       case 0:
         path = jsonSimpleList;
         break;
@@ -67,13 +67,15 @@ class NotionDatabaseTemplate {
     return null;
   }
 
-  static dynamic simpleItem(String databaseId,{required String title, String? brief}) async{
+  static dynamic simpleItem(String databaseId,
+      {required String title, String? brief}) async {
     final json = await rootBundle.loadString(jsonSimpleItem);
-    if(json != null){
+    if (json != null) {
       final map = jsonDecode(json);
       map[jParent][jDatabaseId] = databaseId;
       map[jProperties][jName][jTypeTitle][0][jTypeText][jTypeContent] = title;
-      map[jTypeChildren][0][jTypeParagraph][jTypeRichText][0][jTypeText][jTypeContent] = brief;
+      map[jTypeChildren][0][jTypeParagraph][jTypeRichText][0][jTypeText]
+          [jTypeContent] = brief;
       return map;
     }
     return null;
@@ -117,6 +119,20 @@ class NotionDatabaseTemplate {
           });
         });
       }
+      return map;
+    }
+    return null;
+  }
+
+  static dynamic databaseProperties({String? title}) {
+    if (title != null) {
+      final map = Map<String, dynamic>();
+      List list = [
+        {
+          'text': {'content': title}
+        }
+      ];
+      map[jTypeTitle] = list;
       return map;
     }
     return null;
@@ -202,7 +218,7 @@ ${text}
     if (json != null) {
       final map = jsonDecode(json);
       map[jTypeChildren][0][jTypeParagraph][jTypeRichText][0][jTypeText]
-      [jTypeContent] = '''
+              [jTypeContent] = '''
 ${DateTime.now().toIso8601String()}
 ${text}
       ''';

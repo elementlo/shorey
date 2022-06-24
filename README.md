@@ -5,11 +5,11 @@
   Shorey
   <br>
 </h1>
-这是一款开源笔记应用, 支持Android/iOS双平台, 使用Flutter 2开发, 体验Flutter的同时也希望做一个能成为个人知识中转站的应用, 让你更方便的把平时收集到的信息记录下来, 最后沉淀到知识库中.
+这是一款开源笔记应用, 支持Android/iOS双平台, 使用Flutter <strike>2</strike> 3开发, 体验Flutter的同时也希望做一个能成为个人知识中转站的应用, 让你更方便的把平时收集到的信息记录下来, 最后沉淀到知识库中.
 
 后边会先开发联动Notion, 让你的Notion成为后台知识库.
 
-Shorey is a simple note app which is built with Flutter 2 and supports both Android/iOS platforms. It provides me full experience of interacting with Flutter and in the meantime I hope it can be your knowledge/memory transition tool, and yes, there still much work to do.
+Shorey is a simple note app which is built with Flutter <strike>2</strike> 3 and supports both Android/iOS platforms. It provides me full experience of interacting with Flutter and in the meantime I hope it can be your knowledge/memory transition tool, and yes, there still much work to do.
 
 Now I focus on linking Notion, in order to make Notion your backend knowledge database.  
 
