@@ -1,0 +1,36 @@
+{
+  "parent": {
+    "type": "page_id",
+    "page_id": "?"
+  },
+  "cover": {
+    "type": "external",
+    "external": {
+      "url": "https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-1.2.1&auto=compress&fm=jpg&crop=entropy&cs=srgb&fit=clip&w=1000"
+    }
+  },
+  "icon":{"type":"emoji","emoji":"🍒"},
+  "title": [
+    {
+      "type": "text",
+      "text": {
+        "content": "My Diary",
+        "link": null
+      }
+    }
+  ],
+  "properties": {
+    "Location": {
+      "title": {}
+    },
+    "Date": {
+      "date": {}
+    },
+    "Tags": {
+      "type": "multi_select",
+      "multi_select": {
+        "options": []
+      }
+    },
+  }
+}
