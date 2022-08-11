@@ -18,6 +18,9 @@ class NotionDatabaseTemplate {
   static const String jsonSimpleList = 'assets/json/notion_simple_list.json';
   static const String jsonSimpleItem = 'assets/json/notion_simple_item.json';
 
+  static const String jsonDiaryRepo = 'assets/json/notion_diary_repo.json';
+  static const String jsonDiaryItem = 'assets/json/notion_diary_item.json';
+
   static const String jPageId = 'page_id';
   static const String jParent = 'parent';
   static const String jDatabaseId = 'database_id';
@@ -53,7 +56,7 @@ class NotionDatabaseTemplate {
         path = jsonTaskList;
         break;
       case 2:
-        path = jsonSimpleList;
+        path = jsonDiaryRepo;
         break;
       default:
         path = jsonSimpleList;

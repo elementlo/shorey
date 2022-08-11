@@ -1,0 +1,60 @@
+{
+  "parent": {
+    "database_id": "?"
+  },
+  "properties": {
+    "Name": {
+      "title": [
+        {
+          "text": {
+            "content": "?"
+          }
+        }
+      ]
+    },
+    "Location": {
+      "rich_text": [
+        {
+          "text": {
+            "content": ""
+          }
+        }
+      ]
+    },
+    "Weather": {
+      "rich_text": [
+        {
+          "text": {
+            "content": ""
+          }
+        }
+      ]
+    },
+    "Tags": {
+      "multi_select": [
+        {
+          "name": "?"
+        }
+      ]
+    },
+    "Date": {
+      "created_time": {}
+    }
+  },
+  "children": [
+    {
+      "object": "block",
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "?"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

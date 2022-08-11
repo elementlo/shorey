@@ -70,7 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "linkNotionDatabase":
             MessageLookupByLibrary.simpleMessage("Link Notion database"),
         "linkNotionIfYouWant": MessageLookupByLibrary.simpleMessage(
-            "Link a Notion account in setting menu with a token could sync your items with a Notion database."),
+            "Linking a Notion account in setting menu with a token could sync your items with a Notion database."),
         "linkNotionInfo": MessageLookupByLibrary.simpleMessage(
             "Input your user token to link Notion"),
         "mainCategory": MessageLookupByLibrary.simpleMessage("Category"),

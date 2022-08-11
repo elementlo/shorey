@@ -137,7 +137,7 @@ class ConfigViewModel extends ViewStateModel {
         brightness = Brightness.dark;
         break;
       default:
-        brightness = WidgetsBinding.instance!.window.platformBrightness;
+        brightness = WidgetsBinding.instance.window.platformBrightness;
     }
 
     final overlayStyle = brightness == Brightness.dark

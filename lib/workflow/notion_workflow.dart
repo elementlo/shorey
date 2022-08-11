@@ -31,11 +31,13 @@ class NotionWorkFlow with ChangeNotifier {
   NotionWorkFlow()
       : _defaultActions = _DefaultActions(),
         _simpleActions = _SampleListActions(),
-        _taskActions = _TaskListActions();
+        _taskActions = _TaskListActions(),
+        _diaryActions = _DiaryActions();
 
   late _DefaultActions _defaultActions;
   late _TaskListActions _taskActions;
   late _SampleListActions _simpleActions;
+  late _DiaryActions _diaryActions;
 
   Results? user;
 
@@ -47,6 +49,8 @@ class NotionWorkFlow with ChangeNotifier {
         return _simpleActions;
       case ActionType.TASK:
         return _taskActions;
+        case ActionType.DIARY:
+          return _diaryActions;
       default:
         return _defaultActions;
     }
@@ -98,7 +102,7 @@ class NotionWorkFlow with ChangeNotifier {
       {required int actionType}) {
     return _defaultActions.createDatabase(pageId, actionType);
   }
-  
+
   Future updateDatabaseProperties(String databaseId, NotionDatabase database){
     return _defaultActions.updateDatabase(databaseId, database);
   }
@@ -225,6 +229,47 @@ class _SampleListActions extends NotionActions {
           await NotionDatabaseTemplate.simpleBlockChildren(text);
       final response =
           await dio.patch('${notionBlocks}/${pageId}/children', data: param);
+      if (response.success) {}
+    }
+  }
+
+  @override
+  Future updateTaskProperties(String? pageId, ToDosCompanion todo) async {
+    if (pageId != null && pageId != '') {
+      final param = await NotionDatabaseTemplate.itemProperties(
+        title: todo.content == Value.absent() ? null : todo.content.value,
+        createdTime: todo.createdTime.value.toIso8601String(),
+      );
+      final response = await dio.patch('${notionPages}/${pageId}', data: param);
+      if (response.success) {}
+    }
+  }
+}
+
+class _DiaryActions extends NotionActions {
+  @override
+  Future<String?> addItem(String databaseId, ToDo todo,
+      {List<String>? links}) async {
+    final param = await NotionDatabaseTemplate.simpleItem(
+      databaseId,
+      title: todo.content,
+      brief: todo.brief ?? '',
+    );
+    final response = await dio.post('${notionPages}', data: param);
+    if (response.success) {
+      return response.data['id'];
+    }
+    return null;
+  }
+
+  @override
+  Future appendBlockChildren(String? pageId,
+      {required String text, List<String>? links}) async {
+    if (pageId != null && pageId != '') {
+      final param =
+      await NotionDatabaseTemplate.simpleBlockChildren(text);
+      final response =
+      await dio.patch('${notionBlocks}/${pageId}/children', data: param);
       if (response.success) {}
     }
   }

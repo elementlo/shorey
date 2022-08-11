@@ -640,10 +640,10 @@ class S {
     );
   }
 
-  /// `Link a Notion account in setting menu with a token could sync your items with a Notion database.`
+  /// `Linking a Notion account in setting menu with a token could sync your items with a Notion database.`
   String get linkNotionIfYouWant {
     return Intl.message(
-      'Link a Notion account in setting menu with a token could sync your items with a Notion database.',
+      'Linking a Notion account in setting menu with a token could sync your items with a Notion database.',
       name: 'linkNotionIfYouWant',
       desc: '',
       args: [],

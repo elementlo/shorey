@@ -39,7 +39,7 @@ Now I focus on linking Notion, in order to make Notion your backend knowledge da
 
 **项目编译要求:**
 1. Android SDK 28/Xcode 13
-2. Flutter SDK 2.8.1
+2. Flutter SDK 3.0.4
 
 ## 应用展示
 UI部分大量参考了Flutter官方的Gallery应用. 此外还在关于页埋了个小彩蛋, 希望喜欢.

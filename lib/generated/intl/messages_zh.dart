@@ -63,7 +63,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "linkNotionDatabase":
             MessageLookupByLibrary.simpleMessage("关联Notion数据库"),
         "linkNotionIfYouWant": MessageLookupByLibrary.simpleMessage(
-            "在设置中绑定Notion账户, 可以同步你的笔记到Notion数据库中"),
+            "在设置中绑定Notion账户, 可以利用工作流管理和同步你的笔记"),
         "linkNotionInfo":
             MessageLookupByLibrary.simpleMessage("输入你的用户令牌使Shorey与Notion连接"),
         "mainCategory": MessageLookupByLibrary.simpleMessage("类别"),

@@ -103,7 +103,6 @@ abstract class NotionActions {
     }
   }
 
-
   Future<String?> addItem(String databaseId, ToDo todo,
       {List<String>? links});
 
