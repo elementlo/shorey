@@ -127,6 +127,31 @@ class NotionDatabaseTemplate {
     return null;
   }
 
+  static dynamic diaryItem(String databaseId,
+      {required String title,
+        required String createdTime,
+        String? location,
+        String? weather,
+        String? brief,
+        String? image,
+        List<String>? tags,}) async {
+    final json = await rootBundle.loadString(jsonDiaryItem);
+    if (json != null) {
+      final map = jsonDecode(json);
+      map[jParent][jDatabaseId] = databaseId;
+      map[jProperties][jName][jTypeTitle][0][jTypeText][jTypeContent] = title;
+      map[jProperties][jTags][jTypeMultiSelect][0][jTypeName] = tags?[0];
+      map[jProperties][jDuration][jTypeDate][jTypeStart] = createdTime;
+
+      map[jTypeChildren][0][jTypeParagraph][jTypeRichText][0][jTypeText]
+      [jTypeContent] = brief;
+
+      return map;
+    }
+    return null;
+  }
+
+
   static dynamic databaseProperties({String? title}) {
     if (title != null) {
       final map = Map<String, dynamic>();
