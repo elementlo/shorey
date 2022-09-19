@@ -38,6 +38,7 @@ class NotionDatabaseTemplate {
   static const String jTypeStart = 'start';
   static const String jTypeEnd = 'end';
   static const String jTypeRichText = 'rich_text';
+  static const String jTypeCreatedTime = 'created_time';
 
   static const String jStatus = 'Status';
   static const String jBrief = 'Brief';
@@ -45,6 +46,7 @@ class NotionDatabaseTemplate {
   static const String jTags = 'Tags';
   static const String jDuration = 'Duration';
   static const String jReminderTime = 'Reminder Time';
+  static const String jCreated = 'Created';
 
   static Future<dynamic?> loadTemplate(String pageId, int actionType) async {
     String path;
@@ -141,7 +143,7 @@ class NotionDatabaseTemplate {
       map[jParent][jDatabaseId] = databaseId;
       map[jProperties][jName][jTypeTitle][0][jTypeText][jTypeContent] = title;
       map[jProperties][jTags][jTypeMultiSelect][0][jTypeName] = tags?[0];
-      map[jProperties][jDuration][jTypeDate][jTypeStart] = createdTime;
+      map[jProperties][jCreated][jTypeCreatedTime] = createdTime;
 
       map[jTypeChildren][0][jTypeParagraph][jTypeRichText][0][jTypeText]
       [jTypeContent] = brief;
