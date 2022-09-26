@@ -46,5 +46,9 @@
       <string>https</string>
       <string>http</string>
     </array>
+
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Need location when in use</string>
+
 </dict>
 </plist>

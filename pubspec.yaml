@@ -51,6 +51,7 @@ dependencies:
   dio: ^4.0.4
   linkwell: ^2.0.6
   amap_flutter_location: ^3.0.0
+  permission_handler: ^10.0.1
 
 dev_dependencies:
   flutter_test:
