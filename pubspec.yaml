@@ -16,7 +16,7 @@ publish_to: 'none'
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.2.0-beta+7
+version: 0.3.0-beta.1
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -26,37 +26,37 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  provider: ^6.0.1
+  provider: ^6.0.3
   pull_to_refresh: ^2.0.0
-  fluttertoast: ^8.0.7
-  sqflite: ^2.0.0+3
-  synchronized: ^3.0.0
-  animated_text_kit: ^4.2.1
-  flutter_local_notifications: ^9.0.3
-  cupertino_icons: ^1.0.3
-  syncfusion_flutter_datepicker: ^19.2.49
-  day_night_time_picker: ^1.0.3+1
+  fluttertoast: ^8.0.9
+  synchronized: ^3.0.0+3
+  animated_text_kit: ^4.2.2
+  flutter_local_notifications: ^12.0.1+1
+  cupertino_icons: ^1.0.5
+  syncfusion_flutter_datepicker: ^20.3.48
+  day_night_time_picker: ^1.1.3
   flutter_native_timezone: ^2.0.0
   intl: ^0.17.0
-  package_info_plus: ^1.0.6
-  lottie: ^1.2.1
-  flutter_easyloading: ^3.0.3
-  url_launcher: ^6.0.12
-  sembast: ^3.1.1
-  path_provider: ^2.0.7
-  drift: ^1.3.0
-  sqlite3_flutter_libs: ^0.5.0
-  path: ^1.8.0
-  ionicons: ^0.1.2
-  dio: ^4.0.4
+  package_info_plus: ^1.4.3+1
+  lottie: ^1.4.3
+  flutter_easyloading: ^3.0.5
+  url_launcher: ^6.1.6
+  sembast: ^3.3.0
+  path_provider: ^2.0.11
+  drift: ^2.2.0
+  sqlite3_flutter_libs: ^0.5.10
+  path: ^1.8.2
+  ionicons: ^0.2.1
+  dio: ^4.0.6
   linkwell: ^2.0.6
   amap_flutter_location: ^3.0.0
-  permission_handler: ^10.0.1
+  permission_handler: ^10.1.0
+  flutter_app_badger: ^1.5.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  drift_dev: ^1.3.0
+  drift_dev: ^2.2.0+1
   build_runner: ^2.1.4
 
 # For information on the generic Dart part of this file, see the

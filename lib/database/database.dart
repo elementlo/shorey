@@ -171,7 +171,7 @@ class DatabaseProvider extends _$DatabaseProvider {
     final query = selectOnly(categories)..addColumns([categories.id.count()]);
     final result = (await query.get())[0];
     final count = result.read(categories.id.count());
-    return count;
+    return count??0;
   }
 
   Future deleteCategory(int id) {

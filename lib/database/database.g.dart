@@ -3,10 +3,10 @@
 part of 'database.dart';
 
 // **************************************************************************
-// MoorGenerator
+// DriftDatabaseGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
+// ignore_for_file: type=lint
 class ToDo extends DataClass implements Insertable<ToDo> {
   int id;
   int? notificationId;
@@ -33,56 +33,29 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       this.pageId,
       required this.status,
       required this.categoryId});
-  factory ToDo.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return ToDo(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      notificationId: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}notification_id']),
-      createdTime: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}created_time'])!,
-      filedTime: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}filed_time']),
-      alertTime: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}alert_time']),
-      content: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}content'])!,
-      brief: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}brief']),
-      tags: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}tags']),
-      pageId: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}page_id']),
-      status: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}status'])!,
-      categoryId: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}category_id'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     if (!nullToAbsent || notificationId != null) {
-      map['notification_id'] = Variable<int?>(notificationId);
+      map['notification_id'] = Variable<int>(notificationId);
     }
     map['created_time'] = Variable<DateTime>(createdTime);
     if (!nullToAbsent || filedTime != null) {
-      map['filed_time'] = Variable<DateTime?>(filedTime);
+      map['filed_time'] = Variable<DateTime>(filedTime);
     }
     if (!nullToAbsent || alertTime != null) {
-      map['alert_time'] = Variable<DateTime?>(alertTime);
+      map['alert_time'] = Variable<DateTime>(alertTime);
     }
     map['content'] = Variable<String>(content);
     if (!nullToAbsent || brief != null) {
-      map['brief'] = Variable<String?>(brief);
+      map['brief'] = Variable<String>(brief);
     }
     if (!nullToAbsent || tags != null) {
-      map['tags'] = Variable<String?>(tags);
+      map['tags'] = Variable<String>(tags);
     }
     if (!nullToAbsent || pageId != null) {
-      map['page_id'] = Variable<String?>(pageId);
+      map['page_id'] = Variable<String>(pageId);
     }
     map['status'] = Variable<int>(status);
     map['category_id'] = Variable<int>(categoryId);
@@ -150,26 +123,27 @@ class ToDo extends DataClass implements Insertable<ToDo> {
 
   ToDo copyWith(
           {int? id,
-          int? notificationId,
+          Value<int?> notificationId = const Value.absent(),
           DateTime? createdTime,
-          DateTime? filedTime,
-          DateTime? alertTime,
+          Value<DateTime?> filedTime = const Value.absent(),
+          Value<DateTime?> alertTime = const Value.absent(),
           String? content,
-          String? brief,
-          String? tags,
-          String? pageId,
+          Value<String?> brief = const Value.absent(),
+          Value<String?> tags = const Value.absent(),
+          Value<String?> pageId = const Value.absent(),
           int? status,
           int? categoryId}) =>
       ToDo(
         id: id ?? this.id,
-        notificationId: notificationId ?? this.notificationId,
+        notificationId:
+            notificationId.present ? notificationId.value : this.notificationId,
         createdTime: createdTime ?? this.createdTime,
-        filedTime: filedTime ?? this.filedTime,
-        alertTime: alertTime ?? this.alertTime,
+        filedTime: filedTime.present ? filedTime.value : this.filedTime,
+        alertTime: alertTime.present ? alertTime.value : this.alertTime,
         content: content ?? this.content,
-        brief: brief ?? this.brief,
-        tags: tags ?? this.tags,
-        pageId: pageId ?? this.pageId,
+        brief: brief.present ? brief.value : this.brief,
+        tags: tags.present ? tags.value : this.tags,
+        pageId: pageId.present ? pageId.value : this.pageId,
         status: status ?? this.status,
         categoryId: categoryId ?? this.categoryId,
       );
@@ -254,14 +228,14 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
         categoryId = Value(categoryId);
   static Insertable<ToDo> custom({
     Expression<int>? id,
-    Expression<int?>? notificationId,
+    Expression<int>? notificationId,
     Expression<DateTime>? createdTime,
-    Expression<DateTime?>? filedTime,
-    Expression<DateTime?>? alertTime,
+    Expression<DateTime>? filedTime,
+    Expression<DateTime>? alertTime,
     Expression<String>? content,
-    Expression<String?>? brief,
-    Expression<String?>? tags,
-    Expression<String?>? pageId,
+    Expression<String>? brief,
+    Expression<String>? tags,
+    Expression<String>? pageId,
     Expression<int>? status,
     Expression<int>? categoryId,
   }) {
@@ -314,28 +288,28 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       map['id'] = Variable<int>(id.value);
     }
     if (notificationId.present) {
-      map['notification_id'] = Variable<int?>(notificationId.value);
+      map['notification_id'] = Variable<int>(notificationId.value);
     }
     if (createdTime.present) {
       map['created_time'] = Variable<DateTime>(createdTime.value);
     }
     if (filedTime.present) {
-      map['filed_time'] = Variable<DateTime?>(filedTime.value);
+      map['filed_time'] = Variable<DateTime>(filedTime.value);
     }
     if (alertTime.present) {
-      map['alert_time'] = Variable<DateTime?>(alertTime.value);
+      map['alert_time'] = Variable<DateTime>(alertTime.value);
     }
     if (content.present) {
       map['content'] = Variable<String>(content.value);
     }
     if (brief.present) {
-      map['brief'] = Variable<String?>(brief.value);
+      map['brief'] = Variable<String>(brief.value);
     }
     if (tags.present) {
-      map['tags'] = Variable<String?>(tags.value);
+      map['tags'] = Variable<String>(tags.value);
     }
     if (pageId.present) {
-      map['page_id'] = Variable<String?>(pageId.value);
+      map['page_id'] = Variable<String>(pageId.value);
     }
     if (status.present) {
       map['status'] = Variable<int>(status.value);
@@ -372,63 +346,63 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
   $ToDosTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _notificationIdMeta =
       const VerificationMeta('notificationId');
   @override
-  late final GeneratedColumn<int?> notificationId = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> notificationId = GeneratedColumn<int>(
       'notification_id', aliasedName, true,
-      type: const IntType(), requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   final VerificationMeta _createdTimeMeta =
       const VerificationMeta('createdTime');
   @override
-  late final GeneratedColumn<DateTime?> createdTime =
-      GeneratedColumn<DateTime?>('created_time', aliasedName, false,
-          type: const IntType(), requiredDuringInsert: true);
+  late final GeneratedColumn<DateTime> createdTime = GeneratedColumn<DateTime>(
+      'created_time', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
   final VerificationMeta _filedTimeMeta = const VerificationMeta('filedTime');
   @override
-  late final GeneratedColumn<DateTime?> filedTime = GeneratedColumn<DateTime?>(
+  late final GeneratedColumn<DateTime> filedTime = GeneratedColumn<DateTime>(
       'filed_time', aliasedName, true,
-      type: const IntType(), requiredDuringInsert: false);
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
   final VerificationMeta _alertTimeMeta = const VerificationMeta('alertTime');
   @override
-  late final GeneratedColumn<DateTime?> alertTime = GeneratedColumn<DateTime?>(
+  late final GeneratedColumn<DateTime> alertTime = GeneratedColumn<DateTime>(
       'alert_time', aliasedName, true,
-      type: const IntType(), requiredDuringInsert: false);
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
   final VerificationMeta _contentMeta = const VerificationMeta('content');
   @override
-  late final GeneratedColumn<String?> content = GeneratedColumn<String?>(
+  late final GeneratedColumn<String> content = GeneratedColumn<String>(
       'content', aliasedName, false,
-      type: const StringType(), requiredDuringInsert: true);
+      type: DriftSqlType.string, requiredDuringInsert: true);
   final VerificationMeta _briefMeta = const VerificationMeta('brief');
   @override
-  late final GeneratedColumn<String?> brief = GeneratedColumn<String?>(
+  late final GeneratedColumn<String> brief = GeneratedColumn<String>(
       'brief', aliasedName, true,
-      type: const StringType(), requiredDuringInsert: false);
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _tagsMeta = const VerificationMeta('tags');
   @override
-  late final GeneratedColumn<String?> tags = GeneratedColumn<String?>(
+  late final GeneratedColumn<String> tags = GeneratedColumn<String>(
       'tags', aliasedName, true,
-      type: const StringType(), requiredDuringInsert: false);
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _pageIdMeta = const VerificationMeta('pageId');
   @override
-  late final GeneratedColumn<String?> pageId = GeneratedColumn<String?>(
+  late final GeneratedColumn<String> pageId = GeneratedColumn<String>(
       'page_id', aliasedName, true,
-      type: const StringType(), requiredDuringInsert: false);
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _statusMeta = const VerificationMeta('status');
   @override
-  late final GeneratedColumn<int?> status = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> status = GeneratedColumn<int>(
       'status', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: true);
   final VerificationMeta _categoryIdMeta = const VerificationMeta('categoryId');
   @override
-  late final GeneratedColumn<int?> categoryId = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
       'category_id', aliasedName, false,
-      type: const IntType(),
+      type: DriftSqlType.int,
       requiredDuringInsert: true,
       $customConstraints:
           'NULLABLE REFERENCES categories(id) ON DELETE CASCADE');
@@ -519,8 +493,31 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   ToDo map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return ToDo.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ToDo(
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      notificationId: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}notification_id']),
+      createdTime: attachedDatabase.options.types
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_time'])!,
+      filedTime: attachedDatabase.options.types
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}filed_time']),
+      alertTime: attachedDatabase.options.types
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}alert_time']),
+      content: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}content'])!,
+      brief: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}brief']),
+      tags: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}tags']),
+      pageId: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}page_id']),
+      status: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}status'])!,
+      categoryId: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}category_id'])!,
+    );
   }
 
   @override
@@ -549,43 +546,22 @@ class Category extends DataClass implements Insertable<Category> {
       required this.iconId,
       required this.colorId,
       this.autoSync});
-  factory Category.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return Category(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      name: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
-      notionDatabaseId: const StringType().mapFromDatabaseResponse(
-          data['${effectivePrefix}notion_database_id']),
-      notionDatabaseName: const StringType().mapFromDatabaseResponse(
-          data['${effectivePrefix}notion_database_name']),
-      notionDatabaseType: const IntType().mapFromDatabaseResponse(
-          data['${effectivePrefix}notion_database_type'])!,
-      iconId: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}icon_id'])!,
-      colorId: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}color_id'])!,
-      autoSync: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}auto_sync']),
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
     if (!nullToAbsent || notionDatabaseId != null) {
-      map['notion_database_id'] = Variable<String?>(notionDatabaseId);
+      map['notion_database_id'] = Variable<String>(notionDatabaseId);
     }
     if (!nullToAbsent || notionDatabaseName != null) {
-      map['notion_database_name'] = Variable<String?>(notionDatabaseName);
+      map['notion_database_name'] = Variable<String>(notionDatabaseName);
     }
     map['notion_database_type'] = Variable<int>(notionDatabaseType);
     map['icon_id'] = Variable<int>(iconId);
     map['color_id'] = Variable<int>(colorId);
     if (!nullToAbsent || autoSync != null) {
-      map['auto_sync'] = Variable<bool?>(autoSync);
+      map['auto_sync'] = Variable<bool>(autoSync);
     }
     return map;
   }
@@ -642,21 +618,25 @@ class Category extends DataClass implements Insertable<Category> {
   Category copyWith(
           {int? id,
           String? name,
-          String? notionDatabaseId,
-          String? notionDatabaseName,
+          Value<String?> notionDatabaseId = const Value.absent(),
+          Value<String?> notionDatabaseName = const Value.absent(),
           int? notionDatabaseType,
           int? iconId,
           int? colorId,
-          bool? autoSync}) =>
+          Value<bool?> autoSync = const Value.absent()}) =>
       Category(
         id: id ?? this.id,
         name: name ?? this.name,
-        notionDatabaseId: notionDatabaseId ?? this.notionDatabaseId,
-        notionDatabaseName: notionDatabaseName ?? this.notionDatabaseName,
+        notionDatabaseId: notionDatabaseId.present
+            ? notionDatabaseId.value
+            : this.notionDatabaseId,
+        notionDatabaseName: notionDatabaseName.present
+            ? notionDatabaseName.value
+            : this.notionDatabaseName,
         notionDatabaseType: notionDatabaseType ?? this.notionDatabaseType,
         iconId: iconId ?? this.iconId,
         colorId: colorId ?? this.colorId,
-        autoSync: autoSync ?? this.autoSync,
+        autoSync: autoSync.present ? autoSync.value : this.autoSync,
       );
   @override
   String toString() {
@@ -725,12 +705,12 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   static Insertable<Category> custom({
     Expression<int>? id,
     Expression<String>? name,
-    Expression<String?>? notionDatabaseId,
-    Expression<String?>? notionDatabaseName,
+    Expression<String>? notionDatabaseId,
+    Expression<String>? notionDatabaseName,
     Expression<int>? notionDatabaseType,
     Expression<int>? iconId,
     Expression<int>? colorId,
-    Expression<bool?>? autoSync,
+    Expression<bool>? autoSync,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -777,10 +757,10 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
       map['name'] = Variable<String>(name.value);
     }
     if (notionDatabaseId.present) {
-      map['notion_database_id'] = Variable<String?>(notionDatabaseId.value);
+      map['notion_database_id'] = Variable<String>(notionDatabaseId.value);
     }
     if (notionDatabaseName.present) {
-      map['notion_database_name'] = Variable<String?>(notionDatabaseName.value);
+      map['notion_database_name'] = Variable<String>(notionDatabaseName.value);
     }
     if (notionDatabaseType.present) {
       map['notion_database_type'] = Variable<int>(notionDatabaseType.value);
@@ -792,7 +772,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
       map['color_id'] = Variable<int>(colorId.value);
     }
     if (autoSync.present) {
-      map['auto_sync'] = Variable<bool?>(autoSync.value);
+      map['auto_sync'] = Variable<bool>(autoSync.value);
     }
     return map;
   }
@@ -821,51 +801,51 @@ class $CategoriesTable extends Categories
   $CategoriesTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
-      type: const StringType(), requiredDuringInsert: true);
+      type: DriftSqlType.string, requiredDuringInsert: true);
   final VerificationMeta _notionDatabaseIdMeta =
       const VerificationMeta('notionDatabaseId');
   @override
-  late final GeneratedColumn<String?> notionDatabaseId =
-      GeneratedColumn<String?>('notion_database_id', aliasedName, true,
-          type: const StringType(), requiredDuringInsert: false);
+  late final GeneratedColumn<String> notionDatabaseId = GeneratedColumn<String>(
+      'notion_database_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _notionDatabaseNameMeta =
       const VerificationMeta('notionDatabaseName');
   @override
-  late final GeneratedColumn<String?> notionDatabaseName =
-      GeneratedColumn<String?>('notion_database_name', aliasedName, true,
-          type: const StringType(), requiredDuringInsert: false);
+  late final GeneratedColumn<String> notionDatabaseName =
+      GeneratedColumn<String>('notion_database_name', aliasedName, true,
+          type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _notionDatabaseTypeMeta =
       const VerificationMeta('notionDatabaseType');
   @override
-  late final GeneratedColumn<int?> notionDatabaseType = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> notionDatabaseType = GeneratedColumn<int>(
       'notion_database_type', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: true);
   final VerificationMeta _iconIdMeta = const VerificationMeta('iconId');
   @override
-  late final GeneratedColumn<int?> iconId = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> iconId = GeneratedColumn<int>(
       'icon_id', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: true);
   final VerificationMeta _colorIdMeta = const VerificationMeta('colorId');
   @override
-  late final GeneratedColumn<int?> colorId = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> colorId = GeneratedColumn<int>(
       'color_id', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: true);
   final VerificationMeta _autoSyncMeta = const VerificationMeta('autoSync');
   @override
-  late final GeneratedColumn<bool?> autoSync = GeneratedColumn<bool?>(
+  late final GeneratedColumn<bool> autoSync = GeneratedColumn<bool>(
       'auto_sync', aliasedName, true,
-      type: const BoolType(),
+      type: DriftSqlType.bool,
       requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (auto_sync IN (0, 1))',
+      defaultConstraints: 'CHECK ("auto_sync" IN (0, 1))',
       defaultValue: const Constant(true));
   @override
   List<GeneratedColumn> get $columns => [
@@ -939,8 +919,25 @@ class $CategoriesTable extends Categories
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Category map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Category.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Category(
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      name: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      notionDatabaseId: attachedDatabase.options.types.read(
+          DriftSqlType.string, data['${effectivePrefix}notion_database_id']),
+      notionDatabaseName: attachedDatabase.options.types.read(
+          DriftSqlType.string, data['${effectivePrefix}notion_database_name']),
+      notionDatabaseType: attachedDatabase.options.types.read(
+          DriftSqlType.int, data['${effectivePrefix}notion_database_type'])!,
+      iconId: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}icon_id'])!,
+      colorId: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}color_id'])!,
+      autoSync: attachedDatabase.options.types
+          .read(DriftSqlType.bool, data['${effectivePrefix}auto_sync']),
+    );
   }
 
   @override
@@ -954,17 +951,6 @@ class HeatPoint extends DataClass implements Insertable<HeatPoint> {
   int level;
   DateTime createdTime;
   HeatPoint({required this.id, required this.level, required this.createdTime});
-  factory HeatPoint.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return HeatPoint(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      level: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}level'])!,
-      createdTime: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}created_time'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1097,22 +1083,22 @@ class $HeatGraphTable extends HeatGraph
   $HeatGraphTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _levelMeta = const VerificationMeta('level');
   @override
-  late final GeneratedColumn<int?> level = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> level = GeneratedColumn<int>(
       'level', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: true);
   final VerificationMeta _createdTimeMeta =
       const VerificationMeta('createdTime');
   @override
-  late final GeneratedColumn<DateTime?> createdTime =
-      GeneratedColumn<DateTime?>('created_time', aliasedName, false,
-          type: const IntType(), requiredDuringInsert: true);
+  late final GeneratedColumn<DateTime> createdTime = GeneratedColumn<DateTime>(
+      'created_time', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [id, level, createdTime];
   @override
@@ -1148,8 +1134,15 @@ class $HeatGraphTable extends HeatGraph
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   HeatPoint map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return HeatPoint.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HeatPoint(
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      level: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}level'])!,
+      createdTime: attachedDatabase.options.types
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_time'])!,
+    );
   }
 
   @override
@@ -1170,27 +1163,12 @@ class UserAction extends DataClass implements Insertable<UserAction> {
       required this.updatedContent,
       required this.updatedTime,
       required this.action});
-  factory UserAction.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return UserAction(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      earlyContent: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}early_content']),
-      updatedContent: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}updated_content'])!,
-      updatedTime: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}updated_time'])!,
-      action: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}action'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     if (!nullToAbsent || earlyContent != null) {
-      map['early_content'] = Variable<String?>(earlyContent);
+      map['early_content'] = Variable<String>(earlyContent);
     }
     map['updated_content'] = Variable<String>(updatedContent);
     map['updated_time'] = Variable<DateTime>(updatedTime);
@@ -1235,13 +1213,14 @@ class UserAction extends DataClass implements Insertable<UserAction> {
 
   UserAction copyWith(
           {int? id,
-          String? earlyContent,
+          Value<String?> earlyContent = const Value.absent(),
           String? updatedContent,
           DateTime? updatedTime,
           int? action}) =>
       UserAction(
         id: id ?? this.id,
-        earlyContent: earlyContent ?? this.earlyContent,
+        earlyContent:
+            earlyContent.present ? earlyContent.value : this.earlyContent,
         updatedContent: updatedContent ?? this.updatedContent,
         updatedTime: updatedTime ?? this.updatedTime,
         action: action ?? this.action,
@@ -1296,7 +1275,7 @@ class ActionsHistoryCompanion extends UpdateCompanion<UserAction> {
         action = Value(action);
   static Insertable<UserAction> custom({
     Expression<int>? id,
-    Expression<String?>? earlyContent,
+    Expression<String>? earlyContent,
     Expression<String>? updatedContent,
     Expression<DateTime>? updatedTime,
     Expression<int>? action,
@@ -1332,7 +1311,7 @@ class ActionsHistoryCompanion extends UpdateCompanion<UserAction> {
       map['id'] = Variable<int>(id.value);
     }
     if (earlyContent.present) {
-      map['early_content'] = Variable<String?>(earlyContent.value);
+      map['early_content'] = Variable<String>(earlyContent.value);
     }
     if (updatedContent.present) {
       map['updated_content'] = Variable<String>(updatedContent.value);
@@ -1367,34 +1346,34 @@ class $ActionsHistoryTable extends ActionsHistory
   $ActionsHistoryTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _earlyContentMeta =
       const VerificationMeta('earlyContent');
   @override
-  late final GeneratedColumn<String?> earlyContent = GeneratedColumn<String?>(
+  late final GeneratedColumn<String> earlyContent = GeneratedColumn<String>(
       'early_content', aliasedName, true,
-      type: const StringType(), requiredDuringInsert: false);
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _updatedContentMeta =
       const VerificationMeta('updatedContent');
   @override
-  late final GeneratedColumn<String?> updatedContent = GeneratedColumn<String?>(
+  late final GeneratedColumn<String> updatedContent = GeneratedColumn<String>(
       'updated_content', aliasedName, false,
-      type: const StringType(), requiredDuringInsert: true);
+      type: DriftSqlType.string, requiredDuringInsert: true);
   final VerificationMeta _updatedTimeMeta =
       const VerificationMeta('updatedTime');
   @override
-  late final GeneratedColumn<DateTime?> updatedTime =
-      GeneratedColumn<DateTime?>('updated_time', aliasedName, false,
-          type: const IntType(), requiredDuringInsert: true);
+  late final GeneratedColumn<DateTime> updatedTime = GeneratedColumn<DateTime>(
+      'updated_time', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
   final VerificationMeta _actionMeta = const VerificationMeta('action');
   @override
-  late final GeneratedColumn<int?> action = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> action = GeneratedColumn<int>(
       'action', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
       [id, earlyContent, updatedContent, updatedTime, action];
@@ -1445,8 +1424,19 @@ class $ActionsHistoryTable extends ActionsHistory
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   UserAction map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return UserAction.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return UserAction(
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      earlyContent: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}early_content']),
+      updatedContent: attachedDatabase.options.types.read(
+          DriftSqlType.string, data['${effectivePrefix}updated_content'])!,
+      updatedTime: attachedDatabase.options.types
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_time'])!,
+      action: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}action'])!,
+    );
   }
 
   @override
@@ -1456,13 +1446,14 @@ class $ActionsHistoryTable extends ActionsHistory
 }
 
 abstract class _$DatabaseProvider extends GeneratedDatabase {
-  _$DatabaseProvider(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+  _$DatabaseProvider(QueryExecutor e) : super(e);
   late final $ToDosTable toDos = $ToDosTable(this);
   late final $CategoriesTable categories = $CategoriesTable(this);
   late final $HeatGraphTable heatGraph = $HeatGraphTable(this);
   late final $ActionsHistoryTable actionsHistory = $ActionsHistoryTable(this);
   @override
-  Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
+  Iterable<TableInfo<Table, dynamic>> get allTables =>
+      allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
       [toDos, categories, heatGraph, actionsHistory];
