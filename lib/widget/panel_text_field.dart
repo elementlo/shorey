@@ -63,14 +63,14 @@ class _PanelTextFieldState extends State<PanelTextField> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 6,
+            height: 4,
           ),
           Text(
             'Main Focus Today:',
             style: TextStyle(fontSize: 12),
           ),
           SizedBox(
-            height: 8,
+            height: 6,
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,

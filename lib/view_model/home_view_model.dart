@@ -53,7 +53,8 @@ class HomeViewModel extends ViewStateModel {
   }
 
   Future _initDefaultAlert() async {
-    if (await dsProvider.getValue<int>(StoreKey.alertPeriod) == null) {
+    final alertPeriod = await dsProvider.getValue<int>(StoreKey.alertPeriod);
+    if (alertPeriod == 0) {
       await dsProvider.saveValue<int>(StoreKey.alertPeriod, 0);
       await dsProvider.saveValue<String>(StoreKey.retrospectTime, '18:00');
       assembleRetrospectNotification(TimeOfDay(hour: 18, minute: 0), 0);
