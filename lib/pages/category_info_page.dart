@@ -426,7 +426,7 @@ class NotionObjectsListItem extends StatelessWidget {
                   style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
             ],
           ),
-          const Divider(height: 10)
+          const Divider(height: 6)
         ],
       ),
     );

@@ -329,7 +329,8 @@ class _ExpandedCategoryDemosState extends State<_ExpandedCategoryDemos> {
                       createdTime: dateTime,
                       categoryId: widget.category.id,
                       status: 1,
-                      tags: widget.category.name), actionType: widget.category.notionDatabaseType);
+                      tags: widget.category.name),
+                  actionType: widget.category.notionDatabaseType);
 
               await _updatePageId(index, pageId);
             }
@@ -516,38 +517,41 @@ class _CategoryDemoItemState extends State<CategoryDemoItem> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    GestureDetector(
-                      onTap: () async {
-                        if (widget.model!.status == 1) {
-                          _cachedItems.add(widget.index);
-                        } else {
-                          _cachedItems.remove(widget.index);
-                        }
-                        await context
-                            .read<HomeViewModel>()
-                            .updateTodoStatus(widget.model!);
-                        setState(() {});
-                        if (widget.model?.pageId != null &&
-                            context.read<ConfigViewModel>().linkedNotion) {
-                          context.read<NotionWorkFlow>().updateTaskProperties(
-                              widget.model!.pageId,
-                              ToDosCompanion(
-                                  status: d.Value(widget.model!.status),
-                                  createdTime:
-                                      d.Value(widget.model!.createdTime),
-                                  filedTime: d.Value(DateTime.now())), actionType: widget.category.notionDatabaseType);
-                        }
-                      },
-                      child: Container(
-                        padding: EdgeInsets.only(left: 5, bottom: 5, right: 10),
-                        child: Icon(
-                          widget.model!.status == 0
-                              ? Icons.check_circle_outline
-                              : Icons.brightness_1_outlined,
-                          color: colorScheme.onSecondary,
+                    if (widget.category.notionDatabaseType != 2)
+                      GestureDetector(
+                        onTap: () async {
+                          if (widget.model!.status == 1) {
+                            _cachedItems.add(widget.index);
+                          } else {
+                            _cachedItems.remove(widget.index);
+                          }
+                          await context
+                              .read<HomeViewModel>()
+                              .updateTodoStatus(widget.model!);
+                          setState(() {});
+                          if (widget.model?.pageId != null &&
+                              context.read<ConfigViewModel>().linkedNotion) {
+                            context.read<NotionWorkFlow>().updateTaskProperties(
+                                widget.model!.pageId,
+                                ToDosCompanion(
+                                    status: d.Value(widget.model!.status),
+                                    createdTime:
+                                        d.Value(widget.model!.createdTime),
+                                    filedTime: d.Value(DateTime.now())),
+                                actionType: widget.category.notionDatabaseType);
+                          }
+                        },
+                        child: Container(
+                          padding:
+                              EdgeInsets.only(left: 5, bottom: 5, right: 10),
+                          child: Icon(
+                            widget.model!.status == 0
+                                ? Icons.check_circle_outline
+                                : Icons.brightness_1_outlined,
+                            color: colorScheme.onSecondary,
+                          ),
                         ),
                       ),
-                    ),
                     Flexible(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

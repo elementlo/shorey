@@ -68,7 +68,7 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
                   height: 25,
                 ),
                 _textView('百分比钟/Percent clock'),
-                _textView('标识今天已经渡过了百分之几。'),
+                _textView('标识今天已经度过了百分之几。'),
                 SizedBox(
                   height: 25,
                 ),

@@ -18,12 +18,11 @@ import 'package:spark_list/widget/home_header.dart';
 /// Description:
 ///
 class HomePage extends StatefulWidget {
-  AnimationController? animationController;
+  final AnimationController? animationController;
+  final String? title;
 
   HomePage({Key? key, this.title, required this.animationController})
       : super(key: key);
-
-  final String? title;
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -34,6 +33,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    super.initState();
     widget.animationController?.forward();
   }
 

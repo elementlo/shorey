@@ -18,5 +18,25 @@
         "link": null
       }
     }
-  ]
+  ],
+  "properties": {
+    "Name": {
+      "title": {}
+    },
+    "Date": {
+      "date": {}
+    },
+    "Location": {
+      "rich_text": {}
+    },
+    "Weather": {
+      "rich_text": {}
+    },
+    "Tags": {
+      "type": "multi_select",
+      "multi_select": {
+        "options": []
+      }
+    }
+  }
 }
