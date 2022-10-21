@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
+import 'package:amap_flutter_location/amap_flutter_location.dart';
 import 'package:amap_flutter_location/amap_location_option.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -14,23 +14,19 @@ import 'package:provider/provider.dart';
 import 'package:spark_list/base/provider_widget.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/database/database.dart';
-import 'package:spark_list/pages/list_category_page.dart';
 import 'package:spark_list/pages/mantra_edit_page.dart';
 import 'package:spark_list/pages/root_page.dart';
 import 'package:spark_list/pages/settings_page.dart';
 import 'package:spark_list/resource/data_provider.dart';
 import 'package:spark_list/resource/http_provider.dart';
-import 'package:spark_list/routes.dart';
 import 'package:spark_list/view_model/config_view_model.dart';
 import 'package:spark_list/view_model/home_view_model.dart';
 import 'package:spark_list/workflow/notion_workflow.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:permission_handler/permission_handler.dart';
 
 import 'config/theme_data.dart';
 import 'generated/l10n.dart';
-import 'package:amap_flutter_location/amap_flutter_location.dart';
 
 late DataStoreProvider dsProvider;
 late DatabaseProvider dbProvider;
@@ -54,14 +50,9 @@ void main() async {
   AMapFlutterLocation.updatePrivacyShow(true, true);
   AMapFlutterLocation.updatePrivacyAgree(true);
 
-  requestPermission();
-
   //Replace your key below
-  AMapFlutterLocation.setApiKey("", "0");
+  AMapFlutterLocation.setApiKey("93aa815a8423f70ce9b1baa547afa8bf", "0");
 
-  if (Platform.isIOS) {
-    _requestAccuracyAuthorization();
-  }
   runApp(ProviderWidget2<ConfigViewModel, HomeViewModel>(
       ConfigViewModel(), HomeViewModel(),
       onModelReady: (cViewModel, hViewModel) async {
@@ -102,12 +93,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  StreamSubscription<Map<String, Object>>? _locationListener;
+  late StreamSubscription<Map<String, Object>>? _locationListener;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    _locationListener = _locationPlugin.onLocationChanged().listen((Map<String, Object> result) {
+    _locationListener = _locationPlugin
+        .onLocationChanged()
+        .listen((Map<String, Object> result) {
       setState(() {
         print(result);
       });
@@ -133,7 +126,8 @@ class _MyAppState extends State<MyApp> {
     ///逆地理信息的语言类型
     locationOption.geoLanguage = GeoLanguage.DEFAULT;
 
-    locationOption.desiredLocationAccuracyAuthorizationMode = AMapLocationAccuracyAuthorizationMode.ReduceAccuracy;
+    locationOption.desiredLocationAccuracyAuthorizationMode =
+        AMapLocationAccuracyAuthorizationMode.ReduceAccuracy;
 
     locationOption.fullAccuracyPurposeKey = "AMapLocationScene";
 
@@ -200,7 +194,9 @@ class _MyAppState extends State<MyApp> {
         supportedLocales: S.delegate.supportedLocales,
         localeResolutionCallback: (locale, supportedLocales) {
           print(locale);
-          return context.read<ConfigViewModel>().initLocale(locale, supportedLocales);
+          return context
+              .read<ConfigViewModel>()
+              .initLocale(locale, supportedLocales);
         },
         // darkTheme: AppThemeData.darkThemeData.copyWith(
         //   platform: defaultTargetPlatform,
@@ -222,73 +218,36 @@ Future<void> _configureLocalTimeZone() async {
 }
 
 Future<void> _initNotificationsSettings() async {
-
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('ic_notification');
   final DarwinInitializationSettings initializationSettingsDarwin =
-  DarwinInitializationSettings(
-    requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-      onDidReceiveLocalNotification: (
-          int id,
-          String? title,
-          String? body,
-          String? payload,
+      DarwinInitializationSettings(
+          requestAlertPermission: true,
+          requestBadgePermission: true,
+          requestSoundPermission: true,
+          onDidReceiveLocalNotification: (
+            int id,
+            String? title,
+            String? body,
+            String? payload,
           ) async {
-        print('received notification: $id $title $body $payload');
-
-      });
+            print('received notification: $id $title $body $payload');
+          });
 
   final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
     iOS: initializationSettingsDarwin,
   );
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse
-  );
+      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
 }
 
-void onDidReceiveNotificationResponse(NotificationResponse notificationResponse) async {
+void onDidReceiveNotificationResponse(
+    NotificationResponse notificationResponse) async {
   final String? payload = notificationResponse.payload;
   if (notificationResponse.payload != null) {
     debugPrint('notification payload: $payload');
   }
 }
 
-void requestPermission() async {
-  bool hasLocationPermission = await requestLocationPermission();
-  if (hasLocationPermission) {
-    print("Location permission granted!");
-  } else {
-    print("Location permission not granted!");
-  }
-}
-
-Future<bool> requestLocationPermission() async {
-  var status = await Permission.location.status;
-  if (status == PermissionStatus.granted) {
-    return true;
-  } else {
-    status = await Permission.location.request();
-    if (status == PermissionStatus.granted) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-}
-
 AMapFlutterLocation _locationPlugin = new AMapFlutterLocation();
-
-
-void _requestAccuracyAuthorization() async {
-  AMapAccuracyAuthorization currentAccuracyAuthorization = await _locationPlugin.getSystemAccuracyAuthorization();
-  if (currentAccuracyAuthorization == AMapAccuracyAuthorization.AMapAccuracyAuthorizationFullAccuracy) {
-    print("FullAccuracy");
-  } else if (currentAccuracyAuthorization == AMapAccuracyAuthorization.AMapAccuracyAuthorizationReducedAccuracy) {
-    print("ReducedAccuracy");
-  } else {
-    print("UnKnown");
-  }
-}

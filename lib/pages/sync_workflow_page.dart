@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:spark_list/model/notion_database_model.dart' as database;
 import 'package:spark_list/model/notion_page_model.dart' as page;
@@ -188,6 +190,20 @@ class _SyncWorkflowPageState extends State<SyncWorkflowPage>
     );
   }
 
+  Future<bool> _requestLocationPermission() async {
+    var status = await Permission.location.status;
+    if (status == PermissionStatus.granted) {
+      return true;
+    } else {
+      status = await Permission.location.request();
+      if (status == PermissionStatus.granted) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
   void _onTapSetting(_ExpandableSetting settingId) {
     setState(() {
       if (_expandedSettingId == settingId) {
@@ -223,9 +239,14 @@ class _SyncWorkflowPageState extends State<SyncWorkflowPage>
                 title: Text(_templateTypes[index - 1],
                     style: TextStyle(color: Colors.black, fontSize: 14)),
                 groupValue: _templateTypes[widget.notionDatabaseType],
-                onChanged: (option) {
-                  widget.notionDatabaseType = _templateTypes.indexOf(option!);
+                onChanged: (option) async{
+                  final index = _templateTypes.indexOf(option!);
+                  widget.notionDatabaseType = index;
                   setState(() {});
+
+                  if (index == 2) {
+                    final hasLocationPermission = await _requestLocationPermission();
+                  }
                 },
                 activeColor: colorScheme.onSecondary,
                 dense: true,

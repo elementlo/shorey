@@ -23,3 +23,7 @@ doc/api/
 *.js.map
 
 .fvm/
+ios/Podfile.lock
+.flutter-plugins-dependencies
+.flutter-plugins-dependencies
+.flutter-plugins

@@ -98,7 +98,9 @@ class _LinkNotionPageState extends State<LinkNotionPage>
           create: (context) => LinkNotionViewModel(),
           update: (context, workflow, viewModel) {
             viewModel!.setUser = workflow.user;
-            context.read<ConfigViewModel>().updateLinkedStatus(workflow.user != null);
+            context
+                .read<ConfigViewModel>()
+                .updateLinkedStatus(workflow.user != null);
             return viewModel;
           },
         )
@@ -227,7 +229,10 @@ class _NotionAccountCardState extends State<_NotionAccountCard> {
                       ),
               ),
               title: Text('${user?.name}'),
-              subtitle: Text('${user?.person?.email}'),
+              subtitle: Text(
+                '${user?.person?.email}',
+                style: TextStyle(fontSize: 12),
+              ),
               trailing: SizedBox(
                 height: 20,
                 width: 20,
