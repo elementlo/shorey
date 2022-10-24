@@ -6,10 +6,10 @@
   "cover": {
     "type": "external",
     "external": {
-      "url": "https://images.unsplash.com/photo-1592296429945-93008c7e5a59?ixlib=rb-1.2.1&&auto=compress&fm=jpg&crop=entropy&cs=srgb&fit=clip&w=1000"
+      "url": "https://images.unsplash.com/photo-1586380951230-e6703d9f6833?ixlib=rb-4.0.3&auto=compress&fm=jpg&crop=entropy&cs=tinysrgb&w=1000"
     }
   },
-  "icon":{"type":"emoji","emoji":"\uD83C\uDF53"},
+  "icon":{"type":"emoji","emoji":"\uD83E\uDD51"},
   "title": [
     {
       "type": "text",

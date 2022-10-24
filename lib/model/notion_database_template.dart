@@ -47,6 +47,8 @@ class NotionDatabaseTemplate {
   static const String jDuration = 'Duration';
   static const String jReminderTime = 'Reminder Time';
   static const String jCreated = 'Created';
+  static const String jLocation = 'Location';
+  static const String jWeather = 'Weather';
 
   static Future<dynamic?> loadTemplate(String pageId, int actionType) async {
     String path;
@@ -129,30 +131,29 @@ class NotionDatabaseTemplate {
     return null;
   }
 
-  static dynamic diaryItem(String databaseId,
-      {required String title,
-        required String createdTime,
-        String? location,
-        String? weather,
-        String? brief,
-        String? image,
-        List<String>? tags,}) async {
+  static dynamic diaryItem(
+    String databaseId, {
+    required String title,
+    String? location,
+    String? weather,
+    String? brief,
+    List<String>? tags,
+  }) async {
     final json = await rootBundle.loadString(jsonDiaryItem);
     if (json != null) {
       final map = jsonDecode(json);
       map[jParent][jDatabaseId] = databaseId;
       map[jProperties][jName][jTypeTitle][0][jTypeText][jTypeContent] = title;
       map[jProperties][jTags][jTypeMultiSelect][0][jTypeName] = tags?[0];
-      map[jProperties][jCreated][jTypeCreatedTime] = createdTime;
-
+      map[jProperties][jLocation][jTypeRichText][0][jTypeText] = location;
+      map[jProperties][jWeather][jTypeRichText][0][jTypeText] = weather;
       map[jTypeChildren][0][jTypeParagraph][jTypeRichText][0][jTypeText]
-      [jTypeContent] = brief;
+          [jTypeContent] = brief;
 
       return map;
     }
     return null;
   }
-
 
   static dynamic databaseProperties({String? title}) {
     if (title != null) {

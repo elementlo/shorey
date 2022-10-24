@@ -249,11 +249,13 @@ class _SampleListActions extends NotionActions {
 class _DiaryActions extends NotionActions {
   @override
   Future<String?> addItem(String databaseId, ToDo todo,
-      {List<String>? links}) async {
-    final param = await NotionDatabaseTemplate.simpleItem(
+      {List<String>? links, String? location, String? weather}) async {
+    final param = await NotionDatabaseTemplate.diaryItem(
       databaseId,
       title: todo.content,
       brief: todo.brief ?? '',
+      location: location,
+      weather: weather
     );
     final response = await dio.post('${notionPages}', data: param);
     if (response.success) {
