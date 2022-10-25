@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:amap_flutter_location/amap_flutter_location.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -18,6 +19,7 @@ import 'package:timezone/timezone.dart' as tz;
 /// Date: 2/4/21
 /// Description:
 ///
+AMapFlutterLocation _locationPlugin = new AMapFlutterLocation();
 
 class HomeViewModel extends ViewStateModel {
   Map<String, int?> heatPointsMap = Map();
@@ -36,6 +38,8 @@ class HomeViewModel extends ViewStateModel {
   List<ToDo?>? filedListModel;
   List<UserAction?>? userActionList;
 
+  late StreamSubscription<Map<String, Object>> _locationListener;
+
   set hasMainFocus(bool hasMainFocus) {
     this._hasMainFocus = hasMainFocus;
     notifyListeners();
@@ -44,6 +48,7 @@ class HomeViewModel extends ViewStateModel {
   HomeViewModel() {
     _initMainFocus();
     _watchToDoList();
+    _addLocationListener();
   }
 
   Future initDefaultSettings() async {
@@ -340,5 +345,14 @@ class HomeViewModel extends ViewStateModel {
   void dispose() {
     dbProvider.close();
     super.dispose();
+  }
+
+  void _addLocationListener() {
+    _locationListener = _locationPlugin
+        .onLocationChanged()
+        .listen((Map<String, Object> result) {
+
+        print(result);
+    });
   }
 }
