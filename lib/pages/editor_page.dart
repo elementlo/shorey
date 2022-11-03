@@ -51,16 +51,16 @@ class _TextEditorPageState extends State<TextEditorPage>
   final ScrollController _controller = ScrollController();
 
   late AnimationController _settingsPanelController;
-
-  _ExpandableSetting? _expandedSettingId;
   late Animation<double> _staggerSettingsItemsAnimation;
 
+  _ExpandableSetting? _expandedSettingId;
   TimeOfDay _time = TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 1);
   String _selectedDate = '';
   ToDo? _oldModel;
   ToDo? _updatedModel;
   String _categoryName = '';
   Color _categoryColor = Colors.white;
+  bool _hasLocationPermission = false;
 
   @override
   void initState() {
@@ -95,6 +95,13 @@ class _TextEditorPageState extends State<TextEditorPage>
         curve: Curves.easeIn,
       ),
     );
+
+    if(widget.category.notionDatabaseType == ActionType.DIARY){
+      context.read<ConfigViewModel>().requestLocationPermission().then((value){
+        _hasLocationPermission = value;
+        setState(() {});
+      });
+    }
   }
 
   @override
@@ -245,9 +252,10 @@ class _TextEditorPageState extends State<TextEditorPage>
                     ),
                     InputField(
                       hintText: S.of(context).itemRemark,
-                      maxLines: 8,
+                      maxLines: 7,
                       textEditingController: _briefController,
                     ),
+                    Text('1')
                   ],
                 ),
               ),

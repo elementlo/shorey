@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:spark_list/base/view_state_model.dart';
 import 'package:spark_list/config/config.dart';
 import 'package:spark_list/database/database.dart';
@@ -145,6 +146,20 @@ class ConfigViewModel extends ViewStateModel {
         : SystemUiOverlayStyle.light;
 
     return overlayStyle;
+  }
+
+  Future<bool> requestLocationPermission() async {
+    var status = await Permission.location.status;
+    if (status == PermissionStatus.granted) {
+      return true;
+    } else {
+      status = await Permission.location.request();
+      if (status == PermissionStatus.granted) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 
   @override

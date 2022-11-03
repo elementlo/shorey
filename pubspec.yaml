@@ -79,6 +79,10 @@ flutter:
     - assets/icons/material/
     - assets/images/
     - assets/json/
+  fonts:
+    - family: QWeather
+      fonts:
+          - asset: assets/fonts/qweather-icons.ttf
 
   generate: true
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -106,5 +110,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
 flutter_intl:
   enabled: true

@@ -190,20 +190,6 @@ class _SyncWorkflowPageState extends State<SyncWorkflowPage>
     );
   }
 
-  Future<bool> _requestLocationPermission() async {
-    var status = await Permission.location.status;
-    if (status == PermissionStatus.granted) {
-      return true;
-    } else {
-      status = await Permission.location.request();
-      if (status == PermissionStatus.granted) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }
-
   void _onTapSetting(_ExpandableSetting settingId) {
     setState(() {
       if (_expandedSettingId == settingId) {
@@ -245,7 +231,7 @@ class _SyncWorkflowPageState extends State<SyncWorkflowPage>
                   setState(() {});
 
                   if (index == 2) {
-                    final hasLocationPermission = await _requestLocationPermission();
+                    context.read<ConfigViewModel>().requestLocationPermission();
                   }
                 },
                 activeColor: colorScheme.onSecondary,
