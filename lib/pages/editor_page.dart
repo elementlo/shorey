@@ -22,6 +22,8 @@ import 'package:spark_list/widget/settings_list_item.dart';
 import 'package:spark_list/workflow/notion_workflow.dart';
 import 'package:timezone/timezone.dart' as tz;
 
+import '../widget/diary_banner.dart';
+
 ///
 /// Author: Elemen
 /// Github: https://github.com/elementlo
@@ -255,7 +257,7 @@ class _TextEditorPageState extends State<TextEditorPage>
                       maxLines: 7,
                       textEditingController: _briefController,
                     ),
-                    Text('1')
+                    DiaryBanner()
                   ],
                 ),
               ),

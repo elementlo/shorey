@@ -82,7 +82,7 @@ flutter:
   fonts:
     - family: QWeather
       fonts:
-          - asset: assets/fonts/qweather-icons.ttf
+          - asset: assets/fonts/qweather_icons.ttf
 
   generate: true
   # An image asset can refer to one or more resolution-specific "variants", see
