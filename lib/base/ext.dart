@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:spark_list/database/database.dart';
+import 'package:shorey/database/database.dart';
 
 ///
 /// Author: Elemen

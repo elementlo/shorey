@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:spark_list/base/view_state_model.dart';
-import 'package:spark_list/config/config.dart';
-import 'package:spark_list/database/database.dart';
-import 'package:spark_list/main.dart';
-import 'package:spark_list/model/model.dart';
-import 'package:spark_list/model/notion_model.dart';
-import 'package:spark_list/resource/data_provider.dart';
-import 'package:spark_list/resource/http_provider.dart';
+import 'package:shorey/base/view_state_model.dart';
+import 'package:shorey/config/config.dart';
+import 'package:shorey/database/database.dart';
+import 'package:shorey/main.dart';
+import 'package:shorey/model/model.dart';
+import 'package:shorey/model/notion_model.dart';
+import 'package:shorey/resource/data_provider.dart';
+import 'package:shorey/resource/http_provider.dart';
 
 ///
 /// Author: Elemen

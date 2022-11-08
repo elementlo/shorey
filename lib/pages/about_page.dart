@@ -2,7 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:spark_list/widget/app_bar.dart';
+import 'package:shorey/widget/app_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 ///
@@ -84,11 +84,11 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
                   height: 45,
                 ),
                 _textView('Version: $_version'),
-                _textView('反馈: https://github.com/elementlo/spark_list/issues', onTap: (){
-                  launch('https://github.com/elementlo/spark_list/issues');
+                _textView('反馈: https://github.com/elementlo/shorey/issues', onTap: (){
+                  launch('https://github.com/elementlo/shorey/issues');
                 }),
-                _textView('捐赠: https://github.com/elementlo/spark_list', onTap: (){
-                  launch('https://github.com/elementlo/spark_list');
+                _textView('捐赠: https://github.com/elementlo/shorey', onTap: (){
+                  launch('https://github.com/elementlo/shorey');
                 }),
               ],
             ),

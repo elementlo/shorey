@@ -1,13 +1,13 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
-import 'package:spark_list/base/ext.dart';
-import 'package:spark_list/base/regexp.dart';
-import 'package:spark_list/config/api.dart';
-import 'package:spark_list/database/database.dart';
-import 'package:spark_list/model/notion_database_model.dart';
-import 'package:spark_list/model/notion_database_template.dart';
-import 'package:spark_list/model/notion_model.dart';
-import 'package:spark_list/resource/http_provider.dart';
+import 'package:shorey/base/ext.dart';
+import 'package:shorey/base/regexp.dart';
+import 'package:shorey/config/api.dart';
+import 'package:shorey/database/database.dart';
+import 'package:shorey/model/notion_database_model.dart';
+import 'package:shorey/model/notion_database_template.dart';
+import 'package:shorey/model/notion_model.dart';
+import 'package:shorey/resource/http_provider.dart';
 
 import 'actions.dart';
 

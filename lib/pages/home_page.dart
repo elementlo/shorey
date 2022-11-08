@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spark_list/generated/l10n.dart';
-import 'package:spark_list/pages/category_info_page.dart';
-import 'package:spark_list/view_model/config_view_model.dart';
-import 'package:spark_list/view_model/home_view_model.dart';
-import 'package:spark_list/widget/category_list_item.dart';
-import 'package:spark_list/widget/daily_focus_panel.dart';
-import 'package:spark_list/widget/home_header.dart';
+import 'package:shorey/generated/l10n.dart';
+import 'package:shorey/pages/category_info_page.dart';
+import 'package:shorey/view_model/config_view_model.dart';
+import 'package:shorey/view_model/home_view_model.dart';
+import 'package:shorey/widget/category_list_item.dart';
+import 'package:shorey/widget/daily_focus_panel.dart';
+import 'package:shorey/widget/home_header.dart';
 
 ///
 /// Author: Elemen

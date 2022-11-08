@@ -1,4 +1,4 @@
-import 'package:spark_list/model/model.dart';
+import 'package:shorey/model/model.dart';
 
 ///
 /// Author: Elemen

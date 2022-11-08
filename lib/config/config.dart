@@ -1,7 +1,7 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
-import 'package:spark_list/generated/l10n.dart';
+import 'package:shorey/generated/l10n.dart';
 
 ///
 /// Author: Elemen

@@ -1,5 +1,5 @@
-// import 'package:spark_list/config/config.dart';
-// import 'package:spark_list/model/model.dart';
+// import 'package:shorey/config/config.dart';
+// import 'package:shorey/model/model.dart';
 // import 'package:sqflite/sqflite.dart';
 // import 'package:sqflite/sqlite_api.dart';
 // import 'package:synchronized/synchronized.dart';

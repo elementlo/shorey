@@ -1,5 +1,5 @@
-import 'package:spark_list/base/view_state_model.dart';
-import 'package:spark_list/model/notion_model.dart';
+import 'package:shorey/base/view_state_model.dart';
+import 'package:shorey/model/notion_model.dart';
 
 ///
 /// Author: Elemen

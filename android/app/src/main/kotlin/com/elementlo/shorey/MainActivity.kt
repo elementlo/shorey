@@ -1,4 +1,4 @@
-package com.elementlo.spark_list
+package com.elementlo.shorey
 
 import io.flutter.embedding.android.FlutterActivity
 

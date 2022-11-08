@@ -38,7 +38,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.elementlo.spark_list"
+        applicationId "com.elementlo.shorey"
         minSdkVersion 21
         targetSdkVersion 30
         multiDexEnabled true

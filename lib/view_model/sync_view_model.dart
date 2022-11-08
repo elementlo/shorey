@@ -1,4 +1,4 @@
-import 'package:spark_list/base/view_state_model.dart';
+import 'package:shorey/base/view_state_model.dart';
 
 import '../model/notion_database_model.dart';
 

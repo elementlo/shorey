@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:spark_list/base/ext.dart';
-import 'package:spark_list/database/database.dart';
-import 'package:spark_list/model/notion_database_model.dart';
-import 'package:spark_list/model/notion_page_model.dart';
-import 'package:spark_list/resource/data_provider.dart';
-import 'package:spark_list/resource/http_provider.dart';
+import 'package:shorey/base/ext.dart';
+import 'package:shorey/database/database.dart';
+import 'package:shorey/model/notion_database_model.dart';
+import 'package:shorey/model/notion_page_model.dart';
+import 'package:shorey/resource/data_provider.dart';
+import 'package:shorey/resource/http_provider.dart';
 
 import '../config/api.dart';
 import '../main.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spark_list/config/api.dart';
+import 'package:shorey/config/api.dart';
 
 ///
 /// Author: Elemen

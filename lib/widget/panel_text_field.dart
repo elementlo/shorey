@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
-import 'package:spark_list/generated/l10n.dart';
-import 'package:spark_list/view_model/home_view_model.dart';
+import 'package:shorey/generated/l10n.dart';
+import 'package:shorey/view_model/home_view_model.dart';
 
 ///
 /// Author: Elemen

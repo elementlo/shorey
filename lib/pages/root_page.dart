@@ -6,14 +6,14 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:spark_list/config/config.dart';
-import 'package:spark_list/main.dart';
-import 'package:spark_list/pages/curtain_page.dart';
-import 'package:spark_list/resource/http_provider.dart';
-import 'package:spark_list/view_model/config_view_model.dart';
-import 'package:spark_list/view_model/home_view_model.dart';
-import 'package:spark_list/widget/settings_icon/icon.dart' as settings_icon;
-import 'package:spark_list/workflow/notion_workflow.dart';
+import 'package:shorey/config/config.dart';
+import 'package:shorey/main.dart';
+import 'package:shorey/pages/curtain_page.dart';
+import 'package:shorey/resource/http_provider.dart';
+import 'package:shorey/view_model/config_view_model.dart';
+import 'package:shorey/view_model/home_view_model.dart';
+import 'package:shorey/widget/settings_icon/icon.dart' as settings_icon;
+import 'package:shorey/workflow/notion_workflow.dart';
 
 import 'home_page.dart';
 

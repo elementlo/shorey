@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:spark_list/database/database.dart';
+import 'package:shorey/database/database.dart';
 
 import '../generated/l10n.dart';
 

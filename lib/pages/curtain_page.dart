@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spark_list/config/config.dart';
-import 'package:spark_list/generated/l10n.dart';
-import 'package:spark_list/pages/action_history_page.dart';
-import 'package:spark_list/pages/filed_events_page.dart';
-import 'package:spark_list/view_model/home_view_model.dart';
+import 'package:shorey/config/config.dart';
+import 'package:shorey/generated/l10n.dart';
+import 'package:shorey/pages/action_history_page.dart';
+import 'package:shorey/pages/filed_events_page.dart';
+import 'package:shorey/view_model/home_view_model.dart';
 
 import 'about_page.dart';
 import 'home_page.dart';

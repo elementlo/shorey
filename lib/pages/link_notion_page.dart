@@ -3,13 +3,13 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
-import 'package:spark_list/generated/l10n.dart';
-import 'package:spark_list/view_model/config_view_model.dart';
-import 'package:spark_list/view_model/link_notion_view_model.dart';
-import 'package:spark_list/widget/app_bar.dart';
-import 'package:spark_list/widget/category_list_item.dart';
-import 'package:spark_list/widget/settings_list_item.dart';
-import 'package:spark_list/workflow/notion_workflow.dart';
+import 'package:shorey/generated/l10n.dart';
+import 'package:shorey/view_model/config_view_model.dart';
+import 'package:shorey/view_model/link_notion_view_model.dart';
+import 'package:shorey/widget/app_bar.dart';
+import 'package:shorey/widget/category_list_item.dart';
+import 'package:shorey/widget/settings_list_item.dart';
+import 'package:shorey/workflow/notion_workflow.dart';
 
 ///
 /// Author: Elemen

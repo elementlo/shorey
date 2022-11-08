@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
-import 'package:spark_list/generated/l10n.dart';
-import 'package:spark_list/view_model/home_view_model.dart';
-import 'package:spark_list/widget/app_bar.dart';
+import 'package:shorey/generated/l10n.dart';
+import 'package:shorey/view_model/home_view_model.dart';
+import 'package:shorey/widget/app_bar.dart';
 
 ///
 /// Author: Elemen

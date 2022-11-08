@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spark_list/base/provider_widget.dart';
-import 'package:spark_list/generated/l10n.dart';
-import 'package:spark_list/view_model/category_list_view_model.dart';
-import 'package:spark_list/view_model/config_view_model.dart';
+import 'package:shorey/base/provider_widget.dart';
+import 'package:shorey/generated/l10n.dart';
+import 'package:shorey/view_model/category_list_view_model.dart';
+import 'package:shorey/view_model/config_view_model.dart';
 
 ///
 /// Author: Elemen

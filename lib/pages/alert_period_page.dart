@@ -4,13 +4,13 @@ import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:spark_list/config/config.dart';
-import 'package:spark_list/generated/l10n.dart';
-import 'package:spark_list/view_model/config_view_model.dart';
-import 'package:spark_list/view_model/home_view_model.dart';
-import 'package:spark_list/widget/app_bar.dart';
-import 'package:spark_list/widget/category_list_item.dart';
-import 'package:spark_list/widget/settings_list_item.dart';
+import 'package:shorey/config/config.dart';
+import 'package:shorey/generated/l10n.dart';
+import 'package:shorey/view_model/config_view_model.dart';
+import 'package:shorey/view_model/home_view_model.dart';
+import 'package:shorey/widget/app_bar.dart';
+import 'package:shorey/widget/category_list_item.dart';
+import 'package:shorey/widget/settings_list_item.dart';
 
 ///
 /// Author: Elemen

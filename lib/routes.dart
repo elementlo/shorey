@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:spark_list/pages/root_page.dart';
+import 'package:shorey/pages/root_page.dart';
 
 ///
 /// Author: Elemen

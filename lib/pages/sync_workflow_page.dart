@@ -6,9 +6,9 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:spark_list/model/notion_database_model.dart' as database;
-import 'package:spark_list/model/notion_page_model.dart' as page;
-import 'package:spark_list/view_model/config_view_model.dart';
+import 'package:shorey/model/notion_database_model.dart' as database;
+import 'package:shorey/model/notion_page_model.dart' as page;
+import 'package:shorey/view_model/config_view_model.dart';
 
 import '../base/provider_widget.dart';
 import '../generated/l10n.dart';
