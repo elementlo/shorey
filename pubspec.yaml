@@ -51,7 +51,8 @@ dependencies:
   linkwell: ^2.0.6
   amap_flutter_location: ^3.0.0
   permission_handler: ^10.1.0
-  flutter_app_badger: ^1.5.0
+  flutter_qweather: ^0.0.10
+
 
 dev_dependencies:
   flutter_test:

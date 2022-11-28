@@ -257,7 +257,10 @@ class _TextEditorPageState extends State<TextEditorPage>
                       maxLines: 7,
                       textEditingController: _briefController,
                     ),
-                    DiaryBanner()
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: DiaryBanner(),
+                    )
                   ],
                 ),
               ),
