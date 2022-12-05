@@ -17,6 +17,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
   String? brief;
   String? tags;
   String? pageId;
+  String? thumb;
 
   ///0: finished 1: going 2: deleted
   int status;
@@ -31,6 +32,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       this.brief,
       this.tags,
       this.pageId,
+      this.thumb,
       required this.status,
       required this.categoryId});
   @override
@@ -57,6 +59,9 @@ class ToDo extends DataClass implements Insertable<ToDo> {
     if (!nullToAbsent || pageId != null) {
       map['page_id'] = Variable<String>(pageId);
     }
+    if (!nullToAbsent || thumb != null) {
+      map['thumb'] = Variable<String>(thumb);
+    }
     map['status'] = Variable<int>(status);
     map['category_id'] = Variable<int>(categoryId);
     return map;
@@ -81,6 +86,8 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       tags: tags == null && nullToAbsent ? const Value.absent() : Value(tags),
       pageId:
           pageId == null && nullToAbsent ? const Value.absent() : Value(pageId),
+      thumb:
+          thumb == null && nullToAbsent ? const Value.absent() : Value(thumb),
       status: Value(status),
       categoryId: Value(categoryId),
     );
@@ -99,6 +106,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       brief: serializer.fromJson<String?>(json['brief']),
       tags: serializer.fromJson<String?>(json['tags']),
       pageId: serializer.fromJson<String?>(json['pageId']),
+      thumb: serializer.fromJson<String?>(json['thumb']),
       status: serializer.fromJson<int>(json['status']),
       categoryId: serializer.fromJson<int>(json['categoryId']),
     );
@@ -116,6 +124,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       'brief': serializer.toJson<String?>(brief),
       'tags': serializer.toJson<String?>(tags),
       'pageId': serializer.toJson<String?>(pageId),
+      'thumb': serializer.toJson<String?>(thumb),
       'status': serializer.toJson<int>(status),
       'categoryId': serializer.toJson<int>(categoryId),
     };
@@ -131,6 +140,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           Value<String?> brief = const Value.absent(),
           Value<String?> tags = const Value.absent(),
           Value<String?> pageId = const Value.absent(),
+          Value<String?> thumb = const Value.absent(),
           int? status,
           int? categoryId}) =>
       ToDo(
@@ -144,6 +154,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
         brief: brief.present ? brief.value : this.brief,
         tags: tags.present ? tags.value : this.tags,
         pageId: pageId.present ? pageId.value : this.pageId,
+        thumb: thumb.present ? thumb.value : this.thumb,
         status: status ?? this.status,
         categoryId: categoryId ?? this.categoryId,
       );
@@ -159,6 +170,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           ..write('brief: $brief, ')
           ..write('tags: $tags, ')
           ..write('pageId: $pageId, ')
+          ..write('thumb: $thumb, ')
           ..write('status: $status, ')
           ..write('categoryId: $categoryId')
           ..write(')'))
@@ -167,7 +179,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
 
   @override
   int get hashCode => Object.hash(id, notificationId, createdTime, filedTime,
-      alertTime, content, brief, tags, pageId, status, categoryId);
+      alertTime, content, brief, tags, pageId, thumb, status, categoryId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -181,6 +193,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           other.brief == this.brief &&
           other.tags == this.tags &&
           other.pageId == this.pageId &&
+          other.thumb == this.thumb &&
           other.status == this.status &&
           other.categoryId == this.categoryId);
 }
@@ -195,6 +208,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
   Value<String?> brief;
   Value<String?> tags;
   Value<String?> pageId;
+  Value<String?> thumb;
   Value<int> status;
   Value<int> categoryId;
   ToDosCompanion({
@@ -207,6 +221,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     this.brief = const Value.absent(),
     this.tags = const Value.absent(),
     this.pageId = const Value.absent(),
+    this.thumb = const Value.absent(),
     this.status = const Value.absent(),
     this.categoryId = const Value.absent(),
   });
@@ -220,6 +235,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     this.brief = const Value.absent(),
     this.tags = const Value.absent(),
     this.pageId = const Value.absent(),
+    this.thumb = const Value.absent(),
     required int status,
     required int categoryId,
   })  : createdTime = Value(createdTime),
@@ -236,6 +252,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     Expression<String>? brief,
     Expression<String>? tags,
     Expression<String>? pageId,
+    Expression<String>? thumb,
     Expression<int>? status,
     Expression<int>? categoryId,
   }) {
@@ -249,6 +266,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       if (brief != null) 'brief': brief,
       if (tags != null) 'tags': tags,
       if (pageId != null) 'page_id': pageId,
+      if (thumb != null) 'thumb': thumb,
       if (status != null) 'status': status,
       if (categoryId != null) 'category_id': categoryId,
     });
@@ -264,6 +282,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       Value<String?>? brief,
       Value<String?>? tags,
       Value<String?>? pageId,
+      Value<String?>? thumb,
       Value<int>? status,
       Value<int>? categoryId}) {
     return ToDosCompanion(
@@ -276,6 +295,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       brief: brief ?? this.brief,
       tags: tags ?? this.tags,
       pageId: pageId ?? this.pageId,
+      thumb: thumb ?? this.thumb,
       status: status ?? this.status,
       categoryId: categoryId ?? this.categoryId,
     );
@@ -311,6 +331,9 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     if (pageId.present) {
       map['page_id'] = Variable<String>(pageId.value);
     }
+    if (thumb.present) {
+      map['thumb'] = Variable<String>(thumb.value);
+    }
     if (status.present) {
       map['status'] = Variable<int>(status.value);
     }
@@ -332,6 +355,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
           ..write('brief: $brief, ')
           ..write('tags: $tags, ')
           ..write('pageId: $pageId, ')
+          ..write('thumb: $thumb, ')
           ..write('status: $status, ')
           ..write('categoryId: $categoryId')
           ..write(')'))
@@ -393,6 +417,11 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
   late final GeneratedColumn<String> pageId = GeneratedColumn<String>(
       'page_id', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  final VerificationMeta _thumbMeta = const VerificationMeta('thumb');
+  @override
+  late final GeneratedColumn<String> thumb = GeneratedColumn<String>(
+      'thumb', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _statusMeta = const VerificationMeta('status');
   @override
   late final GeneratedColumn<int> status = GeneratedColumn<int>(
@@ -417,6 +446,7 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
         brief,
         tags,
         pageId,
+        thumb,
         status,
         categoryId
       ];
@@ -472,6 +502,10 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
       context.handle(_pageIdMeta,
           pageId.isAcceptableOrUnknown(data['page_id']!, _pageIdMeta));
     }
+    if (data.containsKey('thumb')) {
+      context.handle(
+          _thumbMeta, thumb.isAcceptableOrUnknown(data['thumb']!, _thumbMeta));
+    }
     if (data.containsKey('status')) {
       context.handle(_statusMeta,
           status.isAcceptableOrUnknown(data['status']!, _statusMeta));
@@ -513,6 +547,8 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
           .read(DriftSqlType.string, data['${effectivePrefix}tags']),
       pageId: attachedDatabase.options.types
           .read(DriftSqlType.string, data['${effectivePrefix}page_id']),
+      thumb: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}thumb']),
       status: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}status'])!,
       categoryId: attachedDatabase.options.types

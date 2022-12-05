@@ -70,6 +70,7 @@ class _DiaryBannerState extends State<DiaryBanner> {
   Widget build(BuildContext context) {
     final weatherIcon = QWeather.all['m${_weatherNow?.now.icon}'];
     return Container(
+      color: Colors.transparent,
       height: 20,
       child: Row(
         mainAxisSize: MainAxisSize.min,

@@ -34,6 +34,8 @@ class ToDos extends Table {
 
   TextColumn get pageId => text().nullable()();
 
+  TextColumn get thumb => text().nullable()();
+
   ///0: finished 1: going 2: deleted
   IntColumn get status => integer()();
 

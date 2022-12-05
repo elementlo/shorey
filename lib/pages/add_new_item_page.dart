@@ -1,8 +1,12 @@
 import 'dart:collection';
+import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:drift/drift.dart' as d;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -22,6 +26,8 @@ import 'package:shorey/widget/customized_date_picker.dart';
 import 'package:shorey/widget/settings_list_item.dart';
 import 'package:shorey/workflow/notion_workflow.dart';
 import 'package:timezone/timezone.dart' as tz;
+
+import '../widget/diary_banner.dart';
 
 ///
 /// Author: Elemen
@@ -50,6 +56,7 @@ class _AddNewItemPageState extends State<AddNewItemPage>
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _briefController = TextEditingController();
   final ScrollController _controller = ScrollController();
+  final GlobalKey rootWidgetKey = GlobalKey();
 
   late AnimationController _settingsPanelController;
 
@@ -63,6 +70,9 @@ class _AddNewItemPageState extends State<AddNewItemPage>
   String _categoryName = '';
   int? _notionDatabaseType;
   ToDosCompanion? companion;
+  String? _thumb;
+  String? _alertTime = null;
+  int? _notificationId;
 
   @override
   void initState() {
@@ -170,7 +180,7 @@ class _AddNewItemPageState extends State<AddNewItemPage>
             Container(
               padding: EdgeInsets.symmetric(horizontal: 16),
               margin: EdgeInsets.symmetric(horizontal: 16),
-              height: 300,
+              height: 400,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8), color: Colors.white),
               child: Column(
@@ -187,29 +197,12 @@ class _AddNewItemPageState extends State<AddNewItemPage>
                     maxLines: 8,
                     textEditingController: _briefController,
                   ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: RepaintBoundary(
+                        key: rootWidgetKey, child: DiaryBanner()),
+                  ),
                 ],
-              ),
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: EditorTableRow(
-                title: _categoryName,
-                indicatorColor: _categoryColor,
-                onTap: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(
-                          builder: (context) => ListCategoryPage(_categoryId)))
-                      .then((result) {
-                    if (result != null) {
-                      _categoryId = result;
-                      _mapCategory();
-                      setState(() {});
-                    }
-                  });
-                },
               ),
             ),
             SizedBox(
@@ -229,34 +222,60 @@ class _AddNewItemPageState extends State<AddNewItemPage>
   }
 
   Future _saveItem() async {
-    String? alertTime = null;
-    int? notificationId;
+    if (widget.category.notionDatabaseType == ActionType.DIARY) {
+      await _prepareDiaryBannerPic();
+      companion = ToDosCompanion(
+          categoryId: d.Value(_categoryId),
+          content: d.Value(_titleController.text),
+          createdTime: d.Value(DateTime.now()),
+          status: d.Value(1),
+          brief: d.Value(_briefController.text),
+          tags: d.Value(_categoryName),
+          thumb: d.Value(_thumb));
+    } else {
+      await _prepareReminderTime();
+      companion = ToDosCompanion(
+        categoryId: d.Value(_categoryId),
+        content: d.Value(_titleController.text),
+        createdTime: d.Value(DateTime.now()),
+        status: d.Value(1),
+        brief: d.Value(_briefController.text),
+        alertTime:
+            d.Value(_alertTime == null ? null : DateTime.parse(_alertTime!)),
+        notificationId: d.Value(_notificationId),
+        tags: d.Value(_categoryName),
+      );
+    }
+    var index = await context.read<HomeViewModel>().saveToDo(companion!);
+    return index;
+  }
+
+  Future _prepareDiaryBannerPic() async {
+    RenderRepaintBoundary boundary = rootWidgetKey.currentContext
+        ?.findRenderObject() as RenderRepaintBoundary;
+    var image = await boundary.toImage(pixelRatio: 3.0);
+    ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
+    Uint8List? imageBuffer = byteData?.buffer.asUint8List();
+    if (imageBuffer != null) {
+      _thumb = base64.encode(imageBuffer);
+    }
+    //imageBuffer = base64.decode(base64.encode(imageBuffer!));
+  }
+
+  Future _prepareReminderTime() async {
     if (_selectedDate.isNotEmpty) {
-      notificationId =
+      _notificationId =
           DateTime.now().millisecond * 1000 + DateTime.now().microsecond;
       final MaterialLocalizations localizations =
           MaterialLocalizations.of(context);
-      alertTime =
+      _alertTime =
           '$_selectedDate ${localizations.formatTimeOfDay(_time, alwaysUse24HourFormat: true)}';
-      print('alerttime: $alertTime notificationId: ${notificationId}');
-      await _setNotification(DateTime.parse(alertTime), notificationId)
+      print('alerttime: $_alertTime notificationId: ${_notificationId}');
+      await _setNotification(DateTime.parse(_alertTime!), _notificationId!)
           .catchError((onError) {
         debugPrint('${onError}');
       });
     }
-    var index = -1;
-    companion = ToDosCompanion(
-      categoryId: d.Value(_categoryId),
-      content: d.Value(_titleController.text),
-      createdTime: d.Value(DateTime.now()),
-      status: d.Value(1),
-      brief: d.Value(_briefController.text),
-      alertTime: d.Value(alertTime == null ? null : DateTime.parse(alertTime)),
-      notificationId: d.Value(notificationId),
-      tags: d.Value(_categoryName),
-    );
-    index = await context.read<HomeViewModel>().saveToDo(companion!);
-    return index;
   }
 
   Future<void> _syncWithNotion(int index) async {
