@@ -192,13 +192,21 @@ class _AddNewItemPageState extends State<AddNewItemPage>
                   Divider(
                     color: colorScheme.background,
                   ),
-                  InputField(
-                    hintText: S.of(context).itemRemark,
-                    maxLines: 8,
-                    textEditingController: _briefController,
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.black,
+                      ),
+                      child: InputField(
+                        hintText: S.of(context).itemRemark,
+                        maxLines: 8,
+                        textEditingController: _briefController,
+                      ),
+                    ),
                   ),
                   Align(
-                    alignment: Alignment.centerRight,
+                    alignment: Alignment.bottomRight,
                     child: RepaintBoundary(
                         key: rootWidgetKey, child: DiaryBanner()),
                   ),
