@@ -1,7 +1,11 @@
 import 'dart:collection';
+import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -51,6 +55,7 @@ class _TextEditorPageState extends State<TextEditorPage>
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _briefController = TextEditingController();
   final ScrollController _controller = ScrollController();
+  final GlobalKey rootWidgetKey = GlobalKey();
 
   late AnimationController _settingsPanelController;
   late Animation<double> _staggerSettingsItemsAnimation;
@@ -63,6 +68,8 @@ class _TextEditorPageState extends State<TextEditorPage>
   String _categoryName = '';
   Color _categoryColor = Colors.white;
   bool _hasLocationPermission = false;
+  Uint8List? imageBuffer = null;
+  String? _thumb;
 
   @override
   void initState() {
@@ -78,6 +85,7 @@ class _TextEditorPageState extends State<TextEditorPage>
             '-${_alertDateTime.day.toString().padLeft(2, '0')}';
         _time = TimeOfDay.fromDateTime(_alertDateTime);
       }
+      _thumb = _updatedModel!.thumb;
       _titleController.text = _updatedModel!.content;
       _briefController.text = _updatedModel!.brief ?? '';
       _mapCategory();
@@ -98,8 +106,8 @@ class _TextEditorPageState extends State<TextEditorPage>
       ),
     );
 
-    if(widget.category.notionDatabaseType == ActionType.DIARY){
-      context.read<ConfigViewModel>().requestLocationPermission().then((value){
+    if (widget.category.notionDatabaseType == ActionType.DIARY) {
+      context.read<ConfigViewModel>().requestLocationPermission().then((value) {
         _hasLocationPermission = value;
         setState(() {});
       });
@@ -239,7 +247,7 @@ class _TextEditorPageState extends State<TextEditorPage>
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 margin: EdgeInsets.symmetric(horizontal: 16),
-                height: 300,
+                height: 400,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     color: Colors.white),
@@ -252,41 +260,42 @@ class _TextEditorPageState extends State<TextEditorPage>
                     Divider(
                       color: colorScheme.background,
                     ),
-                    InputField(
-                      hintText: S.of(context).itemRemark,
-                      maxLines: 7,
-                      textEditingController: _briefController,
+                    Expanded(
+                      child: InputField(
+                        hintText: S.of(context).itemRemark,
+                        maxLines: 7,
+                        textEditingController: _briefController,
+                      ),
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: DiaryBanner(),
-                    )
+                    if (_thumb != null && _thumb != '')
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Image.memory(base64.decode(_thumb!), height: 20,),
+                      ),
+                    // if (imageBuffer != null) Image.memory(imageBuffer!),
+                    // TextButton(
+                    //     onPressed: () async {
+                    //       RenderRepaintBoundary boundary =
+                    //           rootWidgetKey.currentContext?.findRenderObject()
+                    //               as RenderRepaintBoundary;
+                    //       var image = await boundary.toImage(pixelRatio: 3.0);
+                    //       ByteData? byteData = await image.toByteData(
+                    //           format: ImageByteFormat.png);
+                    //       imageBuffer = byteData?.buffer.asUint8List();
+                    //       imageBuffer =
+                    //           base64.decode(base64.encode(imageBuffer!));
+                    //       setState(() {});
+                    //     },
+                    //     child: Text(
+                    //       'capture',
+                    //       style: TextStyle(color: Colors.black),
+                    //     ))
+                    SizedBox(
+                      height: 16,
+                    ),
                   ],
                 ),
               ),
-              // SizedBox(
-              //   height: 16,
-              // ),
-              // Padding(
-              //   padding: EdgeInsets.symmetric(horizontal: 16),
-              //   child: EditorTableRow(
-              //     title: '${_categoryName}',
-              //     indicatorColor: _categoryColor,
-              //     onTap: () {
-              //       Navigator.of(context)
-              //           .push(MaterialPageRoute(
-              //               builder: (context) =>
-              //                   ListCategoryPage(_updatedModel!.categoryId)))
-              //           .then((result) {
-              //         if (result != null) {
-              //           _updatedModel!.categoryId = result;
-              //           _mapCategory();
-              //           setState(() {});
-              //         }
-              //       });
-              //     },
-              //   ),
-              // ),
               SizedBox(
                 height: 16,
               ),
@@ -327,9 +336,16 @@ class _TextEditorPageState extends State<TextEditorPage>
   }
 
   Future _prepareData() async {
-    //_oldModel = _updatedModel!.copyWith();
     _updatedModel!.brief = _briefController.text;
     _updatedModel!.content = _titleController.text;
+    if (widget.category.notionDatabaseType == ActionType.DIARY) {
+      await _prepareDiaryBannerPic();
+    } else {
+      await _prepareReminderTime();
+    }
+  }
+
+  Future _prepareReminderTime() async {
     String? alertTime = null;
     if (_selectedDate.isNotEmpty) {
       final notificationId =
@@ -354,6 +370,18 @@ class _TextEditorPageState extends State<TextEditorPage>
 
     _updatedModel!.alertTime =
         alertTime == null ? null : DateTime.parse(alertTime);
+  }
+
+  Future _prepareDiaryBannerPic() async {
+    RenderRepaintBoundary boundary = rootWidgetKey.currentContext
+        ?.findRenderObject() as RenderRepaintBoundary;
+    var image = await boundary.toImage(pixelRatio: 3.0);
+    ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
+    Uint8List? imageBuffer = byteData?.buffer.asUint8List();
+    if (imageBuffer != null) {
+      _updatedModel!.thumb = base64.encode(imageBuffer);
+    }
+    //imageBuffer = base64.decode(base64.encode(imageBuffer!));
   }
 
   Future _updateItem() async {
@@ -421,22 +449,16 @@ class InputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: TextField(
-            controller: textEditingController,
-            keyboardType: TextInputType.multiline,
-            style: TextStyle(
-                fontWeight: FontWeight.normal, color: Color(0xff4F4F4F)),
-            maxLines: maxLines,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: '$hintText',
-                hintStyle: TextStyle(color: Colors.grey)),
-          ),
-        ),
-      ],
+    return TextField(
+      controller: textEditingController,
+      keyboardType: TextInputType.multiline,
+      style: TextStyle(fontWeight: FontWeight.normal, color: Color(0xff4F4F4F)),
+      maxLines: maxLines,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.all(0),
+          border: InputBorder.none,
+          hintText: '$hintText',
+          hintStyle: TextStyle(color: Colors.grey)),
     );
   }
 }

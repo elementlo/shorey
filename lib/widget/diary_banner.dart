@@ -86,7 +86,7 @@ class _DiaryBannerState extends State<DiaryBanner> {
           ),
           SizedBox(width: 5,),
           Text(
-            '${_weatherNow?.now.temp}℃'??'',
+            '${_weatherNow?.now.temp??''}℃',
             style: _fontStyle,
           ),
           SizedBox(width: 3,),

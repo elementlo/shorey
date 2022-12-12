@@ -196,7 +196,6 @@ class _AddNewItemPageState extends State<AddNewItemPage>
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
-                        color: Colors.black,
                       ),
                       child: InputField(
                         hintText: S.of(context).itemRemark,
@@ -210,6 +209,9 @@ class _AddNewItemPageState extends State<AddNewItemPage>
                     child: RepaintBoundary(
                         key: rootWidgetKey, child: DiaryBanner()),
                   ),
+                  SizedBox(
+                    height: 16,
+                  )
                 ],
               ),
             ),
