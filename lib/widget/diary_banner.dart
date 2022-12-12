@@ -16,7 +16,9 @@ import 'icons.dart';
 /// Description:
 ///
 class DiaryBanner extends StatefulWidget {
-  const DiaryBanner({Key? key}) : super(key: key);
+  final Function(String? weather, String? temperature, String? location)? onInfoUpdated;
+
+  const DiaryBanner({Key? key, this.onInfoUpdated}) : super(key: key);
 
   @override
   State<DiaryBanner> createState() => _DiaryBannerState();
@@ -42,14 +44,15 @@ class _DiaryBannerState extends State<DiaryBanner> {
     super.initState();
     context.read<ConfigViewModel>().requestLocationPermission().then((value) {
       _hasLocationPermission = value;
-      _locationListener = _locationPlugin.onLocationChanged().listen((Map<String, Object> result) {
+      _locationListener = _locationPlugin.onLocationChanged().listen((Map<String, Object> result) async {
           _locationResult = result;
           if(_locationResult!=null && _locationResult!['locationType'] != 0){
             _city = _locationResult!['city'] == null ? '' : _locationResult!['city'] as String;
             _street = _locationResult!['street'] == null ? '' : _locationResult!['street'] as String;
             _longitude = _locationResult!['longitude'] == null ? 0 : _locationResult!['longitude'] as double;
             _latitude = _locationResult!['latitude'] == null ? 0 : _locationResult!['latitude'] as double;
-            _getWeather(_longitude, _latitude);
+            await _getWeather(_longitude, _latitude);
+            widget.onInfoUpdated?.call(_weatherNow?.now.text, _weatherNow?.now.temp, '$_city $_street');
             setState(() {});
           }
       });
@@ -126,6 +129,7 @@ class _DiaryBannerState extends State<DiaryBanner> {
     final String location = '$_longitude,$_latitude';
     _weatherNow = await FlutterQweather.instance.getWeatherNow(location);
     setState(() {});
+    return _weatherNow;
   }
 
   void _startLocation() {
