@@ -69,10 +69,12 @@ class _AddNewItemPageState extends State<AddNewItemPage>
   Color _categoryColor = Colors.white;
   String _categoryName = '';
   int? _notionDatabaseType;
-  ToDosCompanion? companion;
+  ToDosCompanion? _companion;
   String? _thumb;
   String? _alertTime = null;
   int? _notificationId;
+  String? _weather;
+  String? _location;
 
   @override
   void initState() {
@@ -207,7 +209,13 @@ class _AddNewItemPageState extends State<AddNewItemPage>
                   Align(
                     alignment: Alignment.bottomRight,
                     child: RepaintBoundary(
-                        key: rootWidgetKey, child: DiaryBanner()),
+                        key: rootWidgetKey,
+                        child: DiaryBanner(
+                          onInfoUpdated: (weather, temp, location) {
+                            _weather = '$weather $temp℃';
+                            _location = location;
+                          },
+                        )),
                   ),
                   SizedBox(
                     height: 16,
@@ -234,17 +242,19 @@ class _AddNewItemPageState extends State<AddNewItemPage>
   Future _saveItem() async {
     if (widget.category.notionDatabaseType == ActionType.DIARY) {
       await _prepareDiaryBannerPic();
-      companion = ToDosCompanion(
+      _companion = ToDosCompanion(
           categoryId: d.Value(_categoryId),
           content: d.Value(_titleController.text),
           createdTime: d.Value(DateTime.now()),
           status: d.Value(1),
           brief: d.Value(_briefController.text),
           tags: d.Value(_categoryName),
-          thumb: d.Value(_thumb));
+          thumb: d.Value(_thumb),
+          weather: d.Value(_weather),
+          location: d.Value(_location));
     } else {
       await _prepareReminderTime();
-      companion = ToDosCompanion(
+      _companion = ToDosCompanion(
         categoryId: d.Value(_categoryId),
         content: d.Value(_titleController.text),
         createdTime: d.Value(DateTime.now()),
@@ -256,7 +266,7 @@ class _AddNewItemPageState extends State<AddNewItemPage>
         tags: d.Value(_categoryName),
       );
     }
-    var index = await context.read<HomeViewModel>().saveToDo(companion!);
+    var index = await context.read<HomeViewModel>().saveToDo(_companion!);
     return index;
   }
 
@@ -291,18 +301,21 @@ class _AddNewItemPageState extends State<AddNewItemPage>
   Future<void> _syncWithNotion(int index) async {
     if (widget.category.notionDatabaseId != null &&
         context.read<ConfigViewModel>().linkedNotion &&
-        companion != null) {
+        _companion != null) {
+
       final pageId = await context.read<NotionWorkFlow>().addTaskItem(
           widget.category.notionDatabaseId!,
           ToDo(
             id: 0,
-            content: companion!.content.value,
-            createdTime: companion!.createdTime.value,
-            categoryId: companion!.categoryId.value,
+            content: _companion!.content.value,
+            createdTime: _companion!.createdTime.value,
+            categoryId: _companion!.categoryId.value,
             status: 1,
             tags: _categoryName,
-            brief: companion!.brief.value,
-            alertTime: companion!.alertTime.value,
+            brief: _companion!.brief.value,
+            alertTime: _companion!.alertTime.value,
+            weather: _weather,
+            location: _location
           ),
           actionType: _notionDatabaseType!);
       if (index != -1) {

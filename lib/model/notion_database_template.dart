@@ -145,8 +145,8 @@ class NotionDatabaseTemplate {
       map[jParent][jDatabaseId] = databaseId;
       map[jProperties][jName][jTypeTitle][0][jTypeText][jTypeContent] = title;
       map[jProperties][jTags][jTypeMultiSelect][0][jTypeName] = tags?[0];
-      map[jProperties][jLocation][jTypeRichText][0][jTypeText] = location;
-      map[jProperties][jWeather][jTypeRichText][0][jTypeText] = weather;
+      map[jProperties][jLocation][jTypeRichText][0][jTypeText][jTypeContent] = location;
+      map[jProperties][jWeather][jTypeRichText][0][jTypeText][jTypeContent] = weather;
       map[jTypeChildren][0][jTypeParagraph][jTypeRichText][0][jTypeText]
           [jTypeContent] = brief;
 

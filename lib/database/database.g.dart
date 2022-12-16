@@ -18,6 +18,8 @@ class ToDo extends DataClass implements Insertable<ToDo> {
   String? tags;
   String? pageId;
   String? thumb;
+  String? weather;
+  String? location;
 
   ///0: finished 1: going 2: deleted
   int status;
@@ -33,6 +35,8 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       this.tags,
       this.pageId,
       this.thumb,
+      this.weather,
+      this.location,
       required this.status,
       required this.categoryId});
   @override
@@ -62,6 +66,12 @@ class ToDo extends DataClass implements Insertable<ToDo> {
     if (!nullToAbsent || thumb != null) {
       map['thumb'] = Variable<String>(thumb);
     }
+    if (!nullToAbsent || weather != null) {
+      map['weather'] = Variable<String>(weather);
+    }
+    if (!nullToAbsent || location != null) {
+      map['location'] = Variable<String>(location);
+    }
     map['status'] = Variable<int>(status);
     map['category_id'] = Variable<int>(categoryId);
     return map;
@@ -88,6 +98,12 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           pageId == null && nullToAbsent ? const Value.absent() : Value(pageId),
       thumb:
           thumb == null && nullToAbsent ? const Value.absent() : Value(thumb),
+      weather: weather == null && nullToAbsent
+          ? const Value.absent()
+          : Value(weather),
+      location: location == null && nullToAbsent
+          ? const Value.absent()
+          : Value(location),
       status: Value(status),
       categoryId: Value(categoryId),
     );
@@ -107,6 +123,8 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       tags: serializer.fromJson<String?>(json['tags']),
       pageId: serializer.fromJson<String?>(json['pageId']),
       thumb: serializer.fromJson<String?>(json['thumb']),
+      weather: serializer.fromJson<String?>(json['weather']),
+      location: serializer.fromJson<String?>(json['location']),
       status: serializer.fromJson<int>(json['status']),
       categoryId: serializer.fromJson<int>(json['categoryId']),
     );
@@ -125,6 +143,8 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       'tags': serializer.toJson<String?>(tags),
       'pageId': serializer.toJson<String?>(pageId),
       'thumb': serializer.toJson<String?>(thumb),
+      'weather': serializer.toJson<String?>(weather),
+      'location': serializer.toJson<String?>(location),
       'status': serializer.toJson<int>(status),
       'categoryId': serializer.toJson<int>(categoryId),
     };
@@ -141,6 +161,8 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           Value<String?> tags = const Value.absent(),
           Value<String?> pageId = const Value.absent(),
           Value<String?> thumb = const Value.absent(),
+          Value<String?> weather = const Value.absent(),
+          Value<String?> location = const Value.absent(),
           int? status,
           int? categoryId}) =>
       ToDo(
@@ -155,6 +177,8 @@ class ToDo extends DataClass implements Insertable<ToDo> {
         tags: tags.present ? tags.value : this.tags,
         pageId: pageId.present ? pageId.value : this.pageId,
         thumb: thumb.present ? thumb.value : this.thumb,
+        weather: weather.present ? weather.value : this.weather,
+        location: location.present ? location.value : this.location,
         status: status ?? this.status,
         categoryId: categoryId ?? this.categoryId,
       );
@@ -171,6 +195,8 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           ..write('tags: $tags, ')
           ..write('pageId: $pageId, ')
           ..write('thumb: $thumb, ')
+          ..write('weather: $weather, ')
+          ..write('location: $location, ')
           ..write('status: $status, ')
           ..write('categoryId: $categoryId')
           ..write(')'))
@@ -178,8 +204,21 @@ class ToDo extends DataClass implements Insertable<ToDo> {
   }
 
   @override
-  int get hashCode => Object.hash(id, notificationId, createdTime, filedTime,
-      alertTime, content, brief, tags, pageId, thumb, status, categoryId);
+  int get hashCode => Object.hash(
+      id,
+      notificationId,
+      createdTime,
+      filedTime,
+      alertTime,
+      content,
+      brief,
+      tags,
+      pageId,
+      thumb,
+      weather,
+      location,
+      status,
+      categoryId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -194,6 +233,8 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           other.tags == this.tags &&
           other.pageId == this.pageId &&
           other.thumb == this.thumb &&
+          other.weather == this.weather &&
+          other.location == this.location &&
           other.status == this.status &&
           other.categoryId == this.categoryId);
 }
@@ -209,6 +250,8 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
   Value<String?> tags;
   Value<String?> pageId;
   Value<String?> thumb;
+  Value<String?> weather;
+  Value<String?> location;
   Value<int> status;
   Value<int> categoryId;
   ToDosCompanion({
@@ -222,6 +265,8 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     this.tags = const Value.absent(),
     this.pageId = const Value.absent(),
     this.thumb = const Value.absent(),
+    this.weather = const Value.absent(),
+    this.location = const Value.absent(),
     this.status = const Value.absent(),
     this.categoryId = const Value.absent(),
   });
@@ -236,6 +281,8 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     this.tags = const Value.absent(),
     this.pageId = const Value.absent(),
     this.thumb = const Value.absent(),
+    this.weather = const Value.absent(),
+    this.location = const Value.absent(),
     required int status,
     required int categoryId,
   })  : createdTime = Value(createdTime),
@@ -253,6 +300,8 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     Expression<String>? tags,
     Expression<String>? pageId,
     Expression<String>? thumb,
+    Expression<String>? weather,
+    Expression<String>? location,
     Expression<int>? status,
     Expression<int>? categoryId,
   }) {
@@ -267,6 +316,8 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       if (tags != null) 'tags': tags,
       if (pageId != null) 'page_id': pageId,
       if (thumb != null) 'thumb': thumb,
+      if (weather != null) 'weather': weather,
+      if (location != null) 'location': location,
       if (status != null) 'status': status,
       if (categoryId != null) 'category_id': categoryId,
     });
@@ -283,6 +334,8 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       Value<String?>? tags,
       Value<String?>? pageId,
       Value<String?>? thumb,
+      Value<String?>? weather,
+      Value<String?>? location,
       Value<int>? status,
       Value<int>? categoryId}) {
     return ToDosCompanion(
@@ -296,6 +349,8 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       tags: tags ?? this.tags,
       pageId: pageId ?? this.pageId,
       thumb: thumb ?? this.thumb,
+      weather: weather ?? this.weather,
+      location: location ?? this.location,
       status: status ?? this.status,
       categoryId: categoryId ?? this.categoryId,
     );
@@ -334,6 +389,12 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     if (thumb.present) {
       map['thumb'] = Variable<String>(thumb.value);
     }
+    if (weather.present) {
+      map['weather'] = Variable<String>(weather.value);
+    }
+    if (location.present) {
+      map['location'] = Variable<String>(location.value);
+    }
     if (status.present) {
       map['status'] = Variable<int>(status.value);
     }
@@ -356,6 +417,8 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
           ..write('tags: $tags, ')
           ..write('pageId: $pageId, ')
           ..write('thumb: $thumb, ')
+          ..write('weather: $weather, ')
+          ..write('location: $location, ')
           ..write('status: $status, ')
           ..write('categoryId: $categoryId')
           ..write(')'))
@@ -422,6 +485,16 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
   late final GeneratedColumn<String> thumb = GeneratedColumn<String>(
       'thumb', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  final VerificationMeta _weatherMeta = const VerificationMeta('weather');
+  @override
+  late final GeneratedColumn<String> weather = GeneratedColumn<String>(
+      'weather', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  final VerificationMeta _locationMeta = const VerificationMeta('location');
+  @override
+  late final GeneratedColumn<String> location = GeneratedColumn<String>(
+      'location', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _statusMeta = const VerificationMeta('status');
   @override
   late final GeneratedColumn<int> status = GeneratedColumn<int>(
@@ -447,6 +520,8 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
         tags,
         pageId,
         thumb,
+        weather,
+        location,
         status,
         categoryId
       ];
@@ -506,6 +581,14 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
       context.handle(
           _thumbMeta, thumb.isAcceptableOrUnknown(data['thumb']!, _thumbMeta));
     }
+    if (data.containsKey('weather')) {
+      context.handle(_weatherMeta,
+          weather.isAcceptableOrUnknown(data['weather']!, _weatherMeta));
+    }
+    if (data.containsKey('location')) {
+      context.handle(_locationMeta,
+          location.isAcceptableOrUnknown(data['location']!, _locationMeta));
+    }
     if (data.containsKey('status')) {
       context.handle(_statusMeta,
           status.isAcceptableOrUnknown(data['status']!, _statusMeta));
@@ -549,6 +632,10 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
           .read(DriftSqlType.string, data['${effectivePrefix}page_id']),
       thumb: attachedDatabase.options.types
           .read(DriftSqlType.string, data['${effectivePrefix}thumb']),
+      weather: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}weather']),
+      location: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}location']),
       status: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}status'])!,
       categoryId: attachedDatabase.options.types
