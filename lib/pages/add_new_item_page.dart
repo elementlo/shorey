@@ -11,6 +11,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shorey/base/provider_widget.dart';
 import 'package:shorey/config/config.dart';
 import 'package:shorey/database/database.dart';
 import 'package:shorey/generated/l10n.dart';
@@ -21,6 +22,7 @@ import 'package:shorey/pages/list_category_page.dart';
 import 'package:shorey/pages/root_page.dart';
 import 'package:shorey/view_model/config_view_model.dart';
 import 'package:shorey/view_model/home_view_model.dart';
+import 'package:shorey/view_model/new_item_view_model.dart';
 import 'package:shorey/widget/app_bar.dart';
 import 'package:shorey/widget/customized_date_picker.dart';
 import 'package:shorey/widget/settings_list_item.dart';
@@ -148,100 +150,108 @@ class _AddNewItemPageState extends State<AddNewItemPage>
               }),
         ),
     ];
-    return Scaffold(
-      appBar: SparkAppBar(
-        context: context,
-        title: '${widget.category.name}',
-        actions: [
-          IconButton(
-              icon: Icon(
-                Icons.alarm_off,
-                color: colorScheme.onSecondary,
-              ),
-              onPressed: () {
-                _selectedDate = '';
-                setState(() {});
-                Fluttertoast.showToast(msg: S.of(context).cancelAlertTime);
-              }),
-          IconButton(
-              icon: Icon(
-                Icons.check,
-                color: colorScheme.onSecondary,
-              ),
-              onPressed: () async {
-                _syncWithNotion(await _saveItem());
-                Navigator.pop(context, 0);
-              }),
-        ],
-      ),
-      body: Container(
-        padding: EdgeInsets.symmetric(vertical: 16),
-        child: ListView(
-          controller: _controller,
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              margin: EdgeInsets.symmetric(horizontal: 16),
-              height: 400,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8), color: Colors.white),
-              child: Column(
-                children: [
-                  InputField(
-                    hintText: S.of(context).itemAlert,
-                    textEditingController: _titleController,
-                  ),
-                  Divider(
-                    color: colorScheme.background,
-                  ),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: InputField(
-                        hintText: S.of(context).itemRemark,
-                        maxLines: 8,
-                        textEditingController: _briefController,
+    return ProviderWidget<NewItemViewModel>(
+      onModelReady: (viewModel) {},
+      model: NewItemViewModel(),
+      child: Scaffold(
+        appBar: SparkAppBar(
+          context: context,
+          title: '${widget.category.name}',
+          actions: [
+            IconButton(
+                icon: Icon(
+                  Icons.alarm_off,
+                  color: colorScheme.onSecondary,
+                ),
+                onPressed: () {
+                  _selectedDate = '';
+                  setState(() {});
+                  Fluttertoast.showToast(msg: S.of(context).cancelAlertTime);
+                }),
+            Consumer<NewItemViewModel>(
+              builder: (context, _, __) {
+                return IconButton(
+                    icon: Icon(
+                      Icons.check,
+                      color: colorScheme.onSecondary,
+                    ),
+                    onPressed: () async {
+                      _syncWithNotion(await _saveItem(context));
+                      Navigator.pop(context, 0);
+                    });
+              }
+            ),
+          ],
+        ),
+        body: Container(
+          padding: EdgeInsets.symmetric(vertical: 16),
+          child: ListView(
+            controller: _controller,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                margin: EdgeInsets.symmetric(horizontal: 16),
+                height: 400,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8), color: Colors.white),
+                child: Column(
+                  children: [
+                    InputField(
+                      hintText: S.of(context).itemAlert,
+                      textEditingController: _titleController,
+                    ),
+                    Divider(
+                      color: colorScheme.background,
+                    ),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: InputField(
+                          hintText: S.of(context).itemRemark,
+                          maxLines: 8,
+                          textEditingController: _briefController,
+                        ),
                       ),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: RepaintBoundary(
-                        key: rootWidgetKey,
-                        child: DiaryBanner(
-                          onInfoUpdated: (weather, temp, location) {
-                            _weather = '$weather $temp℃';
-                            _location = location;
-                          },
-                        )),
-                  ),
-                  SizedBox(
-                    height: 16,
-                  )
-                ],
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: RepaintBoundary(
+                          key: rootWidgetKey,
+                          child: DiaryBanner(
+                            onInfoUpdated: (weather, temp, location) {
+                              _weather = '$weather $temp℃';
+                              _location = location;
+                            },
+                          )),
+                    ),
+                    SizedBox(
+                      height: 16,
+                    )
+                  ],
+                ),
               ),
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            ...[
-              AnimateSettingsListItems(
-                animation: _staggerSettingsItemsAnimation,
-                children: settingsListItems,
+              SizedBox(
+                height: 16,
               ),
-              const SizedBox(height: 16),
+              ...[
+                AnimateSettingsListItems(
+                  animation: _staggerSettingsItemsAnimation,
+                  children: settingsListItems,
+                ),
+                const SizedBox(height: 16),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
   }
 
-  Future _saveItem() async {
+  Future _saveItem(BuildContext context) async {
     if (widget.category.notionDatabaseType == ActionType.DIARY) {
-      await _prepareDiaryBannerPic();
+      await _prepareDiaryBannerPic(context);
       _companion = ToDosCompanion(
           categoryId: d.Value(_categoryId),
           content: d.Value(_titleController.text),
@@ -270,12 +280,14 @@ class _AddNewItemPageState extends State<AddNewItemPage>
     return index;
   }
 
-  Future _prepareDiaryBannerPic() async {
+  Future _prepareDiaryBannerPic(BuildContext context) async {
     RenderRepaintBoundary boundary = rootWidgetKey.currentContext
         ?.findRenderObject() as RenderRepaintBoundary;
     var image = await boundary.toImage(pixelRatio: 3.0);
     ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
     Uint8List? imageBuffer = byteData?.buffer.asUint8List();
+
+    context.read<NewItemViewModel>().uploadImage(byteData);
     if (imageBuffer != null) {
       _thumb = base64.encode(imageBuffer);
     }
@@ -315,7 +327,8 @@ class _AddNewItemPageState extends State<AddNewItemPage>
             brief: _companion!.brief.value,
             alertTime: _companion!.alertTime.value,
             weather: _weather,
-            location: _location
+            location: _location,
+            thumb: _thumb,
           ),
           actionType: _notionDatabaseType!);
       if (index != -1) {

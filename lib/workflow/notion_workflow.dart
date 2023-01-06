@@ -250,6 +250,11 @@ class _DiaryActions extends NotionActions {
   @override
   Future<String?> addItem(String databaseId, ToDo todo,
       {List<String>? links,}) async {
+    if(todo.thumb !=null && todo.thumb!.isNotEmpty){
+
+    }
+
+
     final param = await NotionDatabaseTemplate.diaryItem(
       databaseId,
       title: todo.content,
