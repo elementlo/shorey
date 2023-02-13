@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:day_night_time_picker/day_night_time_picker.dart';
+import 'package:dio/dio.dart';
 import 'package:drift/drift.dart' as d;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -287,7 +288,7 @@ class _AddNewItemPageState extends State<AddNewItemPage>
     ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
     Uint8List? imageBuffer = byteData?.buffer.asUint8List();
 
-    context.read<NewItemViewModel>().uploadImage(byteData);
+    final Response res = await context.read<NewItemViewModel>().uploadImage(byteData);
     if (imageBuffer != null) {
       _thumb = base64.encode(imageBuffer);
     }

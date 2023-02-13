@@ -52,6 +52,16 @@
           }
         ]
       }
+    },
+    {
+      "object": "block",
+      "type": "image",
+      "image": {
+        "type": "external",
+        "external": {
+          "url": ""
+        }
+      }
     }
   ]
 }
