@@ -40,6 +40,8 @@ class ToDos extends Table {
 
   TextColumn get location => text().nullable()();
 
+  TextColumn get weatherBannerUrl => text().nullable()();
+
   ///0: finished 1: going 2: deleted
   IntColumn get status => integer()();
 

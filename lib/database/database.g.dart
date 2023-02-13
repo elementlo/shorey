@@ -20,6 +20,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
   String? thumb;
   String? weather;
   String? location;
+  String? weatherBannerUrl;
 
   ///0: finished 1: going 2: deleted
   int status;
@@ -37,6 +38,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       this.thumb,
       this.weather,
       this.location,
+      this.weatherBannerUrl,
       required this.status,
       required this.categoryId});
   @override
@@ -72,6 +74,9 @@ class ToDo extends DataClass implements Insertable<ToDo> {
     if (!nullToAbsent || location != null) {
       map['location'] = Variable<String>(location);
     }
+    if (!nullToAbsent || weatherBannerUrl != null) {
+      map['weather_banner_url'] = Variable<String>(weatherBannerUrl);
+    }
     map['status'] = Variable<int>(status);
     map['category_id'] = Variable<int>(categoryId);
     return map;
@@ -104,6 +109,9 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       location: location == null && nullToAbsent
           ? const Value.absent()
           : Value(location),
+      weatherBannerUrl: weatherBannerUrl == null && nullToAbsent
+          ? const Value.absent()
+          : Value(weatherBannerUrl),
       status: Value(status),
       categoryId: Value(categoryId),
     );
@@ -125,6 +133,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       thumb: serializer.fromJson<String?>(json['thumb']),
       weather: serializer.fromJson<String?>(json['weather']),
       location: serializer.fromJson<String?>(json['location']),
+      weatherBannerUrl: serializer.fromJson<String?>(json['weatherBannerUrl']),
       status: serializer.fromJson<int>(json['status']),
       categoryId: serializer.fromJson<int>(json['categoryId']),
     );
@@ -145,6 +154,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       'thumb': serializer.toJson<String?>(thumb),
       'weather': serializer.toJson<String?>(weather),
       'location': serializer.toJson<String?>(location),
+      'weatherBannerUrl': serializer.toJson<String?>(weatherBannerUrl),
       'status': serializer.toJson<int>(status),
       'categoryId': serializer.toJson<int>(categoryId),
     };
@@ -163,6 +173,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           Value<String?> thumb = const Value.absent(),
           Value<String?> weather = const Value.absent(),
           Value<String?> location = const Value.absent(),
+          Value<String?> weatherBannerUrl = const Value.absent(),
           int? status,
           int? categoryId}) =>
       ToDo(
@@ -179,6 +190,9 @@ class ToDo extends DataClass implements Insertable<ToDo> {
         thumb: thumb.present ? thumb.value : this.thumb,
         weather: weather.present ? weather.value : this.weather,
         location: location.present ? location.value : this.location,
+        weatherBannerUrl: weatherBannerUrl.present
+            ? weatherBannerUrl.value
+            : this.weatherBannerUrl,
         status: status ?? this.status,
         categoryId: categoryId ?? this.categoryId,
       );
@@ -197,6 +211,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           ..write('thumb: $thumb, ')
           ..write('weather: $weather, ')
           ..write('location: $location, ')
+          ..write('weatherBannerUrl: $weatherBannerUrl, ')
           ..write('status: $status, ')
           ..write('categoryId: $categoryId')
           ..write(')'))
@@ -217,6 +232,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
       thumb,
       weather,
       location,
+      weatherBannerUrl,
       status,
       categoryId);
   @override
@@ -235,6 +251,7 @@ class ToDo extends DataClass implements Insertable<ToDo> {
           other.thumb == this.thumb &&
           other.weather == this.weather &&
           other.location == this.location &&
+          other.weatherBannerUrl == this.weatherBannerUrl &&
           other.status == this.status &&
           other.categoryId == this.categoryId);
 }
@@ -252,6 +269,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
   Value<String?> thumb;
   Value<String?> weather;
   Value<String?> location;
+  Value<String?> weatherBannerUrl;
   Value<int> status;
   Value<int> categoryId;
   ToDosCompanion({
@@ -267,6 +285,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     this.thumb = const Value.absent(),
     this.weather = const Value.absent(),
     this.location = const Value.absent(),
+    this.weatherBannerUrl = const Value.absent(),
     this.status = const Value.absent(),
     this.categoryId = const Value.absent(),
   });
@@ -283,6 +302,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     this.thumb = const Value.absent(),
     this.weather = const Value.absent(),
     this.location = const Value.absent(),
+    this.weatherBannerUrl = const Value.absent(),
     required int status,
     required int categoryId,
   })  : createdTime = Value(createdTime),
@@ -302,6 +322,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     Expression<String>? thumb,
     Expression<String>? weather,
     Expression<String>? location,
+    Expression<String>? weatherBannerUrl,
     Expression<int>? status,
     Expression<int>? categoryId,
   }) {
@@ -318,6 +339,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       if (thumb != null) 'thumb': thumb,
       if (weather != null) 'weather': weather,
       if (location != null) 'location': location,
+      if (weatherBannerUrl != null) 'weather_banner_url': weatherBannerUrl,
       if (status != null) 'status': status,
       if (categoryId != null) 'category_id': categoryId,
     });
@@ -336,6 +358,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       Value<String?>? thumb,
       Value<String?>? weather,
       Value<String?>? location,
+      Value<String?>? weatherBannerUrl,
       Value<int>? status,
       Value<int>? categoryId}) {
     return ToDosCompanion(
@@ -351,6 +374,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
       thumb: thumb ?? this.thumb,
       weather: weather ?? this.weather,
       location: location ?? this.location,
+      weatherBannerUrl: weatherBannerUrl ?? this.weatherBannerUrl,
       status: status ?? this.status,
       categoryId: categoryId ?? this.categoryId,
     );
@@ -395,6 +419,9 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
     if (location.present) {
       map['location'] = Variable<String>(location.value);
     }
+    if (weatherBannerUrl.present) {
+      map['weather_banner_url'] = Variable<String>(weatherBannerUrl.value);
+    }
     if (status.present) {
       map['status'] = Variable<int>(status.value);
     }
@@ -419,6 +446,7 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
           ..write('thumb: $thumb, ')
           ..write('weather: $weather, ')
           ..write('location: $location, ')
+          ..write('weatherBannerUrl: $weatherBannerUrl, ')
           ..write('status: $status, ')
           ..write('categoryId: $categoryId')
           ..write(')'))
@@ -495,6 +523,12 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
   late final GeneratedColumn<String> location = GeneratedColumn<String>(
       'location', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  final VerificationMeta _weatherBannerUrlMeta =
+      const VerificationMeta('weatherBannerUrl');
+  @override
+  late final GeneratedColumn<String> weatherBannerUrl = GeneratedColumn<String>(
+      'weather_banner_url', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _statusMeta = const VerificationMeta('status');
   @override
   late final GeneratedColumn<int> status = GeneratedColumn<int>(
@@ -522,6 +556,7 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
         thumb,
         weather,
         location,
+        weatherBannerUrl,
         status,
         categoryId
       ];
@@ -589,6 +624,12 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
       context.handle(_locationMeta,
           location.isAcceptableOrUnknown(data['location']!, _locationMeta));
     }
+    if (data.containsKey('weather_banner_url')) {
+      context.handle(
+          _weatherBannerUrlMeta,
+          weatherBannerUrl.isAcceptableOrUnknown(
+              data['weather_banner_url']!, _weatherBannerUrlMeta));
+    }
     if (data.containsKey('status')) {
       context.handle(_statusMeta,
           status.isAcceptableOrUnknown(data['status']!, _statusMeta));
@@ -636,6 +677,8 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
           .read(DriftSqlType.string, data['${effectivePrefix}weather']),
       location: attachedDatabase.options.types
           .read(DriftSqlType.string, data['${effectivePrefix}location']),
+      weatherBannerUrl: attachedDatabase.options.types.read(
+          DriftSqlType.string, data['${effectivePrefix}weather_banner_url']),
       status: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}status'])!,
       categoryId: attachedDatabase.options.types
