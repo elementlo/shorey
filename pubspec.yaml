@@ -47,7 +47,7 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.10
   path: ^1.8.2
   ionicons: ^0.2.1
-  dio: ^4.0.6
+  dio: ^5.0.3
   linkwell: ^2.0.6
   amap_flutter_location: ^3.0.0
   permission_handler: ^10.1.0
