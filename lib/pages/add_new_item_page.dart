@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:day_night_time_picker/day_night_time_picker.dart';
+import 'package:day_night_time_picker/day_night_time_picker.dart' as dy;
 import 'package:dio/dio.dart';
 import 'package:drift/drift.dart' as d;
 import 'package:flutter/material.dart';
@@ -66,7 +66,7 @@ class _AddNewItemPageState extends State<AddNewItemPage>
   _ExpandableSetting? _expandedSettingId;
   late Animation<double> _staggerSettingsItemsAnimation;
 
-  TimeOfDay _time = TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 1);
+  late dy.Time _time;
   String _selectedDate = '';
   late int _categoryId;
   Color _categoryColor = Colors.white;
@@ -82,6 +82,8 @@ class _AddNewItemPageState extends State<AddNewItemPage>
   @override
   void initState() {
     super.initState();
+    TimeOfDay _timeOfDay = TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 1);
+    _time = dy.Time.fromTimeOfDay(_timeOfDay, 60);
     _categoryId = widget.category.id;
     if (widget.title != null) {
       _titleController.text = widget.title!;
@@ -132,7 +134,8 @@ class _AddNewItemPageState extends State<AddNewItemPage>
           onOptionChanged: (newTextScale) {},
           onTapSetting: () => _onTapSetting(_ExpandableSetting.time),
           isExpanded: _expandedSettingId == _ExpandableSetting.time,
-          child: createInlinePicker(
+          child: dy.showPicker(
+              isInlinePicker: true,
               accentColor: colorScheme.onSecondary,
               dialogInsetPadding: EdgeInsets.all(0),
               context: context,
@@ -289,6 +292,7 @@ class _AddNewItemPageState extends State<AddNewItemPage>
     Uint8List? imageBuffer = byteData?.buffer.asUint8List();
 
     final Response res = await context.read<NewItemViewModel>().uploadImage(byteData);
+
     if (imageBuffer != null) {
       _thumb = base64.encode(imageBuffer);
     }

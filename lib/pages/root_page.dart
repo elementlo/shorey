@@ -79,7 +79,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
   Future _configDio() async {
     dio.interceptors.add(InterceptorsWrapper(onError: (e, handler) {
       EasyLoading.dismiss();
-      if (e.response != null || e.message.isNotEmpty) {
+      if (e.response != null || e.message != null) {
         Fluttertoast.showToast(
             msg: e.response?.data['message'] ?? e.message);
         handler.next(e);

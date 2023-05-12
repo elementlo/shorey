@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:amap_flutter_location/amap_flutter_location.dart';
-import 'package:amap_flutter_location/amap_location_option.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +10,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:flutter_qweather/flutter_qweather.dart';
 import 'package:provider/provider.dart';
 import 'package:shorey/base/provider_widget.dart';
 import 'package:shorey/config/config.dart';
@@ -51,7 +52,7 @@ void main() async {
   AMapFlutterLocation.updatePrivacyAgree(true);
 
   //Replace your key below
-  AMapFlutterLocation.setApiKey("", "0");
+  AMapFlutterLocation.setApiKey("93aa815a8423f70ce9b1baa547afa8bf", "0");
 
   runApp(ProviderWidget2<ConfigViewModel, HomeViewModel>(
       ConfigViewModel(), HomeViewModel(),
@@ -75,11 +76,11 @@ parseJson(String text) {
 
 void _configHttpClient() {
   dio.interceptors
-      .add(LogInterceptor(responseBody: true, responseHeader: false));
+      .add(LogInterceptor(responseBody: true, responseHeader: false, requestBody: true));
   dio.options.baseUrl = 'https://api.notion.com/';
   dio.options.headers.addAll({'Notion-Version': notionApiVersion});
-  dio.options.connectTimeout = 5000;
-  dio.options.receiveTimeout = 7000;
+  dio.options.connectTimeout = Duration(seconds: 5);
+  dio.options.receiveTimeout = Duration(seconds: 7);
   (dio.transformer as DefaultTransformer).jsonDecodeCallback = parseJson;
 }
 
@@ -93,12 +94,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     super.initState();
+    _initQweather();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -148,6 +148,17 @@ class _MyAppState extends State<MyApp> {
         },
       ),
     );
+  }
+
+  void _initQweather() async {
+    QweatherConfig config = QweatherConfig(
+        publicIdForAndroid: 'HE2211251119011133',
+        keyForAndroid: '3b19b684691d4120823ae4381633682b',
+        publicIdForIos: 'HE2211251121031704',
+        keyForIos: '678ced250e31451c9835a21c8f63d239',
+        biz: false,
+        debug: true);
+    await FlutterQweather.instance.init(config);
   }
 }
 

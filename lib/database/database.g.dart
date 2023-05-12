@@ -2,11 +2,253 @@
 
 part of 'database.dart';
 
-// **************************************************************************
-// DriftDatabaseGenerator
-// **************************************************************************
-
 // ignore_for_file: type=lint
+class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ToDosTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _notificationIdMeta =
+      const VerificationMeta('notificationId');
+  @override
+  late final GeneratedColumn<int> notificationId = GeneratedColumn<int>(
+      'notification_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _createdTimeMeta =
+      const VerificationMeta('createdTime');
+  @override
+  late final GeneratedColumn<DateTime> createdTime = GeneratedColumn<DateTime>(
+      'created_time', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _filedTimeMeta =
+      const VerificationMeta('filedTime');
+  @override
+  late final GeneratedColumn<DateTime> filedTime = GeneratedColumn<DateTime>(
+      'filed_time', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _alertTimeMeta =
+      const VerificationMeta('alertTime');
+  @override
+  late final GeneratedColumn<DateTime> alertTime = GeneratedColumn<DateTime>(
+      'alert_time', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _contentMeta =
+      const VerificationMeta('content');
+  @override
+  late final GeneratedColumn<String> content = GeneratedColumn<String>(
+      'content', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _briefMeta = const VerificationMeta('brief');
+  @override
+  late final GeneratedColumn<String> brief = GeneratedColumn<String>(
+      'brief', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _tagsMeta = const VerificationMeta('tags');
+  @override
+  late final GeneratedColumn<String> tags = GeneratedColumn<String>(
+      'tags', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _pageIdMeta = const VerificationMeta('pageId');
+  @override
+  late final GeneratedColumn<String> pageId = GeneratedColumn<String>(
+      'page_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _thumbMeta = const VerificationMeta('thumb');
+  @override
+  late final GeneratedColumn<String> thumb = GeneratedColumn<String>(
+      'thumb', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _weatherMeta =
+      const VerificationMeta('weather');
+  @override
+  late final GeneratedColumn<String> weather = GeneratedColumn<String>(
+      'weather', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _locationMeta =
+      const VerificationMeta('location');
+  @override
+  late final GeneratedColumn<String> location = GeneratedColumn<String>(
+      'location', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _weatherBannerUrlMeta =
+      const VerificationMeta('weatherBannerUrl');
+  @override
+  late final GeneratedColumn<String> weatherBannerUrl = GeneratedColumn<String>(
+      'weather_banner_url', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<int> status = GeneratedColumn<int>(
+      'status', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _categoryIdMeta =
+      const VerificationMeta('categoryId');
+  @override
+  late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
+      'category_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints:
+          'NULLABLE REFERENCES categories(id) ON DELETE CASCADE');
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        notificationId,
+        createdTime,
+        filedTime,
+        alertTime,
+        content,
+        brief,
+        tags,
+        pageId,
+        thumb,
+        weather,
+        location,
+        weatherBannerUrl,
+        status,
+        categoryId
+      ];
+  @override
+  String get aliasedName => _alias ?? 'to_dos';
+  @override
+  String get actualTableName => 'to_dos';
+  @override
+  VerificationContext validateIntegrity(Insertable<ToDo> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('notification_id')) {
+      context.handle(
+          _notificationIdMeta,
+          notificationId.isAcceptableOrUnknown(
+              data['notification_id']!, _notificationIdMeta));
+    }
+    if (data.containsKey('created_time')) {
+      context.handle(
+          _createdTimeMeta,
+          createdTime.isAcceptableOrUnknown(
+              data['created_time']!, _createdTimeMeta));
+    } else if (isInserting) {
+      context.missing(_createdTimeMeta);
+    }
+    if (data.containsKey('filed_time')) {
+      context.handle(_filedTimeMeta,
+          filedTime.isAcceptableOrUnknown(data['filed_time']!, _filedTimeMeta));
+    }
+    if (data.containsKey('alert_time')) {
+      context.handle(_alertTimeMeta,
+          alertTime.isAcceptableOrUnknown(data['alert_time']!, _alertTimeMeta));
+    }
+    if (data.containsKey('content')) {
+      context.handle(_contentMeta,
+          content.isAcceptableOrUnknown(data['content']!, _contentMeta));
+    } else if (isInserting) {
+      context.missing(_contentMeta);
+    }
+    if (data.containsKey('brief')) {
+      context.handle(
+          _briefMeta, brief.isAcceptableOrUnknown(data['brief']!, _briefMeta));
+    }
+    if (data.containsKey('tags')) {
+      context.handle(
+          _tagsMeta, tags.isAcceptableOrUnknown(data['tags']!, _tagsMeta));
+    }
+    if (data.containsKey('page_id')) {
+      context.handle(_pageIdMeta,
+          pageId.isAcceptableOrUnknown(data['page_id']!, _pageIdMeta));
+    }
+    if (data.containsKey('thumb')) {
+      context.handle(
+          _thumbMeta, thumb.isAcceptableOrUnknown(data['thumb']!, _thumbMeta));
+    }
+    if (data.containsKey('weather')) {
+      context.handle(_weatherMeta,
+          weather.isAcceptableOrUnknown(data['weather']!, _weatherMeta));
+    }
+    if (data.containsKey('location')) {
+      context.handle(_locationMeta,
+          location.isAcceptableOrUnknown(data['location']!, _locationMeta));
+    }
+    if (data.containsKey('weather_banner_url')) {
+      context.handle(
+          _weatherBannerUrlMeta,
+          weatherBannerUrl.isAcceptableOrUnknown(
+              data['weather_banner_url']!, _weatherBannerUrlMeta));
+    }
+    if (data.containsKey('status')) {
+      context.handle(_statusMeta,
+          status.isAcceptableOrUnknown(data['status']!, _statusMeta));
+    } else if (isInserting) {
+      context.missing(_statusMeta);
+    }
+    if (data.containsKey('category_id')) {
+      context.handle(
+          _categoryIdMeta,
+          categoryId.isAcceptableOrUnknown(
+              data['category_id']!, _categoryIdMeta));
+    } else if (isInserting) {
+      context.missing(_categoryIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ToDo map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ToDo(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      notificationId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}notification_id']),
+      createdTime: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_time'])!,
+      filedTime: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}filed_time']),
+      alertTime: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}alert_time']),
+      content: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}content'])!,
+      brief: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}brief']),
+      tags: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}tags']),
+      pageId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}page_id']),
+      thumb: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}thumb']),
+      weather: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}weather']),
+      location: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}location']),
+      weatherBannerUrl: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}weather_banner_url']),
+      status: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}status'])!,
+      categoryId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}category_id'])!,
+    );
+  }
+
+  @override
+  $ToDosTable createAlias(String alias) {
+    return $ToDosTable(attachedDatabase, alias);
+  }
+}
+
 class ToDo extends DataClass implements Insertable<ToDo> {
   int id;
   int? notificationId;
@@ -454,195 +696,132 @@ class ToDosCompanion extends UpdateCompanion<ToDo> {
   }
 }
 
-class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
+class $CategoriesTable extends Categories
+    with TableInfo<$CategoriesTable, Category> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ToDosTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $CategoriesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
+      hasAutoIncrement: true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _notificationIdMeta =
-      const VerificationMeta('notificationId');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedColumn<int> notificationId = GeneratedColumn<int>(
-      'notification_id', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  final VerificationMeta _createdTimeMeta =
-      const VerificationMeta('createdTime');
-  @override
-  late final GeneratedColumn<DateTime> createdTime = GeneratedColumn<DateTime>(
-      'created_time', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  final VerificationMeta _filedTimeMeta = const VerificationMeta('filedTime');
-  @override
-  late final GeneratedColumn<DateTime> filedTime = GeneratedColumn<DateTime>(
-      'filed_time', aliasedName, true,
-      type: DriftSqlType.dateTime, requiredDuringInsert: false);
-  final VerificationMeta _alertTimeMeta = const VerificationMeta('alertTime');
-  @override
-  late final GeneratedColumn<DateTime> alertTime = GeneratedColumn<DateTime>(
-      'alert_time', aliasedName, true,
-      type: DriftSqlType.dateTime, requiredDuringInsert: false);
-  final VerificationMeta _contentMeta = const VerificationMeta('content');
-  @override
-  late final GeneratedColumn<String> content = GeneratedColumn<String>(
-      'content', aliasedName, false,
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  final VerificationMeta _briefMeta = const VerificationMeta('brief');
+  static const VerificationMeta _notionDatabaseIdMeta =
+      const VerificationMeta('notionDatabaseId');
   @override
-  late final GeneratedColumn<String> brief = GeneratedColumn<String>(
-      'brief', aliasedName, true,
+  late final GeneratedColumn<String> notionDatabaseId = GeneratedColumn<String>(
+      'notion_database_id', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _tagsMeta = const VerificationMeta('tags');
+  static const VerificationMeta _notionDatabaseNameMeta =
+      const VerificationMeta('notionDatabaseName');
   @override
-  late final GeneratedColumn<String> tags = GeneratedColumn<String>(
-      'tags', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _pageIdMeta = const VerificationMeta('pageId');
+  late final GeneratedColumn<String> notionDatabaseName =
+      GeneratedColumn<String>('notion_database_name', aliasedName, true,
+          type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _notionDatabaseTypeMeta =
+      const VerificationMeta('notionDatabaseType');
   @override
-  late final GeneratedColumn<String> pageId = GeneratedColumn<String>(
-      'page_id', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _thumbMeta = const VerificationMeta('thumb');
-  @override
-  late final GeneratedColumn<String> thumb = GeneratedColumn<String>(
-      'thumb', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _weatherMeta = const VerificationMeta('weather');
-  @override
-  late final GeneratedColumn<String> weather = GeneratedColumn<String>(
-      'weather', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _locationMeta = const VerificationMeta('location');
-  @override
-  late final GeneratedColumn<String> location = GeneratedColumn<String>(
-      'location', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _weatherBannerUrlMeta =
-      const VerificationMeta('weatherBannerUrl');
-  @override
-  late final GeneratedColumn<String> weatherBannerUrl = GeneratedColumn<String>(
-      'weather_banner_url', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _statusMeta = const VerificationMeta('status');
-  @override
-  late final GeneratedColumn<int> status = GeneratedColumn<int>(
-      'status', aliasedName, false,
+  late final GeneratedColumn<int> notionDatabaseType = GeneratedColumn<int>(
+      'notion_database_type', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
-  final VerificationMeta _categoryIdMeta = const VerificationMeta('categoryId');
+  static const VerificationMeta _iconIdMeta = const VerificationMeta('iconId');
   @override
-  late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
-      'category_id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints:
-          'NULLABLE REFERENCES categories(id) ON DELETE CASCADE');
+  late final GeneratedColumn<int> iconId = GeneratedColumn<int>(
+      'icon_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _colorIdMeta =
+      const VerificationMeta('colorId');
+  @override
+  late final GeneratedColumn<int> colorId = GeneratedColumn<int>(
+      'color_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _autoSyncMeta =
+      const VerificationMeta('autoSync');
+  @override
+  late final GeneratedColumn<bool> autoSync =
+      GeneratedColumn<bool>('auto_sync', aliasedName, true,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: false,
+          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
+            SqlDialect.sqlite: 'CHECK ("auto_sync" IN (0, 1))',
+            SqlDialect.mysql: '',
+            SqlDialect.postgres: '',
+          }),
+          defaultValue: const Constant(true));
   @override
   List<GeneratedColumn> get $columns => [
         id,
-        notificationId,
-        createdTime,
-        filedTime,
-        alertTime,
-        content,
-        brief,
-        tags,
-        pageId,
-        thumb,
-        weather,
-        location,
-        weatherBannerUrl,
-        status,
-        categoryId
+        name,
+        notionDatabaseId,
+        notionDatabaseName,
+        notionDatabaseType,
+        iconId,
+        colorId,
+        autoSync
       ];
   @override
-  String get aliasedName => _alias ?? 'to_dos';
+  String get aliasedName => _alias ?? 'categories';
   @override
-  String get actualTableName => 'to_dos';
+  String get actualTableName => 'categories';
   @override
-  VerificationContext validateIntegrity(Insertable<ToDo> instance,
+  VerificationContext validateIntegrity(Insertable<Category> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('notification_id')) {
+    if (data.containsKey('name')) {
       context.handle(
-          _notificationIdMeta,
-          notificationId.isAcceptableOrUnknown(
-              data['notification_id']!, _notificationIdMeta));
-    }
-    if (data.containsKey('created_time')) {
-      context.handle(
-          _createdTimeMeta,
-          createdTime.isAcceptableOrUnknown(
-              data['created_time']!, _createdTimeMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
-      context.missing(_createdTimeMeta);
+      context.missing(_nameMeta);
     }
-    if (data.containsKey('filed_time')) {
-      context.handle(_filedTimeMeta,
-          filedTime.isAcceptableOrUnknown(data['filed_time']!, _filedTimeMeta));
+    if (data.containsKey('notion_database_id')) {
+      context.handle(
+          _notionDatabaseIdMeta,
+          notionDatabaseId.isAcceptableOrUnknown(
+              data['notion_database_id']!, _notionDatabaseIdMeta));
     }
-    if (data.containsKey('alert_time')) {
-      context.handle(_alertTimeMeta,
-          alertTime.isAcceptableOrUnknown(data['alert_time']!, _alertTimeMeta));
+    if (data.containsKey('notion_database_name')) {
+      context.handle(
+          _notionDatabaseNameMeta,
+          notionDatabaseName.isAcceptableOrUnknown(
+              data['notion_database_name']!, _notionDatabaseNameMeta));
     }
-    if (data.containsKey('content')) {
-      context.handle(_contentMeta,
-          content.isAcceptableOrUnknown(data['content']!, _contentMeta));
+    if (data.containsKey('notion_database_type')) {
+      context.handle(
+          _notionDatabaseTypeMeta,
+          notionDatabaseType.isAcceptableOrUnknown(
+              data['notion_database_type']!, _notionDatabaseTypeMeta));
     } else if (isInserting) {
-      context.missing(_contentMeta);
+      context.missing(_notionDatabaseTypeMeta);
     }
-    if (data.containsKey('brief')) {
-      context.handle(
-          _briefMeta, brief.isAcceptableOrUnknown(data['brief']!, _briefMeta));
-    }
-    if (data.containsKey('tags')) {
-      context.handle(
-          _tagsMeta, tags.isAcceptableOrUnknown(data['tags']!, _tagsMeta));
-    }
-    if (data.containsKey('page_id')) {
-      context.handle(_pageIdMeta,
-          pageId.isAcceptableOrUnknown(data['page_id']!, _pageIdMeta));
-    }
-    if (data.containsKey('thumb')) {
-      context.handle(
-          _thumbMeta, thumb.isAcceptableOrUnknown(data['thumb']!, _thumbMeta));
-    }
-    if (data.containsKey('weather')) {
-      context.handle(_weatherMeta,
-          weather.isAcceptableOrUnknown(data['weather']!, _weatherMeta));
-    }
-    if (data.containsKey('location')) {
-      context.handle(_locationMeta,
-          location.isAcceptableOrUnknown(data['location']!, _locationMeta));
-    }
-    if (data.containsKey('weather_banner_url')) {
-      context.handle(
-          _weatherBannerUrlMeta,
-          weatherBannerUrl.isAcceptableOrUnknown(
-              data['weather_banner_url']!, _weatherBannerUrlMeta));
-    }
-    if (data.containsKey('status')) {
-      context.handle(_statusMeta,
-          status.isAcceptableOrUnknown(data['status']!, _statusMeta));
+    if (data.containsKey('icon_id')) {
+      context.handle(_iconIdMeta,
+          iconId.isAcceptableOrUnknown(data['icon_id']!, _iconIdMeta));
     } else if (isInserting) {
-      context.missing(_statusMeta);
+      context.missing(_iconIdMeta);
     }
-    if (data.containsKey('category_id')) {
-      context.handle(
-          _categoryIdMeta,
-          categoryId.isAcceptableOrUnknown(
-              data['category_id']!, _categoryIdMeta));
+    if (data.containsKey('color_id')) {
+      context.handle(_colorIdMeta,
+          colorId.isAcceptableOrUnknown(data['color_id']!, _colorIdMeta));
     } else if (isInserting) {
-      context.missing(_categoryIdMeta);
+      context.missing(_colorIdMeta);
+    }
+    if (data.containsKey('auto_sync')) {
+      context.handle(_autoSyncMeta,
+          autoSync.isAcceptableOrUnknown(data['auto_sync']!, _autoSyncMeta));
     }
     return context;
   }
@@ -650,45 +829,31 @@ class $ToDosTable extends ToDos with TableInfo<$ToDosTable, ToDo> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  ToDo map(Map<String, dynamic> data, {String? tablePrefix}) {
+  Category map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return ToDo(
-      id: attachedDatabase.options.types
+    return Category(
+      id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      notificationId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}notification_id']),
-      createdTime: attachedDatabase.options.types
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_time'])!,
-      filedTime: attachedDatabase.options.types
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}filed_time']),
-      alertTime: attachedDatabase.options.types
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}alert_time']),
-      content: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}content'])!,
-      brief: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}brief']),
-      tags: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}tags']),
-      pageId: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}page_id']),
-      thumb: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}thumb']),
-      weather: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}weather']),
-      location: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}location']),
-      weatherBannerUrl: attachedDatabase.options.types.read(
-          DriftSqlType.string, data['${effectivePrefix}weather_banner_url']),
-      status: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}status'])!,
-      categoryId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}category_id'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      notionDatabaseId: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}notion_database_id']),
+      notionDatabaseName: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}notion_database_name']),
+      notionDatabaseType: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}notion_database_type'])!,
+      iconId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}icon_id'])!,
+      colorId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}color_id'])!,
+      autoSync: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}auto_sync']),
     );
   }
 
   @override
-  $ToDosTable createAlias(String alias) {
-    return $ToDosTable(attachedDatabase, alias);
+  $CategoriesTable createAlias(String alias) {
+    return $CategoriesTable(attachedDatabase, alias);
   }
 }
 
@@ -959,124 +1124,59 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   }
 }
 
-class $CategoriesTable extends Categories
-    with TableInfo<$CategoriesTable, Category> {
+class $HeatGraphTable extends HeatGraph
+    with TableInfo<$HeatGraphTable, HeatPoint> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $CategoriesTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $HeatGraphTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
+      hasAutoIncrement: true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _nameMeta = const VerificationMeta('name');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _levelMeta = const VerificationMeta('level');
   @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  final VerificationMeta _notionDatabaseIdMeta =
-      const VerificationMeta('notionDatabaseId');
-  @override
-  late final GeneratedColumn<String> notionDatabaseId = GeneratedColumn<String>(
-      'notion_database_id', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _notionDatabaseNameMeta =
-      const VerificationMeta('notionDatabaseName');
-  @override
-  late final GeneratedColumn<String> notionDatabaseName =
-      GeneratedColumn<String>('notion_database_name', aliasedName, true,
-          type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _notionDatabaseTypeMeta =
-      const VerificationMeta('notionDatabaseType');
-  @override
-  late final GeneratedColumn<int> notionDatabaseType = GeneratedColumn<int>(
-      'notion_database_type', aliasedName, false,
+  late final GeneratedColumn<int> level = GeneratedColumn<int>(
+      'level', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
-  final VerificationMeta _iconIdMeta = const VerificationMeta('iconId');
+  static const VerificationMeta _createdTimeMeta =
+      const VerificationMeta('createdTime');
   @override
-  late final GeneratedColumn<int> iconId = GeneratedColumn<int>(
-      'icon_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  final VerificationMeta _colorIdMeta = const VerificationMeta('colorId');
+  late final GeneratedColumn<DateTime> createdTime = GeneratedColumn<DateTime>(
+      'created_time', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
-  late final GeneratedColumn<int> colorId = GeneratedColumn<int>(
-      'color_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  final VerificationMeta _autoSyncMeta = const VerificationMeta('autoSync');
+  List<GeneratedColumn> get $columns => [id, level, createdTime];
   @override
-  late final GeneratedColumn<bool> autoSync = GeneratedColumn<bool>(
-      'auto_sync', aliasedName, true,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK ("auto_sync" IN (0, 1))',
-      defaultValue: const Constant(true));
+  String get aliasedName => _alias ?? 'heat_graph';
   @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        name,
-        notionDatabaseId,
-        notionDatabaseName,
-        notionDatabaseType,
-        iconId,
-        colorId,
-        autoSync
-      ];
+  String get actualTableName => 'heat_graph';
   @override
-  String get aliasedName => _alias ?? 'categories';
-  @override
-  String get actualTableName => 'categories';
-  @override
-  VerificationContext validateIntegrity(Insertable<Category> instance,
+  VerificationContext validateIntegrity(Insertable<HeatPoint> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('name')) {
+    if (data.containsKey('level')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+          _levelMeta, level.isAcceptableOrUnknown(data['level']!, _levelMeta));
     } else if (isInserting) {
-      context.missing(_nameMeta);
+      context.missing(_levelMeta);
     }
-    if (data.containsKey('notion_database_id')) {
+    if (data.containsKey('created_time')) {
       context.handle(
-          _notionDatabaseIdMeta,
-          notionDatabaseId.isAcceptableOrUnknown(
-              data['notion_database_id']!, _notionDatabaseIdMeta));
-    }
-    if (data.containsKey('notion_database_name')) {
-      context.handle(
-          _notionDatabaseNameMeta,
-          notionDatabaseName.isAcceptableOrUnknown(
-              data['notion_database_name']!, _notionDatabaseNameMeta));
-    }
-    if (data.containsKey('notion_database_type')) {
-      context.handle(
-          _notionDatabaseTypeMeta,
-          notionDatabaseType.isAcceptableOrUnknown(
-              data['notion_database_type']!, _notionDatabaseTypeMeta));
+          _createdTimeMeta,
+          createdTime.isAcceptableOrUnknown(
+              data['created_time']!, _createdTimeMeta));
     } else if (isInserting) {
-      context.missing(_notionDatabaseTypeMeta);
-    }
-    if (data.containsKey('icon_id')) {
-      context.handle(_iconIdMeta,
-          iconId.isAcceptableOrUnknown(data['icon_id']!, _iconIdMeta));
-    } else if (isInserting) {
-      context.missing(_iconIdMeta);
-    }
-    if (data.containsKey('color_id')) {
-      context.handle(_colorIdMeta,
-          colorId.isAcceptableOrUnknown(data['color_id']!, _colorIdMeta));
-    } else if (isInserting) {
-      context.missing(_colorIdMeta);
-    }
-    if (data.containsKey('auto_sync')) {
-      context.handle(_autoSyncMeta,
-          autoSync.isAcceptableOrUnknown(data['auto_sync']!, _autoSyncMeta));
+      context.missing(_createdTimeMeta);
     }
     return context;
   }
@@ -1084,31 +1184,21 @@ class $CategoriesTable extends Categories
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Category map(Map<String, dynamic> data, {String? tablePrefix}) {
+  HeatPoint map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Category(
-      id: attachedDatabase.options.types
+    return HeatPoint(
+      id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      name: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      notionDatabaseId: attachedDatabase.options.types.read(
-          DriftSqlType.string, data['${effectivePrefix}notion_database_id']),
-      notionDatabaseName: attachedDatabase.options.types.read(
-          DriftSqlType.string, data['${effectivePrefix}notion_database_name']),
-      notionDatabaseType: attachedDatabase.options.types.read(
-          DriftSqlType.int, data['${effectivePrefix}notion_database_type'])!,
-      iconId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}icon_id'])!,
-      colorId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}color_id'])!,
-      autoSync: attachedDatabase.options.types
-          .read(DriftSqlType.bool, data['${effectivePrefix}auto_sync']),
+      level: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}level'])!,
+      createdTime: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_time'])!,
     );
   }
 
   @override
-  $CategoriesTable createAlias(String alias) {
-    return $CategoriesTable(attachedDatabase, alias);
+  $HeatGraphTable createAlias(String alias) {
+    return $HeatGraphTable(attachedDatabase, alias);
   }
 }
 
@@ -1241,57 +1331,86 @@ class HeatGraphCompanion extends UpdateCompanion<HeatPoint> {
   }
 }
 
-class $HeatGraphTable extends HeatGraph
-    with TableInfo<$HeatGraphTable, HeatPoint> {
+class $ActionsHistoryTable extends ActionsHistory
+    with TableInfo<$ActionsHistoryTable, UserAction> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $HeatGraphTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $ActionsHistoryTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
+      hasAutoIncrement: true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _levelMeta = const VerificationMeta('level');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _earlyContentMeta =
+      const VerificationMeta('earlyContent');
   @override
-  late final GeneratedColumn<int> level = GeneratedColumn<int>(
-      'level', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  final VerificationMeta _createdTimeMeta =
-      const VerificationMeta('createdTime');
+  late final GeneratedColumn<String> earlyContent = GeneratedColumn<String>(
+      'early_content', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _updatedContentMeta =
+      const VerificationMeta('updatedContent');
   @override
-  late final GeneratedColumn<DateTime> createdTime = GeneratedColumn<DateTime>(
-      'created_time', aliasedName, false,
+  late final GeneratedColumn<String> updatedContent = GeneratedColumn<String>(
+      'updated_content', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _updatedTimeMeta =
+      const VerificationMeta('updatedTime');
+  @override
+  late final GeneratedColumn<DateTime> updatedTime = GeneratedColumn<DateTime>(
+      'updated_time', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _actionMeta = const VerificationMeta('action');
   @override
-  List<GeneratedColumn> get $columns => [id, level, createdTime];
+  late final GeneratedColumn<int> action = GeneratedColumn<int>(
+      'action', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
   @override
-  String get aliasedName => _alias ?? 'heat_graph';
+  List<GeneratedColumn> get $columns =>
+      [id, earlyContent, updatedContent, updatedTime, action];
   @override
-  String get actualTableName => 'heat_graph';
+  String get aliasedName => _alias ?? 'actions_history';
   @override
-  VerificationContext validateIntegrity(Insertable<HeatPoint> instance,
+  String get actualTableName => 'actions_history';
+  @override
+  VerificationContext validateIntegrity(Insertable<UserAction> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('level')) {
+    if (data.containsKey('early_content')) {
       context.handle(
-          _levelMeta, level.isAcceptableOrUnknown(data['level']!, _levelMeta));
-    } else if (isInserting) {
-      context.missing(_levelMeta);
+          _earlyContentMeta,
+          earlyContent.isAcceptableOrUnknown(
+              data['early_content']!, _earlyContentMeta));
     }
-    if (data.containsKey('created_time')) {
+    if (data.containsKey('updated_content')) {
       context.handle(
-          _createdTimeMeta,
-          createdTime.isAcceptableOrUnknown(
-              data['created_time']!, _createdTimeMeta));
+          _updatedContentMeta,
+          updatedContent.isAcceptableOrUnknown(
+              data['updated_content']!, _updatedContentMeta));
     } else if (isInserting) {
-      context.missing(_createdTimeMeta);
+      context.missing(_updatedContentMeta);
+    }
+    if (data.containsKey('updated_time')) {
+      context.handle(
+          _updatedTimeMeta,
+          updatedTime.isAcceptableOrUnknown(
+              data['updated_time']!, _updatedTimeMeta));
+    } else if (isInserting) {
+      context.missing(_updatedTimeMeta);
+    }
+    if (data.containsKey('action')) {
+      context.handle(_actionMeta,
+          action.isAcceptableOrUnknown(data['action']!, _actionMeta));
+    } else if (isInserting) {
+      context.missing(_actionMeta);
     }
     return context;
   }
@@ -1299,21 +1418,25 @@ class $HeatGraphTable extends HeatGraph
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  HeatPoint map(Map<String, dynamic> data, {String? tablePrefix}) {
+  UserAction map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return HeatPoint(
-      id: attachedDatabase.options.types
+    return UserAction(
+      id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      level: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}level'])!,
-      createdTime: attachedDatabase.options.types
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_time'])!,
+      earlyContent: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}early_content']),
+      updatedContent: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}updated_content'])!,
+      updatedTime: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_time'])!,
+      action: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}action'])!,
     );
   }
 
   @override
-  $HeatGraphTable createAlias(String alias) {
-    return $HeatGraphTable(attachedDatabase, alias);
+  $ActionsHistoryTable createAlias(String alias) {
+    return $ActionsHistoryTable(attachedDatabase, alias);
   }
 }
 
@@ -1504,113 +1627,6 @@ class ActionsHistoryCompanion extends UpdateCompanion<UserAction> {
   }
 }
 
-class $ActionsHistoryTable extends ActionsHistory
-    with TableInfo<$ActionsHistoryTable, UserAction> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $ActionsHistoryTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _earlyContentMeta =
-      const VerificationMeta('earlyContent');
-  @override
-  late final GeneratedColumn<String> earlyContent = GeneratedColumn<String>(
-      'early_content', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _updatedContentMeta =
-      const VerificationMeta('updatedContent');
-  @override
-  late final GeneratedColumn<String> updatedContent = GeneratedColumn<String>(
-      'updated_content', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  final VerificationMeta _updatedTimeMeta =
-      const VerificationMeta('updatedTime');
-  @override
-  late final GeneratedColumn<DateTime> updatedTime = GeneratedColumn<DateTime>(
-      'updated_time', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  final VerificationMeta _actionMeta = const VerificationMeta('action');
-  @override
-  late final GeneratedColumn<int> action = GeneratedColumn<int>(
-      'action', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns =>
-      [id, earlyContent, updatedContent, updatedTime, action];
-  @override
-  String get aliasedName => _alias ?? 'actions_history';
-  @override
-  String get actualTableName => 'actions_history';
-  @override
-  VerificationContext validateIntegrity(Insertable<UserAction> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('early_content')) {
-      context.handle(
-          _earlyContentMeta,
-          earlyContent.isAcceptableOrUnknown(
-              data['early_content']!, _earlyContentMeta));
-    }
-    if (data.containsKey('updated_content')) {
-      context.handle(
-          _updatedContentMeta,
-          updatedContent.isAcceptableOrUnknown(
-              data['updated_content']!, _updatedContentMeta));
-    } else if (isInserting) {
-      context.missing(_updatedContentMeta);
-    }
-    if (data.containsKey('updated_time')) {
-      context.handle(
-          _updatedTimeMeta,
-          updatedTime.isAcceptableOrUnknown(
-              data['updated_time']!, _updatedTimeMeta));
-    } else if (isInserting) {
-      context.missing(_updatedTimeMeta);
-    }
-    if (data.containsKey('action')) {
-      context.handle(_actionMeta,
-          action.isAcceptableOrUnknown(data['action']!, _actionMeta));
-    } else if (isInserting) {
-      context.missing(_actionMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  UserAction map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return UserAction(
-      id: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      earlyContent: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}early_content']),
-      updatedContent: attachedDatabase.options.types.read(
-          DriftSqlType.string, data['${effectivePrefix}updated_content'])!,
-      updatedTime: attachedDatabase.options.types
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_time'])!,
-      action: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}action'])!,
-    );
-  }
-
-  @override
-  $ActionsHistoryTable createAlias(String alias) {
-    return $ActionsHistoryTable(attachedDatabase, alias);
-  }
-}
-
 abstract class _$DatabaseProvider extends GeneratedDatabase {
   _$DatabaseProvider(QueryExecutor e) : super(e);
   late final $ToDosTable toDos = $ToDosTable(this);
@@ -1618,7 +1634,7 @@ abstract class _$DatabaseProvider extends GeneratedDatabase {
   late final $HeatGraphTable heatGraph = $HeatGraphTable(this);
   late final $ActionsHistoryTable actionsHistory = $ActionsHistoryTable(this);
   @override
-  Iterable<TableInfo<Table, dynamic>> get allTables =>
+  Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>

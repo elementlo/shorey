@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
+import 'package:day_night_time_picker/day_night_time_picker.dart' as dy;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +9,6 @@ import 'package:shorey/generated/l10n.dart';
 import 'package:shorey/view_model/config_view_model.dart';
 import 'package:shorey/view_model/home_view_model.dart';
 import 'package:shorey/widget/app_bar.dart';
-import 'package:shorey/widget/category_list_item.dart';
 import 'package:shorey/widget/settings_list_item.dart';
 
 ///
@@ -35,9 +34,9 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
   late AnimationController _settingsPanelController;
   _ExpandableSetting? _expandedSettingId;
   _AlertPeriod selectPeriod = _AlertPeriod.daily;
-  TimeOfDay _time = TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 1);
   int? selectedOption;
   late Map optionMap;
+  late dy.Time _time;
 
   void onTapSetting(_ExpandableSetting settingId) {
     setState(() {
@@ -66,7 +65,7 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
     if (retrospectTime != null && retrospectTime.isNotEmpty) {
       print('init time: $retrospectTime');
       var formatter = new DateFormat('Hm');
-      _time = TimeOfDay.fromDateTime(formatter.parse(retrospectTime));
+      _time = dy.Time.fromTimeOfDay(TimeOfDay.fromDateTime(formatter.parse(retrospectTime)), 60);
     }
     setState(() {});
   }
@@ -88,6 +87,8 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    TimeOfDay _timeOfDay = TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 1);
+    _time = dy.Time.fromTimeOfDay(_timeOfDay, 60);
     _initSelectedOption();
     _settingsPanelController = AnimationController(
       vsync: this,
@@ -139,7 +140,8 @@ class AlertPeriodPageState extends State with TickerProviderStateMixin {
         onOptionChanged: (newTextScale) {},
         onTapSetting: () => onTapSetting(_ExpandableSetting.time),
         isExpanded: _expandedSettingId == _ExpandableSetting.time,
-        child: createInlinePicker(
+        child: dy.showPicker(
+          isInlinePicker: true,
             accentColor: colorScheme.onSecondary,
             dialogInsetPadding: EdgeInsets.all(0),
             context: context,

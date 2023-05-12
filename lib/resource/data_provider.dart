@@ -3,9 +3,6 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
-import 'package:shorey/model/model.dart';
-import 'package:shorey/model/notion_model.dart';
-import 'package:shorey/model/notion_page_model.dart';
 import 'package:synchronized/synchronized.dart';
 
 ///
@@ -65,7 +62,7 @@ class DataStoreProvider {
   }
 
   Future<String?> getLocale() async {
-    defaultLocale = await dataStore.record('locale').get(db!);
+    defaultLocale = await dataStore.record('locale').get(db!) as String?;
     return defaultLocale;
   }
 

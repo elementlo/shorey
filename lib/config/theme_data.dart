@@ -25,17 +25,14 @@ class AppThemeData {
 			primaryColor: const Color(0xFFF7F8FA),
 			textTheme: _textTheme,
 			appBarTheme: AppBarTheme(
-				textTheme: _textTheme.apply(bodyColor: colorScheme.onPrimary),
 				color: colorScheme.background,
 				elevation: 0,
 				iconTheme: IconThemeData(color: colorScheme.primary),
-				brightness: colorScheme.brightness,
 			),
 			iconTheme: IconThemeData(color: colorScheme.onPrimary),
 			canvasColor: colorScheme.background,
 			scaffoldBackgroundColor: Color(0xFFF5F5F5),
 			highlightColor: Colors.transparent,
-			accentColor: colorScheme.primary,
 			focusColor: focusColor,
 			snackBarTheme: SnackBarThemeData(
 				behavior: SnackBarBehavior.floating,
@@ -51,7 +48,7 @@ class AppThemeData {
 	static const ColorScheme lightColorScheme = ColorScheme(
 		primary: Color(0xe26d5c),
 		primaryVariant: Color(0xFF117378),
-		secondary: Color(0xFFEFF3F3),
+		secondary: Color(0xFFe26d5c),
 		secondaryVariant: Color(0xFFFAFBFB),
 		background: Color(0xFFE6EBEB),
 		surface: Color(0xFFFAFBFB),

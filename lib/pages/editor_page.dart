@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:day_night_time_picker/day_night_time_picker.dart';
+import 'package:day_night_time_picker/day_night_time_picker.dart' as dy;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -59,9 +59,9 @@ class _TextEditorPageState extends State<TextEditorPage>
 
   late AnimationController _settingsPanelController;
   late Animation<double> _staggerSettingsItemsAnimation;
+  late dy.Time _time;
 
   _ExpandableSetting? _expandedSettingId;
-  TimeOfDay _time = TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 1);
   String _selectedDate = '';
   ToDo? _oldModel;
   ToDo? _updatedModel;
@@ -74,7 +74,9 @@ class _TextEditorPageState extends State<TextEditorPage>
   @override
   void initState() {
     super.initState();
-
+    TimeOfDay _timeOfDay =
+        TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 1);
+    _time = dy.Time.fromTimeOfDay(_timeOfDay, 60);
     context.read<HomeViewModel>().queryToDoItem(widget.itemId).then((value) {
       _updatedModel = value!;
       _oldModel = _updatedModel!.copyWith();
@@ -83,7 +85,8 @@ class _TextEditorPageState extends State<TextEditorPage>
         _selectedDate =
             '${_alertDateTime.year}-${_alertDateTime.month.toString().padLeft(2, '0')}'
             '-${_alertDateTime.day.toString().padLeft(2, '0')}';
-        _time = TimeOfDay.fromDateTime(_alertDateTime);
+        _time =
+            dy.Time.fromTimeOfDay(TimeOfDay.fromDateTime(_alertDateTime), 60);
       }
       _thumb = _updatedModel!.thumb;
       _titleController.text = _updatedModel!.content;
@@ -144,7 +147,8 @@ class _TextEditorPageState extends State<TextEditorPage>
           onOptionChanged: (newTextScale) {},
           onTapSetting: () => _onTapSetting(_ExpandableSetting.time),
           isExpanded: _expandedSettingId == _ExpandableSetting.time,
-          child: createInlinePicker(
+          child: dy.showPicker(
+              isInlinePicker: true,
               accentColor: colorScheme.onSecondary,
               dialogInsetPadding: EdgeInsets.all(0),
               context: context,
@@ -270,7 +274,10 @@ class _TextEditorPageState extends State<TextEditorPage>
                     if (_thumb != null && _thumb != '')
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Image.memory(base64.decode(_thumb!), height: 20,),
+                        child: Image.memory(
+                          base64.decode(_thumb!),
+                          height: 20,
+                        ),
                       ),
                     // if (imageBuffer != null) Image.memory(imageBuffer!),
                     // TextButton(
