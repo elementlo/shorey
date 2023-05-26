@@ -34,15 +34,19 @@ class NotionDatabaseTemplate {
   static const String jTypeChildren = 'children';
   static const String jTypeObject = 'object';
   static const String jTypeParagraph = 'paragraph';
+  static const String jTypeImage = 'image';
   static const String jTypeDate = 'date';
   static const String jTypeStart = 'start';
   static const String jTypeEnd = 'end';
   static const String jTypeRichText = 'rich_text';
   static const String jTypeCreatedTime = 'created_time';
+  static const String jTypeExternal = 'external';
+  static const String jTypeUrl = 'url';
 
   static const String jStatus = 'Status';
   static const String jBrief = 'Brief';
   static const String jName = 'Name';
+  static const String jDate = 'Date';
   static const String jTags = 'Tags';
   static const String jDuration = 'Duration';
   static const String jReminderTime = 'Reminder Time';
@@ -137,6 +141,8 @@ class NotionDatabaseTemplate {
     String? location,
     String? weather,
     String? brief,
+    String? weatherUploadUrl,
+    String? date,
     List<String>? tags,
   }) async {
     final json = await rootBundle.loadString(jsonDiaryItem);
@@ -144,12 +150,16 @@ class NotionDatabaseTemplate {
       final map = jsonDecode(json);
       map[jParent][jDatabaseId] = databaseId;
       map[jProperties][jName][jTypeTitle][0][jTypeText][jTypeContent] = title;
+      map[jProperties][jDate][jTypeDate][jTypeStart] = date;
       map[jProperties][jTags][jTypeMultiSelect][0][jTypeName] = tags?[0];
-      map[jProperties][jLocation][jTypeRichText][0][jTypeText][jTypeContent] = location;
-      map[jProperties][jWeather][jTypeRichText][0][jTypeText][jTypeContent] = weather;
+      map[jProperties][jLocation][jTypeRichText][0][jTypeText][jTypeContent] =
+          location;
+      map[jProperties][jWeather][jTypeRichText][0][jTypeText][jTypeContent] =
+          weather;
       map[jTypeChildren][0][jTypeParagraph][jTypeRichText][0][jTypeText]
           [jTypeContent] = brief;
-
+      map[jTypeChildren][1][jTypeImage][jTypeExternal][jTypeUrl] =
+          weatherUploadUrl;
       return map;
     }
     return null;

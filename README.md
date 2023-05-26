@@ -9,7 +9,7 @@ Shorey是一款笔记应用, 支持Android/iOS双平台, 使用Flutter <strike>2
 
 后边会先开发联动Notion, 让你的Notion成为后台知识库.
 
-Shorey is a simple note app which is built with Flutter <strike>2</strike> 3 and supports both Android/iOS platforms. It provides me full experience of interacting with Flutter and in the meantime I hope it can be your knowledge/memory transition tool, and yes, there still much work to do.
+Shorey is a simple note app which is built with Flutter <strike>2</strike> 3 and supports both Android/iOS platforms. It provides me full experience of interacting with Flutter and in the meantime I hope it can be your knowledge/memory transition tool, and yes, there are still much work to do.
 
 Now I focus on linking Notion, in order to make Notion your backend knowledge database.  
 
@@ -35,11 +35,11 @@ Now I focus on linking Notion, in order to make Notion your backend knowledge da
 ## 马上开始
 **应用运行要求:**
 1. Android 5.0+
-2. iOS 10+
+2. iOS 11+
 
 **项目编译要求:**
-1. Android SDK 28/Xcode 13
-2. Flutter SDK 3.0.4
+1. Android SDK 28/Xcode 14
+2. Flutter SDK 3.10
 
 ## 应用展示
 UI部分大量参考了Flutter官方的Gallery应用. 此外还在关于页埋了个小彩蛋, 希望喜欢.

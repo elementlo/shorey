@@ -250,18 +250,17 @@ class _DiaryActions extends NotionActions {
   @override
   Future<String?> addItem(String databaseId, ToDo todo,
       {List<String>? links,}) async {
-    if(todo.thumb !=null && todo.thumb!.isNotEmpty){
-
-    }
-
 
     final param = await NotionDatabaseTemplate.diaryItem(
       databaseId,
       title: todo.content,
+      date: todo.createdTime.toIso8601String(),
       brief: todo.brief ?? '',
       tags: ['${todo.tags}'],
       location: todo.location ?? '',
       weather: todo.weather ?? '',
+      weatherUploadUrl: todo.weatherBannerUrl??'',
+
     );
     final response = await dio.post('${notionPages}', data: param);
     if (response.success) {

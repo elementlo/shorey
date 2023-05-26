@@ -12,6 +12,11 @@
         }
       ]
     },
+    "Date": {
+      "date": {
+        "start": ""
+      }
+    },
     "Location": {
       "rich_text": [
         {

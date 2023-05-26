@@ -80,8 +80,8 @@ void _configHttpClient() {
   dio.options.baseUrl = 'https://api.notion.com/';
   dio.options.headers.addAll({'Notion-Version': notionApiVersion});
   dio.options.connectTimeout = Duration(seconds: 5);
-  dio.options.receiveTimeout = Duration(seconds: 7);
-  (dio.transformer as DefaultTransformer).jsonDecodeCallback = parseJson;
+  dio.options.receiveTimeout = Duration(seconds: 20);
+  (dio.transformer as BackgroundTransformer).jsonDecodeCallback = parseJson;
 }
 
 void _configLoading() {

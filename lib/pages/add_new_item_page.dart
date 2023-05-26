@@ -78,11 +78,13 @@ class _AddNewItemPageState extends State<AddNewItemPage>
   int? _notificationId;
   String? _weather;
   String? _location;
+  String? _bannerUploadUrl;
 
   @override
   void initState() {
     super.initState();
-    TimeOfDay _timeOfDay = TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 1);
+    TimeOfDay _timeOfDay =
+        TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 1);
     _time = dy.Time.fromTimeOfDay(_timeOfDay, 60);
     _categoryId = widget.category.id;
     if (widget.title != null) {
@@ -172,19 +174,17 @@ class _AddNewItemPageState extends State<AddNewItemPage>
                   setState(() {});
                   Fluttertoast.showToast(msg: S.of(context).cancelAlertTime);
                 }),
-            Consumer<NewItemViewModel>(
-              builder: (context, _, __) {
-                return IconButton(
-                    icon: Icon(
-                      Icons.check,
-                      color: colorScheme.onSecondary,
-                    ),
-                    onPressed: () async {
-                      _syncWithNotion(await _saveItem(context));
-                      Navigator.pop(context, 0);
-                    });
-              }
-            ),
+            Consumer<NewItemViewModel>(builder: (context, _, __) {
+              return IconButton(
+                  icon: Icon(
+                    Icons.check,
+                    color: colorScheme.onSecondary,
+                  ),
+                  onPressed: () async {
+                    _syncWithNotion(context, await _saveItem(context));
+                    Navigator.pop(context, 0);
+                  });
+            }),
           ],
         ),
         body: Container(
@@ -197,7 +197,8 @@ class _AddNewItemPageState extends State<AddNewItemPage>
                 margin: EdgeInsets.symmetric(horizontal: 16),
                 height: 400,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8), color: Colors.white),
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white),
                 child: Column(
                   children: [
                     InputField(
@@ -227,6 +228,11 @@ class _AddNewItemPageState extends State<AddNewItemPage>
                             onInfoUpdated: (weather, temp, location) {
                               _weather = '$weather $temp℃';
                               _location = location;
+                              // if (weather!.isNotEmpty &&
+                              //     _location != null &&
+                              //     _bannerUploadUrl != null) {
+                              //   //_prepareDiaryBannerPic(context);
+                              // }
                             },
                           )),
                     ),
@@ -255,7 +261,6 @@ class _AddNewItemPageState extends State<AddNewItemPage>
 
   Future _saveItem(BuildContext context) async {
     if (widget.category.notionDatabaseType == ActionType.DIARY) {
-      await _prepareDiaryBannerPic(context);
       _companion = ToDosCompanion(
           categoryId: d.Value(_categoryId),
           content: d.Value(_titleController.text),
@@ -265,7 +270,8 @@ class _AddNewItemPageState extends State<AddNewItemPage>
           tags: d.Value(_categoryName),
           thumb: d.Value(_thumb),
           weather: d.Value(_weather),
-          location: d.Value(_location));
+          location: d.Value(_location),
+          weatherBannerUrl: d.Value(_bannerUploadUrl));
     } else {
       await _prepareReminderTime();
       _companion = ToDosCompanion(
@@ -290,13 +296,12 @@ class _AddNewItemPageState extends State<AddNewItemPage>
     var image = await boundary.toImage(pixelRatio: 3.0);
     ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
     Uint8List? imageBuffer = byteData?.buffer.asUint8List();
-
-    final Response res = await context.read<NewItemViewModel>().uploadImage(byteData);
-
     if (imageBuffer != null) {
       _thumb = base64.encode(imageBuffer);
     }
-    //imageBuffer = base64.decode(base64.encode(imageBuffer!));
+    final Response res =
+        await context.read<NewItemViewModel>().uploadImage(byteData);
+    _bannerUploadUrl = res.data;
   }
 
   Future _prepareReminderTime() async {
@@ -315,12 +320,14 @@ class _AddNewItemPageState extends State<AddNewItemPage>
     }
   }
 
-  Future<void> _syncWithNotion(int index) async {
+  Future<void> _syncWithNotion(BuildContext context, int index) async {
     if (widget.category.notionDatabaseId != null &&
         context.read<ConfigViewModel>().linkedNotion &&
         _companion != null) {
-
-      final pageId = await context.read<NotionWorkFlow>().addTaskItem(
+      if(_notionDatabaseType == ActionType.DIARY){
+        await _prepareDiaryBannerPic(context);
+      }
+      final pageId = await appContext.read<NotionWorkFlow>().addTaskItem(
           widget.category.notionDatabaseId!,
           ToDo(
             id: 0,
@@ -334,6 +341,7 @@ class _AddNewItemPageState extends State<AddNewItemPage>
             weather: _weather,
             location: _location,
             thumb: _thumb,
+            weatherBannerUrl: _bannerUploadUrl
           ),
           actionType: _notionDatabaseType!);
       if (index != -1) {
