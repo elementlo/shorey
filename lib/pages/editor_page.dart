@@ -26,8 +26,6 @@ import 'package:shorey/widget/settings_list_item.dart';
 import 'package:shorey/workflow/notion_workflow.dart';
 import 'package:timezone/timezone.dart' as tz;
 
-import '../widget/diary_banner.dart';
-
 ///
 /// Author: Elemen
 /// Github: https://github.com/elementlo
@@ -346,7 +344,7 @@ class _TextEditorPageState extends State<TextEditorPage>
     _updatedModel!.brief = _briefController.text;
     _updatedModel!.content = _titleController.text;
     if (widget.category.notionDatabaseType == ActionType.DIARY) {
-      await _prepareDiaryBannerPic();
+      //await _prepareDiaryBannerPic();
     } else {
       await _prepareReminderTime();
     }

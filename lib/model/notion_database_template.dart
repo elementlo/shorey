@@ -156,9 +156,9 @@ class NotionDatabaseTemplate {
           location;
       map[jProperties][jWeather][jTypeRichText][0][jTypeText][jTypeContent] =
           weather;
-      map[jTypeChildren][0][jTypeParagraph][jTypeRichText][0][jTypeText]
+      map[jTypeChildren][1][jTypeParagraph][jTypeRichText][0][jTypeText]
           [jTypeContent] = brief;
-      map[jTypeChildren][1][jTypeImage][jTypeExternal][jTypeUrl] =
+      map[jTypeChildren][0][jTypeImage][jTypeExternal][jTypeUrl] =
           weatherUploadUrl;
       return map;
     }

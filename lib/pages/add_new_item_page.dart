@@ -79,6 +79,7 @@ class _AddNewItemPageState extends State<AddNewItemPage>
   String? _weather;
   String? _location;
   String? _bannerUploadUrl;
+  ByteData? _byteData;
 
   @override
   void initState() {
@@ -261,6 +262,7 @@ class _AddNewItemPageState extends State<AddNewItemPage>
 
   Future _saveItem(BuildContext context) async {
     if (widget.category.notionDatabaseType == ActionType.DIARY) {
+      await _prepareDiaryBannerPic();
       _companion = ToDosCompanion(
           categoryId: d.Value(_categoryId),
           content: d.Value(_titleController.text),
@@ -290,17 +292,20 @@ class _AddNewItemPageState extends State<AddNewItemPage>
     return index;
   }
 
-  Future _prepareDiaryBannerPic(BuildContext context) async {
+  Future _prepareDiaryBannerPic() async {
     RenderRepaintBoundary boundary = rootWidgetKey.currentContext
         ?.findRenderObject() as RenderRepaintBoundary;
     var image = await boundary.toImage(pixelRatio: 3.0);
-    ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
-    Uint8List? imageBuffer = byteData?.buffer.asUint8List();
+    _byteData = await image.toByteData(format: ImageByteFormat.png);
+    Uint8List? imageBuffer = _byteData?.buffer.asUint8List();
     if (imageBuffer != null) {
       _thumb = base64.encode(imageBuffer);
     }
+  }
+
+  Future _uploadDiaryBannerPic(BuildContext context) async {
     final Response res =
-        await context.read<NewItemViewModel>().uploadImage(byteData);
+        await context.read<NewItemViewModel>().uploadImage(_byteData);
     _bannerUploadUrl = res.data;
   }
 
@@ -324,25 +329,24 @@ class _AddNewItemPageState extends State<AddNewItemPage>
     if (widget.category.notionDatabaseId != null &&
         context.read<ConfigViewModel>().linkedNotion &&
         _companion != null) {
-      if(_notionDatabaseType == ActionType.DIARY){
-        await _prepareDiaryBannerPic(context);
+      if (_notionDatabaseType == ActionType.DIARY) {
+        await _uploadDiaryBannerPic(context);
       }
       final pageId = await appContext.read<NotionWorkFlow>().addTaskItem(
           widget.category.notionDatabaseId!,
           ToDo(
-            id: 0,
-            content: _companion!.content.value,
-            createdTime: _companion!.createdTime.value,
-            categoryId: _companion!.categoryId.value,
-            status: 1,
-            tags: _categoryName,
-            brief: _companion!.brief.value,
-            alertTime: _companion!.alertTime.value,
-            weather: _weather,
-            location: _location,
-            thumb: _thumb,
-            weatherBannerUrl: _bannerUploadUrl
-          ),
+              id: 0,
+              content: _companion!.content.value,
+              createdTime: _companion!.createdTime.value,
+              categoryId: _companion!.categoryId.value,
+              status: 1,
+              tags: _categoryName,
+              brief: _companion!.brief.value,
+              alertTime: _companion!.alertTime.value,
+              weather: _weather,
+              location: _location,
+              thumb: _thumb,
+              weatherBannerUrl: _bannerUploadUrl),
           actionType: _notionDatabaseType!);
       if (index != -1) {
         _updatePageId(index, pageId);
