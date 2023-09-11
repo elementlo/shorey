@@ -113,7 +113,7 @@ class FiledItem extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.where_to_vote_rounded,
-                      color: colorScheme.primaryVariant,
+                      color: colorScheme.primaryContainer,
                       size: 22,
                     ),
                     SizedBox(

@@ -72,7 +72,7 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                                         decoration: BoxDecoration(
                                           color: Theme.of(context)
                                               .colorScheme
-                                              .primaryVariant
+                                              .primaryContainer
                                               .withOpacity(0.5),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(4.0)),
@@ -158,7 +158,7 @@ class _DailyFocusPanelState extends State<DailyFocusPanel> {
                                             fontSize: 24,
                                             letterSpacing: 0.0,
                                             color: AppThemeData.lightColorScheme
-                                                .primaryVariant,
+                                                .primaryContainer,
                                           ),
                                         ),
                                         Text(

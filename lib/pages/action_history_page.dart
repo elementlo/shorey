@@ -68,7 +68,7 @@ class _ActionItem extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.wb_incandescent_rounded,
-                      color: colorScheme.primaryVariant,
+                      color: colorScheme.primaryContainer,
                       size: 22,
                     ),
                     SizedBox(

@@ -120,7 +120,7 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
         },
         child: Scaffold(
           body: Container(
-            color: colorScheme.primaryVariant,
+            color: colorScheme.primaryContainer,
             width: double.infinity,
             height: double.infinity,
             child: Center(

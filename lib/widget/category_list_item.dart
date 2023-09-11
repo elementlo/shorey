@@ -370,7 +370,7 @@ class _CategoryHeader extends StatelessWidget {
     return PopupMenuButton(
       icon: Icon(
         Icons.more_horiz,
-        color: colorScheme.primaryVariant,
+        color: colorScheme.primaryContainer,
       ),
       elevation: 3,
       padding: EdgeInsets.zero,
@@ -461,7 +461,7 @@ class _CategoryHeader extends StatelessWidget {
                               _buildPopupMenu(context),
                               Icon(
                                 Icons.keyboard_arrow_up,
-                                color: colorScheme.primaryVariant,
+                                color: colorScheme.primaryContainer,
                               ),
                             ],
                           ),

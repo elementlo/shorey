@@ -75,7 +75,7 @@ class _SettingsCategoryPageState extends State<SettingsCategoryPage> {
                   value: _switchOn,
                   activeColor: colorScheme.primary,
                   inactiveTrackColor:
-                      colorScheme.primaryVariant.withOpacity(0.8),
+                      colorScheme.primaryContainer.withOpacity(0.8),
                   onChanged: (isOn) async {
                     setState(() {
                       _switchOn = isOn;

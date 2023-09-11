@@ -142,7 +142,7 @@ class _SettingsListItemState<T> extends State<SettingsListItem<T>>
       animation: _controller.view,
       builder: _buildHeaderWithChildren,
       child: Container(
-          color: colorScheme.secondaryVariant,
+          color: colorScheme.secondaryContainer,
           margin: const EdgeInsetsDirectional.only(bottom: 40),
           padding:
           const EdgeInsetsDirectional.only(start: 24, end: 24, bottom: 0),
@@ -233,7 +233,7 @@ class _CategoryHeaderState extends State<_CategoryHeader> {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: textTheme.overline?.apply(
-                            color: colorScheme.primaryVariant,
+                            color: colorScheme.primaryContainer,
                           ),
                         ),
                       )

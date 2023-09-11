@@ -68,7 +68,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("输入你的用户令牌使Shorey与Notion连接"),
         "mainCategory": MessageLookupByLibrary.simpleMessage("类别"),
         "mainFocusToday": MessageLookupByLibrary.simpleMessage("今日聚焦"),
-        "mantra": MessageLookupByLibrary.simpleMessage("格言"),
+        "mantra": MessageLookupByLibrary.simpleMessage("微言"),
         "mantra1": MessageLookupByLibrary.simpleMessage("我们称之为路的, 只不过是彷徨."),
         "mantra2": MessageLookupByLibrary.simpleMessage(
             "心脏是一座有两间卧室的房子, 一间住着痛苦, 另一间住着欢乐, 人不能笑得太响. 否则笑声会吵醒隔壁房间的痛苦."),

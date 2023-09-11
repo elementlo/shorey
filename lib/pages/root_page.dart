@@ -194,7 +194,7 @@ class _SettingsIcon extends AnimatedWidget {
           color: context.watch<ConfigViewModel>().isSettingsOpenNotifier &
                   !animationController.isAnimating
               ? Colors.transparent
-              : Theme.of(context).colorScheme.secondaryVariant,
+              : Theme.of(context).colorScheme.secondaryContainer,
           clipBehavior: Clip.antiAlias,
           child: InkWell(
             onTap: () {

@@ -93,12 +93,12 @@ class _CategoriesHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Header(
-      color: Theme.of(context).colorScheme.primaryVariant,
+      color: Theme.of(context).colorScheme.primaryContainer,
       text: S.of(context).mainCategory,
       tailing: PopupMenuButton(
         icon: Icon(
           Icons.more_horiz,
-          color: colorScheme.primaryVariant,
+          color: colorScheme.primaryContainer,
         ),
         onSelected: (value) {
           switch (value) {

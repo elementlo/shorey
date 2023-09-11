@@ -160,7 +160,7 @@ class _MomentGrid extends StatelessWidget {
 
   Color _randomColor(int row, int col, BuildContext context) {
     if (row % 3 == 0) {
-      return Theme.of(context).colorScheme.primaryVariant.withOpacity(0.6);
+      return Theme.of(context).colorScheme.primaryContainer.withOpacity(0.6);
     } else if (row % 6 == 5) {
       return Color(0xFF1ab4bc).withOpacity(0.5);
     } else if (row % 4 == 3) {
@@ -180,7 +180,7 @@ class _MomentGrid extends StatelessWidget {
       } else if (value > 2 && value <= 4) {
         return Color(0xFF1ab4bc).withOpacity(0.5);
       } else if (value > 4) {
-        return Theme.of(context).colorScheme.primaryVariant.withOpacity(0.6);
+        return Theme.of(context).colorScheme.primaryContainer.withOpacity(0.6);
       } else {
         return Colors.black12.withOpacity(0.1);
       }
