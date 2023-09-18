@@ -7,14 +7,14 @@
 </h1>
 Shorey是一款笔记应用, 支持Android/iOS双平台, 使用Flutter <strike>2</strike> 3开发, 体验Flutter的同时也希望做一个能成为个人知识中转站的应用, 让你更方便的把平时收集到的信息记录下来, 最后沉淀到知识库中.
 
-后边会先开发联动Notion, 让你的Notion成为后台知识库.
+<strike>后边会先开发联动Notion, 让你的Notion成为后台知识库.</strike>与Notion连接已经完成了✅
 
 Shorey is a simple note app which is built with Flutter <strike>2</strike> 3 and supports both Android/iOS platforms. It provides me full experience of interacting with Flutter and in the meantime I hope it can be your knowledge/memory transition tool, and yes, there are still much work to do.
 
 <strike>Now I focus on linking Notion, in order to make Notion your backend knowledge database.</strike>
 
 ## Release notes
-* 已经可以通过自己申请Notion插件token的方式连接Notion, 目前默认提供三个模板: 1. simple list. 2. TODOs list. 3. Diary. 可以体验. 
+* 已经可以通过自己申请Notion插件token的方式连接Notion, 目前默认提供三个模板: 1. simple list. 2. TODOs list. 3. Diary. 详细教程可以查看公众号分享的第三篇. 
 * Now it can link to Notion using your Notion integration token. Currently, Shorey provides 3 templates: 1. simple list. 2. TODOs list. 3. Diary. Choose what you need.
 * [Notion integration](https://www.notion.so/my-integrations)
 
@@ -37,6 +37,8 @@ Shorey is a simple note app which is built with Flutter <strike>2</strike> 3 and
 
 [个人笔记软件Shorey开源(二) - 使用Flutter开发App入门](https://mp.weixin.qq.com/s/_7Kl9nJLHaX6ZbZzLKREYQ)
 
+[个人笔记软件Shorey开源(三) - 与Notion连接能带来什么](https://mp.weixin.qq.com/s/zSVouQysQICag9o8Y9_MVw)
+
 ## 马上开始
 **应用运行要求:**
 1. Android 5.0+
@@ -44,7 +46,7 @@ Shorey is a simple note app which is built with Flutter <strike>2</strike> 3 and
 
 **项目编译要求:**
 1. Android SDK 28/Xcode 14
-2. Flutter SDK 3.10
+2. Flutter SDK 3.13
 
 ## 应用展示
 UI部分大量参考了Flutter官方的Gallery应用. 此外还在关于页埋了个小彩蛋, 希望喜欢.
