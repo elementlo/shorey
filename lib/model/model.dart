@@ -17,7 +17,7 @@ class VerboseTodo {
   VerboseTodo(this.todo, this.category);
 }
 
-abstract class ModelMixin {
+abstract mixin class ModelMixin {
   Map<String, dynamic> toJson();
 }
 
